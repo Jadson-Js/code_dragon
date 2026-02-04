@@ -85,6 +85,19 @@
       padding: 0 2rem;
     }
   }
+
+  .link {
+    color: var(--color-primary-1);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-offset: 4px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .link:hover {
+    color: var(--color-primary-2);
+  }
 }
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: LayoutProps) {
     <div className="flex flex-col md:flex-row min-h-screen">
       <AuthSidebar />
 
-      {children}
+      <div className="content py-8 w-full max-w-xl m-auto">{children}</div>
     </div>
   );
 }

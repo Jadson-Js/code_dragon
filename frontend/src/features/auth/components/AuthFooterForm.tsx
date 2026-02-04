@@ -39,9 +39,7 @@ export default function AuthFooterForm() {
           Ao se inscrever você concorda com os{" "}
           <Dialog>
             <DialogTrigger asChild>
-              <span className="text-primary-1 hover:text-primary-2 underline underline-offset-2 transition-colors cursor-pointer">
-                Termos de Uso
-              </span>
+              <span className="link">Termos de Uso</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -72,9 +70,7 @@ export default function AuthFooterForm() {
           e{" "}
           <Dialog>
             <DialogTrigger asChild>
-              <span className="text-primary-1 hover:text-primary-2 underline underline-offset-2 transition-colors cursor-pointer">
-                Políticas de Privacidade
-              </span>
+              <span className="link">Políticas de Privacidade</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

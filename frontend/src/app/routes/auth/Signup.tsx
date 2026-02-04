@@ -8,7 +8,6 @@ import {
   LuEye,
   LuEyeOff,
 } from "react-icons/lu";
-
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -40,7 +39,7 @@ export default function Signup() {
         </header>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8 mb-6">
           <FieldGroup>
             <div className="flex flex-col gap-6 md:flex-row md:gap-4">
               {/* Nome */}
@@ -116,10 +115,7 @@ export default function Signup() {
         {/* Login Link */}
         <p className="text-center text-white-2 text-sm mb-6">
           Já tem uma conta?{" "}
-          <Link
-            to="/login"
-            className="text-primary-1 hover:text-primary-2 font-medium underline underline-offset-4 transition-colors"
-          >
+          <Link to="/login" className="link">
             Fazer login
           </Link>
         </p>

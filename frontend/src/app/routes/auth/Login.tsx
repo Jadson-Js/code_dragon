@@ -21,73 +21,74 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <div className="content py-8 w-full max-w-xl m-auto">
-        {/* Header */}
-        <header className="flex flex-col gap-2 mb-8">
-          <h1 className="text-h1 text-white-1">Bem vindo de volta!</h1>
-          <p className="text-white-2">Faça login para continuar</p>
-        </header>
+      {/* Header */}
+      <header className="flex flex-col gap-2 mb-8">
+        <h1 className="text-h1 text-white-1">Bem vindo de volta!</h1>
+        <p className="text-white-2">Faça login para continuar</p>
+      </header>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-6">
-          <FieldGroup>
-            {/* Email */}
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <InputIcon
-                id="email"
-                name="email"
-                type="email"
-                placeholder="seu@email.com"
-                autoComplete="email"
-                required
-                iconLeft={<LuMail size={18} />}
-              />
-            </Field>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-6">
+        <FieldGroup>
+          {/* Email */}
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <InputIcon
+              id="email"
+              name="email"
+              type="email"
+              placeholder="seu@email.com"
+              autoComplete="email"
+              required
+              iconLeft={<LuMail size={18} />}
+            />
+          </Field>
 
-            {/* Senha */}
-            <Field>
-              <FieldLabel htmlFor="password">Senha</FieldLabel>
-              <InputIcon
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Mínimo 8 caracteres"
-                autoComplete="new-password"
-                required
-                minLength={8}
-                iconLeft={<LuLock size={18} />}
-                iconRight={
-                  showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
-                }
-                onIconRightClick={togglePasswordVisibility}
-              />
-            </Field>
-          </FieldGroup>
+          {/* Senha */}
+          <Field>
+            <FieldLabel htmlFor="password">Senha</FieldLabel>
+            <InputIcon
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Mínimo 8 caracteres"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              iconLeft={<LuLock size={18} />}
+              iconRight={
+                showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
+              }
+              onIconRightClick={togglePasswordVisibility}
+            />
+            {/* Login Link */}
+            <p className="text-end text-white-2 text-sm mb-6">
+              <Link to="/forgot-password" className="link">
+                Esqueceu sua senha?
+              </Link>
+            </p>
+          </Field>
+        </FieldGroup>
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full uppercase tracking-wide"
-          >
-            Entrar
-          </Button>
-        </form>
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full uppercase tracking-wide"
+        >
+          Entrar
+        </Button>
+      </form>
 
-        {/* Login Link */}
-        <p className="text-center text-white-2 text-sm mb-6">
-          Não tem uma conta?{" "}
-          <Link
-            to="/signup"
-            className="text-primary-1 hover:text-primary-2 font-medium underline underline-offset-4 transition-colors"
-          >
-            Cadastre-se
-          </Link>
-        </p>
+      {/* Login Link */}
+      <p className="text-center text-white-2 text-sm mb-6">
+        Não tem uma conta?{" "}
+        <Link to="/signup" className="link">
+          Cadastre-se
+        </Link>
+      </p>
 
-        <AuthFooterForm />
-      </div>
+      <AuthFooterForm />
     </AuthLayout>
   );
 }
