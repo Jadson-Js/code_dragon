@@ -3,34 +3,41 @@ import { Button } from "@/components/ui/button";
 import { GrFormPreviousLink } from "react-icons/gr";
 import { Link } from "react-router";
 import { LuRefreshCcw } from "react-icons/lu";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { TimerContext, type TimerContextType } from "@/app/TimerProvider";
 
 export default function VerifyEmail() {
+  const timerContext = useContext<TimerContextType>(TimerContext);
   const [textButton, setTextButton] = useState(
     "Não recebeu? Clique para reenviar",
   );
   const [iconButton, setIconButton] = useState<React.ReactNode | null>(
     <LuRefreshCcw size={14} />,
   );
-  const [isDisable, setIsDisable] = useState(false);
+
+  useEffect(() => {
+    if (timerContext.timer > 0) {
+      setTextButton(`Reenviar em ${timerContext.timer}s`);
+      setIconButton(null);
+    } else {
+      setTextButton("Não recebeu? Clique para reenviar");
+      setIconButton(<LuRefreshCcw size={14} />);
+    }
+  }, [timerContext.timer]);
 
   const handleResendEmail = async () => {
-    setIsDisable(true);
-    setTextButton("Reenviando em 5");
-    setIconButton(null);
+    timerContext.toggleTimer(5);
     regressiveContage(4);
   };
 
   const regressiveContage = (loop: number) => {
-    if (loop === -1) {
-      setIsDisable(false);
-      setTextButton("Não recebeu? Clique para reenviar");
-      setIconButton(<LuRefreshCcw size={14} />);
+    if (loop < 0) {
+      timerContext.toggleTimer(0);
       return;
     }
 
     setTimeout(() => {
-      setTextButton(`Reenviando em ${loop}`);
+      timerContext.toggleTimer(loop);
       regressiveContage(loop - 1);
     }, 1000);
   };
@@ -55,7 +62,7 @@ export default function VerifyEmail() {
         variant="secondary"
         className="w-full mb-8"
         onClick={handleResendEmail}
-        disabled={isDisable}
+        disabled={timerContext.timer !== 0}
       >
         {iconButton} {textButton}
       </Button>

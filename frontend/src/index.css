@@ -24,6 +24,10 @@
     font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   }
 
+  #root {
+    background: var(--color-bg-1);
+  }
+
   p {
     font-weight: 400;
     font-size: 1rem; /* 16px */

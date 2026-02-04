@@ -1,10 +1,10 @@
 import AppRouter from "./AppRouter";
+import { TimerProvider } from "./TimerProvider";
 
 export default function App() {
   return (
-    // Provider
-    <div className="bg-bg-1">
+    <TimerProvider>
       <AppRouter />
-    </div>
+    </TimerProvider>
   );
 }
