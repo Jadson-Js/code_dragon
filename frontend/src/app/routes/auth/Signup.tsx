@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router";
 import {
   LuUser,
   LuCalendar,
@@ -16,15 +16,23 @@ import { InputMask } from "@/components/ui/input-mask";
 import AuthFooterForm from "@/features/auth/components/AuthFooterForm";
 
 export default function Signup() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "admin",
+    birthdate: "08/03/2005",
+    email: "admin@admin.com",
+    password: "admin123",
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // TODO: Implementar lógica de cadastro
+
+    navigate("/verify-email");
   };
 
   return (
@@ -53,6 +61,10 @@ export default function Signup() {
                   autoComplete="name"
                   required
                   iconLeft={<LuUser size={18} />}
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </Field>
               {/* Data de Nascimento */}
@@ -64,6 +76,11 @@ export default function Signup() {
                   mask="date"
                   autoComplete="bday"
                   iconLeft={<LuCalendar size={18} />}
+                  required
+                  value={formData.birthdate}
+                  onValueChange={(e) => {
+                    setFormData({ ...formData, birthdate: e });
+                  }}
                 />
               </Field>
             </div>
@@ -79,6 +96,10 @@ export default function Signup() {
                 autoComplete="email"
                 required
                 iconLeft={<LuMail size={18} />}
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </Field>
 
@@ -98,6 +119,10 @@ export default function Signup() {
                   showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
                 }
                 onIconRightClick={togglePasswordVisibility}
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
               />
             </Field>
           </FieldGroup>

@@ -56,7 +56,10 @@ function applyMask(value: string, mask: string): string {
   return result;
 }
 
-interface InputMaskProps extends Omit<React.ComponentProps<"input">, "onChange"> {
+interface InputMaskProps extends Omit<
+  React.ComponentProps<"input">,
+  "onChange"
+> {
   mask: MaskType;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
@@ -77,7 +80,8 @@ function InputMask({
   const config = MASK_CONFIGS[mask];
   const [internalValue, setInternalValue] = useState("");
 
-  const value = controlledValue !== undefined ? String(controlledValue) : internalValue;
+  const value =
+    controlledValue !== undefined ? String(controlledValue) : internalValue;
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +94,7 @@ function InputMask({
 
       onValueChange?.(formatted, rawValue);
     },
-    [config.pattern, controlledValue, onValueChange]
+    [config.pattern, controlledValue, onValueChange],
   );
 
   return (
@@ -115,7 +119,7 @@ function InputMask({
           "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           iconLeft ? "pl-12" : "pl-4",
           iconRight ? "pr-12" : "pr-4",
-          className
+          className,
         )}
         {...props}
       />
