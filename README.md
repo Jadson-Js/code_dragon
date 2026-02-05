@@ -7,28 +7,31 @@
 
 ## 🎯 Objetivo do Projeto
 
-* **Monetização:** Estabelecer uma receita recorrente através de um modelo SaaS.
-* **Impacto Social:** Democratizar o acesso à mentoria técnica de alta qualidade.
-* **Mentoria Automatizada:** Substituir o feedback humano caro por um sistema de IA que guia o aprendizado de forma assertiva.
+- **Monetização:** Estabelecer uma receita recorrente através de um modelo SaaS.
+- **Impacto Social:** Democratizar o acesso à mentoria técnica de alta qualidade.
+- **Mentoria Automatizada:** Substituir o feedback humano caro por um sistema de IA que guia o aprendizado de forma assertiva.
 
 ---
 
 ## 🚀 Proposta de Valor e Funcionalidades
 
 ### 🧠 Diagnóstico e Aprendizado
-* **Diagnóstico de Competências:** Quiz técnico adaptativo (básico ao avançado) para mapear o nível real do candidato.
-* **Roadmap Inteligente:** Trilhas de estudo personalizadas baseadas nos gaps identificados.
-* **Dashboard Analítico:** Insights detalhados e benchmarking comparativo com a comunidade.
+
+- **Diagnóstico de Competências:** Quiz técnico adaptativo (básico ao avançado) para mapear o nível real do candidato.
+- **Roadmap Inteligente:** Trilhas de estudo personalizadas baseadas nos gaps identificados.
+- **Dashboard Analítico:** Insights detalhados e benchmarking comparativo com a comunidade.
 
 ### 💼 Ferramentas de Empregabilidade
-* **Simulador de Entrevistas com IA:** Prática de entrevistas técnicas e comportamentais (PT/EN) com feedback imediato via áudio/texto.
-* **Auditoria 360:** Análise automatizada de Currículo, Portfólio, GitHub e LinkedIn com relatórios de criticidade.
-* **Gerador de CV para ATS:** Criação de currículos personalizados com base nas palavras-chave de vagas específicas do LinkedIn.
-* **Gerador de Posts LinkedIn:** IA para criação de conteúdo técnico (texto + imagem + hashtags) para aumentar a visibilidade do profissional.
+
+- **Simulador de Entrevistas com IA:** Prática de entrevistas técnicas e comportamentais (PT/EN) com feedback imediato via áudio/texto.
+- **Auditoria 360:** Análise automatizada de Currículo, Portfólio, GitHub e LinkedIn com relatórios de criticidade.
+- **Gerador de CV para ATS:** Criação de currículos personalizados com base nas palavras-chave de vagas específicas do LinkedIn.
+- **Gerador de Posts LinkedIn:** IA para criação de conteúdo técnico (texto + imagem + hashtags) para aumentar a visibilidade do profissional.
 
 ### 🛠️ Gestão e Comunidade
-* **Caixa de Sugestões Gamificada:** Sistema de feedback onde usuários ganham pontos e conquistas por contribuir com a plataforma.
-* **Dashboard Administrativo:** Monitoramento completo de métricas (CAC, LTV, taxa de conversão Premium, senioridade média, stacks principais).
+
+- **Caixa de Sugestões Gamificada:** Sistema de feedback onde usuários ganham pontos e conquistas por contribuir com a plataforma.
+- **Dashboard Administrativo:** Monitoramento completo de métricas (CAC, LTV, taxa de conversão Premium, senioridade média, stacks principais).
 
 ---
 
@@ -44,19 +47,19 @@
 
 ## 💰 Estratégia de Negócio
 
-* **Modelo Principal:** "Pack Aceleração Júnior" (Pagamento único/Créditos).
-* **Afiliados (Hotmart/Udemy):** Recomendação contextual de cursos baseada nos erros cometidos pelo usuário no quiz.
-* **Growth Viral:** Sistema "Indique e Ganhe" (Member-Get-Member) que recompensa usuários com créditos de IA.
-* **Prova Social:** Geração de certificados "Top 10%" em formato vertical para compartilhamento em redes sociais.
+- **Modelo Principal:** "Pack Aceleração Júnior" (Pagamento único/Créditos).
+- **Afiliados (Hotmart/Udemy):** Recomendação contextual de cursos baseada nos erros cometidos pelo usuário no quiz.
+- **Growth Viral:** Sistema "Indique e Ganhe" (Member-Get-Member) que recompensa usuários com créditos de IA.
+- **Prova Social:** Geração de certificados "Top 10%" em formato vertical para compartilhamento em redes sociais.
 
 ---
 
 ## 🛠️ Stack Técnica (Prevista)
 
-* **Frontend:** React / Next.js (Landing Page focada em conversão).
-* **Estilização:** Tailwind CSS.
-* **Inteligência Artificial:** Integração com APIs de LLM (OpenAI/Gemini) para análises e simulações.
-* **Análise de Dados:** Web Scraping para auditoria de perfis.
+- **Frontend:** React / Next.js (Landing Page focada em conversão).
+- **Estilização:** Tailwind CSS.
+- **Inteligência Artificial:** Integração com APIs de LLM (OpenAI/Gemini) para análises e simulações.
+- **Análise de Dados:** Web Scraping para auditoria de perfis.
 
 ---
 
@@ -74,4 +77,46 @@
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ---
-**Desenvolvido com foco no futuro da educação tech.** 🐉
+
+## 🏗️ Arquitetura Backend (Clean Architecture)
+
+```
+src/
+├── modules/
+│ └── user/                       # Módulo de usuários
+│   ├── user.controller.ts        # Recebe requests HTTP
+│   ├── user.routes.ts            # Define endpoints e middlewares
+│   ├── user.schema.ts            # Validação Zod dos inputs
+│   ├── user.dto.ts               # Tipagem de entrada/saída
+│   └── use-cases/
+│     ├── create-user.ts          # Caso de uso: criar usuário
+│     └── authenticate-user.ts    # Caso de uso: autenticar
+│
+├── domain/
+│ ├── entities/
+  │ │ └── user.entity.ts            # Modelo de domínio
+│ ├── repositories/
+│ │ └── user.repository.ts        # Interface do repositório
+│ └── services/
+│   └── email.service.ts          # Interface de email
+│
+├── infra/
+│ ├── database/
+│ │ └── prisma/
+│ │   └── user.prisma-repository.ts   # Implementação Prisma
+│ ├── providers/
+│ │ └── sendgrid.provider.ts          # Implementação SendGrid
+│ └── http/
+│   ├── middlewares/
+│   │ ├── auth.middleware.ts          # Validação JWT
+│   │ └── error.middleware.ts         # Handler de erros
+│   ├── container.ts                  # Injeção de dependências
+│   └── server.ts                     # Configuração Express
+│
+└── shared/
+  ├── errors/
+  │ └── app.error.ts              # Erros customizados
+  ├── env.ts                      # Variáveis de ambiente
+  └── utils.ts                    # Funções utilitárias
+└── tests/
+```

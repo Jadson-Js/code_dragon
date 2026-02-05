@@ -26,8 +26,8 @@ export default function VerifyEmail() {
   }, [timerContext.timer]);
 
   const handleResendEmail = async () => {
-    timerContext.toggleTimer(5);
-    regressiveContage(4);
+    timerContext.toggleTimer(30);
+    regressiveContage(29);
   };
 
   const regressiveContage = (loop: number) => {
