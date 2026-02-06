@@ -21,22 +21,42 @@ function postPrismaToDomain(raw: any): Post {
   });
 }
 
+function postDomainToPrisma(domain: Post): any {
+  return {
+    id: domain.id,
+    name: domain.name,
+    email: domain.email,
+    passwordHash: domain.passwordHash,
+    birthDate: domain.birthDate,
+    verifiedAt: domain.verifiedAt,
+    imageId: domain.imageId,
+    linkedinUrl: domain.linkedinUrl,
+    githubUrl: domain.githubUrl,
+    portfolioUrl: domain.portfolioUrl,
+    createdAt: domain.createdAt,
+    updatedAt: domain.updatedAt,
+    deletedAt: domain.deletedAt,
+  };
+}
+
 @injectable()
 export class PostPrismaRepository implements IPostRepository {
   async create(data: Post): Promise<Post> {
+    const raw = postDomainToPrisma(data);
     const response = await prisma.post.create({
-      data: data,
+      data: raw,
     });
 
     return postPrismaToDomain(response);
   }
 
   async update(data: Post): Promise<Post> {
+    const raw = postDomainToPrisma(data);
     const response = await prisma.post.update({
       where: {
-        id: data.id,
+        id: raw.id,
       },
-      data: data,
+      data: raw,
     });
 
     return postPrismaToDomain(response);

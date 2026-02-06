@@ -36,6 +36,7 @@ export function generatePrismaRepository(modelName, modelDefinition) {
   const repoInterfaceName = `I${className}Repository`;
   const repoImplementationName = `${className}PrismaRepository`;
   const mapperName = `${className.charAt(0).toLowerCase() + className.slice(1)}PrismaToDomain`;
+  const domainToPrismaName = `${className.charAt(0).toLowerCase() + className.slice(1)}DomainToPrisma`;
   const prismaModelName =
     className.charAt(0).toLowerCase() + className.slice(1); // user, post
 
@@ -55,22 +56,34 @@ function ${mapperName}(raw: any): ${className} {
   content += `  });
 }
 
+function ${domainToPrismaName}(domain: ${className}): any {
+  return {
+`;
+  fields.forEach((field) => {
+    // assuming public getters match field names
+    content += `    ${field.name}: domain.${field.name},\n`;
+  });
+  content += `  };
+}
+
 @injectable()
 export class ${repoImplementationName} implements ${repoInterfaceName} {
   async create(data: ${className}): Promise<${className}> {
+    const raw = ${domainToPrismaName}(data);
     const response = await prisma.${prismaModelName}.create({
-      data: data,
+      data: raw,
     });
 
     return ${mapperName}(response);
   }
 
   async update(data: ${className}): Promise<${className}> {
+    const raw = ${domainToPrismaName}(data);
     const response = await prisma.${prismaModelName}.update({
       where: {
-        id: data.id,
+        id: raw.id,
       },
-      data: data,
+      data: raw,
     });
 
     return ${mapperName}(response);
