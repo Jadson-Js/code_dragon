@@ -16,6 +16,7 @@ import { generateDTO } from "./utils/dto-generator.js";
 import { generateController } from "./utils/controller-generator.js";
 import { generateContainer } from "./utils/container-generator.js";
 import { generateUseCases } from "./utils/use-cases-generator.js";
+import { generateRoutesIndex } from "./utils/routes-index-generator.js";
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -49,6 +50,9 @@ rl.question("Qual o nome do model? ", (modelName) => {
       generateController(modelName);
       generateContainer(modelName);
       generateUseCases(modelName);
+
+      // Regenerate the routes index to include the new module
+      generateRoutesIndex();
     } else {
       console.log(
         `\nErro: Model [${modelName}] não encontrado em prisma/schema.prisma`,
