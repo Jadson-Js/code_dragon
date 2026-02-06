@@ -52,3 +52,15 @@ model EmailToken {
 
   @@map("email_tokens")
 }
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  key       String   @unique
+  mimeType  String   @map("mime_type")
+  size      Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("images")
+}
