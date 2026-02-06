@@ -12,26 +12,16 @@ export class UserController {
   ) {}
 
   async create(request: Request, response: Response) {
-    try {
-      const { name, email, password } = request.body;
+    const { name, email, password } = request.body;
 
-      const user = await this.createUserUseCase.execute({
-        name,
-        email,
-        password,
-      });
+    const user = await this.createUserUseCase.execute({
+      name,
+      email,
+      password,
+    });
 
-      const userResponse = userToHTTP(user);
+    const userResponse = userToHTTP(user);
 
-      return response.status(201).json(userResponse);
-    } catch (error) {
-      console.error("Error creating user:", error);
-
-      if (error instanceof Error) {
-        return response.status(400).json({ error: error.message });
-      }
-
-      return response.status(500).json({ error: "Internal server error" });
-    }
+    return response.status(201).json(userResponse);
   }
 }
