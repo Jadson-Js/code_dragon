@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-
+import { UserController } from "@/modules/user/user.controller";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { CreateUserUseCase } from "@/modules/user/use-cases/create-user";
 
@@ -13,4 +13,4 @@ container.register("CreateUserUseCase", {
   useClass: CreateUserUseCase,
 });
 
-export { container };
+export const userController = container.resolve(UserController);

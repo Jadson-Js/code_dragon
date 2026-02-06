@@ -1,8 +1,10 @@
 import { hash } from "bcryptjs";
 import { User } from "@/domain/entities/user.entity";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
-import type { CreateUserDTO, UserResponseDTO } from "@/modules/user/user.dto";
+import type { CreateUserDTO } from "@/modules/user/user.dto";
+import { ConflictError } from "@/shared/errors/app.error";
 import { inject, injectable } from "tsyringe";
+
 @injectable()
 export class CreateUserUseCase {
   constructor(
@@ -11,6 +13,14 @@ export class CreateUserUseCase {
   ) {}
 
   async execute(params: CreateUserDTO) {
+    const userWithSameEmail = await this.userRepository.findByEmail(
+      params.email,
+    );
+
+    if (userWithSameEmail) {
+      throw new ConflictError("User already exists");
+    }
+
     const passwordHash = await hash(params.password, 8);
 
     const user = User.create({
