@@ -1,8 +1,8 @@
-import { User } from "@/domain/entities/user.entity";
+import type { User } from "@/domain/entities/user.entity";
 import type { UserResponseDTO } from "./user.dto";
 
-export function userToHTTP(user: User): UserResponseDTO {
+export function userToHTTP(entity: User): UserResponseDTO {
   return {
-    id: user.id,
+    id: entity.id,
   };
 }

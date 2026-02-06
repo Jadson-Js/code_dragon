@@ -20,12 +20,6 @@ import { ${controllerVar} } from "./${names.containerFile}";
 
 const router = Router();
 
-router.post(
-  "/",
-  validate(${schemaName}),
-  ${controllerVar}.create.bind(${controllerVar}),
-);
-
 router.get(
   "/",
   ${controllerVar}.findAll.bind(${controllerVar}),
@@ -34,6 +28,12 @@ router.get(
 router.get(
   "/:id",
   ${controllerVar}.findById.bind(${controllerVar}),
+);
+
+router.post(
+  "/",
+  validate(${schemaName}),
+  ${controllerVar}.create.bind(${controllerVar}),
 );
 
 router.put(

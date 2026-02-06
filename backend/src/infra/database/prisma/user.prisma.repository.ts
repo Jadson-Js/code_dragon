@@ -21,22 +21,42 @@ function userPrismaToDomain(raw: any): User {
   });
 }
 
+function userDomainToPrisma(domain: User): any {
+  return {
+    id: domain.id,
+    name: domain.name,
+    email: domain.email,
+    passwordHash: domain.passwordHash,
+    birthDate: domain.birthDate,
+    verifiedAt: domain.verifiedAt,
+    imageId: domain.imageId,
+    linkedinUrl: domain.linkedinUrl,
+    githubUrl: domain.githubUrl,
+    portfolioUrl: domain.portfolioUrl,
+    createdAt: domain.createdAt,
+    updatedAt: domain.updatedAt,
+    deletedAt: domain.deletedAt,
+  };
+}
+
 @injectable()
 export class UserPrismaRepository implements IUserRepository {
-  async create(user: User): Promise<User> {
+  async create(data: User): Promise<User> {
+    const raw = userDomainToPrisma(data);
     const response = await prisma.user.create({
-      data: user,
+      data: raw,
     });
 
     return userPrismaToDomain(response);
   }
 
-  async update(user: User): Promise<User> {
+  async update(data: User): Promise<User> {
+    const raw = userDomainToPrisma(data);
     const response = await prisma.user.update({
       where: {
-        id: user.id,
+        id: raw.id,
       },
-      data: user,
+      data: raw,
     });
 
     return userPrismaToDomain(response);

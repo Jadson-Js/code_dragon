@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import "@/shared/container";
+import "@/infra/container/providers";
 
 import app from "./infra/http/server";
 import { env } from "./shared/env";
