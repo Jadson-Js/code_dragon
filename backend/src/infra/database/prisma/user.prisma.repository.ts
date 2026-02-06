@@ -25,20 +25,7 @@ function userPrismaToDomain(raw: any): User {
 export class UserPrismaRepository implements IUserRepository {
   async create(user: User): Promise<User> {
     const response = await prisma.user.create({
-      data: {
-        name: user.name,
-        email: user.email,
-        passwordHash: user.passwordHash,
-        birthDate: user.birthDate,
-        verifiedAt: user.verifiedAt,
-        imageId: user.imageId,
-        linkedinUrl: user.linkedinUrl,
-        githubUrl: user.githubUrl,
-        portfolioUrl: user.portfolioUrl,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        deletedAt: user.deletedAt,
-      },
+      data: user,
     });
 
     return userPrismaToDomain(response);
@@ -49,20 +36,7 @@ export class UserPrismaRepository implements IUserRepository {
       where: {
         id: user.id,
       },
-      data: {
-        name: user.name,
-        email: user.email,
-        passwordHash: user.passwordHash,
-        birthDate: user.birthDate,
-        verifiedAt: user.verifiedAt,
-        imageId: user.imageId,
-        linkedinUrl: user.linkedinUrl,
-        githubUrl: user.githubUrl,
-        portfolioUrl: user.portfolioUrl,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        deletedAt: user.deletedAt,
-      },
+      data: user,
     });
 
     return userPrismaToDomain(response);

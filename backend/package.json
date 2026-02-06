@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "clear && tsx watch --tsconfig tsconfig.json src/main.ts",
+    "create": "node scripts/create-module.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
