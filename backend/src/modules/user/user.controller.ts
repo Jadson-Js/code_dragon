@@ -1,4 +1,6 @@
+import type { User } from "@/domain/entities/user.entity";
 import type { CreateUserUseCase } from "./use-cases/create-user";
+import { userToHTTP } from "./user.presenter";
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 
@@ -11,16 +13,17 @@ export class UserController {
 
   async create(request: Request, response: Response) {
     try {
-      const { name, email, password, birthDate } = request.body;
+      const { name, email, password } = request.body;
 
       const user = await this.createUserUseCase.execute({
         name,
         email,
         password,
-        birthDate,
       });
 
-      return response.status(201).json(user);
+      const userResponse = userToHTTP(user);
+
+      return response.status(201).json(userResponse);
     } catch (error) {
       console.error("Error creating user:", error);
 
