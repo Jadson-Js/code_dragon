@@ -1,10 +1,9 @@
 export interface CreateUserDTO {
   name: string;
   email: string;
-  password: string;
+  passwordHash: string;
 }
 
 export interface UserResponseDTO {
-  name: string;
-  email: string;
+  id: string;
 }

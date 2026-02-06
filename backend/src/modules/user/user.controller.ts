@@ -1,4 +1,3 @@
-import type { User } from "@/domain/entities/user.entity";
 import type { CreateUserUseCase } from "./use-cases/create-user";
 import { userToHTTP } from "./user.presenter";
 import type { Request, Response } from "express";
@@ -12,12 +11,12 @@ export class UserController {
   ) {}
 
   async create(request: Request, response: Response) {
-    const { name, email, password } = request.body;
+    const { name, email, passwordHash } = request.body;
 
     const user = await this.createUserUseCase.execute({
       name,
       email,
-      password,
+      passwordHash,
     });
 
     const userResponse = userToHTTP(user);

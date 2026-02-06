@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "tsx watch --tsconfig tsconfig.json src/main.ts",
+    "start": "clear && tsx watch --tsconfig tsconfig.json src/main.ts",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
