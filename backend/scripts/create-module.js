@@ -1,7 +1,10 @@
-import fs from "node:fs";
-import path from "node:path";
+/**
+ * Create Module Script
+ * Main entry point for generating all module files from a Prisma model.
+ */
+
 import readline from "node:readline";
-import { findModel } from "./utils/prisma-parser.js";
+import { findModel } from "./utils/shared/prisma-parser.js";
 import { generateEntity } from "./utils/entity-generator.js";
 import { generateModuleFolder } from "./utils/module-generator.js";
 import { generateRoutes } from "./utils/routes-generator.js";
@@ -33,38 +36,19 @@ rl.question("Qual o nome do model? ", (modelName) => {
     if (model) {
       console.log(`\nÓtimo! Model [${modelName}] encontrado:\n`);
       console.log(model);
-      console.log(model);
 
-      const entityContent = generateEntity(modelName, model);
-      const entityFileName = `${modelName.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}.entity.ts`;
-      const entityPath = path.join(
-        process.cwd(),
-        "src",
-        "domain",
-        "entities",
-        entityFileName,
-      );
-
-      // Ensure directory exists
-      const dir = path.dirname(entityPath);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      fs.writeFileSync(entityPath, entityContent);
-      console.log(`\nArquivo gerado com sucesso: ${entityPath}`);
-
+      // Generate all files
+      generateEntity(modelName, model);
       generateModuleFolder(modelName);
       generateRoutes(modelName);
       generateRepository(modelName);
       generateSchema(modelName, model);
       generatePrismaRepository(modelName, model);
       generateDTO(modelName, model);
-      generatePresenter(modelName, model);
-      generateController(modelName, model);
-      generateController(modelName, model);
-      generateContainer(modelName, model);
-      generateUseCases(modelName, model);
+      generatePresenter(modelName);
+      generateController(modelName);
+      generateContainer(modelName);
+      generateUseCases(modelName);
     } else {
       console.log(
         `\nErro: Model [${modelName}] não encontrado em prisma/schema.prisma`,

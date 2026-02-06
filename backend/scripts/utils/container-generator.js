@@ -1,64 +1,56 @@
-import fs from "node:fs";
+/**
+ * Container Generator
+ * Generates dependency injection container configuration.
+ */
+
 import path from "node:path";
+import { getModelNames, toCamelCase } from "./shared/naming.js";
+import { getModulePaths, writeFile } from "./shared/paths.js";
 
 export function generateContainer(modelName) {
-  const kebabCaseName = modelName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .toLowerCase();
-
-  const className = modelName;
-  const containerFileName = `${kebabCaseName}.container.ts`;
-  const modulePath = path.join(process.cwd(), "src", "modules", kebabCaseName);
-
-  if (!fs.existsSync(modulePath)) {
-    console.error(`Erro: Pasta do módulo ${kebabCaseName} não encontrada.`);
-    return;
-  }
-
-  const controllerName = `${className}Controller`;
-  const repoInterfaceName = `I${className}Repository`; // Usually used in token, or just "Repository"
-  // User container uses "UserRepository" string token.
-
-  const repoImplementation = `${className}PrismaRepository`;
+  const names = getModelNames(modelName);
+  const paths = getModulePaths(names.kebab);
+  const controllerVar = `${toCamelCase(modelName)}Controller`;
 
   const content = `import { container } from "tsyringe";
-import { ${controllerName} } from "@/modules/${kebabCaseName}/${kebabCaseName}.controller";
-import { ${repoImplementation} } from "@/infra/database/prisma/${kebabCaseName}.prisma.repository";
-import { Create${className}UseCase } from "@/modules/${kebabCaseName}/use-cases/create-${kebabCaseName}";
-import { FindAll${className}UseCase } from "@/modules/${kebabCaseName}/use-cases/find-all-${kebabCaseName}";
-import { FindById${className}UseCase } from "@/modules/${kebabCaseName}/use-cases/find-by-id-${kebabCaseName}";
-import { Update${className}UseCase } from "@/modules/${kebabCaseName}/use-cases/update-${kebabCaseName}";
-import { Delete${className}UseCase } from "@/modules/${kebabCaseName}/use-cases/delete-${kebabCaseName}";
+import { ${names.controllerClass} } from "@/modules/${names.kebab}/${names.controllerFile}";
+import { ${names.repoClass} } from "@/infra/database/prisma/${names.prismaRepoFile}";
+import { ${names.createUseCase} } from "@/modules/${names.kebab}/use-cases/create-${names.kebab}";
+import { ${names.findAllUseCase} } from "@/modules/${names.kebab}/use-cases/find-all-${names.kebab}";
+import { ${names.findByIdUseCase} } from "@/modules/${names.kebab}/use-cases/find-by-id-${names.kebab}";
+import { ${names.updateUseCase} } from "@/modules/${names.kebab}/use-cases/update-${names.kebab}";
+import { ${names.deleteUseCase} } from "@/modules/${names.kebab}/use-cases/delete-${names.kebab}";
 
 // Registra o repositório
-container.register("${className}Repository", {
-  useClass: ${repoImplementation},
+container.register("${names.repoToken}", {
+  useClass: ${names.repoClass},
 });
 
 // Registra os use cases
-container.register("Create${className}UseCase", {
-  useClass: Create${className}UseCase,
+container.register("${names.createUseCaseToken}", {
+  useClass: ${names.createUseCase},
 });
 
-container.register("FindAll${className}UseCase", {
-  useClass: FindAll${className}UseCase,
+container.register("${names.findAllUseCaseToken}", {
+  useClass: ${names.findAllUseCase},
 });
 
-container.register("FindById${className}UseCase", {
-  useClass: FindById${className}UseCase,
+container.register("${names.findByIdUseCaseToken}", {
+  useClass: ${names.findByIdUseCase},
 });
 
-container.register("Update${className}UseCase", {
-  useClass: Update${className}UseCase,
+container.register("${names.updateUseCaseToken}", {
+  useClass: ${names.updateUseCase},
 });
 
-container.register("Delete${className}UseCase", {
-  useClass: Delete${className}UseCase,
+container.register("${names.deleteUseCaseToken}", {
+  useClass: ${names.deleteUseCase},
 });
 
-export const ${className.charAt(0).toLowerCase() + className.slice(1)}Controller = container.resolve(${controllerName});
+export const ${controllerVar} = container.resolve(${names.controllerClass});
 `;
 
-  fs.writeFileSync(path.join(modulePath, containerFileName), content);
-  console.log(`Arquivo gerado: ${path.join(modulePath, containerFileName)}`);
+  // Write file
+  const filePath = path.join(paths.module, `${names.containerFile}.ts`);
+  writeFile(filePath, content);
 }

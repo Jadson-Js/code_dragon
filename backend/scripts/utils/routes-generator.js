@@ -1,58 +1,55 @@
-import fs from "node:fs";
+/**
+ * Routes Generator
+ * Generates Express router with CRUD endpoints.
+ */
+
 import path from "node:path";
+import { getModelNames, toCamelCase } from "./shared/naming.js";
+import { getModulePaths, writeFile } from "./shared/paths.js";
 
 export function generateRoutes(modelName) {
-  const kebabCaseName = modelName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .toLowerCase();
-
-  const camelCaseName = modelName.charAt(0).toLowerCase() + modelName.slice(1);
-  const controllerName = `${camelCaseName}Controller`;
-  const schemaName = `create${modelName}Schema`; // Following user pattern
+  const names = getModelNames(modelName);
+  const paths = getModulePaths(names.kebab);
+  const controllerVar = `${toCamelCase(modelName)}Controller`;
+  const schemaName = `create${names.pascal}Schema`;
 
   const content = `import { Router } from "express";
 import { validate } from "@/infra/http/middlewares/validate.middleware";
-import { ${schemaName} } from "./${kebabCaseName}.schema";
-import { ${controllerName} } from "./${kebabCaseName}.container";
+import { ${schemaName} } from "./${names.schemaFile}";
+import { ${controllerVar} } from "./${names.containerFile}";
 
 const router = Router();
 
 router.post(
   "/",
   validate(${schemaName}),
-  ${controllerName}.create.bind(${controllerName}),
+  ${controllerVar}.create.bind(${controllerVar}),
 );
 
 router.get(
   "/",
-  ${controllerName}.findAll.bind(${controllerName}),
+  ${controllerVar}.findAll.bind(${controllerVar}),
 );
 
 router.get(
   "/:id",
-  ${controllerName}.findById.bind(${controllerName}),
+  ${controllerVar}.findById.bind(${controllerVar}),
 );
 
 router.put(
   "/:id",
-  ${controllerName}.update.bind(${controllerName}),
+  ${controllerVar}.update.bind(${controllerVar}),
 );
 
 router.delete(
   "/:id",
-  ${controllerName}.delete.bind(${controllerName}),
+  ${controllerVar}.delete.bind(${controllerVar}),
 );
 
 export default router;
 `;
 
-  const modulePath = path.join(process.cwd(), "src", "modules", kebabCaseName);
-  const routesPath = path.join(modulePath, `${kebabCaseName}.routes.ts`);
-
-  if (fs.existsSync(modulePath)) {
-    fs.writeFileSync(routesPath, content);
-    console.log(`Arquivo gerado: ${routesPath}`);
-  } else {
-    console.error(`Erro: Pasta do módulo ${kebabCaseName} não encontrada.`);
-  }
+  // Write file
+  const filePath = path.join(paths.module, `${names.routesFile}.ts`);
+  writeFile(filePath, content);
 }

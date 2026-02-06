@@ -1,38 +1,28 @@
-import fs from "node:fs";
+/**
+ * Repository Interface Generator
+ * Generates repository interfaces for domain layer.
+ */
+
 import path from "node:path";
+import { getModelNames } from "./shared/naming.js";
+import { getModulePaths, writeFile } from "./shared/paths.js";
 
 export function generateRepository(modelName) {
-  const kebabCaseName = modelName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .toLowerCase();
+  const names = getModelNames(modelName);
+  const paths = getModulePaths(names.kebab);
 
-  const className = modelName;
-  const interfaceName = `I${className}Repository`;
+  const content = `import type { ${names.pascal} } from "@/domain/entities/${names.entityFile}";
 
-  const content = `import type { ${className} } from "@/domain/entities/${kebabCaseName}.entity";
-
-export interface ${interfaceName} {
-  create(data: ${className}): Promise<${className}>;
-  update(data: ${className}): Promise<${className}>;
+export interface ${names.repoInterface} {
+  create(data: ${names.pascal}): Promise<${names.pascal}>;
+  update(data: ${names.pascal}): Promise<${names.pascal}>;
   delete(id: string): Promise<void>;
-  findById(id: string): Promise<${className} | null>;
-  findAll(): Promise<${className}[]>;
+  findById(id: string): Promise<${names.pascal} | null>;
+  findAll(): Promise<${names.pascal}[]>;
 }
 `;
 
-  const repoPath = path.join(
-    process.cwd(),
-    "src",
-    "domain",
-    "repositories",
-    `${kebabCaseName}.repository.ts`,
-  );
-  const dir = path.dirname(repoPath);
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-
-  fs.writeFileSync(repoPath, content);
-  console.log(`Arquivo gerado: ${repoPath}`);
+  // Write file
+  const filePath = path.join(paths.repositories, `${names.repoFile}.ts`);
+  writeFile(filePath, content);
 }

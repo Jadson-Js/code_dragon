@@ -1,26 +1,26 @@
-import fs from "node:fs";
-import path from "node:path";
+/**
+ * Module Folder Generator
+ * Creates the module directory structure.
+ */
+
+import { getModelNames } from "./shared/naming.js";
+import { getModulePaths, ensureDir, dirExists } from "./shared/paths.js";
 
 export function generateModuleFolder(modelName) {
-  // Convert module name to kebab-case
-  const folderName = modelName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .toLowerCase();
+  const names = getModelNames(modelName);
+  const paths = getModulePaths(names.kebab);
 
-  const modulePath = path.join(process.cwd(), "src", "modules", folderName);
-
-  if (!fs.existsSync(modulePath)) {
-    fs.mkdirSync(modulePath, { recursive: true });
-    console.log(`\nFolder criado: ${modulePath}`);
+  if (dirExists(paths.module)) {
+    console.log(`Folder já existe: ${paths.module}`);
   } else {
-    console.log(`\nFolder já existe: ${modulePath}`);
+    ensureDir(paths.module);
+    console.log(`Folder criado: ${paths.module}`);
   }
 
-  const useCasesPath = path.join(modulePath, "use-cases");
-  if (!fs.existsSync(useCasesPath)) {
-    fs.mkdirSync(useCasesPath, { recursive: true });
-    console.log(`Folder criado: ${useCasesPath}`);
+  if (dirExists(paths.useCases)) {
+    console.log(`Folder já existe: ${paths.useCases}`);
   } else {
-    console.log(`Folder já existe: ${useCasesPath}`);
+    ensureDir(paths.useCases);
+    console.log(`Folder criado: ${paths.useCases}`);
   }
 }

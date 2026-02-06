@@ -3,50 +3,50 @@ interface CreatePostProps {
   name: string;
   email: string;
   passwordHash: string;
-  birthDate?: Date;
-  verifiedAt?: Date;
-  imageId?: number;
-  linkedinUrl?: string;
-  githubUrl?: string;
-  portfolioUrl?: string;
+  birthDate?: Date | null;
+  verifiedAt?: Date | null;
+  imageId?: number | null;
+  linkedinUrl?: string | null;
+  githubUrl?: string | null;
+  portfolioUrl?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export class Post {
-  private constructor(
-    private readonly _id: string,
-    private readonly _name: string,
-    private readonly _email: string,
-    private readonly _passwordHash: string,
-    private readonly _birthDate: Date | null,
-    private readonly _verifiedAt: Date | null,
-    private readonly _imageId: number | null,
-    private readonly _linkedinUrl: string | null,
-    private readonly _githubUrl: string | null,
-    private readonly _portfolioUrl: string | null,
-    private readonly _createdAt: Date,
-    private readonly _updatedAt: Date,
-    private readonly _deletedAt: Date | null,
-  ) {}
+  private _id: string;
+  private _name: string;
+  private _email: string;
+  private _passwordHash: string;
+  private _birthDate: Date | null;
+  private _verifiedAt: Date | null;
+  private _imageId: number | null;
+  private _linkedinUrl: string | null;
+  private _githubUrl: string | null;
+  private _portfolioUrl: string | null;
+  private _createdAt: Date;
+  private _updatedAt: Date;
+  private _deletedAt: Date | null;
 
-  public static create(props: CreatePostProps): Post {
-    return new Post(
-      props.id ?? crypto.randomUUID(),
-      props.name,
-      props.email,
-      props.passwordHash,
-      props.birthDate ?? null,
-      props.verifiedAt ?? null,
-      props.imageId ?? null,
-      props.linkedinUrl ?? null,
-      props.githubUrl ?? null,
-      props.portfolioUrl ?? null,
-      props.createdAt ?? new Date(),
-      props.updatedAt ?? new Date(),
-      props.deletedAt ?? null,
-    );
+  private constructor(props: CreatePostProps) {
+    this._id = props.id ?? crypto.randomUUID();
+    this._name = props.name;
+    this._email = props.email;
+    this._passwordHash = props.passwordHash;
+    this._birthDate = props.birthDate ?? null;
+    this._verifiedAt = props.verifiedAt ?? null;
+    this._imageId = props.imageId ?? null;
+    this._linkedinUrl = props.linkedinUrl ?? null;
+    this._githubUrl = props.githubUrl ?? null;
+    this._portfolioUrl = props.portfolioUrl ?? null;
+    this._createdAt = props.createdAt ?? new Date();
+    this._updatedAt = props.updatedAt ?? new Date();
+    this._deletedAt = props.deletedAt ?? null;
+  }
+
+  static create(props: CreatePostProps): Post {
+    return new Post(props);
   }
 
   get id(): string {

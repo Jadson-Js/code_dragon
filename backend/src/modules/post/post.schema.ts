@@ -13,5 +13,3 @@ export const createPostSchema = z.object({
     portfolioUrl: z.string().optional(),
   }),
 });
-
-export type CreatePostSchema = z.infer<typeof createPostSchema>;

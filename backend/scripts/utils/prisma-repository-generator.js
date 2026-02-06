@@ -1,134 +1,96 @@
-import fs from "node:fs";
+/**
+ * Prisma Repository Implementation Generator
+ * Generates concrete Prisma-based repository implementations.
+ */
+
 import path from "node:path";
-
-function parseModel(modelDefinition) {
-  const lines = modelDefinition.split("\n");
-  const fields = [];
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (
-      !trimmed ||
-      trimmed.startsWith("model") ||
-      trimmed.startsWith("}") ||
-      trimmed.startsWith("//") ||
-      trimmed.startsWith("@@")
-    ) {
-      continue;
-    }
-
-    const parts = trimmed.split(/\s+/);
-    if (parts.length < 2) continue;
-
-    const name = parts[0];
-    fields.push({ name });
-  }
-  return fields;
-}
+import { parseModel } from "./shared/prisma-parser.js";
+import { getModelNames, toCamelCase } from "./shared/naming.js";
+import { getModulePaths, writeFile } from "./shared/paths.js";
 
 export function generatePrismaRepository(modelName, modelDefinition) {
   const fields = parseModel(modelDefinition);
-  const kebabCaseName = modelName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .toLowerCase();
+  const names = getModelNames(modelName);
+  const paths = getModulePaths(names.kebab);
+  const prismaModel = toCamelCase(modelName); // For prisma.user, prisma.post, etc.
 
-  const className = modelName;
-  const repoInterfaceName = `I${className}Repository`;
-  const repoImplementationName = `${className}PrismaRepository`;
-  const mapperName = `${className.charAt(0).toLowerCase() + className.slice(1)}PrismaToDomain`;
-  const domainToPrismaName = `${className.charAt(0).toLowerCase() + className.slice(1)}DomainToPrisma`;
-  const prismaModelName =
-    className.charAt(0).toLowerCase() + className.slice(1); // user, post
-
-  let content = `import { ${className} } from "@/domain/entities/${kebabCaseName}.entity";
-import type { ${repoInterfaceName} } from "@/domain/repositories/${kebabCaseName}.repository";
+  let content = `import { ${names.pascal} } from "@/domain/entities/${names.entityFile}";
+import type { ${names.repoInterface} } from "@/domain/repositories/${names.repoFile}";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 
-function ${mapperName}(raw: any): ${className} {
-  return ${className}.create({
+function ${names.prismaToDomain}(raw: any): ${names.pascal} {
+  return ${names.pascal}.create({
 `;
 
-  fields.forEach((field) => {
+  for (const field of fields) {
     content += `    ${field.name}: raw.${field.name},\n`;
-  });
+  }
 
   content += `  });
 }
 
-function ${domainToPrismaName}(domain: ${className}): any {
+function ${names.domainToPrisma}(domain: ${names.pascal}): any {
   return {
 `;
-  fields.forEach((field) => {
-    // assuming public getters match field names
+
+  for (const field of fields) {
     content += `    ${field.name}: domain.${field.name},\n`;
-  });
+  }
+
   content += `  };
 }
 
 @injectable()
-export class ${repoImplementationName} implements ${repoInterfaceName} {
-  async create(data: ${className}): Promise<${className}> {
-    const raw = ${domainToPrismaName}(data);
-    const response = await prisma.${prismaModelName}.create({
+export class ${names.repoClass} implements ${names.repoInterface} {
+  async create(data: ${names.pascal}): Promise<${names.pascal}> {
+    const raw = ${names.domainToPrisma}(data);
+    const response = await prisma.${prismaModel}.create({
       data: raw,
     });
 
-    return ${mapperName}(response);
+    return ${names.prismaToDomain}(response);
   }
 
-  async update(data: ${className}): Promise<${className}> {
-    const raw = ${domainToPrismaName}(data);
-    const response = await prisma.${prismaModelName}.update({
+  async update(data: ${names.pascal}): Promise<${names.pascal}> {
+    const raw = ${names.domainToPrisma}(data);
+    const response = await prisma.${prismaModel}.update({
       where: {
         id: raw.id,
       },
       data: raw,
     });
 
-    return ${mapperName}(response);
+    return ${names.prismaToDomain}(response);
   }
 
   async delete(id: string): Promise<void> {
-    await prisma.${prismaModelName}.delete({
+    await prisma.${prismaModel}.delete({
       where: {
         id,
       },
     });
   }
 
-  async findById(id: string): Promise<${className} | null> {
-    const response = await prisma.${prismaModelName}.findUnique({
+  async findById(id: string): Promise<${names.pascal} | null> {
+    const response = await prisma.${prismaModel}.findUnique({
       where: {
         id,
       },
     });
 
-    return response ? ${mapperName}(response) : null;
+    return response ? ${names.prismaToDomain}(response) : null;
   }
 
-  async findAll(): Promise<${className}[]> {
-    const response = await prisma.${prismaModelName}.findMany();
+  async findAll(): Promise<${names.pascal}[]> {
+    const response = await prisma.${prismaModel}.findMany();
 
-    return response.map(${mapperName});
+    return response.map(${names.prismaToDomain});
   }
 }
 `;
 
-  const repoPath = path.join(
-    process.cwd(),
-    "src",
-    "infra",
-    "database",
-    "prisma",
-    `${kebabCaseName}.prisma.repository.ts`,
-  );
-  const dir = path.dirname(repoPath);
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-
-  fs.writeFileSync(repoPath, content);
-  console.log(`Arquivo gerado: ${repoPath}`);
+  // Write file
+  const filePath = path.join(paths.prismaRepo, `${names.prismaRepoFile}.ts`);
+  writeFile(filePath, content);
 }

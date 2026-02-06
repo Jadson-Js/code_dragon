@@ -27,7 +27,7 @@ export class PostController {
   ) {}
 
   async create(request: Request, response: Response) {
-    const body = request.body; 
+    const body = request.body;
     const result = await this.createPostUseCase.execute(body);
     const httpResponse = postToHTTP(result);
     return response.status(201).json(httpResponse);
@@ -41,9 +41,9 @@ export class PostController {
 
   async findById(request: Request, response: Response) {
     const { id } = request.params;
-    const result = await this.findByIdPostUseCase.execute(id);
+    const result = await this.findByIdPostUseCase.execute(id as string);
     if (!result) return response.status(404).send();
-    
+
     const httpResponse = postToHTTP(result);
     return response.status(200).json(httpResponse);
   }
@@ -58,7 +58,7 @@ export class PostController {
 
   async delete(request: Request, response: Response) {
     const { id } = request.params;
-    await this.deletePostUseCase.execute(id);
+    await this.deletePostUseCase.execute(id as string);
     return response.status(204).send();
   }
 }
