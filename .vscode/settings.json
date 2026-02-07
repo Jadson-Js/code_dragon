@@ -2,24 +2,24 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma",
     "editor.formatOnSave": true
-  },
-  "files.exclude": {
-    "**/generated": true,
-    "**/node_modules": true,
-    "**/prisma/migrations": true,
-    "**/prisma/client.ts": true,
-    "**/.gitignore": true,
-    "**/.prettierignore": true,
-    "**/.prettierrc": true,
-    "**/eslint.config.ts": true,
-    "**/package-lock.json": true,
-    "**/prisma.config.ts": true,
-    "**/tsconfig.json": true,
-    "**/dist": true,
-    "**/components.json": true,
-    "**/tsconfig.app.json": true,
-    "**/tsconfig.node.json": true,
-    "**/vite.config.ts": true,
-    "**/eslint.config.js": true
   }
+  // "files.exclude": {
+  //   "**/generated": true,
+  //   "**/node_modules": true,
+  //   "**/prisma/migrations": true,
+  //   "**/prisma/client.ts": true,
+  //   "**/.gitignore": true,
+  //   "**/.prettierignore": true,
+  //   "**/.prettierrc": true,
+  //   "**/eslint.config.ts": true,
+  //   "**/package-lock.json": true,
+  //   "**/prisma.config.ts": true,
+  //   "**/tsconfig.json": true,
+  //   "**/dist": true,
+  //   "**/components.json": true,
+  //   "**/tsconfig.app.json": true,
+  //   "**/tsconfig.node.json": true,
+  //   "**/vite.config.ts": true,
+  //   "**/eslint.config.js": true
+  // }
 }
