@@ -20,47 +20,19 @@ enum EmailTokenType {
 }
 
 model User {
-  id           String       @id @default(uuid())
+  id           String    @id @default(uuid())
   name         String
-  email        String       @unique
-  passwordHash String       @map("password_hash")
-  birthDate    DateTime?    @map("birth_date")
-  verifiedAt   DateTime?    @map("verified_at")
-  imageId      Int?         @map("image_id")
-  linkedinUrl  String?      @map("linkedin_url")
-  githubUrl    String?      @map("github_url")
-  portfolioUrl String?      @map("portfolio_url")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at")
-  deletedAt    DateTime?    @map("deleted_at")
-  emailTokens  EmailToken[]
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  birthDate    DateTime? @map("birth_date")
+  verifiedAt   DateTime? @map("verified_at")
+  imageId      Int?      @map("image_id")
+  linkedinUrl  String?   @map("linkedin_url")
+  githubUrl    String?   @map("github_url")
+  portfolioUrl String?   @map("portfolio_url")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
 
   @@map("users")
-}
-
-model EmailToken {
-  id        String         @id @default(uuid())
-  userId    String         @map("user_id")
-  token     String         @unique
-  type      EmailTokenType
-  usedAt    DateTime?      @map("used_at")
-  expiresAt DateTime       @map("expires_at")
-  createdAt DateTime       @default(now()) @map("created_at")
-  updatedAt DateTime       @default(now()) @updatedAt @map("updated_at")
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("email_tokens")
-}
-
-model Image {
-  id        String   @id @default(uuid())
-  url       String
-  key       String   @unique
-  mimeType  String   @map("mime_type")
-  size      Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-
-  @@map("images")
 }
