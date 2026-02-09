@@ -20,10 +20,11 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/app
-      - /usr/app/node_modules # Preserva node_modules do container
+      - node_modules:/usr/app/node_modules # Volume nomeado para remoção seletiva
     environment:
       DATABASE_URL: postgresql://${DB_USER:-codedragon_admin}:${DB_PASSWORD:-admin123}@db:5432/${DB_NAME:-codedragon}?schema=public
       NODE_ENV: ${NODE_ENV:-development}
 
 volumes:
   postgres_data:
+  node_modules:

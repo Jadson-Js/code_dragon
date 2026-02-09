@@ -85,4 +85,14 @@ export class UserPrismaRepository implements IUserRepository {
 
     return response.map(userPrismaToDomain);
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const response = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return response ? userPrismaToDomain(response) : null;
+  }
 }

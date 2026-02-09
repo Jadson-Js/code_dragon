@@ -13,10 +13,9 @@ datasource db {
   provider = "postgresql"
 }
 
-enum EmailTokenType {
-  VERIFICATION
+enum TokenType {
+  EMAIL_VERIFICATION
   PASSWORD_RESET
-  EMAIL_CHANGE
 }
 
 model User {
@@ -33,6 +32,22 @@ model User {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
+  tokens       Token[]
 
   @@map("users")
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  type      TokenType
+  usedAt    DateTime? @map("used_at")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("tokens")
 }

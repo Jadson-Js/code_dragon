@@ -20,7 +20,7 @@ export const emailRenderProvider: IEmailRenderProvider = (
 
     if (value === undefined) continue;
 
-    html = html.replaceAll(`{${key}}`, value);
+    html = html.replaceAll(`{{${key}}}`, value);
   }
 
   return html;
