@@ -12,59 +12,27 @@ interface CreateTokenProps {
 }
 
 export class Token {
-  private _id: string;
-  private _userId: string;
-  private _tokenHash: string;
-  private _type: TokenType;
-  private _usedAt: Date | null;
-  private _expiresAt: Date;
-  private _createdAt: Date;
-  private _updatedAt: Date;
+  readonly id: string;
+  readonly userId: string;
+  readonly tokenHash: string;
+  readonly type: TokenType;
+  readonly usedAt: Date | null;
+  readonly expiresAt: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 
   private constructor(props: CreateTokenProps) {
-    this._id = props.id ?? crypto.randomUUID();
-    this._userId = props.userId;
-    this._tokenHash = props.tokenHash;
-    this._type = props.type;
-    this._usedAt = props.usedAt ?? null;
-    this._expiresAt = props.expiresAt;
-    this._createdAt = props.createdAt ?? new Date();
-    this._updatedAt = props.updatedAt ?? new Date();
+    this.id = props.id ?? crypto.randomUUID();
+    this.userId = props.userId;
+    this.tokenHash = props.tokenHash;
+    this.type = props.type;
+    this.usedAt = props.usedAt ?? null;
+    this.expiresAt = props.expiresAt;
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
   }
 
   static create(props: CreateTokenProps): Token {
     return new Token(props);
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  get userId(): string {
-    return this._userId;
-  }
-
-  get tokenHash(): string {
-    return this._tokenHash;
-  }
-
-  get type(): TokenType {
-    return this._type;
-  }
-
-  get usedAt(): Date | null {
-    return this._usedAt;
-  }
-
-  get expiresAt(): Date {
-    return this._expiresAt;
-  }
-
-  get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  get updatedAt(): Date {
-    return this._updatedAt;
   }
 }

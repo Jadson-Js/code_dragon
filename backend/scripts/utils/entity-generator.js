@@ -26,10 +26,10 @@ export function generateEntity(modelName, modelDefinition) {
   // Build class
   let classContent = `export class ${names.pascal} {\n`;
 
-  // Private fields
+  // Readonly public fields
   for (const field of fields) {
     const nullSuffix = field.isOptional ? " | null" : "";
-    classContent += `  private _${field.name}: ${field.tsType}${nullSuffix};\n`;
+    classContent += `  readonly ${field.name}: ${field.tsType}${nullSuffix};\n`;
   }
   classContent += "\n";
 
@@ -37,11 +37,11 @@ export function generateEntity(modelName, modelDefinition) {
   classContent += `  private constructor(props: Create${names.pascal}Props) {\n`;
   for (const field of fields) {
     if (field.defaultValue) {
-      classContent += `    this._${field.name} = props.${field.name} ?? ${field.defaultValue};\n`;
+      classContent += `    this.${field.name} = props.${field.name} ?? ${field.defaultValue};\n`;
     } else if (field.isOptional) {
-      classContent += `    this._${field.name} = props.${field.name} ?? null;\n`;
+      classContent += `    this.${field.name} = props.${field.name} ?? null;\n`;
     } else {
-      classContent += `    this._${field.name} = props.${field.name};\n`;
+      classContent += `    this.${field.name} = props.${field.name};\n`;
     }
   }
   classContent += "  }\n\n";
@@ -49,15 +49,7 @@ export function generateEntity(modelName, modelDefinition) {
   // Static create method
   classContent += `  static create(props: Create${names.pascal}Props): ${names.pascal} {\n`;
   classContent += `    return new ${names.pascal}(props);\n`;
-  classContent += "  }\n\n";
-
-  // Public getters
-  for (const field of fields) {
-    const nullSuffix = field.isOptional ? " | null" : "";
-    classContent += `  get ${field.name}(): ${field.tsType}${nullSuffix} {\n`;
-    classContent += `    return this._${field.name};\n`;
-    classContent += "  }\n\n";
-  }
+  classContent += "  }\n";
 
   classContent += "}\n";
 

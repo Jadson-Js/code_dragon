@@ -30,35 +30,22 @@ function ${names.prismaToDomain}(raw: any): ${names.pascal} {
   content += `  });
 }
 
-function ${names.domainToPrisma}(domain: ${names.pascal}): any {
-  return {
-`;
-
-  for (const field of fields) {
-    content += `    ${field.name}: domain.${field.name},\n`;
-  }
-
-  content += `  };
-}
-
 @injectable()
 export class ${names.repoClass} implements ${names.repoInterface} {
   async create(data: ${names.pascal}): Promise<${names.pascal}> {
-    const raw = ${names.domainToPrisma}(data);
     const response = await prisma.${prismaModel}.create({
-      data: raw,
+      data: data,
     });
 
     return ${names.prismaToDomain}(response);
   }
 
   async update(data: ${names.pascal}): Promise<${names.pascal}> {
-    const raw = ${names.domainToPrisma}(data);
     const response = await prisma.${prismaModel}.update({
       where: {
-        id: raw.id,
+        id: data.id,
       },
-      data: raw,
+      data: data,
     });
 
     return ${names.prismaToDomain}(response);
