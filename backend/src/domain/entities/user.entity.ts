@@ -48,4 +48,8 @@ export class User {
   static create(props: CreateUserProps): User {
     return new User(props);
   }
+
+  markAsVerified(): User {
+    return new User({ ...this, verifiedAt: new Date(), updatedAt: new Date() });
+  }
 }

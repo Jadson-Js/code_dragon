@@ -35,4 +35,8 @@ export class Token {
   static create(props: CreateTokenProps): Token {
     return new Token(props);
   }
+
+  isExpired(): boolean {
+    return this.expiresAt < new Date();
+  }
 }

@@ -49,4 +49,14 @@ export class JwtProvider implements IJWTProvider {
       return false;
     }
   }
+
+  async decodeToken(
+    token: string,
+  ): Promise<{ sub: string; [key: string]: unknown }> {
+    const decoded = jwt.decode(token) as {
+      userId: string;
+      [key: string]: unknown;
+    };
+    return { sub: decoded.userId, ...decoded };
+  }
 }

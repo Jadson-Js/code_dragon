@@ -4,6 +4,7 @@ import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.reposi
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import { SignupAuthUseCase } from "./use-cases/signup-auth";
 import { ResendEmailUseCase } from "./use-cases/resend-email";
+import { VerifyEmailUseCase } from "./use-cases/verify-email";
 
 // Registra o repositório
 container.register("UserRepository", {
@@ -21,6 +22,10 @@ container.register("SignupAuthUseCase", {
 
 container.register("ResendEmailUseCase", {
   useClass: ResendEmailUseCase,
+});
+
+container.register("VerifyEmailUseCase", {
+  useClass: VerifyEmailUseCase,
 });
 
 export const authController = container.resolve(AuthController);

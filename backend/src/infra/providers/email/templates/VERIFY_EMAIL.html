@@ -129,22 +129,26 @@
                 >
                   <tr>
                     <td align="center" style="padding: 0 0 32px 0">
-                      <a
-                        href="{{link}}"
-                        style="
-                          display: inline-block;
-                          background-color: #f59e0b;
-                          color: #1a1a2e;
-                          text-decoration: none;
-                          font-size: 14px;
-                          font-weight: bold;
-                          padding: 16px 40px;
-                          border-radius: 8px;
-                          letter-spacing: 1px;
-                        "
-                      >
-                        CONFIRMAR SEU EMAIL
-                      </a>
+                      <form action="{{link}}" method="POST">
+                        <input type="hidden" name="token" value="{{token}}" />
+                        <button
+                          type="submit"
+                          style="
+                            display: inline-block;
+                            background-color: #f59e0b;
+                            color: #1a1a2e;
+                            border: none;
+                            cursor: pointer;
+                            font-size: 14px;
+                            font-weight: bold;
+                            padding: 16px 40px;
+                            border-radius: 8px;
+                            letter-spacing: 1px;
+                          "
+                        >
+                          CONFIRMAR SEU EMAIL
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 </table>

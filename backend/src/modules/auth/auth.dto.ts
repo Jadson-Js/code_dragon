@@ -15,3 +15,7 @@ export interface AuthResponseDTO {
 export interface ResendEmailResponseDTO {
   message: string;
 }
+
+export interface VerifyEmailDTO {
+  token: string;
+}

@@ -58,7 +58,8 @@ export class ResendEmailUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.appUrl}/verify-email?token=${emailToken}`,
+        link: `${env.appUrl}/api/auth/verify-email`,
+        token: emailToken,
         expiration: "24",
       },
     });

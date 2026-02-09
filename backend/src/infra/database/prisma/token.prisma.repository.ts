@@ -43,6 +43,16 @@ export class TokenPrismaRepository implements ITokenRepository {
     return response ? tokenPrismaToDomain(response) : null;
   }
 
+  async findByUserId(userId: string): Promise<Token[]> {
+    const response = await prisma.token.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return response.map(tokenPrismaToDomain);
+  }
+
   async findAll(): Promise<Token[]> {
     const response = await prisma.token.findMany();
 

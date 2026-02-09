@@ -5,5 +5,6 @@ export interface ITokenRepository {
   update(data: Token): Promise<Token>;
   delete(id: string): Promise<void>;
   findById(id: string): Promise<Token | null>;
+  findByUserId(userId: string): Promise<Token[]>;
   findAll(): Promise<Token[]>;
 }

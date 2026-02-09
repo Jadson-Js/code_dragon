@@ -19,4 +19,6 @@ export const env = {
   emailVerificationTokenExpiration:
     Number(process.env.EMAIL_VERIFICATION_TOKEN_EXPIRATION) ||
     1000 * 60 * 60 * 24, // 24h in ms
+
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
 };

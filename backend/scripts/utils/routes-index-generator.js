@@ -37,7 +37,7 @@ export function generateRoutesIndex() {
           modules.push({
             name: moduleName,
             importName: `${toCamelCase(moduleName)}Routes`,
-            endpoint: `/${toPlural(moduleName)}`,
+            endpoint: `${toPlural(moduleName)}`,
           });
         }
       }
@@ -66,7 +66,7 @@ const router = Router();
 
   // Generate route registrations
   for (const mod of modules) {
-    content += `router.use("${mod.endpoint}", ${mod.importName});\n`;
+    content += `router.use("/api/${mod.endpoint}", ${mod.importName});\n`;
   }
 
   content += `

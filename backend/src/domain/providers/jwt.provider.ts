@@ -5,4 +5,5 @@ export interface IJWTProvider {
   verifyRefreshToken(token: string): Promise<boolean>;
   verifyAccessToken(token: string): Promise<boolean>;
   verifyEmailVerificationToken(token: string): Promise<boolean>;
+  decodeToken(token: string): Promise<{ sub: string; [key: string]: unknown }>;
 }

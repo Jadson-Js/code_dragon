@@ -21,7 +21,7 @@ export class AuthTransactionPrismaRepository implements IAuthTransactionReposito
       });
     } catch (error: any) {
       if (error.code === "P2002") {
-        throw new ConflictError("Email already in use");
+        throw new ConflictError("User already exists.");
       }
       throw error;
     }
