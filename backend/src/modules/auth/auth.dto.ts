@@ -4,6 +4,14 @@ export interface SignupAuthDTO {
   password: string;
 }
 
+export interface ResendEmailDTO {
+  email: string;
+}
+
 export interface AuthResponseDTO {
   id: string;
+}
+
+export interface ResendEmailResponseDTO {
+  message: string;
 }

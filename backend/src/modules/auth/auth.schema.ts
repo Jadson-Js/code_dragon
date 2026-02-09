@@ -7,3 +7,9 @@ export const signupAuthSchema = z.object({
     password: z.string(),
   }),
 });
+
+export const resendEmailSchema = z.object({
+  body: z.object({
+    email: z.string().email(),
+  }),
+});
