@@ -50,7 +50,7 @@ export class ResendEmailUseCase {
       expiresAt: new Date(Date.now() + env.emailVerificationTokenExpiration),
     });
 
-    await this.tokenRepository.create(token);
+    await this.tokenRepository.deleteAllByUserAndCreateToken(user.id, token);
 
     await this.emailProvider.send({
       to: user.email,

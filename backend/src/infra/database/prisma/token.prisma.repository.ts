@@ -3,6 +3,7 @@ import type { ITokenRepository } from "@/domain/repositories/token.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { tokenPrismaToDomain } from "./mappers";
+import { InternalServerError } from "@/shared/app.error";
 
 @injectable()
 export class TokenPrismaRepository implements ITokenRepository {
@@ -57,5 +58,25 @@ export class TokenPrismaRepository implements ITokenRepository {
     const response = await prisma.token.findMany();
 
     return response.map(tokenPrismaToDomain);
+  }
+
+  async deleteAllByUserAndCreateToken(
+    userId: string,
+    token: Token,
+  ): Promise<void> {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        await tx.token.deleteMany({
+          where: {
+            userId,
+          },
+        });
+        await tx.token.create({
+          data: token,
+        });
+      });
+    } catch (error: any) {
+      throw new InternalServerError();
+    }
   }
 }

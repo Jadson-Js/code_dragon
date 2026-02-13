@@ -2,7 +2,7 @@ import { User } from "@/domain/entities/user.entity";
 import { Token } from "@/domain/entities/token.entity";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
-import { ConflictError } from "@/shared/app.error";
+import { ConflictError, InternalServerError } from "@/shared/app.error";
 import type { IAuthTransactionRepository } from "@/domain/repositories/auth-transaction.repository";
 import { userPrismaToDomain } from "./mappers";
 
@@ -23,7 +23,7 @@ export class AuthTransactionPrismaRepository implements IAuthTransactionReposito
       if (error.code === "P2002") {
         throw new ConflictError("User already exists.");
       }
-      throw error;
+      throw new InternalServerError();
     }
   }
 }
