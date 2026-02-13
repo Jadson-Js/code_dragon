@@ -20,7 +20,6 @@ export class AuthController {
 
   async signup(request: Request, response: Response) {
     const result = await this.signupAuthUseCase.execute(request.body);
-    // Always return 200 with generic message to prevent email enumeration
     return response.status(200).json(result);
   }
 

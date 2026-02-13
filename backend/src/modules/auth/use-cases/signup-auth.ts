@@ -34,11 +34,9 @@ export class SignupAuthUseCase {
   ) {}
 
   async execute(params: SignupAuthDTO) {
-    // Check if user already exists (silently)
     const existingUser = await this.userRepository.findByEmail(params.email);
 
     if (existingUser) {
-      // Return same generic message to prevent email enumeration
       return this.GENERIC_RESPONSE;
     }
 
@@ -66,7 +64,12 @@ export class SignupAuthUseCase {
         name: user.name,
         link: `${env.appUrl}/api/auth/verify-email`,
         token: emailToken,
-        expiration: "24",
+        expiration: (
+          env.emailVerificationTokenExpiration /
+          60 /
+          60 /
+          1000
+        ).toString(),
       },
     });
 
