@@ -15,14 +15,16 @@ export const env = {
 
   bcryptSaltRounds: Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
 
-  jwtAccessSecret: process.env.JWT_ACCESS_SECRET || "access-secret",
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "refresh-secret",
-  jwtEmailVerificationSecret:
-    process.env.JWT_EMAIL_VERIFICATION_SECRET || "email-verification-secret",
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET || "",
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "",
+  jwtEmailVerificationSecret: process.env.JWT_EMAIL_VERIFICATION_SECRET || "",
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "5m",
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "24h",
   jwtEmailVerificationExpiresIn:
     process.env.JWT_EMAIL_VERIFICATION_EXPIRES_IN || "10m",
 
   resendApiKey: process.env.RESEND_API_KEY || "",
+
+  redisHost: process.env.REDIS_HOST || "",
+  redisPort: Number(process.env.REDIS_PORT) || 6379,
 };

@@ -9,6 +9,7 @@ import type { ITokenRepository } from "@/domain/repositories/token.repository";
 import { env } from "@/shared/env";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 import { parseDuration } from "@/shared/utils";
+import { emailQueue } from "@/infra/providers/queue/queue.provider";
 
 @injectable()
 export class ResendEmailUseCase {
@@ -55,7 +56,7 @@ export class ResendEmailUseCase {
 
     await this.tokenRepository.deleteAllByUserAndCreateToken(user.id, token);
 
-    await this.emailProvider.send({
+    await emailQueue.add("email", {
       to: user.email,
       subject: "Email Verification",
       template: "VERIFY_EMAIL",

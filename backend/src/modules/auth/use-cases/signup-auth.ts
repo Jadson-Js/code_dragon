@@ -9,6 +9,7 @@ import type { IAuthTransactionRepository } from "@/domain/repositories/auth-tran
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import { env } from "@/shared/env";
 import { parseDuration } from "@/shared/utils";
+import { emailQueue } from "@/infra/providers/queue/queue.provider";
 
 @injectable()
 export class SignupAuthUseCase {
@@ -26,9 +27,6 @@ export class SignupAuthUseCase {
 
     @inject("UserRepository")
     private readonly userRepository: IUserRepository,
-
-    @inject("EmailProvider")
-    private readonly emailProvider: IEmailProvider,
 
     @inject("JWTProvider")
     private readonly jwtProvider: IJWTProvider,
@@ -60,7 +58,7 @@ export class SignupAuthUseCase {
 
     await this.authTransactionRepository.createUserWithEmailToken(user, token);
 
-    await this.emailProvider.send({
+    await emailQueue.add("email", {
       to: user.email,
       subject: "Email Verification",
       template: "VERIFY_EMAIL",
