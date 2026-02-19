@@ -1,11 +1,14 @@
 FROM node:lts-alpine
 
-WORKDIR /usr/app
+WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
+
+RUN mkdir -p /app/generated && chmod -R 777 /app/generated
 
 EXPOSE 3000
 

@@ -8,6 +8,7 @@ import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
 import { env } from "@/shared/env";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
+import { parseDuration } from "@/shared/utils";
 
 @injectable()
 export class ResendEmailUseCase {
@@ -47,7 +48,9 @@ export class ResendEmailUseCase {
       userId: user.id,
       tokenHash: emailTokenHash,
       type: "EMAIL_VERIFICATION",
-      expiresAt: new Date(Date.now() + env.emailVerificationTokenExpiration),
+      expiresAt: new Date(
+        Date.now() + parseDuration(env.jwtEmailVerificationExpiresIn),
+      ),
     });
 
     await this.tokenRepository.deleteAllByUserAndCreateToken(user.id, token);
@@ -58,9 +61,9 @@ export class ResendEmailUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.appUrl}/api/auth/verify-email`,
+        link: `${env.apiUrl}/api/auth/verify-email`,
         token: emailToken,
-        expiration: "24",
+        expiration: env.jwtEmailVerificationExpiresIn,
       },
     });
 

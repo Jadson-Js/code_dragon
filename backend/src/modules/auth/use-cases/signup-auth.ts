@@ -8,6 +8,7 @@ import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IAuthTransactionRepository } from "@/domain/repositories/auth-transaction.repository";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import { env } from "@/shared/env";
+import { parseDuration } from "@/shared/utils";
 
 @injectable()
 export class SignupAuthUseCase {
@@ -47,11 +48,14 @@ export class SignupAuthUseCase {
       user.id,
     );
     const emailTokenHash = await this.hashProvider.hash(emailToken);
+
     const token = Token.create({
       userId: user.id,
       tokenHash: emailTokenHash,
       type: "EMAIL_VERIFICATION",
-      expiresAt: new Date(Date.now() + env.emailVerificationTokenExpiration),
+      expiresAt: new Date(
+        Date.now() + parseDuration(env.jwtEmailVerificationExpiresIn),
+      ),
     });
 
     await this.authTransactionRepository.createUserWithEmailToken(user, token);
@@ -62,14 +66,9 @@ export class SignupAuthUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.appUrl}/api/auth/verify-email`,
+        link: `${env.apiUrl}/api/auth/verify-email`,
         token: emailToken,
-        expiration: (
-          env.emailVerificationTokenExpiration /
-          60 /
-          60 /
-          1000
-        ).toString(),
+        expiration: env.jwtEmailVerificationExpiresIn,
       },
     });
 
