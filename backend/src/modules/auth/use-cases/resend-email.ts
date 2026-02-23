@@ -7,11 +7,15 @@ import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 import { env } from "@/shared/env";
-import { NotFoundError, BadRequestError } from "@/shared/app.error";
 import { parseDuration } from "@/shared/utils";
 
 @injectable()
 export class ResendEmailUseCase {
+  private readonly GENERIC_RESPONSE = {
+    message:
+      "If this email is registered and not yet verified, you will receive a verification email.",
+  };
+
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -32,12 +36,8 @@ export class ResendEmailUseCase {
   async execute(params: ResendEmailDTO) {
     const user = await this.userRepository.findByEmail(params.email);
 
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    if (user.verifiedAt) {
-      throw new BadRequestError("Email already verified");
+    if (!user || user.verifiedAt) {
+      return this.GENERIC_RESPONSE;
     }
 
     const emailToken = await this.jwtProvider.generateEmailVerificationToken(
@@ -67,6 +67,6 @@ export class ResendEmailUseCase {
       },
     });
 
-    return { message: "Verification email sent" };
+    return this.GENERIC_RESPONSE;
   }
 }
