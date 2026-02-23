@@ -10,10 +10,10 @@ import { env } from "@/shared/env";
 @injectable()
 export class VerifyEmailUseCase {
   constructor(
-    @inject("JWTProvider")
+    @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
 
-    @inject("HashProvider")
+    @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
     @inject("UserRepository")

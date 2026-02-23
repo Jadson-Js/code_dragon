@@ -6,6 +6,7 @@ import {
   resendEmailSchema,
   verifyEmailSchema,
 } from "./auth.schema";
+import { rateLimitMiddleware } from "@/infra/http/middlewares/rate-limit.middleware";
 
 const router = Router();
 
@@ -17,6 +18,7 @@ router.post(
 
 router.post(
   "/resend-email",
+  rateLimitMiddleware({ max: 1, windowInMs: 60000, key: "resend-email" }),
   validate(resendEmailSchema),
   authController.resendEmail.bind(authController),
 );

@@ -10,7 +10,7 @@ export class CreateUserUseCase {
     @inject("UserRepository")
     private readonly userRepository: IUserRepository,
 
-    @inject("EmailProvider")
+    @inject("IEmailProvider")
     private readonly emailProvider: IEmailProvider,
   ) {}
 
@@ -18,16 +18,16 @@ export class CreateUserUseCase {
     const user = User.create(params);
     const response = await this.userRepository.create(user);
 
-    await this.emailProvider.send(
-      "jadson20051965@gmail.com",
-      "Hello",
-      "VERIFY_EMAIL",
-      {
+    await this.emailProvider.send({
+      to: "jadson20051965@gmail.com",
+      subject: "Hello",
+      template: "VERIFY_EMAIL",
+      variables: {
         name: "Jadson",
         link: "google.com",
         expiration: "10 min",
       },
-    );
+    });
 
     return response;
   }

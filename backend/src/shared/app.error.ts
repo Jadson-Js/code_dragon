@@ -37,6 +37,12 @@ export class ConflictError extends AppError {
   }
 }
 
+export class TooManyRequestsError extends AppError {
+  constructor(message: string = "Too many requests, please try again later") {
+    super(429, message);
+  }
+}
+
 export class InternalServerError extends AppError {
   constructor(message: string = "Internal server error") {
     super(500, message);

@@ -1,4 +1,3 @@
-import type { IEmailProvider } from "@/domain/providers/email/email.provider";
 import { inject, injectable } from "tsyringe";
 import type { ResendEmailDTO } from "../auth.dto";
 import { Token } from "@/domain/entities/token.entity";
@@ -6,15 +5,15 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
+import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 import { env } from "@/shared/env";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 import { parseDuration } from "@/shared/utils";
-import { emailQueue } from "@/infra/providers/queue/queue.provider";
 
 @injectable()
 export class ResendEmailUseCase {
   constructor(
-    @inject("HashProvider")
+    @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
     @inject("UserRepository")
@@ -23,10 +22,10 @@ export class ResendEmailUseCase {
     @inject("TokenRepository")
     private readonly tokenRepository: ITokenRepository,
 
-    @inject("EmailProvider")
-    private readonly emailProvider: IEmailProvider,
+    @inject("IEmailQueueProvider")
+    private readonly emailQueueProvider: IEmailQueueProvider,
 
-    @inject("JWTProvider")
+    @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
@@ -56,7 +55,7 @@ export class ResendEmailUseCase {
 
     await this.tokenRepository.deleteAllByUserAndCreateToken(user.id, token);
 
-    await emailQueue.add("email", {
+    await this.emailQueueProvider.addJob({
       to: user.email,
       subject: "Email Verification",
       template: "VERIFY_EMAIL",

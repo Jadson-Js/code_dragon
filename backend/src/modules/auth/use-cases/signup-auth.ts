@@ -1,4 +1,3 @@
-import type { IEmailProvider } from "@/domain/providers/email/email.provider";
 import { inject, injectable } from "tsyringe";
 import type { SignupAuthDTO } from "../auth.dto";
 import { User } from "@/domain/entities/user.entity";
@@ -9,17 +8,17 @@ import type { IAuthTransactionRepository } from "@/domain/repositories/auth-tran
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import { env } from "@/shared/env";
 import { parseDuration } from "@/shared/utils";
-import { emailQueue } from "@/infra/providers/queue/queue.provider";
+import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 
 @injectable()
 export class SignupAuthUseCase {
   private readonly GENERIC_RESPONSE = {
     message:
-      "Se este email não estiver cadastrado, você receberá um email de verificação.",
+      "If this email is not registered, you will receive a verification email.",
   };
 
   constructor(
-    @inject("HashProvider")
+    @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
     @inject("AuthTransactionRepository")
@@ -28,8 +27,11 @@ export class SignupAuthUseCase {
     @inject("UserRepository")
     private readonly userRepository: IUserRepository,
 
-    @inject("JWTProvider")
+    @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
+
+    @inject("IEmailQueueProvider")
+    private readonly emailQueueProvider: IEmailQueueProvider,
   ) {}
 
   async execute(params: SignupAuthDTO) {
@@ -58,7 +60,7 @@ export class SignupAuthUseCase {
 
     await this.authTransactionRepository.createUserWithEmailToken(user, token);
 
-    await emailQueue.add("email", {
+    await this.emailQueueProvider.addJob({
       to: user.email,
       subject: "Email Verification",
       template: "VERIFY_EMAIL",
