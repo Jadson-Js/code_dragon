@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   async verifyEmail(request: Request, response: Response) {
-    const { redirectUrl } = await this.verifyEmailUseCase.execute(request.body);
-    return response.redirect(redirectUrl);
+    const url = await this.verifyEmailUseCase.execute(request.body);
+    return response.redirect(url);
   }
 }

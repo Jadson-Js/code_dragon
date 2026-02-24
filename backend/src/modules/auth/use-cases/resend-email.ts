@@ -51,7 +51,7 @@ export class ResendEmailUseCase {
       expiresAt: new Date(Date.now() + env.jwtEmailVerificationExpiresInMs),
     });
 
-    await this.tokenRepository.deleteAllByUserAndCreateToken(user.id, token);
+    await this.tokenRepository.deleteAllByUserIdAndCreateToken(user.id, token);
 
     await this.emailQueueProvider.addJob({
       to: user.email,
@@ -59,7 +59,7 @@ export class ResendEmailUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.apiUrl}/api/auth/verify-email`,
+        link: `${env.frontendUrl}/verify-email?token=${emailToken}`,
         token: emailToken,
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },

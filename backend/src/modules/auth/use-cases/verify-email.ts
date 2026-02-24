@@ -24,6 +24,7 @@ export class VerifyEmailUseCase {
   ) {}
 
   async execute(params: VerifyEmailDTO) {
+    // 1. Verify the JWT signature
     const isValidToken = await this.jwtProvider.verifyEmailVerificationToken(
       params.token,
     );
@@ -32,9 +33,11 @@ export class VerifyEmailUseCase {
       throw new BadRequestError("Invalid or expired token");
     }
 
+    // 2. Decode to get the userId
     const decoded = await this.jwtProvider.decodeToken(params.token);
     const userId = decoded.sub as string;
 
+    // 3. Find the user
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
@@ -45,40 +48,36 @@ export class VerifyEmailUseCase {
       throw new BadRequestError("Email already verified");
     }
 
-    // Find and validate the token in database by comparing hashes
+    // 4. Find the matching token in the database
     const tokens = await this.tokenRepository.findByUserId(userId);
     const emailVerificationTokens = tokens.filter(
       (t) => t.type === "EMAIL_VERIFICATION",
     );
 
-    // Find the token that matches the received token hash
-    let emailToken = null;
-    for (const token of emailVerificationTokens) {
-      const isMatch = await this.hashProvider.compare(
-        params.token,
-        token.tokenHash,
-      );
-      if (isMatch) {
-        emailToken = token;
-        break;
-      }
-    }
+    const token = emailVerificationTokens[0];
+    if (!token) throw new BadRequestError("Token not found or invalid");
 
-    if (!emailToken) {
+    const isMatch = await this.hashProvider.compare(
+      params.token,
+      token.tokenHash,
+    );
+
+    if (!isMatch) {
       throw new BadRequestError("Token not found or invalid");
     }
 
-    // Mark user as verified using entity method
+    // 5. Check if the token is expired
+    if (token.isExpired()) {
+      throw new BadRequestError("Token has expired");
+    }
+
+    // 7. Mark user as verified
     const verifiedUser = user.markAsVerified();
     await this.userRepository.update(verifiedUser);
 
-    // Delete the used token
-    await this.tokenRepository.delete(emailToken.id);
+    // 8. Delete the used token
+    await this.tokenRepository.delete(token.id);
 
-    // Redirect to success page or return success message
-    return {
-      success: true,
-      redirectUrl: `${env.frontendUrl}/email-verified`,
-    };
+    return `${env.frontendUrl}/email-verified`;
   }
 }

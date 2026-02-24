@@ -29,7 +29,6 @@ export function tokenPrismaToDomain(raw: PrismaToken): Token {
     userId: raw.userId,
     tokenHash: raw.tokenHash,
     type: raw.type,
-    usedAt: raw.usedAt ?? null,
     expiresAt: raw.expiresAt,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,
