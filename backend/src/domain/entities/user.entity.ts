@@ -52,4 +52,12 @@ export class User {
   markAsVerified(): User {
     return new User({ ...this, verifiedAt: new Date(), updatedAt: new Date() });
   }
+
+  isVerified(): boolean {
+    return this.verifiedAt !== null;
+  }
+
+  changePassword(passwordHash: string): User {
+    return new User({ ...this, passwordHash, updatedAt: new Date() });
+  }
 }

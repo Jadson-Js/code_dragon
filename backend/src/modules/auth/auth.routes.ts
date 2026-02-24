@@ -6,6 +6,7 @@ import {
   resendEmailSchema,
   verifyEmailSchema,
   forgotPasswordSchema,
+  resetPasswordSchema,
 } from "./auth.schema";
 import { rateLimitMiddleware } from "@/infra/http/middlewares/rate-limit.middleware";
 
@@ -35,6 +36,12 @@ router.post(
   rateLimitMiddleware({ max: 1, windowInMs: 60000, key: "forgot-password" }),
   validate(forgotPasswordSchema),
   authController.forgotPassword.bind(authController),
+);
+
+router.post(
+  "/reset-password",
+  validate(resetPasswordSchema),
+  authController.resetPassword.bind(authController),
 );
 
 export default router;

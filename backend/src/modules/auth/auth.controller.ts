@@ -4,10 +4,30 @@ import type { SignupAuthUseCase } from "./use-cases/signup-auth";
 import type { ResendEmailUseCase } from "./use-cases/resend-email";
 import type { VerifyEmailUseCase } from "./use-cases/verify-email";
 import type { ForgotPasswordUseCase } from "./use-cases/forgot-password";
-import { authToHTTP } from "./auth.presenter";
+import type { ResetPasswordUseCase } from "./use-cases/reset-password";
+import { env } from "@/shared/env";
 
 @injectable()
 export class AuthController {
+  private readonly SIGNUP_RESPONSE = {
+    message:
+      "If this email is not registered, you will receive a verification email.",
+  };
+
+  private readonly RESEND_EMAIL_RESPONSE = {
+    message:
+      "If this email is registered and not yet verified, you will receive a verification email.",
+  };
+
+  private readonly FORGOT_PASSWORD_RESPONSE = {
+    message:
+      "If this email is registered and verified, you will receive a password reset email.",
+  };
+
+  private readonly RESET_PASSWORD_RESPONSE = {
+    message: "Password reset successfully.",
+  };
+
   constructor(
     @inject("SignupAuthUseCase")
     private readonly signupAuthUseCase: SignupAuthUseCase,
@@ -20,25 +40,33 @@ export class AuthController {
 
     @inject("ForgotPasswordUseCase")
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+
+    @inject("ResetPasswordUseCase")
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
   ) {}
 
   async signup(request: Request, response: Response) {
-    const result = await this.signupAuthUseCase.execute(request.body);
-    return response.status(200).json(result);
+    await this.signupAuthUseCase.execute(request.body);
+    return response.status(200).json(this.SIGNUP_RESPONSE);
   }
 
   async resendEmail(request: Request, response: Response) {
-    const result = await this.resendEmailUseCase.execute(request.body);
-    return response.status(200).json(result);
+    await this.resendEmailUseCase.execute(request.body);
+    return response.status(200).json(this.RESEND_EMAIL_RESPONSE);
   }
 
   async verifyEmail(request: Request, response: Response) {
-    const url = await this.verifyEmailUseCase.execute(request.body);
-    return response.redirect(url);
+    await this.verifyEmailUseCase.execute(request.body);
+    return response.redirect(`${env.frontendUrl}/email-verified`);
   }
 
   async forgotPassword(request: Request, response: Response) {
-    const result = await this.forgotPasswordUseCase.execute(request.body);
-    return response.status(200).json(result);
+    await this.forgotPasswordUseCase.execute(request.body);
+    return response.status(200).json(this.FORGOT_PASSWORD_RESPONSE);
+  }
+
+  async resetPassword(request: Request, response: Response) {
+    await this.resetPasswordUseCase.execute(request.body);
+    return response.status(200).json(this.RESET_PASSWORD_RESPONSE);
   }
 }

@@ -12,11 +12,6 @@ import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provide
 
 @injectable()
 export class SignupAuthUseCase {
-  private readonly GENERIC_RESPONSE = {
-    message:
-      "If this email is not registered, you will receive a verification email.",
-  };
-
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -34,12 +29,10 @@ export class SignupAuthUseCase {
     private readonly emailQueueProvider: IEmailQueueProvider,
   ) {}
 
-  async execute(params: SignupAuthDTO) {
+  async execute(params: SignupAuthDTO): Promise<void> {
     const existingUser = await this.userRepository.findByEmail(params.email);
 
-    if (existingUser) {
-      return this.GENERIC_RESPONSE;
-    }
+    if (existingUser) return;
 
     const passwordHash = await this.hashProvider.hash(params.password);
     const user = User.create({ ...params, passwordHash });
@@ -69,7 +62,5 @@ export class SignupAuthUseCase {
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },
     });
-
-    return this.GENERIC_RESPONSE;
   }
 }

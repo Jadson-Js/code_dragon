@@ -11,11 +11,6 @@ import { formatMs } from "@/shared/utils";
 
 @injectable()
 export class ForgotPasswordUseCase {
-  private readonly GENERIC_RESPONSE = {
-    message:
-      "If this email is registered and verified, you will receive a password reset email.",
-  };
-
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -33,13 +28,11 @@ export class ForgotPasswordUseCase {
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
-  async execute(params: ForgotPasswordDTO) {
+  async execute(params: ForgotPasswordDTO): Promise<void> {
     const user = await this.userRepository.findByEmail(params.email);
 
     // Only proceed if the user exists and is verified
-    if (!user || !user.verifiedAt) {
-      return this.GENERIC_RESPONSE;
-    }
+    if (!user || !user.isVerified()) return;
 
     const resetToken = await this.jwtProvider.generatePasswordResetToken(
       user.id,
@@ -66,7 +59,5 @@ export class ForgotPasswordUseCase {
         expiration: formatMs(env.jwtResetPasswordExpiresInMs),
       },
     });
-
-    return this.GENERIC_RESPONSE;
   }
 }

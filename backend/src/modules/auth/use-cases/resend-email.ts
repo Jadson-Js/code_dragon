@@ -11,11 +11,6 @@ import { formatMs } from "@/shared/utils";
 
 @injectable()
 export class ResendEmailUseCase {
-  private readonly GENERIC_RESPONSE = {
-    message:
-      "If this email is registered and not yet verified, you will receive a verification email.",
-  };
-
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -33,12 +28,10 @@ export class ResendEmailUseCase {
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
-  async execute(params: ResendEmailDTO) {
+  async execute(params: ResendEmailDTO): Promise<void> {
     const user = await this.userRepository.findByEmail(params.email);
 
-    if (!user || user.verifiedAt) {
-      return this.GENERIC_RESPONSE;
-    }
+    if (!user || user.isVerified()) return;
 
     const emailToken = await this.jwtProvider.generateEmailVerificationToken(
       user.id,
@@ -64,7 +57,5 @@ export class ResendEmailUseCase {
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },
     });
-
-    return this.GENERIC_RESPONSE;
   }
 }
