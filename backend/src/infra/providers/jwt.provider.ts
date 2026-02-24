@@ -24,6 +24,12 @@ export class JwtProvider implements IJWTProvider {
     });
   }
 
+  async generatePasswordResetToken(userId: string): Promise<string> {
+    return jwt.sign({ userId }, env.jwtResetPasswordSecret, {
+      expiresIn: msToSeconds(env.jwtResetPasswordExpiresInMs),
+    });
+  }
+
   async verifyAccessToken(token: string): Promise<boolean> {
     try {
       jwt.verify(token, env.jwtAccessSecret);
@@ -45,6 +51,15 @@ export class JwtProvider implements IJWTProvider {
   async verifyEmailVerificationToken(token: string): Promise<boolean> {
     try {
       jwt.verify(token, env.jwtEmailVerificationSecret);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async verifyPasswordResetToken(token: string): Promise<boolean> {
+    try {
+      jwt.verify(token, env.jwtResetPasswordSecret);
       return true;
     } catch {
       return false;

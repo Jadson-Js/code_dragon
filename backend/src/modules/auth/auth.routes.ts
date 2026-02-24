@@ -5,6 +5,7 @@ import {
   signupAuthSchema,
   resendEmailSchema,
   verifyEmailSchema,
+  forgotPasswordSchema,
 } from "./auth.schema";
 import { rateLimitMiddleware } from "@/infra/http/middlewares/rate-limit.middleware";
 
@@ -27,6 +28,13 @@ router.post(
   "/verify-email",
   validate(verifyEmailSchema),
   authController.verifyEmail.bind(authController),
+);
+
+router.post(
+  "/forgot-password",
+  rateLimitMiddleware({ max: 1, windowInMs: 60000, key: "forgot-password" }),
+  validate(forgotPasswordSchema),
+  authController.forgotPassword.bind(authController),
 );
 
 export default router;
