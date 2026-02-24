@@ -18,10 +18,11 @@ export const env = {
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET || "",
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "",
   jwtEmailVerificationSecret: process.env.JWT_EMAIL_VERIFICATION_SECRET || "",
-  jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "5m",
-  jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "24h",
-  jwtEmailVerificationExpiresIn:
-    process.env.JWT_EMAIL_VERIFICATION_EXPIRES_IN || "10m",
+  jwtAccessExpiresInMs: Number(process.env.JWT_ACCESS_EXPIRES_IN_MS) || 900000,
+  jwtRefreshExpiresInMs:
+    Number(process.env.JWT_REFRESH_EXPIRES_IN_MS) || 604800000,
+  jwtEmailVerificationExpiresInMs:
+    Number(process.env.JWT_EMAIL_VERIFICATION_EXPIRES_IN_MS) || 600000,
 
   resendApiKey: process.env.RESEND_API_KEY || "",
 

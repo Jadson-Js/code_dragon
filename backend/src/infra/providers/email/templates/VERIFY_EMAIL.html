@@ -1,154 +1,249 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta name="referrer" content="no-referrer" />
     <title>Confirme seu Email - CodeDragon</title>
+    <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+    <![endif]-->
+    <style type="text/css">
+      /* Reset */
+      body,
+      table,
+      td,
+      a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+      }
+
+      /* Outlook fix */
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      /* Google Fonts fallback */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      /* Button hover */
+      .btn-confirm:hover {
+        background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+      }
+
+      /* Responsive */
+      @media only screen and (max-width: 600px) {
+        .wrapper {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        .inner-td {
+          padding: 24px 20px !important;
+        }
+        .header-td {
+          padding: 24px 20px !important;
+        }
+        .footer-td {
+          padding: 16px 20px !important;
+        }
+        h1 {
+          font-size: 20px !important;
+        }
+      }
+    </style>
   </head>
-  <body
-    style="
-      margin: 0;
-      padding: 0;
-      font-family: &quot;Segoe UI&quot;, Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f5f5;
-    "
-  >
+  <body style="margin: 0; padding: 0; background-color: #f1f5f9; width: 100%">
+    <!-- Preheader (hidden preview text) -->
+    <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all">
+      Confirme seu cadastro no CodeDragon e comece sua jornada 🐉
+      &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+    </div>
+
+    <!-- Outer wrapper -->
     <table
       role="presentation"
-      cellspacing="0"
-      cellpadding="0"
-      border="0"
       width="100%"
-      style="background-color: #f5f5f5"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #f1f5f9"
     >
       <tr>
-        <td align="center" style="padding: 40px 20px">
+        <td align="center" style="padding: 40px 16px">
+          <!-- Email card -->
           <table
+            class="wrapper"
             role="presentation"
-            cellspacing="0"
-            cellpadding="0"
+            width="560"
             border="0"
-            width="100%"
+            cellpadding="0"
+            cellspacing="0"
             style="
-              max-width: 600px;
+              max-width: 560px;
+              width: 100%;
               background-color: #ffffff;
-              border-radius: 12px;
+              border-radius: 16px;
+              border: 1px solid #e2e8f0;
               overflow: hidden;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             "
           >
-            <!-- Header -->
+            <!-- ===== HEADER ===== -->
             <tr>
               <td
+                class="header-td"
+                align="center"
                 style="
-                  background-color: #1a1a2e;
-                  padding: 30px 40px;
-                  text-align: center;
+                  padding: 16px 16px;
+                  background-color: #0f172a;
+                  border-radius: 16px 16px 0 0;
                 "
               >
-                <table
-                  role="presentation"
-                  cellspacing="0"
-                  cellpadding="0"
-                  border="0"
-                  style="margin: 0 auto"
-                >
-                  <tr>
-                    <td style="vertical-align: middle; padding-right: 12px">
-                      <div
-                        style="
-                          width: 40px;
-                          height: 40px;
-                          background-color: #f59e0b;
-                          border-radius: 8px;
-                          display: inline-block;
-                          text-align: center;
-                          line-height: 40px;
-                        "
-                      >
-                        <span
-                          style="
-                            color: #1a1a2e;
-                            font-size: 20px;
-                            font-weight: bold;
-                          "
-                          >⬡</span
-                        >
-                      </div>
-                    </td>
-                    <td style="vertical-align: middle">
-                      <span
-                        style="
-                          color: #ffffff;
-                          font-size: 24px;
-                          font-weight: bold;
-                          letter-spacing: 1px;
-                        "
-                        >CodeDragon</span
-                      >
-                    </td>
-                  </tr>
-                </table>
+                <!-- Logo: substitua o src pelo link absoluto da sua logo -->
+                <img
+                  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjg1IiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjg1IDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNTAgMTguNzVWNDEuMjVMNDAgNDYuODc1TTUwIDE4Ljc1TDQwIDEzLjEyNU01MCAxOC43NUwzMCAzME00MCA0Ni44NzVMMzAgNTIuNU00MCA0Ni44NzVWMzVMNTAgMzBNMzAgNTIuNUwyMCA0Ni44NzVNMzAgNTIuNVYzME0yMCA0Ni44NzVMMTAgNDEuMjVWMTguNzVNMjAgNDYuODc1VjM1TDEwIDMwTTEwIDE4Ljc1TDIwIDEzLjEyNU0xMCAxOC43NUwzMCAzME0yMCAxMy4xMjVMMzAgNy41TDQwIDEzLjEyNU0yMCAxMy4xMjVMMzAgMTguNzVMNDAgMTMuMTI1IiBzdHJva2U9IiNGOEZBRkMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik04Mi42Mjk1IDQ1LjQ4QzgwLjczNjIgNDUuNDggNzkuMDI5NSA0NS4xODY3IDc3LjUwOTUgNDQuNkM3NS45ODk1IDQzLjk4NjcgNzQuNjk2MiA0My4wOTMzIDczLjYyOTUgNDEuOTJDNzIuNTYyOSA0MC43MiA3MS43MzYyIDM5LjI0IDcxLjE0OTUgMzcuNDhDNzAuNTYyOSAzNS42OTMzIDcwLjI2OTUgMzMuNjEzMyA3MC4yNjk1IDMxLjI0QzcwLjI2OTUgMjguODkzMyA3MC41NjI5IDI2LjgxMzMgNzEuMTQ5NSAyNUM3MS43MzYyIDIzLjE2IDcyLjU2MjkgMjEuNjI2NyA3My42Mjk1IDIwLjRDNzQuNjk2MiAxOS4xNDY3IDc1Ljk4OTUgMTguMiA3Ny41MDk1IDE3LjU2Qzc5LjAyOTUgMTYuOTIgODAuNzM2MiAxNi42IDgyLjYyOTUgMTYuNkM4NS4yMTYyIDE2LjYgODcuMzQ5NSAxNy4xMzMzIDg5LjAyOTUgMTguMkM5MC43MDk1IDE5LjI0IDkyLjA1NjIgMjAuODkzMyA5My4wNjk1IDIzLjE2TDg3LjgyOTUgMjUuODhDODcuNDU2MiAyNC43MDY3IDg2Ljg2OTUgMjMuNzczMyA4Ni4wNjk1IDIzLjA4Qzg1LjI5NjIgMjIuMzYgODQuMTQ5NSAyMiA4Mi42Mjk1IDIyQzgwLjg0MjkgMjIgNzkuNDAyOSAyMi41ODY3IDc4LjMwOTUgMjMuNzZDNzcuMjQyOSAyNC45MDY3IDc2LjcwOTUgMjYuNTg2NyA3Ni43MDk1IDI4LjhWMzMuMjhDNzYuNzA5NSAzNS40OTMzIDc3LjI0MjkgMzcuMTg2NyA3OC4zMDk1IDM4LjM2Qzc5LjQwMjkgMzkuNTA2NyA4MC44NDI5IDQwLjA4IDgyLjYyOTUgNDAuMDhDODQuMTIyOSA0MC4wOCA4NS4zMDk1IDM5LjY4IDg2LjE4OTUgMzguODhDODcuMDk2MiAzOC4wNTMzIDg3Ljc2MjkgMzcuMDY2NyA4OC4xODk1IDM1LjkyTDkzLjE0OTUgMzguOEM5Mi4xMDk1IDQwLjkzMzMgOTAuNzM2MiA0Mi41ODY3IDg5LjAyOTUgNDMuNzZDODcuMzQ5NSA0NC45MDY3IDg1LjIxNjIgNDUuNDggODIuNjI5NSA0NS40OFpNMTA0LjEwNCA0NS40OEMxMDIuNTU4IDQ1LjQ4IDEwMS4xNzEgNDUuMjI2NyA5OS45NDQyIDQ0LjcyQzk4Ljc0NDIgNDQuMjEzMyA5Ny43MTc2IDQzLjQ4IDk2Ljg2NDIgNDIuNTJDOTYuMDM3NiA0MS41NiA5NS4zOTc2IDQwLjQgOTQuOTQ0MiAzOS4wNEM5NC40OTA5IDM3LjY4IDk0LjI2NDIgMzYuMTYgOTQuMjY0MiAzNC40OEM5NC4yNjQyIDMyLjggOTQuNDkwOSAzMS4yOCA5NC45NDQyIDI5LjkyQzk1LjM5NzYgMjguNTYgOTYuMDM3NiAyNy40MTMzIDk2Ljg2NDIgMjYuNDhDOTcuNzE3NiAyNS41MiA5OC43NDQyIDI0Ljc4NjcgOTkuOTQ0MiAyNC4yOEMxMDEuMTcxIDIzLjc3MzMgMTAyLjU1OCAyMy41MiAxMDQuMTA0IDIzLjUyQzEwNS42NTEgMjMuNTIgMTA3LjAyNCAyMy43NzMzIDEwOC4yMjQgMjQuMjhDMTA5LjQ1MSAyNC43ODY3IDExMC40NzggMjUuNTIgMTExLjMwNCAyNi40OEMxMTIuMTU4IDI3LjQxMzMgMTEyLjgxMSAyOC41NiAxMTMuMjY0IDI5LjkyQzExMy43MTggMzEuMjggMTEzLjk0NCAzMi44IDExMy45NDQgMzQuNDhDMTEzLjk0NCAzNi4xNiAxMTMuNzE4IDM3LjY4IDExMy4yNjQgMzkuMDRDMTEyLjgxMSA0MC40IDExMi4xNTggNDEuNTYgMTExLjMwNCA0Mi41MkMxMTAuNDc4IDQzLjQ4IDEwOS40NTEgNDQuMjEzMyAxMDguMjI0IDQ0LjcyQzEwNy4wMjQgNDUuMjI2NyAxMDUuNjUxIDQ1LjQ4IDEwNC4xMDQgNDUuNDhaTTEwNC4xMDQgNDAuOEMxMDUuMjc4IDQwLjggMTA2LjE4NCA0MC40NCAxMDYuODI0IDM5LjcyQzEwNy40NjQgMzkgMTA3Ljc4NCAzNy45NzMzIDEwNy43ODQgMzYuNjRWMzIuMzZDMTA3Ljc4NCAzMS4wMjY3IDEwNy40NjQgMzAgMTA2LjgyNCAyOS4yOEMxMDYuMTg0IDI4LjU2IDEwNS4yNzggMjguMiAxMDQuMTA0IDI4LjJDMTAyLjkzMSAyOC4yIDEwMi4wMjQgMjguNTYgMTAxLjM4NCAyOS4yOEMxMDAuNzQ0IDMwIDEwMC40MjQgMzEuMDI2NyAxMDAuNDI0IDMyLjM2VjM2LjY0QzEwMC40MjQgMzcuOTczMyAxMDAuNzQ0IDM5IDEwMS4zODQgMzkuNzJDMTAyLjAyNCA0MC40NCAxMDIuOTMxIDQwLjggMTA0LjEwNCA0MC44Wk0xMjkuNTQyIDQxLjQ4SDEyOS4zNDJDMTI5LjE4MiA0Mi4wNCAxMjguOTI5IDQyLjU3MzMgMTI4LjU4MiA0My4wOEMxMjguMjM2IDQzLjU2IDEyNy44MDkgNDMuOTg2NyAxMjcuMzAyIDQ0LjM2QzEyNi44MjIgNDQuNzA2NyAxMjYuMjYyIDQ0Ljk3MzMgMTI1LjYyMiA0NS4xNkMxMjUuMDA5IDQ1LjM3MzMgMTI0LjM2OSA0NS40OCAxMjMuNzAyIDQ1LjQ4QzEyMS4wMzYgNDUuNDggMTE5LjAyMiA0NC41NDY3IDExNy42NjIgNDIuNjhDMTE2LjMwMiA0MC43ODY3IDExNS42MjIgMzguMDUzMyAxMTUuNjIyIDM0LjQ4QzExNS42MjIgMzAuOTA2NyAxMTYuMzAyIDI4LjE4NjcgMTE3LjY2MiAyNi4zMkMxMTkuMDIyIDI0LjQ1MzMgMTIxLjAzNiAyMy41MiAxMjMuNzAyIDIzLjUyQzEyNS4wNjIgMjMuNTIgMTI2LjI2MiAyMy44OTMzIDEyNy4zMDIgMjQuNjRDMTI4LjM2OSAyNS4zODY3IDEyOS4wNDkgMjYuMzQ2NyAxMjkuMzQyIDI3LjUySDEyOS41NDJWMTUuNEgxMzUuNDYyVjQ1SDEyOS41NDJWNDEuNDhaTTEyNS42NjIgNDAuNjhDMTI2Ljc4MiA0MC42OCAxMjcuNzAyIDQwLjQxMzMgMTI4LjQyMiAzOS44OEMxMjkuMTY5IDM5LjMyIDEyOS41NDIgMzguNTYgMTI5LjU0MiAzNy42VjMxLjRDMTI5LjU0MiAzMC40NCAxMjkuMTY5IDI5LjY5MzMgMTI4LjQyMiAyOS4xNkMxMjcuNzAyIDI4LjYgMTI2Ljc4MiAyOC4zMiAxMjUuNjYyIDI4LjMyQzEyNC41NDIgMjguMzIgMTIzLjYwOSAyOC43MiAxMjIuODYyIDI5LjUyQzEyMi4xNDIgMzAuMjkzMyAxMjEuNzgyIDMxLjM0NjcgMTIxLjc4MiAzMi42OFYzNi4zMkMxMjEuNzgyIDM3LjY1MzMgMTIyLjE0MiAzOC43MiAxMjIuODYyIDM5LjUyQzEyMy42MDkgNDAuMjkzMyAxMjQuNTQyIDQwLjY4IDEyNS42NjIgNDAuNjhaTTE0OC4yNTggNDUuNDhDMTQ2LjY1OCA0NS40OCAxNDUuMjMyIDQ1LjIyNjcgMTQzLjk3OCA0NC43MkMxNDIuNzI1IDQ0LjE4NjcgMTQxLjY1OCA0My40NTMzIDE0MC43NzggNDIuNTJDMTM5LjkyNSA0MS41NiAxMzkuMjcyIDQwLjQgMTM4LjgxOCAzOS4wNEMxMzguMzkyIDM3LjY4IDEzOC4xNzggMzYuMTYgMTM4LjE3OCAzNC40OEMxMzguMTc4IDMyLjgyNjcgMTM4LjM5MiAzMS4zMzMzIDEzOC44MTggMzBDMTM5LjI0NSAyOC42NCAxMzkuODcyIDI3LjQ4IDE0MC42OTggMjYuNTJDMTQxLjU1MiAyNS41NiAxNDIuNTkyIDI0LjgyNjcgMTQzLjgxOCAyNC4zMkMxNDUuMDQ1IDIzLjc4NjcgMTQ2LjQ0NSAyMy41MiAxNDguMDE4IDIzLjUyQzE0OS43NTIgMjMuNTIgMTUxLjIzMiAyMy44MTMzIDE1Mi40NTggMjQuNEMxNTMuNzEyIDI0Ljk4NjcgMTU0LjcyNSAyNS43NzMzIDE1NS40OTggMjYuNzZDMTU2LjI5OCAyNy43NDY3IDE1Ni44NzIgMjguODkzMyAxNTcuMjE4IDMwLjJDMTU3LjU5MiAzMS40OCAxNTcuNzc4IDMyLjgyNjcgMTU3Ljc3OCAzNC4yNFYzNkgxNDQuMjk4VjM2LjMyQzE0NC4yOTggMzcuNzA2NyAxNDQuNjcyIDM4LjgxMzMgMTQ1LjQxOCAzOS42NEMxNDYuMTY1IDQwLjQ0IDE0Ny4zMzggNDAuODQgMTQ4LjkzOCA0MC44NEMxNTAuMTY1IDQwLjg0IDE1MS4xNjUgNDAuNiAxNTEuOTM4IDQwLjEyQzE1Mi43MTIgMzkuNjEzMyAxNTMuNDMyIDM5LjAxMzMgMTU0LjA5OCAzOC4zMkwxNTcuMDU4IDQyQzE1Ni4xMjUgNDMuMDkzMyAxNTQuODk4IDQzLjk0NjcgMTUzLjM3OCA0NC41NkMxNTEuODg1IDQ1LjE3MzMgMTUwLjE3OCA0NS40OCAxNDguMjU4IDQ1LjQ4Wk0xNDguMTM4IDI3Ljg4QzE0Ni45MzggMjcuODggMTQ1Ljk5MiAyOC4yOCAxNDUuMjk4IDI5LjA4QzE0NC42MzIgMjkuODUzMyAxNDQuMjk4IDMwLjg5MzMgMTQ0LjI5OCAzMi4yVjMyLjUySDE1MS42NThWMzIuMTZDMTUxLjY1OCAzMC44OCAxNTEuMzY1IDI5Ljg1MzMgMTUwLjc3OCAyOS4wOEMxNTAuMjE4IDI4LjI4IDE0OS4zMzggMjcuODggMTQ4LjEzOCAyNy44OFpNMTYwLjc3OSAxNy4wOEgxNzEuMjk5QzE3My4xMzkgMTcuMDggMTc0LjgxOSAxNy4zNzMzIDE3Ni4zMzkgMTcuOTZDMTc3Ljg1OSAxOC41NDY3IDE3OS4xNTMgMTkuNDI2NyAxODAuMjE5IDIwLjZDMTgxLjI4NiAyMS43NDY3IDE4Mi4xMTMgMjMuMiAxODIuNjk5IDI0Ljk2QzE4My4yODYgMjYuNjkzMyAxODMuNTc5IDI4LjcyIDE4My41NzkgMzEuMDRDMTgzLjU3OSAzMy4zNiAxODMuMjg2IDM1LjQgMTgyLjY5OSAzNy4xNkMxODIuMTEzIDM4Ljg5MzMgMTgxLjI4NiA0MC4zNDY3IDE4MC4yMTkgNDEuNTJDMTc5LjE1MyA0Mi42NjY3IDE3Ny44NTkgNDMuNTMzMyAxNzYuMzM5IDQ0LjEyQzE3NC44MTkgNDQuNzA2NyAxNzMuMTM5IDQ1IDE3MS4yOTkgNDVIMTYwLjc3OVYxNy4wOFpNMTcxLjI5OSAzOS42QzE3My4xMTMgMzkuNiAxNzQuNTM5IDM5LjA5MzMgMTc1LjU3OSAzOC4wOEMxNzYuNjE5IDM3LjA2NjcgMTc3LjEzOSAzNS40NCAxNzcuMTM5IDMzLjJWMjguODhDMTc3LjEzOSAyNi42NCAxNzYuNjE5IDI1LjAxMzMgMTc1LjU3OSAyNEMxNzQuNTM5IDIyLjk4NjcgMTczLjExMyAyMi40OCAxNzEuMjk5IDIyLjQ4SDE2Ni44NTlWMzkuNkgxNzEuMjk5Wk0xODYuODUgNDVWMjRIMTkyLjc3VjI4LjU2SDE5Mi45N0MxOTMuMDc3IDI3Ljk3MzMgMTkzLjI2MyAyNy40MTMzIDE5My41MyAyNi44OEMxOTMuNzk3IDI2LjMyIDE5NC4xNDMgMjUuODI2NyAxOTQuNTcgMjUuNEMxOTUuMDIzIDI0Ljk3MzMgMTk1LjU1NyAyNC42NCAxOTYuMTcgMjQuNEMxOTYuNzgzIDI0LjEzMzMgMTk3LjUwMyAyNCAxOTguMzMgMjRIMTk5LjM3VjI5LjUySDE5Ny44OUMxOTYuMTU3IDI5LjUyIDE5NC44NjMgMjkuNzQ2NyAxOTQuMDEgMzAuMkMxOTMuMTgzIDMwLjY1MzMgMTkyLjc3IDMxLjQ5MzMgMTkyLjc3IDMyLjcyVjQ1SDE4Ni44NVpNMjE2LjQ5NSA0NUMyMTUuNDI4IDQ1IDIxNC41MzUgNDQuNjY2NyAyMTMuODE1IDQ0QzIxMy4xMjIgNDMuMzMzMyAyMTIuNjgyIDQyLjQ0IDIxMi40OTUgNDEuMzJIMjEyLjI1NUMyMTEuOTM1IDQyLjY4IDIxMS4yMjggNDMuNzIgMjEwLjEzNSA0NC40NEMyMDkuMDQyIDQ1LjEzMzMgMjA3LjY5NSA0NS40OCAyMDYuMDk1IDQ1LjQ4QzIwMy45ODggNDUuNDggMjAyLjM3NSA0NC45MiAyMDEuMjU1IDQzLjhDMjAwLjEzNSA0Mi42OCAxOTkuNTc1IDQxLjIgMTk5LjU3NSAzOS4zNkMxOTkuNTc1IDM3LjE0NjcgMjAwLjM3NSAzNS41MDY3IDIwMS45NzUgMzQuNDRDMjAzLjYwMiAzMy4zNDY3IDIwNS44MDIgMzIuOCAyMDguNTc1IDMyLjhIMjExLjg5NVYzMS40OEMyMTEuODk1IDMwLjQ2NjcgMjExLjYyOCAyOS42NjY3IDIxMS4wOTUgMjkuMDhDMjEwLjU2MiAyOC40NjY3IDIwOS42NjggMjguMTYgMjA4LjQxNSAyOC4xNkMyMDcuMjQyIDI4LjE2IDIwNi4zMDggMjguNDEzMyAyMDUuNjE1IDI4LjkyQzIwNC45MjIgMjkuNDI2NyAyMDQuMzQ4IDMwIDIwMy44OTUgMzAuNjRMMjAwLjM3NSAyNy41MkMyMDEuMjI4IDI2LjI2NjcgMjAyLjI5NSAyNS4yOTMzIDIwMy41NzUgMjQuNkMyMDQuODgyIDIzLjg4IDIwNi42NDIgMjMuNTIgMjA4Ljg1NSAyMy41MkMyMTEuODQyIDIzLjUyIDIxNC4wODIgMjQuMTczMyAyMTUuNTc1IDI1LjQ4QzIxNy4wNjggMjYuNzg2NyAyMTcuODE1IDI4LjY5MzMgMjE3LjgxNSAzMS4yVjQwLjRIMjE5Ljc3NVY0NUgyMTYuNDk1Wk0yMDguMjk1IDQxLjM2QzIwOS4yODIgNDEuMzYgMjEwLjEyMiA0MS4xNDY3IDIxMC44MTUgNDAuNzJDMjExLjUzNSA0MC4yOTMzIDIxMS44OTUgMzkuNiAyMTEuODk1IDM4LjY0VjM2LjE2SDIwOS4wMTVDMjA2LjY5NSAzNi4xNiAyMDUuNTM1IDM2Ljk0NjcgMjA1LjUzNSAzOC41MlYzOS4xMkMyMDUuNTM1IDM5Ljg5MzMgMjA1Ljc3NSA0MC40NjY3IDIwNi4yNTUgNDAuODRDMjA2LjczNSA0MS4xODY3IDIwNy40MTUgNDEuMzYgMjA4LjI5NSA0MS4zNlpNMjQxLjY4OCA0Ni41MkMyNDEuNjg4IDQ3LjY0IDI0MS40ODggNDguNjI2NyAyNDEuMDg4IDQ5LjQ4QzI0MC43MTUgNTAuMzMzMyAyNDAuMDg4IDUxLjA1MzMgMjM5LjIwOCA1MS42NEMyMzguMzI4IDUyLjI1MzMgMjM3LjE1NSA1Mi43MDY3IDIzNS42ODggNTNDMjM0LjI0OCA1My4zMiAyMzIuNDYyIDUzLjQ4IDIzMC4zMjggNTMuNDhDMjI4LjUxNSA1My40OCAyMjYuOTY4IDUzLjM2IDIyNS42ODggNTMuMTJDMjI0LjQzNSA1Mi45MDY3IDIyMy40MDggNTIuNTg2NyAyMjIuNjA4IDUyLjE2QzIyMS44MzUgNTEuNzYgMjIxLjI2MiA1MS4yNTMzIDIyMC44ODggNTAuNjRDMjIwLjU0MiA1MC4wNTMzIDIyMC4zNjggNDkuMzczMyAyMjAuMzY4IDQ4LjZDMjIwLjM2OCA0Ny40MjY3IDIyMC43MTUgNDYuNTA2NyAyMjEuNDA4IDQ1Ljg0QzIyMi4xMDIgNDUuMTczMyAyMjMuMDYyIDQ0Ljc2IDIyNC4yODggNDQuNlY0NC4xNkMyMjMuMjc1IDQzLjk3MzMgMjIyLjUxNSA0My41NDY3IDIyMi4wMDggNDIuODhDMjIxLjUwMiA0Mi4xODY3IDIyMS4yNDggNDEuMzg2NyAyMjEuMjQ4IDQwLjQ4QzIyMS4yNDggMzkuOTIgMjIxLjM1NSAzOS40NCAyMjEuNTY4IDM5LjA0QzIyMS44MDggMzguNjEzMyAyMjIuMTAyIDM4LjI1MzMgMjIyLjQ0OCAzNy45NkMyMjIuODIyIDM3LjY0IDIyMy4yNDggMzcuMzg2NyAyMjMuNzI4IDM3LjJDMjI0LjIwOCAzNy4wMTMzIDIyNC42ODggMzYuODY2NyAyMjUuMTY4IDM2Ljc2VjM2LjZDMjIzLjg4OCAzNi4wMTMzIDIyMi45NDIgMzUuMjEzMyAyMjIuMzI4IDM0LjJDMjIxLjcxNSAzMy4xNiAyMjEuNDA4IDMxLjk2IDIyMS40MDggMzAuNkMyMjEuNDA4IDI4LjQ2NjcgMjIyLjE0MiAyNi43NiAyMjMuNjA4IDI1LjQ4QzIyNS4xMDIgMjQuMTczMyAyMjcuMzY4IDIzLjUyIDIzMC40MDggMjMuNTJDMjMxLjc5NSAyMy41MiAyMzIuOTgyIDIzLjY1MzMgMjMzLjk2OCAyMy45MlYyMy4xMkMyMzMuOTY4IDIyIDIzNC4yMzUgMjEuMiAyMzQuNzY4IDIwLjcyQzIzNS4zMjggMjAuMjEzMyAyMzYuMTE1IDE5Ljk2IDIzNy4xMjggMTkuOTZIMjQwLjQ0OFYyNC4zNkgyMzUuODA4VjI0LjZDMjM3LjAzNSAyNS4xODY3IDIzNy45NDIgMjYgMjM4LjUyOCAyNy4wNEMyMzkuMTE1IDI4LjA1MzMgMjM5LjQwOCAyOS4yNCAyMzkuNDA4IDMwLjZDMjM5LjQwOCAzMi43MDY3IDIzOC42NjIgMzQuNCAyMzcuMTY4IDM1LjY4QzIzNS43MDIgMzYuOTMzMyAyMzMuNDQ4IDM3LjU2IDIzMC40MDggMzcuNTZDMjI5LjA0OCAzNy41NiAyMjcuODA4IDM3LjQxMzMgMjI2LjY4OCAzNy4xMkMyMjYuMDc1IDM3LjUyIDIyNS43NjggMzguMDggMjI1Ljc2OCAzOC44QzIyNS43NjggMzkuMzA2NyAyMjUuOTU1IDM5LjcwNjcgMjI2LjMyOCA0MEMyMjYuNzI4IDQwLjI2NjcgMjI3LjM4MiA0MC40IDIyOC4yODggNDAuNEgyMzQuMzY4QzIzNi45MjggNDAuNCAyMzguNzgyIDQwLjkzMzMgMjM5LjkyOCA0MkMyNDEuMTAyIDQzLjA2NjcgMjQxLjY4OCA0NC41NzMzIDI0MS42ODggNDYuNTJaTTIzNi4xMjggNDcuMzJDMjM2LjEyOCA0Ni43MDY3IDIzNS44ODggNDYuMjQgMjM1LjQwOCA0NS45MkMyMzQuOTI4IDQ1LjYgMjM0LjA4OCA0NS40NCAyMzIuODg4IDQ1LjQ0SDIyNS42ODhDMjI1LjQyMiA0NS43MDY3IDIyNS4yMjIgNDYgMjI1LjA4OCA0Ni4zMkMyMjQuOTgyIDQ2LjY2NjcgMjI0LjkyOCA0NyAyMjQuOTI4IDQ3LjMyQzIyNC45MjggNDguMDkzMyAyMjUuMjYyIDQ4LjY1MzMgMjI1LjkyOCA0OUMyMjYuNTk1IDQ5LjM3MzMgMjI3LjcyOCA0OS41NiAyMjkuMzI4IDQ5LjU2SDIzMS43MjhDMjMzLjMyOCA0OS41NiAyMzQuNDYyIDQ5LjM3MzMgMjM1LjEyOCA0OUMyMzUuNzk1IDQ4LjY1MzMgMjM2LjEyOCA0OC4wOTMzIDIzNi4xMjggNDcuMzJaTTIzMC40MDggMzMuNjhDMjMxLjU4MiAzMy42OCAyMzIuNDQ4IDMzLjQ0IDIzMy4wMDggMzIuOTZDMjMzLjU5NSAzMi40NTMzIDIzMy44ODggMzEuNzMzMyAyMzMuODg4IDMwLjhWMzAuMzJDMjMzLjg4OCAyOS4zODY3IDIzMy41OTUgMjguNjggMjMzLjAwOCAyOC4yQzIzMi40NDggMjcuNjkzMyAyMzEuNTgyIDI3LjQ0IDIzMC40MDggMjcuNDRDMjI5LjIzNSAyNy40NCAyMjguMzU1IDI3LjY5MzMgMjI3Ljc2OCAyOC4yQzIyNy4yMDggMjguNjggMjI2LjkyOCAyOS4zODY3IDIyNi45MjggMzAuMzJWMzAuOEMyMjYuOTI4IDMxLjczMzMgMjI3LjIwOCAzMi40NTMzIDIyNy43NjggMzIuOTZDMjI4LjM1NSAzMy40NCAyMjkuMjM1IDMzLjY4IDIzMC40MDggMzMuNjhaTTI1MS4xMDQgNDUuNDhDMjQ5LjU1OCA0NS40OCAyNDguMTcxIDQ1LjIyNjcgMjQ2Ljk0NCA0NC43MkMyNDUuNzQ0IDQ0LjIxMzMgMjQ0LjcxOCA0My40OCAyNDMuODY0IDQyLjUyQzI0My4wMzggNDEuNTYgMjQyLjM5OCA0MC40IDI0MS45NDQgMzkuMDRDMjQxLjQ5MSAzNy42OCAyNDEuMjY0IDM2LjE2IDI0MS4yNjQgMzQuNDhDMjQxLjI2NCAzMi44IDI0MS40OTEgMzEuMjggMjQxLjk0NCAyOS45MkMyNDIuMzk4IDI4LjU2IDI0My4wMzggMjcuNDEzMyAyNDMuODY0IDI2LjQ4QzI0NC43MTggMjUuNTIgMjQ1Ljc0NCAyNC43ODY3IDI0Ni45NDQgMjQuMjhDMjQ4LjE3MSAyMy43NzMzIDI0OS41NTggMjMuNTIgMjUxLjEwNCAyMy41MkMyNTIuNjUxIDIzLjUyIDI1NC4wMjQgMjMuNzczMyAyNTUuMjI0IDI0LjI4QzI1Ni40NTEgMjQuNzg2NyAyNTcuNDc4IDI1LjUyIDI1OC4zMDQgMjYuNDhDMjU5LjE1OCAyNy40MTMzIDI1OS44MTEgMjguNTYgMjYwLjI2NCAyOS45MkMyNjAuNzE4IDMxLjI4IDI2MC45NDQgMzIuOCAyNjAuOTQ0IDM0LjQ4QzI2MC45NDQgMzYuMTYgMjYwLjcxOCAzNy42OCAyNjAuMjY0IDM5LjA0QzI1OS44MTEgNDAuNCAyNTkuMTU4IDQxLjU2IDI1OC4zMDQgNDIuNTJDMjU3LjQ3OCA0My40OCAyNTYuNDUxIDQ0LjIxMzMgMjU1LjIyNCA0NC43MkMyNTQuMDI0IDQ1LjIyNjcgMjUyLjY1MSA0NS40OCAyNTEuMTA0IDQ1LjQ4Wk0yNTEuMTA0IDQwLjhDMjUyLjI3OCA0MC44IDI1My4xODQgNDAuNDQgMjUzLjgyNCAzOS43MkMyNTQuNDY0IDM5IDI1NC43ODQgMzcuOTczMyAyNTQuNzg0IDM2LjY0VjMyLjM2QzI1NC43ODQgMzEuMDI2NyAyNTQuNDY0IDMwIDI1My44MjQgMjkuMjhDMjUzLjE4NCAyOC41NiAyNTIuMjc4IDI4LjIgMjUxLjEwNCAyOC4yQzI0OS45MzEgMjguMiAyNDkuMDI0IDI4LjU2IDI0OC4zODQgMjkuMjhDMjQ3Ljc0NCAzMCAyNDcuNDI0IDMxLjAyNjcgMjQ3LjQyNCAzMi4zNlYzNi42NEMyNDcuNDI0IDM3Ljk3MzMgMjQ3Ljc0NCAzOSAyNDguMzg0IDM5LjcyQzI0OS4wMjQgNDAuNDQgMjQ5LjkzMSA0MC44IDI1MS4xMDQgNDAuOFpNMjYzLjY2MiA0NVYyNEgyNjkuNTgyVjI3LjU2SDI2OS44MjJDMjcwLjE5NiAyNi40NjY3IDI3MC44NDkgMjUuNTIgMjcxLjc4MiAyNC43MkMyNzIuNzE2IDIzLjkyIDI3NC4wMDkgMjMuNTIgMjc1LjY2MiAyMy41MkMyNzcuODIyIDIzLjUyIDI3OS40NDkgMjQuMjQgMjgwLjU0MiAyNS42OEMyODEuNjYyIDI3LjEyIDI4Mi4yMjIgMjkuMTczMyAyODIuMjIyIDMxLjg0VjQ1SDI3Ni4zMDJWMzIuMzJDMjc2LjMwMiAzMC45NiAyNzYuMDg5IDI5Ljk2IDI3NS42NjIgMjkuMzJDMjc1LjIzNiAyOC42NTMzIDI3NC40NzYgMjguMzIgMjczLjM4MiAyOC4zMkMyNzIuOTAyIDI4LjMyIDI3Mi40MzYgMjguMzg2NyAyNzEuOTgyIDI4LjUyQzI3MS41MjkgMjguNjI2NyAyNzEuMTE2IDI4LjgxMzMgMjcwLjc0MiAyOS4wOEMyNzAuMzk2IDI5LjM0NjcgMjcwLjExNiAyOS42OCAyNjkuOTAyIDMwLjA4QzI2OS42ODkgMzAuNDUzMyAyNjkuNTgyIDMwLjg5MzMgMjY5LjU4MiAzMS40VjQ1SDI2My42NjJaIiBmaWxsPSIjRjhGQUZDIi8+Cjwvc3ZnPgo="
+                  alt="CodeDragon"
+                  width="200"
+                />
               </td>
             </tr>
 
-            <!-- Content -->
+            <!-- ===== CONTENT ===== -->
             <tr>
-              <td style="padding: 40px">
-                <h1
-                  style="
-                    margin: 0 0 16px 0;
-                    color: #1a1a2e;
-                    font-size: 28px;
-                    font-weight: bold;
-                    text-align: center;
-                  "
+              <td class="inner-td" style="padding: 32px 40px 24px 40px">
+                <!-- Título -->
+                <table
+                  role="presentation"
+                  width="100%"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
                 >
-                  Bem vindo, {{name}}!
-                </h1>
-                <p
-                  style="
-                    margin: 0 0 32px 0;
-                    color: #666666;
-                    font-size: 16px;
-                    line-height: 1.6;
-                    text-align: center;
-                  "
-                >
-                  Para começar sua jornada e acessar o diagnóstico de carreira,
-                  confirme seu cadastro abaixo:
-                </p>
+                  <tr>
+                    <td align="center" style="padding-bottom: 8px">
+                      <h1
+                        style="
+                          margin: 0;
+                          color: #0f172a;
+                          font-family:
+                            &quot;Inter&quot;, &quot;Segoe UI&quot;, Tahoma,
+                            Geneva, Verdana, sans-serif;
+                          font-size: 24px;
+                          font-weight: 700;
+                          letter-spacing: -0.02em;
+                          line-height: 1.3;
+                        "
+                      >
+                        Bem-vindo, {{name}}!
+                      </h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding-bottom: 32px">
+                      <p
+                        style="
+                          margin: 0;
+                          color: #64748b;
+                          font-family:
+                            &quot;Inter&quot;, &quot;Segoe UI&quot;, Tahoma,
+                            Geneva, Verdana, sans-serif;
+                          font-size: 15px;
+                          line-height: 1.6;
+                          max-width: 420px;
+                        "
+                      >
+                        Para começar sua jornada e acessar o diagnóstico de
+                        carreira, confirme seu cadastro clicando no botão
+                        abaixo.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
 
                 <!-- CTA Button -->
                 <table
                   role="presentation"
-                  cellspacing="0"
-                  cellpadding="0"
-                  border="0"
                   width="100%"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
                 >
                   <tr>
-                    <td align="center" style="padding: 0 0 32px 0">
-                      <form action="{{link}}" method="POST">
-                        <input type="hidden" name="token" value="{{token}}" />
-                        <button
-                          type="submit"
+                    <td align="center" style="padding-bottom: 32px">
+                      <!--[if mso]>
+                        <v:roundrect
+                          xmlns:v="urn:schemas-microsoft-com:vml"
+                          xmlns:w="urn:schemas-microsoft-com:office:word"
+                          href="{{link}}"
                           style="
-                            display: inline-block;
-                            background-color: #f59e0b;
-                            color: #1a1a2e;
-                            border: none;
-                            cursor: pointer;
-                            font-size: 14px;
-                            font-weight: bold;
-                            padding: 16px 40px;
-                            border-radius: 8px;
-                            letter-spacing: 1px;
+                            height: 48px;
+                            v-text-anchor: middle;
+                            width: 220px;
                           "
+                          arcsize="17%"
+                          stroke="f"
+                          fillcolor="#6366f1"
                         >
-                          CONFIRMAR SEU EMAIL
-                        </button>
-                      </form>
+                          <w:anchorlock />
+                          <center
+                            style="
+                              color: #ffffff;
+                              font-family: &quot;Segoe UI&quot;, sans-serif;
+                              font-size: 14px;
+                              font-weight: 600;
+                              letter-spacing: 0.04em;
+                            "
+                          >
+                            CONFIRMAR MEU EMAIL
+                          </center>
+                        </v:roundrect>
+                      <![endif]-->
+                      <!--[if !mso]><!-->
+                      <a
+                        href="{{link}}"
+                        class="btn-confirm"
+                        target="_blank"
+                        style="
+                          display: inline-block;
+                          background: linear-gradient(135deg, #6366f1, #818cf8);
+                          color: #ffffff;
+                          font-family:
+                            &quot;Inter&quot;, &quot;Segoe UI&quot;, Tahoma,
+                            Geneva, Verdana, sans-serif;
+                          font-size: 14px;
+                          font-weight: 600;
+                          letter-spacing: 0.04em;
+                          text-decoration: none;
+                          padding: 14px 48px;
+                          border-radius: 8px;
+                          mso-padding-alt: 0;
+                        "
+                      >
+                        CONFIRMAR MEU EMAIL
+                      </a>
+                      <!--<![endif]-->
                     </td>
                   </tr>
                 </table>
@@ -156,36 +251,50 @@
                 <!-- Warning Box -->
                 <table
                   role="presentation"
-                  cellspacing="0"
-                  cellpadding="0"
-                  border="0"
                   width="100%"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
                   style="
-                    background-color: #fef3c7;
-                    border-left: 4px solid #f59e0b;
-                    border-radius: 4px;
+                    background-color: #fffbeb;
+                    border-left: 3px solid #f59e0b;
+                    border-radius: 8px;
+                    margin-bottom: 32px;
                   "
                 >
                   <tr>
-                    <td style="padding: 16px 20px">
+                    <td style="padding: 14px 16px">
                       <table
                         role="presentation"
-                        cellspacing="0"
-                        cellpadding="0"
+                        width="100%"
                         border="0"
+                        cellpadding="0"
+                        cellspacing="0"
                       >
                         <tr>
-                          <td style="vertical-align: top; padding-right: 12px">
-                            <span style="color: #f59e0b; font-size: 18px"
+                          <td
+                            width="22"
+                            valign="top"
+                            style="padding-right: 10px"
+                          >
+                            <span style="color: #f59e0b; font-size: 16px"
                               >⚠</span
                             >
                           </td>
-                          <td>
+                          <td valign="top">
                             <p
-                              style="margin: 0; color: #92400e; font-size: 14px"
+                              style="
+                                margin: 0;
+                                color: #92400e;
+                                font-family:
+                                  &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                  Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 13px;
+                                line-height: 1.5;
+                              "
                             >
                               <strong>Importante:</strong> Este link expira em
-                              {{expiration}} horas por segurança.
+                              {{expiration}} por segurança.
                             </p>
                           </td>
                         </tr>
@@ -195,160 +304,270 @@
                 </table>
 
                 <!-- Steps Section -->
-                <div style="margin-top: 32px">
-                  <h2
-                    style="
-                      margin: 0 0 20px 0;
-                      color: #1a1a2e;
-                      font-size: 18px;
-                      font-weight: bold;
-                    "
-                  >
-                    O que esperar depois da confirmação:
-                  </h2>
+                <table
+                  role="presentation"
+                  width="100%"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
+                >
+                  <tr>
+                    <td style="padding-bottom: 16px">
+                      <h2
+                        style="
+                          margin: 0;
+                          color: #0f172a;
+                          font-family:
+                            &quot;Inter&quot;, &quot;Segoe UI&quot;, Tahoma,
+                            Geneva, Verdana, sans-serif;
+                          font-size: 16px;
+                          font-weight: 600;
+                          letter-spacing: -0.01em;
+                        "
+                      >
+                        O que esperar depois da confirmação:
+                      </h2>
+                    </td>
+                  </tr>
 
-                  <table
-                    role="presentation"
-                    cellspacing="0"
-                    cellpadding="0"
-                    border="0"
-                    width="100%"
-                  >
-                    <tr>
-                      <td style="padding: 8px 0">
-                        <table
-                          role="presentation"
-                          cellspacing="0"
-                          cellpadding="0"
-                          border="0"
-                        >
-                          <tr>
-                            <td
-                              style="vertical-align: top; padding-right: 12px"
+                  <!-- Step 1 -->
+                  <tr>
+                    <td style="padding: 6px 0">
+                      <table
+                        role="presentation"
+                        width="100%"
+                        border="0"
+                        cellpadding="0"
+                        cellspacing="0"
+                      >
+                        <tr>
+                          <td
+                            width="24"
+                            valign="middle"
+                            style="padding-right: 12px"
+                          >
+                            <table
+                              role="presentation"
+                              width="24"
+                              height="24"
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              style="
+                                background: #eef2ff;
+                                border: 1px solid rgba(99, 102, 241, 0.2);
+                                border-radius: 50%;
+                              "
                             >
-                              <div
-                                style="
-                                  width: 24px;
-                                  height: 24px;
-                                  background-color: #dbeafe;
-                                  border-radius: 50%;
-                                  text-align: center;
-                                  line-height: 24px;
-                                "
-                              >
-                                <span
-                                  style="
-                                    color: #3b82f6;
-                                    font-size: 12px;
-                                    font-weight: bold;
-                                  "
-                                  >1</span
+                              <tr>
+                                <td
+                                  align="center"
+                                  valign="middle"
+                                  height="24"
+                                  width="24"
                                 >
-                              </div>
-                            </td>
-                            <td style="color: #666666; font-size: 14px">
-                              Abra sua caixa de entrada e procure por um e-mail
-                              da
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0">
-                        <table
-                          role="presentation"
-                          cellspacing="0"
-                          cellpadding="0"
-                          border="0"
-                        >
-                          <tr>
-                            <td
-                              style="vertical-align: top; padding-right: 12px"
+                                  <span
+                                    style="
+                                      color: #6366f1;
+                                      font-family:
+                                        &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                        Tahoma, sans-serif;
+                                      font-size: 11px;
+                                      font-weight: 700;
+                                      line-height: 1;
+                                    "
+                                    >1</span
+                                  >
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td valign="middle">
+                            <span
+                              style="
+                                color: #64748b;
+                                font-family:
+                                  &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                  Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 14px;
+                                line-height: 1.5;
+                              "
                             >
-                              <div
-                                style="
-                                  width: 24px;
-                                  height: 24px;
-                                  background-color: #dbeafe;
-                                  border-radius: 50%;
-                                  text-align: center;
-                                  line-height: 24px;
-                                "
-                              >
-                                <span
-                                  style="
-                                    color: #3b82f6;
-                                    font-size: 12px;
-                                    font-weight: bold;
-                                  "
-                                  >2</span
-                                >
-                              </div>
-                            </td>
-                            <td style="color: #666666; font-size: 14px">
-                              Abra sua caixa de entrada e procure por um e-mail
-                              da
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0">
-                        <table
-                          role="presentation"
-                          cellspacing="0"
-                          cellpadding="0"
-                          border="0"
-                        >
-                          <tr>
-                            <td
-                              style="vertical-align: top; padding-right: 12px"
+                              Seu e-mail será verificado automaticamente
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Step 2 -->
+                  <tr>
+                    <td style="padding: 6px 0">
+                      <table
+                        role="presentation"
+                        width="100%"
+                        border="0"
+                        cellpadding="0"
+                        cellspacing="0"
+                      >
+                        <tr>
+                          <td
+                            width="24"
+                            valign="middle"
+                            style="padding-right: 12px"
+                          >
+                            <table
+                              role="presentation"
+                              width="24"
+                              height="24"
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              style="
+                                background: #eef2ff;
+                                border: 1px solid rgba(99, 102, 241, 0.2);
+                                border-radius: 50%;
+                              "
                             >
-                              <div
-                                style="
-                                  width: 24px;
-                                  height: 24px;
-                                  background-color: #dbeafe;
-                                  border-radius: 50%;
-                                  text-align: center;
-                                  line-height: 24px;
-                                "
-                              >
-                                <span
-                                  style="
-                                    color: #3b82f6;
-                                    font-size: 12px;
-                                    font-weight: bold;
-                                  "
-                                  >3</span
+                              <tr>
+                                <td
+                                  align="center"
+                                  valign="middle"
+                                  height="24"
+                                  width="24"
                                 >
-                              </div>
-                            </td>
-                            <td style="color: #666666; font-size: 14px">
-                              Abra sua caixa de entrada e procure por um e-mail
-                              da
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
+                                  <span
+                                    style="
+                                      color: #6366f1;
+                                      font-family:
+                                        &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                        Tahoma, sans-serif;
+                                      font-size: 11px;
+                                      font-weight: 700;
+                                      line-height: 1;
+                                    "
+                                    >2</span
+                                  >
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td valign="middle">
+                            <span
+                              style="
+                                color: #64748b;
+                                font-family:
+                                  &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                  Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 14px;
+                                line-height: 1.5;
+                              "
+                            >
+                              Acesse a plataforma com suas credenciais
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Step 3 -->
+                  <tr>
+                    <td style="padding: 6px 0">
+                      <table
+                        role="presentation"
+                        width="100%"
+                        border="0"
+                        cellpadding="0"
+                        cellspacing="0"
+                      >
+                        <tr>
+                          <td
+                            width="24"
+                            valign="middle"
+                            style="padding-right: 12px"
+                          >
+                            <table
+                              role="presentation"
+                              width="24"
+                              height="24"
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              style="
+                                background: #eef2ff;
+                                border: 1px solid rgba(99, 102, 241, 0.2);
+                                border-radius: 50%;
+                              "
+                            >
+                              <tr>
+                                <td
+                                  align="center"
+                                  valign="middle"
+                                  height="24"
+                                  width="24"
+                                >
+                                  <span
+                                    style="
+                                      color: #6366f1;
+                                      font-family:
+                                        &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                        Tahoma, sans-serif;
+                                      font-size: 11px;
+                                      font-weight: 700;
+                                      line-height: 1;
+                                    "
+                                    >3</span
+                                  >
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td valign="middle">
+                            <span
+                              style="
+                                color: #64748b;
+                                font-family:
+                                  &quot;Inter&quot;, &quot;Segoe UI&quot;,
+                                  Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 14px;
+                                line-height: 1.5;
+                              "
+                            >
+                              Comece o diagnóstico de carreira
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
 
-            <!-- Footer -->
+            <!-- ===== FOOTER ===== -->
             <tr>
               <td
+                class="footer-td"
+                align="center"
                 style="
-                  padding: 24px 40px;
-                  border-top: 1px solid #e5e5e5;
-                  text-align: center;
+                  padding: 20px 40px;
+                  border-top: 1px solid #e2e8f0;
+                  border-radius: 0 0 16px 16px;
                 "
               >
-                <p style="margin: 0 0 12px 0; color: #666666; font-size: 14px">
+                <p
+                  style="
+                    margin: 0;
+                    color: #94a3b8;
+                    font-family:
+                      &quot;Inter&quot;, &quot;Segoe UI&quot;, Tahoma, Geneva,
+                      Verdana, sans-serif;
+                    font-size: 13px;
+                    line-height: 1.5;
+                  "
+                >
                   Se você não se cadastrou no CodeDragon, ignore este e-mail.
                 </p>
               </td>

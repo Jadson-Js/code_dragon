@@ -2,23 +2,27 @@ export function transformerStringDataToNumber(data: string) {
   return Number(data);
 }
 
-export function parseDuration(duration: string): number {
-  const match = duration.match(/^(\d+)([dhms])$/);
-  if (!match) return 0;
+export function msToSeconds(ms: number): number {
+  return Math.floor(ms / 1000);
+}
 
-  const value = parseInt(match[1]!, 10);
-  const unit = match[2]!;
+export function msToMinutes(ms: number): number {
+  return Math.floor(ms / (1000 * 60));
+}
 
-  switch (unit) {
-    case "d":
-      return value * 24 * 60 * 60 * 1000;
-    case "h":
-      return value * 60 * 60 * 1000;
-    case "m":
-      return value * 60 * 1000;
-    case "s":
-      return value * 1000;
-    default:
-      return 0;
+export function msToHours(ms: number): number {
+  return Math.floor(ms / (1000 * 60 * 60));
+}
+
+export function formatMs(ms: number): string {
+  const hours = msToHours(ms);
+  if (hours >= 24) {
+    const days = Math.floor(hours / 24);
+    return `${days} dia${days > 1 ? "s" : ""}`;
   }
+  if (hours >= 1) {
+    return `${hours} hora${hours > 1 ? "s" : ""}`;
+  }
+  const minutes = msToMinutes(ms);
+  return `${minutes} minuto${minutes > 1 ? "s" : ""}`;
 }

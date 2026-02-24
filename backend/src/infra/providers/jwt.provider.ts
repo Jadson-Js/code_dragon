@@ -1,5 +1,6 @@
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import { env } from "@/shared/env";
+import { msToSeconds } from "@/shared/utils";
 import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";
 
@@ -7,19 +8,19 @@ import { injectable } from "tsyringe";
 export class JwtProvider implements IJWTProvider {
   async generateAccessToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, env.jwtAccessSecret, {
-      expiresIn: env.jwtAccessExpiresIn,
+      expiresIn: msToSeconds(env.jwtAccessExpiresInMs),
     });
   }
 
   async generateRefreshToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, env.jwtRefreshSecret, {
-      expiresIn: env.jwtRefreshExpiresIn,
+      expiresIn: msToSeconds(env.jwtRefreshExpiresInMs),
     });
   }
 
   async generateEmailVerificationToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, env.jwtEmailVerificationSecret, {
-      expiresIn: env.jwtEmailVerificationExpiresIn,
+      expiresIn: msToSeconds(env.jwtEmailVerificationExpiresInMs),
     });
   }
 
