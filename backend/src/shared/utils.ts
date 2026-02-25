@@ -26,3 +26,7 @@ export function formatMs(ms: number): string {
   const minutes = msToMinutes(ms);
   return `${minutes} minuto${minutes > 1 ? "s" : ""}`;
 }
+
+export function stringToDate(date: string): Date {
+  return new Date(date);
+}

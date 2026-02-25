@@ -35,7 +35,11 @@ export class SignupAuthUseCase {
     if (existingUser) return;
 
     const passwordHash = await this.hashProvider.hash(params.password);
-    const user = User.create({ ...params, passwordHash });
+    const user = User.create({
+      ...params,
+      birthDate: new Date(params.birthDate),
+      passwordHash,
+    });
 
     const emailToken = await this.jwtProvider.generateEmailVerificationToken(
       user.id,
