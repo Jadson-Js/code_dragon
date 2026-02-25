@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 type MaskType = "date" | "phone" | "cpf" | "cnpj" | "cep";
 

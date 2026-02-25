@@ -11,6 +11,6 @@ const queueProvider = container.resolve<IEmailQueueProvider>(
 );
 queueProvider.start();
 
-app.listen(env.apiPort, () => {
-  console.log(`🚀 Server running on ${env.apiUrl}`);
+app.listen(env.serverPort, () => {
+  console.log(`🚀 Server running on ${env.serverUrl}`);
 });

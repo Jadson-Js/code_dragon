@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const env = {
-  apiPort: process.env.API_PORT || 3000,
-  apiUrl: process.env.API_URL || "",
-  frontendUrl: process.env.FRONTEND_URL || "",
+  serverPort: process.env.SERVER_PORT || 3000,
+  serverUrl: process.env.SERVER_URL || "",
+  clientUrl: process.env.CLIENT_URL || "",
 
   databaseUrl: process.env.DATABASE_URL || "",
   dbHost: process.env.DB_HOST || "",
@@ -12,8 +12,6 @@ export const env = {
   dbName: process.env.DB_NAME || "",
   dbUser: process.env.DB_USER || "",
   dbPassword: process.env.DB_PASSWORD || "",
-
-  bcryptSaltRounds: Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
 
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET || "",
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "",

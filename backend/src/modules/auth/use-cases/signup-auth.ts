@@ -57,7 +57,7 @@ export class SignupAuthUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.frontendUrl}/verify-email?token=${emailToken}`,
+        link: `${env.clientUrl}/verify-email?token=${emailToken}`,
         token: emailToken,
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },

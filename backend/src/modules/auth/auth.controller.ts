@@ -57,7 +57,7 @@ export class AuthController {
 
   async verifyEmail(request: Request, response: Response) {
     await this.verifyEmailUseCase.execute(request.body);
-    return response.redirect(`${env.frontendUrl}/email-verified`);
+    return response.redirect(`${env.clientUrl}/email-verified`);
   }
 
   async forgotPassword(request: Request, response: Response) {

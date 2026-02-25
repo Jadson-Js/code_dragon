@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 interface StatItemProps {
   icon?: ReactNode;
@@ -13,7 +13,7 @@ function StatItem({ icon, value, label, className }: StatItemProps) {
     <div
       className={cn(
         "flex flex-col items-center gap-1 group transition-transform hover:scale-105",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-1.5 text-primary-1">
@@ -39,7 +39,7 @@ function StatsGroup({ children, className }: StatsGroupProps) {
     <div
       className={cn(
         "flex items-center justify-center gap-6 sm:gap-10 py-4",
-        className
+        className,
       )}
     >
       {children}

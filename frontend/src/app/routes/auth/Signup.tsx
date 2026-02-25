@@ -20,7 +20,7 @@ export default function Signup() {
   const [formData, setFormData] = useState({
     name: "admin",
     birthdate: "08/03/2005",
-    email: "admin@admin.com",
+    email: "jadson20051965@gmail.com",
     password: "admin123",
   });
   const [showPassword, setShowPassword] = useState(false);
