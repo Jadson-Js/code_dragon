@@ -56,10 +56,7 @@ function applyMask(value: string, mask: string): string {
   return result;
 }
 
-interface InputMaskProps extends Omit<
-  React.ComponentProps<"input">,
-  "onChange"
-> {
+interface InputMaskProps extends React.ComponentProps<"input"> {
   mask: MaskType;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
@@ -67,74 +64,89 @@ interface InputMaskProps extends Omit<
   onValueChange?: (value: string, rawValue: string) => void;
 }
 
-function InputMask({
-  className,
-  mask,
-  iconLeft,
-  iconRight,
-  onIconRightClick,
-  onValueChange,
-  value: controlledValue,
-  ...props
-}: InputMaskProps) {
-  const config = MASK_CONFIGS[mask];
-  const [internalValue, setInternalValue] = useState("");
-
-  const value =
-    controlledValue !== undefined ? String(controlledValue) : internalValue;
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const rawValue = e.target.value.replace(/\D/g, "");
-      const formatted = applyMask(e.target.value, config.pattern);
-
-      if (controlledValue === undefined) {
-        setInternalValue(formatted);
-      }
-
-      onValueChange?.(formatted, rawValue);
+const InputMask = React.forwardRef<HTMLInputElement, InputMaskProps>(
+  (
+    {
+      className,
+      mask,
+      iconLeft,
+      iconRight,
+      onIconRightClick,
+      onValueChange,
+      value: controlledValue,
+      onChange: externalOnChange,
+      ...props
     },
-    [config.pattern, controlledValue, onValueChange],
-  );
+    ref,
+  ) => {
+    const config = MASK_CONFIGS[mask];
+    const [internalValue, setInternalValue] = useState("");
 
-  return (
-    <div className="relative w-full">
-      {iconLeft && (
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white-2 pointer-events-none">
-          {iconLeft}
-        </div>
-      )}
-      <input
-        type="text"
-        inputMode="numeric"
-        data-slot="input"
-        maxLength={config.maxLength}
-        placeholder={props.placeholder || config.placeholder}
-        value={value}
-        onChange={handleChange}
-        className={cn(
-          "w-full h-12 bg-bg-2 text-white-1 rounded-lg border border-bg-3 outline-none transition-all",
-          "placeholder:text-white-2",
-          "focus:ring-2 focus:ring-primary-1/50",
-          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-          iconLeft ? "pl-12" : "pl-4",
-          iconRight ? "pr-12" : "pr-4",
-          className,
+    const value =
+      controlledValue !== undefined ? String(controlledValue) : internalValue;
+
+    const handleChange = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value.replace(/\D/g, "");
+        const formatted = applyMask(e.target.value, config.pattern);
+
+        if (controlledValue === undefined) {
+          setInternalValue(formatted);
+        }
+
+        // Call our custom onValueChange
+        onValueChange?.(formatted, rawValue);
+
+        // Call external onChange for react-hook-form compatibility
+        if (externalOnChange) {
+          e.target.value = formatted;
+          externalOnChange(e);
+        }
+      },
+      [config.pattern, controlledValue, onValueChange, externalOnChange],
+    );
+
+    return (
+      <div className="relative w-full">
+        {iconLeft && (
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white-2 pointer-events-none">
+            {iconLeft}
+          </div>
         )}
-        {...props}
-      />
-      {iconRight && (
-        <button
-          type="button"
-          onClick={onIconRightClick}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-white-2 hover:text-white-1 transition-colors cursor-pointer"
-          tabIndex={-1}
-        >
-          {iconRight}
-        </button>
-      )}
-    </div>
-  );
-}
+        <input
+          ref={ref}
+          type="text"
+          inputMode="numeric"
+          data-slot="input"
+          maxLength={config.maxLength}
+          placeholder={props.placeholder || config.placeholder}
+          value={value}
+          onChange={handleChange}
+          className={cn(
+            "w-full h-12 bg-bg-2 text-white-1 rounded-lg border border-bg-3 outline-none transition-all",
+            "placeholder:text-white-2",
+            "focus:ring-2 focus:ring-primary-1/50",
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+            iconLeft ? "pl-12" : "pl-4",
+            iconRight ? "pr-12" : "pr-4",
+            className,
+          )}
+          {...props}
+        />
+        {iconRight && (
+          <button
+            type="button"
+            onClick={onIconRightClick}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white-2 hover:text-white-1 transition-colors cursor-pointer"
+            tabIndex={-1}
+          >
+            {iconRight}
+          </button>
+        )}
+      </div>
+    );
+  },
+);
+InputMask.displayName = "InputMask";
 
 export { InputMask, type MaskType };

@@ -19,6 +19,10 @@ export class AuthController {
       "If this email is registered and not yet verified, you will receive a verification email.",
   };
 
+  private readonly VERIFY_EMAIL_RESPONSE = {
+    message: "This email has been verified successfully.",
+  };
+
   private readonly FORGOT_PASSWORD_RESPONSE = {
     message:
       "If this email is registered and verified, you will receive a password reset email.",
@@ -57,7 +61,7 @@ export class AuthController {
 
   async verifyEmail(request: Request, response: Response) {
     await this.verifyEmailUseCase.execute(request.body);
-    return response.redirect(`${env.clientUrl}/email-verified`);
+    return response.status(200).json(this.VERIFY_EMAIL_RESPONSE);
   }
 
   async forgotPassword(request: Request, response: Response) {

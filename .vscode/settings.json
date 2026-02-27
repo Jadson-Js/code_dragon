@@ -25,7 +25,7 @@
     "**/.docker": true,
     "**/eslint.config.js": true,
     "**/scripts": true,
-    "**/.dockerignore": true,
-    "**/docker-compose.yml": true
+    "**/.dockerignore": true
+    //"**/docker-compose.yml": true
   }
 }

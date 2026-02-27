@@ -1,5 +1,7 @@
-import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   LuUser,
   LuCalendar,
@@ -8,31 +10,47 @@ import {
   LuEye,
   LuEyeOff,
 } from "react-icons/lu";
+
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldError,
+} from "@/components/ui/field";
 import { InputIcon } from "@/components/ui/input-icon";
 import { InputMask } from "@/components/ui/input-mask";
 import AuthFooterForm from "@/features/auth/components/AuthFooterForm";
 
+import { useSignup } from "@/features/auth/hooks/use-signup";
+import {
+  signupSchema,
+  type SignupValues,
+} from "@/features/auth/schemas/signup-schema";
+
 export default function Signup() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "admin",
-    birthdate: "08/03/2005",
-    email: "jadson20051965@gmail.com",
-    password: "admin123",
-  });
   const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const { mutate: signup, isPending, error } = useSignup();
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: "",
+      birthDate: "",
+      email: "",
+      password: "",
+    },
+  });
 
-    navigate("/verify-email");
+  const onSubmit = (data: SignupValues) => {
+    signup(data);
   };
 
   return (
@@ -47,7 +65,10 @@ export default function Signup() {
         </header>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8 mb-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-8 mb-6"
+        >
           <FieldGroup>
             <div className="flex flex-col gap-6 md:flex-row md:gap-4">
               {/* Nome */}
@@ -55,33 +76,25 @@ export default function Signup() {
                 <FieldLabel htmlFor="name">Nome</FieldLabel>
                 <InputIcon
                   id="name"
-                  name="name"
-                  type="text"
                   placeholder="Digite seu nome aqui"
                   autoComplete="name"
-                  required
                   iconLeft={<LuUser size={18} />}
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  {...register("name")}
                 />
+                <FieldError errors={[errors.name]} />
               </Field>
+
               {/* Data de Nascimento */}
               <Field>
-                <FieldLabel htmlFor="birthdate">Data de Nascimento</FieldLabel>
+                <FieldLabel htmlFor="birthDate">Data de Nascimento</FieldLabel>
                 <InputMask
-                  id="birthdate"
-                  name="birthdate"
+                  id="birthDate"
                   mask="date"
                   autoComplete="bday"
                   iconLeft={<LuCalendar size={18} />}
-                  required
-                  value={formData.birthdate}
-                  onValueChange={(e) => {
-                    setFormData({ ...formData, birthdate: e });
-                  }}
+                  {...register("birthDate")}
                 />
+                <FieldError errors={[errors.birthDate]} />
               </Field>
             </div>
 
@@ -90,17 +103,13 @@ export default function Signup() {
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <InputIcon
                 id="email"
-                name="email"
                 type="email"
                 placeholder="seu@email.com"
                 autoComplete="email"
-                required
                 iconLeft={<LuMail size={18} />}
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                {...register("email")}
               />
+              <FieldError errors={[errors.email]} />
             </Field>
 
             {/* Senha */}
@@ -108,30 +117,29 @@ export default function Signup() {
               <FieldLabel htmlFor="password">Senha</FieldLabel>
               <InputIcon
                 id="password"
-                name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Mínimo 8 caracteres"
                 autoComplete="new-password"
-                required
-                minLength={8}
                 iconLeft={<LuLock size={18} />}
                 iconRight={
                   showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
                 }
                 onIconRightClick={togglePasswordVisibility}
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                {...register("password")}
               />
+              <FieldError errors={[errors.password]} />
             </Field>
           </FieldGroup>
+
+          {/* API Error */}
+          {error && <FieldError errors={[error]} />}
 
           {/* Submit Button */}
           <Button
             type="submit"
             size="lg"
             className="w-full uppercase tracking-wide"
+            loading={isPending}
           >
             Criar Conta
           </Button>

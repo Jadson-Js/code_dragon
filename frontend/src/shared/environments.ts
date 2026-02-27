@@ -1,3 +1,3 @@
 export const env = {
-  backendUrl: import.meta.env.VITE_BACKEND_URL || "",
+  serverUrl: import.meta.env.VITE_SERVER_URL || "",
 };
