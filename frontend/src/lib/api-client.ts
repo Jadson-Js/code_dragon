@@ -12,8 +12,7 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
-      error.response?.data?.message || "Ocorreu um erro inesperado.";
+    const message = error.response.data.error || "Ocorreu um erro inesperado.";
     return Promise.reject(new Error(message));
   },
 );

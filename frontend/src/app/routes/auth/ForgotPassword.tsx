@@ -1,18 +1,40 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldError,
+} from "@/components/ui/field";
 import { InputIcon } from "@/components/ui/input-icon";
 import { LuMail } from "react-icons/lu";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { GrFormPreviousLink } from "react-icons/gr";
 import { FiSend } from "react-icons/fi";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordValues,
+} from "@/features/auth/schemas/forgot-password-schema";
+import { useForgotPassword } from "@/features/auth/hooks/use-forgot-password";
 
 export default function ForgotPassword() {
-  const navigate = useNavigate();
+  const { mutate: forgotPassword, isPending } = useForgotPassword();
 
-  const handleForgotPassword = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    navigate("/verify-email");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordValues>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = (data: ForgotPasswordValues) => {
+    forgotPassword(data);
   };
 
   return (
@@ -31,19 +53,20 @@ export default function ForgotPassword() {
 
       <form
         className="flex flex-col gap-8 mb-8"
-        onSubmit={handleForgotPassword}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <InputIcon
-              name="email"
+              id="email"
               type="email"
               iconLeft={<LuMail size={18} />}
               autoComplete="email"
               placeholder="seu@email.com"
-              required
+              {...register("email")}
             />
+            <FieldError errors={[errors.email]} />
           </Field>
         </FieldGroup>
 
@@ -51,6 +74,7 @@ export default function ForgotPassword() {
           type="submit"
           size="lg"
           className="w-full uppercase tracking-wide"
+          loading={isPending}
         >
           <FiSend size={18} /> Enviar Link de Recuperação
         </Button>

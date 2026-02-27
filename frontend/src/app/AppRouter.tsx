@@ -13,7 +13,14 @@ export default function AppRouter() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-email/:email" element={<VerifyEmail />} />
+        <Route
+          path="/verify-email/:email"
+          element={<VerifyEmail type="signup" />}
+        />
+        <Route
+          path="/forgot-password/:email"
+          element={<VerifyEmail type="forgot-password" />}
+        />
       </Routes>
     </BrowserRouter>
   );
