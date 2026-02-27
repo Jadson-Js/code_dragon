@@ -1,12 +1,15 @@
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { GrFormPreviousLink } from "react-icons/gr";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { LuRefreshCcw } from "react-icons/lu";
 import { useContext, useEffect, useState } from "react";
 import { TimerContext, type TimerContextType } from "@/app/TimerProvider";
+import { useResendEmail } from "@/features/auth/hooks/use-resend-email";
 
 export default function VerifyEmail() {
+  const { mutate: resendEmail, isPending, error } = useResendEmail();
+  const { email } = useParams();
   const timerContext = useContext<TimerContextType>(TimerContext);
   const [textButton, setTextButton] = useState(
     "Não recebeu? Clique para reenviar",
@@ -26,8 +29,10 @@ export default function VerifyEmail() {
   }, [timerContext.timer]);
 
   const handleResendEmail = async () => {
-    timerContext.toggleTimer(30);
-    regressiveContage(29);
+    resendEmail({ email: email as string });
+
+    timerContext.toggleTimer(60);
+    regressiveContage(59);
   };
 
   const regressiveContage = (loop: number) => {

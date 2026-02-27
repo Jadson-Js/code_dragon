@@ -42,10 +42,10 @@ export default function Signup() {
   } = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
-      birthDate: "",
-      email: "",
-      password: "",
+      name: "admin",
+      birthDate: "08/03/2005",
+      email: "jadson20051965@gmail.com",
+      password: "admin123",
     },
   });
 
