@@ -1,47 +1,70 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
+
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldError,
+} from "@/components/ui/field";
 import { InputIcon } from "@/components/ui/input-icon";
 import AuthFooterForm from "@/features/auth/components/AuthFooterForm";
+import AuthHeader from "@/features/auth/components/AuthHeader";
+
+import { useLogin } from "@/features/auth/hooks/use-login";
+import {
+  loginSchema,
+  type LoginValues,
+} from "@/features/auth/schemas/login-schema";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const { mutate: login, isPending } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implementar lógica de cadastro
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginValues) => {
+    login(data);
   };
 
   return (
     <AuthLayout>
-      {/* Header */}
-      <header className="flex flex-col gap-2 mb-8">
-        <h1 className="text-h1 text-white-1">Bem vindo de volta!</h1>
-        <p className="text-white-2">Faça login para continuar</p>
-      </header>
+      <AuthHeader
+        title="Bem vindo de volta!"
+        description="Faça login para continuar"
+      />
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-6 mb-6"
+      >
         <FieldGroup>
           {/* Email */}
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <InputIcon
               id="email"
-              name="email"
               type="email"
               placeholder="seu@email.com"
               autoComplete="email"
-              required
               iconLeft={<LuMail size={18} />}
+              {...register("email")}
             />
+            <FieldError errors={[errors.email]} />
           </Field>
 
           {/* Senha */}
@@ -49,24 +72,26 @@ export default function Login() {
             <FieldLabel htmlFor="password">Senha</FieldLabel>
             <InputIcon
               id="password"
-              name="password"
               type={showPassword ? "text" : "password"}
               placeholder="Mínimo 8 caracteres"
-              autoComplete="new-password"
-              required
-              minLength={8}
+              autoComplete="current-password"
               iconLeft={<LuLock size={18} />}
               iconRight={
                 showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
               }
               onIconRightClick={togglePasswordVisibility}
+              {...register("password")}
             />
-            {/* Login Link */}
-            <p className="text-end text-white-2 text-sm mb-6">
-              <Link to="/forgot-password" className="link">
+            <FieldError errors={[errors.password]} />
+            <div className="text-end mt-2">
+              <Link
+                to="/forgot-password"
+                shaking-text
+                className="link text-sm uppercase tracking-wider opacity-70 hover:opacity-100 transition-opacity"
+              >
                 Esqueceu sua senha?
               </Link>
-            </p>
+            </div>
           </Field>
         </FieldGroup>
 
@@ -75,12 +100,13 @@ export default function Login() {
           type="submit"
           size="lg"
           className="w-full uppercase tracking-wide"
+          loading={isPending}
         >
           Entrar
         </Button>
       </form>
 
-      {/* Login Link */}
+      {/* Signup Link */}
       <p className="text-center text-white-2 text-sm mb-6">
         Não tem uma conta?{" "}
         <Link to="/signup" className="link">

@@ -1,7 +1,7 @@
 import { api } from "@/lib/api-client";
 import type { SignupValues } from "../schemas/signup-schema";
 
-export async function API_SIGNUP(data: SignupValues) {
+export async function signup(data: SignupValues) {
   const [day, month, year] = data.birthDate.split("/");
   const formattedData = {
     ...data,

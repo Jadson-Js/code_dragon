@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,13 +44,11 @@ export default function ForgotPassword() {
         <img src="/src/assets/IconKey.svg" alt="icon" className="img" />
       </div>
 
-      <header className="flex flex-col gap-2 mb-8">
-        <h1 className="text-h1 text-white-1">Recuperar Senha</h1>
-        <p className="text-white-2">
-          Digite o e-mail associado à sua conta e enviaremos um link de
-          recuperação.
-        </p>
-      </header>
+      <AuthHeader
+        title="Recuperar Senha"
+        description="Digite o e-mail associado à sua conta e enviaremos um link de recuperação."
+        centered
+      />
 
       <form
         className="flex flex-col gap-8 mb-8"
