@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { FaRegCircleCheck } from "react-icons/fa6";
-import { useLocation } from "react-router";
 
 export default function AuthSidebar() {
   return (
@@ -11,10 +9,10 @@ export default function AuthSidebar() {
         </div>
       </div>
       <div className="flex flex-col gap-2 mb-8">
-        <h2 className="text-h2 text-white-1">
+        <h2 className="typ-h2 text-white-1">
           Acelere sua carreira em tecnologia
         </h2>
-        <p className="text-body text-white-2">
+        <p className="typ-body text-white-2">
           Diagnósticos personalizados, simulações de entrevista com IA e
           auditoria completa do seu perfil profissional.
         </p>
@@ -25,7 +23,7 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="text-h3 text-white-1">
+            <h3 className="typ-h3 text-white-1">
               Acelere sua carreira em tecnologia
             </h3>
             <p className="text-white-2">
@@ -39,7 +37,7 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="text-h3 text-white-1">Simulação de Entrevista</h3>
+            <h3 className="typ-h3 text-white-1">Simulação de Entrevista</h3>
             <p className="text-white-2">
               Pratique com IA e receba feedback detalhado
             </p>
@@ -50,7 +48,7 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="text-h3 text-white-1">Auditoria de Perfil</h3>
+            <h3 className="typ-h3 text-white-1">Auditoria de Perfil</h3>
             <p className="text-white-2">Otimize seu LinkedIn e currículo</p>
           </div>
         </div>

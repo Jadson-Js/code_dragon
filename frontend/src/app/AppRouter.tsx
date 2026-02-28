@@ -1,9 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import Signup from "./routes/auth/Signup";
 import Dashboard from "./routes/dashboard/Dashboard";
-import Login from "./routes/auth/Login";
-import ForgotPassword from "./routes/auth/ForgotPassword";
-import VerifyEmail from "./routes/auth/VerifyEmail";
+import Signup from "./routes/auth/Signup";
 
 export default function AppRouter() {
   return (
@@ -11,16 +8,6 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/verify-email/:email"
-          element={<VerifyEmail type="signup" />}
-        />
-        <Route
-          path="/forgot-password/:email"
-          element={<VerifyEmail type="forgot-password" />}
-        />
       </Routes>
     </BrowserRouter>
   );

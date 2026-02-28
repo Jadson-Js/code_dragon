@@ -1,149 +1,78 @@
-import { useState } from "react";
-import { Link } from "react-router";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  LuUser,
-  LuCalendar,
-  LuMail,
-  LuLock,
-  LuEye,
-  LuEyeOff,
-} from "react-icons/lu";
-import AuthLayout from "@/components/layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldError,
-} from "@/components/ui/field";
-import { InputIcon } from "@/components/ui/input-icon";
-import { InputMask } from "@/components/ui/input-mask";
-import AuthFooterForm from "@/features/auth/components/AuthFooterForm";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input, InputWithIcons } from "@/components/ui/input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-
-import { useSignup } from "@/features/auth/hooks/use-signup";
-import {
-  signupSchema,
-  type SignupValues,
-} from "@/features/auth/schemas/signup-schema";
+import AuthLayout from "@/features/auth/components/AuthLayout";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import React from "react";
+import { Link } from "react-router";
+import AuthFooter from "@/features/auth/components/AuthFooter";
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-
-  const { mutate: signup, isPending, error } = useSignup();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupValues>({
-    resolver: zodResolver(signupSchema),
-  });
-
-  const onSubmit = (data: SignupValues) => {
-    signup(data);
-  };
+  const [showPassword, setShowPassword] = React.useState(false);
 
   return (
     <AuthLayout>
       <AuthHeader
         title="Crie sua conta gratuita"
-        description="Junte-se a milhares de devs acelerando a carreira"
+        text="Junte-se a milhares de devs acelerando a carreira"
+        className="mb-8"
       />
 
-      {/* Form */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-8 mb-6"
-      >
-        <FieldGroup>
-          <div className="flex flex-col gap-6 md:flex-row md:gap-4">
-            {/* Nome */}
-            <Field>
-              <FieldLabel htmlFor="name">Nome</FieldLabel>
-              <InputIcon
-                id="name"
-                placeholder="Digite seu nome aqui"
-                autoComplete="name"
-                iconLeft={<LuUser size={18} />}
-                {...register("name")}
-              />
-              <FieldError errors={[errors.name]} />
-            </Field>
-
-            {/* Data de Nascimento */}
-            <Field>
-              <FieldLabel htmlFor="birthDate">Data de Nascimento</FieldLabel>
-              <InputMask
-                id="birthDate"
-                mask="date"
-                autoComplete="bday"
-                iconLeft={<LuCalendar size={18} />}
-                {...register("birthDate")}
-              />
-              <FieldError errors={[errors.birthDate]} />
-            </Field>
-          </div>
-
-          {/* Email */}
+      <form className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-row gap-4">
           <Field>
-            <FieldLabel htmlFor="email">Email</FieldLabel>
-            <InputIcon
-              id="email"
-              type="email"
-              placeholder="seu@email.com"
-              autoComplete="email"
-              iconLeft={<LuMail size={18} />}
-              {...register("email")}
+            <FieldLabel htmlFor="checkout-7j9-card-name-43j">Nome</FieldLabel>
+            <Input
+              id="checkout-7j9-card-name-43j"
+              placeholder="Digite seu nome"
+              required
             />
-            <FieldError errors={[errors.email]} />
           </Field>
 
-          {/* Senha */}
           <Field>
-            <FieldLabel htmlFor="password">Senha</FieldLabel>
-            <InputIcon
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Mínimo 8 caracteres"
-              autoComplete="new-password"
-              iconLeft={<LuLock size={18} />}
-              iconRight={
-                showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />
-              }
-              onIconRightClick={togglePasswordVisibility}
-              {...register("password")}
+            <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+              Data de Nascimento
+            </FieldLabel>
+            <Input
+              id="checkout-7j9-card-number-uw1"
+              placeholder="Digite sua data de nascimento"
+              required
             />
-            <FieldError errors={[errors.password]} />
           </Field>
-        </FieldGroup>
+        </div>
 
-        {/* API Error */}
-        {error && <FieldError errors={[error]} />}
+        <Field>
+          <FieldLabel htmlFor="checkout-7j9-card-name-43j">Email</FieldLabel>
+          <InputWithIcons leftIcon={Mail} placeholder="Digite seu email" />
+        </Field>
 
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full uppercase tracking-wide"
-          loading={isPending}
-        >
-          Criar Conta
+        <Field className="mb-8">
+          <FieldLabel htmlFor="checkout-7j9-card-name-43j">Senha</FieldLabel>
+          <InputWithIcons
+            id="checkout-7j9-card-name-43j"
+            placeholder="Digite sua senha"
+            leftIcon={Lock}
+            rightIcon={showPassword ? Eye : EyeOff}
+            required
+            type={showPassword ? "text" : "password"}
+            onRightIconClick={() => setShowPassword(!showPassword)}
+          />
+        </Field>
+
+        <Button variant="default" size="lg">
+          CRIAR CONTA
         </Button>
+
+        <Link to="/auth/login">
+          <p className="text-center text-white-2 typ-caption">
+            Já tem uma conta? <span className="link">Faça login</span>
+          </p>
+        </Link>
       </form>
 
-      {/* Login Link */}
-      <p className="text-center text-white-2 text-sm mb-6">
-        Já tem uma conta?{" "}
-        <Link to="/login" className="link">
-          Fazer login
-        </Link>
-      </p>
-
-      <AuthFooterForm />
+      <AuthFooter />
     </AuthLayout>
   );
 }

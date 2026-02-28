@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const env = {
-  serverPort: process.env.SERVER_PORT || 3000,
+  serverPort: process.env.SERVER_PORT || 3001,
   serverUrl: process.env.SERVER_URL || "",
   clientUrl: process.env.CLIENT_URL || "",
 
