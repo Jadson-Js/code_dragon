@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { Input, InputWithIcons } from "@/components/ui/input";
+import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/features/auth/components/AuthLayout";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
@@ -35,10 +34,9 @@ export default function Signup() {
             <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
               Data de Nascimento
             </FieldLabel>
-            <Input
-              id="checkout-7j9-card-number-uw1"
+            <InputMask
+              mask="__/__/____"
               placeholder="Digite sua data de nascimento"
-              required
             />
           </Field>
         </div>
