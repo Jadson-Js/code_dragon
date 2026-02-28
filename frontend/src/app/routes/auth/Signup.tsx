@@ -7,8 +7,11 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
+import { useSignup } from "@/features/auth/hooks/useSignup";
 
 export default function Signup() {
+  const { register, handleSubmit, errors, isSubmitting, reset, onSubmit } =
+    useSignup();
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -19,7 +22,10 @@ export default function Signup() {
         className="mb-8"
       />
 
-      <form className="flex flex-col gap-4 mb-8">
+      <form
+        className="flex flex-col gap-4 mb-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-row gap-4">
           <Field>
             <FieldLabel htmlFor="checkout-7j9-card-name-43j">Nome</FieldLabel>
@@ -27,6 +33,7 @@ export default function Signup() {
               id="checkout-7j9-card-name-43j"
               placeholder="Digite seu nome"
               required
+              {...register("name")}
             />
           </Field>
 
@@ -37,13 +44,18 @@ export default function Signup() {
             <InputMask
               mask="__/__/____"
               placeholder="Digite sua data de nascimento"
+              {...register("birthDate")}
             />
           </Field>
         </div>
 
         <Field>
           <FieldLabel htmlFor="checkout-7j9-card-name-43j">Email</FieldLabel>
-          <InputWithIcons leftIcon={Mail} placeholder="Digite seu email" />
+          <InputWithIcons
+            leftIcon={Mail}
+            placeholder="Digite seu email"
+            {...register("email")}
+          />
         </Field>
 
         <Field className="mb-8">
@@ -56,10 +68,17 @@ export default function Signup() {
             required
             type={showPassword ? "text" : "password"}
             onRightIconClick={() => setShowPassword(!showPassword)}
+            {...register("password")}
           />
         </Field>
 
-        <Button variant="default" size="lg">
+        <Button
+          variant="default"
+          size="lg"
+          type="submit"
+          className="cursor-pointer"
+          disabled={isSubmitting}
+        >
           CRIAR CONTA
         </Button>
 

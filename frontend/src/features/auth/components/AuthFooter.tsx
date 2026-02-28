@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
-import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router";
 
@@ -16,7 +15,7 @@ export default function AuthFooter() {
       <Button
         variant="outline"
         size="lg"
-        className="w-full gap-3 transition-transform active:scale-[0.98] cursor-pointer mb-8"
+        className="w-full gap-3 transition-all cursor-pointer mb-8"
       >
         <FcGoogle className="size-5" />
         Entrar com Google
