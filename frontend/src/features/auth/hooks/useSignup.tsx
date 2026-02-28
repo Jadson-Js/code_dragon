@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
 import { env } from "@/shared/environments";
 import axios from "axios";
+import { toast } from "sonner";
 
 export function useSignup() {
   const {
@@ -27,10 +28,11 @@ export function useSignup() {
         dataFormatted,
       );
       reset();
+      toast.success("Conta criada com sucesso!");
       console.log(response);
       return response;
     } catch (error) {
-      console.log(error);
+      toast.error("Erro ao criar conta");
       return error;
     }
   };

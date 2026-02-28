@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const signupSchema = z.object({
-  name: z.string(),
+  name: z.string().min(2, "O nome deve ter pelo menos 2 caracteres"),
   birthDate: z
     .string()
     .min(10, "Data de nascimento inválida")

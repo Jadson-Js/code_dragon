@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/features/auth/components/AuthLayout";
@@ -28,48 +28,54 @@ export default function Signup() {
       >
         <div className="flex flex-row gap-4">
           <Field>
-            <FieldLabel htmlFor="checkout-7j9-card-name-43j">Nome</FieldLabel>
+            <FieldLabel htmlFor="name">Nome</FieldLabel>
             <Input
-              id="checkout-7j9-card-name-43j"
+              id="name"
               placeholder="Digite seu nome"
-              required
+              aria-invalid={!!errors.name}
               {...register("name")}
             />
+            <FieldError errors={[errors.name]} />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-              Data de Nascimento
-            </FieldLabel>
+            <FieldLabel htmlFor="birthDate">Data de Nascimento</FieldLabel>
             <InputMask
+              id="birthDate"
               mask="__/__/____"
               placeholder="Digite sua data de nascimento"
+              aria-invalid={!!errors.birthDate}
               {...register("birthDate")}
             />
+            <FieldError errors={[errors.birthDate]} />
           </Field>
         </div>
 
         <Field>
-          <FieldLabel htmlFor="checkout-7j9-card-name-43j">Email</FieldLabel>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
           <InputWithIcons
+            id="email"
             leftIcon={Mail}
             placeholder="Digite seu email"
+            aria-invalid={!!errors.email}
             {...register("email")}
           />
+          <FieldError errors={[errors.email]} />
         </Field>
 
         <Field className="mb-8">
-          <FieldLabel htmlFor="checkout-7j9-card-name-43j">Senha</FieldLabel>
+          <FieldLabel htmlFor="password">Senha</FieldLabel>
           <InputWithIcons
-            id="checkout-7j9-card-name-43j"
+            id="password"
             placeholder="Digite sua senha"
             leftIcon={Lock}
             rightIcon={showPassword ? Eye : EyeOff}
-            required
             type={showPassword ? "text" : "password"}
             onRightIconClick={() => setShowPassword(!showPassword)}
+            aria-invalid={!!errors.password}
             {...register("password")}
           />
+          <FieldError errors={[errors.password]} />
         </Field>
 
         <Button
@@ -79,7 +85,7 @@ export default function Signup() {
           className="cursor-pointer"
           disabled={isSubmitting}
         >
-          CRIAR CONTA
+          {isSubmitting ? "CRIANDO CONTA..." : "CRIAR CONTA"}
         </Button>
 
         <Link to="/auth/login">
