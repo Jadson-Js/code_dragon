@@ -5,6 +5,7 @@ import ResendEmailVerification from "./routes/auth/ResendEmailVerification";
 import VerifyTokenEmailVerification from "./routes/auth/VerifyTokenEmailVerification";
 import Login from "./routes/auth/Login";
 import ForgotPassword from "./routes/auth/ForgotPassword";
+import ResetPassword from "./routes/auth/ResetPassword";
 
 export default function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );
