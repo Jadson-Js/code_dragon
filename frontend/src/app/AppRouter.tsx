@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./routes/dashboard/Dashboard";
 import Signup from "./routes/auth/Signup";
 import ResendEmailVerification from "./routes/auth/ResendEmailVerification";
+import VerifyTokenEmailVerification from "./routes/auth/VerifyTokenEmailVerification";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -11,6 +13,10 @@ export default function AppRouter() {
         <Route
           path="/resend-email-verification/:email"
           element={<ResendEmailVerification />}
+        />
+        <Route
+          path="/verify-token-email-verification/:token"
+          element={<VerifyTokenEmailVerification />}
         />
       </Routes>
     </BrowserRouter>

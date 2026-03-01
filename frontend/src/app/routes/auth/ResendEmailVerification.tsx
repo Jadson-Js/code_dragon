@@ -5,6 +5,7 @@ import { ButtonWithIcons } from "@/components/ui/button";
 import { Loader2, Mail, RefreshCcw } from "lucide-react";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { useResendEmailVerification } from "@/features/auth/hooks/useResendEmailVerification";
+import ListNumber from "@/components/ui/listNumber";
 
 export default function ResendEmailVerification() {
   const { email } = useParams();
@@ -81,9 +82,7 @@ export default function ResendEmailVerification() {
 
         <div className="flex flex-col gap-4">
           <div className="flex gap-4 items-center">
-            <div className="shrink-0 w-6 h-6 rounded-full bg-primary-1 flex items-center justify-center text-white-1 font-bold text-sm">
-              1
-            </div>
+            <ListNumber number={1} />
             <p className="text-white-2">
               Abra sua caixa de entrada e procure por um e-mail da{" "}
               <span className="font-bold">CodeDragon</span>
@@ -91,9 +90,7 @@ export default function ResendEmailVerification() {
           </div>
 
           <div className="flex gap-4 items-center">
-            <div className="shrink-0 w-6 h-6 rounded-full bg-primary-1 flex items-center justify-center text-white-1 font-bold text-sm">
-              2
-            </div>
+            <ListNumber number={2} />
             <p className="text-white-2">
               Abra sua caixa de entrada e procure por um e-mail da{" "}
               <span className="font-bold">CodeDragon</span>
@@ -101,9 +98,7 @@ export default function ResendEmailVerification() {
           </div>
 
           <div className="flex gap-4 items-center">
-            <div className="shrink-0 w-6 h-6 rounded-full bg-primary-1 flex items-center justify-center text-white-1 font-bold text-sm">
-              3
-            </div>
+            <ListNumber number={3} />
             <p className="text-white-2">
               Abra sua caixa de entrada e procure por um e-mail da{" "}
               <span className="font-bold">CodeDragon</span>
