@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { Check } from "lucide-react";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import CircleCheck from "@/components/ui/circleCheck";
+import { SetupLayout } from "@/features/auth/layout/SetLayout";
 
 export default function VerifyTokenEmailVerification() {
   const { token } = useParams();
@@ -48,12 +49,7 @@ export default function VerifyTokenEmailVerification() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-bg-1 flex flex-col items-center justify-center p-4">
-      {/* Logo */}
-      <div className="mb-12">
-        <img src="/public/logo.svg" alt="logo" className="img" />
-      </div>
-
+    <SetupLayout>
       {/* Success Icon */}
 
       <div className="w-20 h-20 rounded-full border-2 border-green bg-green/15 flex items-center justify-center mb-12">
@@ -108,6 +104,6 @@ export default function VerifyTokenEmailVerification() {
           ></div>
         </div>
       </div>
-    </div>
+    </SetupLayout>
   );
 }

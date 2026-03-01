@@ -1,4 +1,4 @@
-import AuthLayout from "@/features/auth/components/AuthLayout";
+import AuthLayout from "@/features/auth/layout/AuthLayout";
 import * as React from "react";
 import { useParams } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";

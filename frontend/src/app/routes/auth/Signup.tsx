@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-import AuthLayout from "@/features/auth/components/AuthLayout";
+import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
