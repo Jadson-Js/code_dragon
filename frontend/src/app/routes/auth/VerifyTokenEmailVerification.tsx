@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useParams, useNavigate } from "react-router";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-import CheckCircle from "@/components/ui/circleCheck";
 import CircleCheck from "@/components/ui/circleCheck";
 
 export default function VerifyTokenEmailVerification() {
@@ -11,10 +9,6 @@ export default function VerifyTokenEmailVerification() {
   const navigate = useNavigate();
   const [seconds, setSeconds] = React.useState(2);
   const [progress, setProgress] = React.useState(0);
-
-  const handleContinue = React.useCallback(() => {
-    // navigate("/auth/login"); // Or wherever the dashboard is
-  }, []);
 
   React.useEffect(() => {
     // To-do: Add API call to verify token here if needed
@@ -30,7 +24,7 @@ export default function VerifyTokenEmailVerification() {
       setSeconds((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleContinue();
+          //navigate("/dashboard");
           return 0;
         }
         return prev - 1;
@@ -51,7 +45,7 @@ export default function VerifyTokenEmailVerification() {
       clearInterval(timer);
       clearInterval(progressTimer);
     };
-  }, [handleContinue]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg-1 flex flex-col items-center justify-center p-4">

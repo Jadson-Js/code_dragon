@@ -15,7 +15,7 @@ export default function AppRouter() {
           element={<ResendEmailVerification />}
         />
         <Route
-          path="/verify-token-email-verification/:token"
+          path="/verify-token/:token"
           element={<VerifyTokenEmailVerification />}
         />
       </Routes>

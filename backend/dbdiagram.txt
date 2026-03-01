@@ -1,0 +1,576 @@
+// ==========================================
+// CORE TABLES
+// ==========================================
+
+Table users {
+  id integer [primary key]
+  name varchar [not null]
+  email varchar [not null, unique]
+  password varchar [not null]
+  birth_date date
+  verified_at timestamp
+  image_id integer
+  linkedin_url varchar
+  github_url varchar
+  portfolio_url varchar
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    email [unique]
+    verified_at
+    deleted_at
+  }
+}
+
+Table email_tokens {
+  id integer [primary key]
+  user_id integer [not null]
+  token varchar [not null, unique]
+  type enum('verification', 'password_reset', 'email_change') [not null]
+  used_at timestamp
+  expires_at timestamp [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    token [unique]
+    user_id
+    expires_at
+    (user_id, type, used_at)
+  }
+}
+
+Table images {
+  id integer [primary key]
+  url varchar [not null]
+  key varchar [not null]
+  mime_type enum('image/jpeg', 'image/jpg', 'image/png', 'image/webp') [not null]
+  size integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    key [unique]
+  }
+}
+
+// ==========================================
+// ENUM TABLES (seniority, objective, speciality)
+// ==========================================
+
+Table seniorities {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  order integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+    order
+  }
+  
+  Note: 'Examples: junior, pleno, senior, expert'
+}
+
+Table career_objectives {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  order integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+    order
+  }
+  
+  Note: 'Examples: learn, practice, interview-prep, certification'
+}
+
+Table specialties {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  order integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+    order
+  }
+  
+  Note: 'Examples: frontend, backend, mobile, devops, data-science'
+}
+
+// ==========================================
+// USER SETUP & STACKS
+// ==========================================
+
+Table user_setups {
+  id integer [primary key]
+  user_id integer [not null]
+  seniority_id integer [not null]
+  speciality_id integer [not null]
+  career_objective_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    user_id
+    (seniority_id, speciality_id, career_objective_id)
+  }
+  
+  Note: 'User profile setup - their preferences and goals'
+}
+
+Table user_setup_stacks {
+  id integer [primary key]
+  user_setup_id integer [not null]
+  stack_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_setup_id, stack_id) [unique]
+    user_setup_id
+    stack_id
+  }
+  
+  Note: 'N:N relationship - user setup can have multiple stacks'
+}
+
+Table stacks {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+  }
+  
+  Note: 'Technologies: JavaScript, React, Node.js, Python, etc'
+}
+
+
+
+// ==========================================
+// FEATURES
+// ==========================================
+
+Table features {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+  }
+  
+  Note: 'Available features: quiz, roadmap, interview-prep, etc'
+}
+
+// ==========================================
+// SUGGESTION BOX
+// ==========================================
+
+Table suggestion_boxes {
+  id integer [primary key]
+  user_id integer [not null]
+  type enum('feature', 'bug', 'improvement', 'other') [not null]
+  title varchar [not null]
+  description text
+  image_id integer
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    user_id
+    type
+    deleted_at
+    created_at
+  }
+}
+
+// ==========================================
+// SESSIONS (GENERIC - FOR ALL FEATURES)
+// ==========================================
+
+Table sessions {
+  id integer [primary key]
+  user_id integer [not null]
+  feature_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    user_id
+    feature_id
+    (user_id, created_at)
+    deleted_at
+  }
+  
+  Note: 'Generic session table - tracks all feature usage for analytics and feedback'
+}
+
+// ==========================================
+// QUIZ SESSIONS (SPECIFIC)
+// ==========================================
+
+Table quiz_sessions {
+  id integer [primary key]
+  session_id integer [not null, unique]
+  user_id integer [not null]
+  quiz_objective_id integer [not null]
+  speciality_id integer [not null]
+  seniority_id integer [not null]
+  duration enum('5min', '10min', '15min', '30min', '45min', '60min') [not null]
+  score integer [default: 0]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    session_id [unique]
+    user_id
+    (seniority_id, speciality_id, quiz_objective_id)
+    (user_id, created_at)
+    deleted_at
+  }
+  
+  Note: 'Quiz-specific session with setup configuration and score'
+}
+
+Table quiz_objectives {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+  }
+  
+  Note: 'Examples: pratic by questions, diagnostic'
+}
+
+Table quiz_session_stacks {
+  id integer [primary key]
+  quiz_session_id integer [not null]
+  stack_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (quiz_session_id, stack_id) [unique]
+    quiz_session_id
+    stack_id
+  }
+  
+  Note: 'N:N relationship - quiz session can test multiple stacks'
+}
+
+// ==========================================
+// QUIZ SYSTEM
+// ==========================================
+
+Table quiz_subjects {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  speciality_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    slug [unique]
+    speciality_id
+  }
+  
+  Note: 'Quiz subjects: HTML, CSS, JavaScript, React, Algorithms, etc'
+}
+
+Table quiz_session_subjects {
+  id integer [primary key]
+  quiz_session_id integer [not null]
+  quiz_subject_id integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (quiz_session_id, quiz_subject_id) [unique]
+    quiz_session_id
+    quiz_subject_id
+  }
+  
+  Note: 'N:N relationship - which subjects were included in this quiz session'
+}
+
+Table quiz_questions {
+  id integer [primary key]
+  quiz_objective_id integer [not null]
+  speciality_id integer [not null]
+  seniority_id integer [not null]
+  subject_id integer [not null]
+  statement text [not null]
+  alternatives text [not null]
+  correct_alternative_index integer [not null]
+  code text
+  reports integer [default: 0]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    subject_id
+    (seniority_id, speciality_id, subject_id)
+    (quiz_objective_id, seniority_id, speciality_id)  // ← ADICIONAR
+    deleted_at
+    reports
+  }
+  
+  Note: 'Quiz question bank - alternatives stored as JSON array'
+}
+
+Table quiz_session_questions {
+  id integer [primary key]
+  quiz_session_id integer [not null]
+  quiz_question_id integer [not null]
+  selected_alternative_index integer
+  is_correct boolean [default: false]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    quiz_session_id
+    quiz_question_id
+    (quiz_session_id, quiz_question_id)
+  }
+  
+  Note: 'User answers for each question in the quiz session'
+}
+
+// ==========================================
+// ROADMAP & COURSES
+// ==========================================
+
+Table quiz_session_roadmaps {
+  id integer [primary key]
+  quiz_session_id integer [not null]
+  title varchar [not null]
+  description text
+  priority enum('low', 'medium', 'high', 'urgent') [not null]
+  quiz_course_id integer
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    quiz_session_id
+    priority
+    quiz_course_id
+  }
+  
+  Note: 'Personalized learning roadmap generated from quiz results'
+}
+
+Table quiz_courses {
+  id integer [primary key]
+  title varchar [not null]
+  rate integer [default: 0]
+  students integer [default: 0]
+  link varchar [not null]
+  image_id integer
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    rate
+    students
+    deleted_at
+  }
+  
+  Note: 'Course recommendations - can be linked in roadmaps'
+}
+
+// ==========================================
+// FEEDBACK
+// ==========================================
+
+Table feedbacks {
+  id integer [primary key]
+  user_id integer [not null]
+  feature_id integer [not null]
+  session_id integer
+  rate integer [not null]
+  reason enum('too_easy', 'too_hard', 'bugs', 'confusing', 'great', 'other') [not null]
+  description text
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    user_id
+    feature_id
+    session_id
+    rate
+    deleted_at
+    created_at
+  }
+  
+  Note: 'User feedback - linked to generic session (works for all features)'
+}
+
+// ==========================================
+// PACKAGES & PURCHASES
+// ==========================================
+
+Table user_packs {
+  id integer [primary key]
+  user_id integer [not null]
+  feature_id integer [not null]
+  used integer [default: 0]
+  total_uses integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    user_id
+    feature_id
+    (user_id, feature_id)
+  }
+  
+  Note: 'User credits/uses per feature'
+}
+
+Table packages {
+  id integer [primary key]
+  name varchar [not null]
+  slug varchar [not null, unique]
+  price integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    slug [unique]
+    deleted_at
+  }
+  
+  Note: 'Available packages for purchase'
+}
+
+Table package_details {
+  id integer [primary key]
+  package_id integer [not null]
+  feature_id integer [not null]
+  total_uses integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    package_id
+    feature_id
+    (package_id, feature_id) [unique]
+  }
+  
+  Note: 'What each package includes - how many uses per feature'
+}
+
+Table user_purchases {
+  id integer [primary key]
+  user_id integer [not null]
+  package_id integer [not null]
+  status enum('pending', 'completed', 'failed', 'refunded', 'cancelled') [not null]
+  total_paid integer [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    user_id
+    package_id
+    status
+    created_at
+    (user_id, status)
+  }
+  
+  Note: 'Purchase history'
+}
+
+// ==========================================
+// RELATIONSHIPS
+// ==========================================
+
+// Users relationships
+Ref: users.image_id > images.id
+Ref: email_tokens.user_id > users.id [delete: cascade]
+Ref: user_setups.user_id > users.id [delete: cascade]
+Ref: suggestion_boxes.user_id > users.id [delete: cascade]
+Ref: sessions.user_id > users.id [delete: cascade]
+Ref: quiz_sessions.user_id > users.id [delete: cascade]
+Ref: feedbacks.user_id > users.id [delete: cascade]
+Ref: user_packs.user_id > users.id [delete: cascade]
+Ref: user_purchases.user_id > users.id [delete: cascade]
+
+// Enum tables relationships
+Ref: user_setups.seniority_id > seniorities.id
+Ref: user_setups.speciality_id > specialties.id
+Ref: user_setups.career_objective_id > career_objectives.id
+Ref: quiz_sessions.seniority_id > seniorities.id
+Ref: quiz_sessions.speciality_id > specialties.id
+Ref: quiz_sessions.quiz_objective_id > quiz_objectives.id
+Ref: quiz_questions.seniority_id > seniorities.id
+Ref: quiz_questions.speciality_id > specialties.id
+Ref: quiz_questions.quiz_objective_id > quiz_objectives.id
+Ref: quiz_subjects.speciality_id > specialties.id
+
+// User Setup & Stacks relationships
+Ref: user_setup_stacks.user_setup_id > user_setups.id [delete: cascade]
+Ref: user_setup_stacks.stack_id > stacks.id [delete: cascade]
+
+// Quiz Session & Stacks relationships
+Ref: quiz_session_stacks.quiz_session_id > quiz_sessions.id [delete: cascade]
+Ref: quiz_session_stacks.stack_id > stacks.id [delete: cascade]
+
+// Features relationships
+Ref: sessions.feature_id > features.id
+Ref: feedbacks.feature_id > features.id
+Ref: user_packs.feature_id > features.id
+Ref: package_details.feature_id > features.id
+
+// Suggestion boxes relationships
+Ref: suggestion_boxes.image_id > images.id
+
+// Sessions relationships (generic)
+Ref: feedbacks.session_id > sessions.id [delete: set null]
+
+// Quiz Sessions relationships
+Ref: quiz_sessions.session_id > sessions.id [delete: cascade]
+Ref: quiz_session_questions.quiz_session_id > quiz_sessions.id [delete: cascade]
+Ref: quiz_session_roadmaps.quiz_session_id > quiz_sessions.id [delete: cascade]
+
+// Quiz relationships
+Ref: quiz_session_subjects.quiz_session_id > quiz_sessions.id [delete: cascade]
+Ref: quiz_session_subjects.quiz_subject_id > quiz_subjects.id [delete: cascade]
+Ref: quiz_questions.subject_id > quiz_subjects.id
+Ref: quiz_session_questions.quiz_question_id > quiz_questions.id
+
+// Roadmap & Courses relationships
+Ref: quiz_session_roadmaps.quiz_course_id > quiz_courses.id [delete: set null]
+Ref: quiz_courses.image_id > images.id
+
+// Packages relationships
+Ref: package_details.package_id > packages.id [delete: cascade]
+Ref: user_purchases.package_id > packages.id
