@@ -9,7 +9,7 @@ import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
 import { useSignup } from "@/features/auth/hooks/useSignup";
 
-export default function Signup() {
+export default function Login() {
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
     useSignup();
   const [showPassword, setShowPassword] = React.useState(false);
@@ -17,7 +17,7 @@ export default function Signup() {
   return (
     <AuthLayout>
       <AuthHeader
-        title="Crie sua conta gratuita"
+        title="Bem vindo de volta!"
         description="Junte-se a milhares de devs acelerando a carreira"
         className="mb-8"
       />
@@ -26,31 +26,6 @@ export default function Signup() {
         className="flex flex-col gap-4 mb-8"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-row gap-4">
-          <Field>
-            <FieldLabel htmlFor="name">Nome</FieldLabel>
-            <Input
-              id="name"
-              placeholder="Digite seu nome"
-              aria-invalid={!!errors.name}
-              {...register("name")}
-            />
-            <FieldError errors={[errors.name]} />
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="birthDate">Data de Nascimento</FieldLabel>
-            <InputMask
-              id="birthDate"
-              mask="__/__/____"
-              placeholder="Digite sua data de nascimento"
-              aria-invalid={!!errors.birthDate}
-              {...register("birthDate")}
-            />
-            <FieldError errors={[errors.birthDate]} />
-          </Field>
-        </div>
-
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <InputWithIcons
@@ -76,20 +51,18 @@ export default function Signup() {
             {...register("password")}
           />
           <FieldError errors={[errors.password]} />
+          <Link to="/forgot-password" className="text-right link typ-caption">
+            Esqueceu sua senha?
+          </Link>
         </Field>
 
-        <Button
-          variant="default"
-          size="lg"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "CRIANDO CONTA..." : "CRIAR CONTA"}
+        <Button variant="default" size="lg" type="submit" disabled={true}>
+          {isSubmitting ? "ENTRANDO..." : "ENTRAR"}
         </Button>
 
-        <Link to="/login">
+        <Link to="/signup">
           <p className="text-center text-white-2 typ-caption">
-            Já tem uma conta? <span className="link">Faça login</span>
+            Não tem uma conta? <span className="link">Crie uma conta</span>
           </p>
         </Link>
       </form>
