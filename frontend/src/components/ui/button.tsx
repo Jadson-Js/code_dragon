@@ -62,8 +62,8 @@ function Button({
 }
 
 interface ButtonWithIconsProps extends React.ComponentProps<typeof Button> {
-  leftIcon?: LucideIcon;
-  rightIcon?: LucideIcon;
+  leftIcon?: LucideIcon | null;
+  rightIcon?: LucideIcon | null;
 }
 
 function ButtonWithIcons({
