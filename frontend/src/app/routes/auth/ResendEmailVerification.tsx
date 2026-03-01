@@ -4,10 +4,12 @@ import { useParams } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { Loader2, Mail, RefreshCcw } from "lucide-react";
 import AuthHeader from "@/features/auth/components/AuthHeader";
+import { useResendEmailVerification } from "@/features/auth/hooks/useResendEmailVerification";
 
 export default function ResendEmailVerification() {
   const { email } = useParams();
   const STORAGE_KEY = `resend_countdown_${email}`;
+  const { resendEmail, isResending } = useResendEmailVerification();
 
   const [countdown, setCountdown] = React.useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -37,8 +39,11 @@ export default function ResendEmailVerification() {
     return () => clearInterval(timer);
   }, [countdown, STORAGE_KEY]);
 
-  const handleResend = () => {
-    // To-do: Add resend email logic here
+  const handleResend = async () => {
+    if (!email) return;
+
+    await resendEmail(email);
+
     const expiresAt = Date.now() + 60 * 1000;
     localStorage.setItem(STORAGE_KEY, expiresAt.toString());
     setCountdown(60);
@@ -60,13 +65,15 @@ export default function ResendEmailVerification() {
         variant="secondary"
         size="lg"
         className="w-full mb-12"
-        leftIcon={countdown > 0 ? null : RefreshCcw}
+        leftIcon={isResending ? Loader2 : countdown > 0 ? null : RefreshCcw}
         onClick={handleResend}
-        disabled={countdown > 0}
+        disabled={countdown > 0 || isResending}
       >
-        {countdown > 0
-          ? `Aguarde ${countdown}s para reenviar`
-          : "Não recebeu? Clique para reenviar"}
+        {isResending
+          ? "Enviando..."
+          : countdown > 0
+            ? `Aguarde ${countdown}s para reenviar`
+            : "Não recebeu? Clique para reenviar"}
       </ButtonWithIcons>
 
       <div className="bg-bg-2 p-4 card border border-bg-3">
