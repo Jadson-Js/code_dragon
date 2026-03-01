@@ -4,8 +4,10 @@ import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
 import { env } from "@/shared/environments";
 import axios from "axios";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export function useSignup() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,7 +31,7 @@ export function useSignup() {
       );
       reset();
       toast.success("Conta criada com sucesso!");
-      console.log(response);
+      navigate("/resend-email-verification/" + data.email);
       return response;
     } catch (error) {
       toast.error("Erro ao criar conta");

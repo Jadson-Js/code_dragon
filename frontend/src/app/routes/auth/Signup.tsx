@@ -10,7 +10,7 @@ import AuthFooter from "@/features/auth/components/AuthFooter";
 import { useSignup } from "@/features/auth/hooks/useSignup";
 
 export default function Signup() {
-  const { register, handleSubmit, errors, isSubmitting, reset, onSubmit } =
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } =
     useSignup();
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -18,7 +18,7 @@ export default function Signup() {
     <AuthLayout>
       <AuthHeader
         title="Crie sua conta gratuita"
-        text="Junte-se a milhares de devs acelerando a carreira"
+        description="Junte-se a milhares de devs acelerando a carreira"
         className="mb-8"
       />
 
@@ -82,7 +82,6 @@ export default function Signup() {
           variant="default"
           size="lg"
           type="submit"
-          className="cursor-pointer"
           disabled={isSubmitting}
         >
           {isSubmitting ? "CRIANDO CONTA..." : "CRIAR CONTA"}
