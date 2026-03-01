@@ -1,8 +1,8 @@
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import * as React from "react";
-import { useParams } from "react-router";
-import { ButtonWithIcons } from "@/components/ui/button";
-import { Loader2, Mail, RefreshCcw } from "lucide-react";
+import { Link, useParams } from "react-router";
+import { Button, ButtonWithIcons } from "@/components/ui/button";
+import { ArrowLeft, Loader2, Mail, RefreshCcw } from "lucide-react";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { useResendEmailVerification } from "@/features/auth/hooks/useResendEmailVerification";
 import ListNumber from "@/components/ui/listNumber";
@@ -77,7 +77,7 @@ export default function ResendEmailVerification() {
             : "Não recebeu? Clique para reenviar"}
       </ButtonWithIcons>
 
-      <div className="bg-bg-2 p-4 card border border-bg-3">
+      <div className="bg-bg-2 p-4 card border border-bg-3 mb-6">
         <h3 className="text-white-1 typ-h3 mb-4">O que fazer agora:</h3>
 
         <div className="flex flex-col gap-4">
@@ -105,6 +105,16 @@ export default function ResendEmailVerification() {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Link
+          to="/signup"
+          className=" text-white-2 hover:text-white-1 flex flex-row items-center"
+        >
+          <ArrowLeft className="mr-1" strokeWidth={1.5} />
+          Voltar para o cadastro
+        </Link>
       </div>
     </AuthLayout>
   );

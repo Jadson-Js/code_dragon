@@ -1,11 +1,11 @@
 import React from "react";
 import { SetupLayout } from "../layout/SetLayout";
-import { Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import AuthHeader from "./AuthHeader";
 import CircleCheck from "@/components/ui/circleCheck";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
-export default function AuthSuccessVerifyToken() {
+export default function AuthSuccessVerifyTokenScreen() {
   const navigate = useNavigate();
   const [seconds, setSeconds] = React.useState(2);
   const [progress, setProgress] = React.useState(0);
@@ -18,7 +18,7 @@ export default function AuthSuccessVerifyToken() {
       setSeconds((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          //navigate("/dashboard");
+          navigate("/dashboard");
           return 0;
         }
         return prev - 1;
@@ -84,7 +84,7 @@ export default function AuthSuccessVerifyToken() {
       </div>
 
       {/* Redirect footer */}
-      <div className="flex flex-col items-center gap-4 w-full max-w-sm">
+      <div className="flex flex-col items-center gap-4 w-full max-w-sm mb-6">
         <p className="text-white-2 text-sm">
           Redirecionando automaticamente em{" "}
           <span className="font-bold">{seconds} Segundos</span>
@@ -95,6 +95,16 @@ export default function AuthSuccessVerifyToken() {
             style={{ width: `${progress}%` }}
           ></div>
         </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Link
+          to="/signup"
+          className=" text-white-2 hover:text-white-1 flex flex-row items-center"
+        >
+          <ArrowLeft className="mr-1" strokeWidth={1.5} />
+          Voltar para o cadastro
+        </Link>
       </div>
     </SetupLayout>
   );

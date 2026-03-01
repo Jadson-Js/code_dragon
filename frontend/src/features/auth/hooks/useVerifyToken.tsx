@@ -10,9 +10,9 @@ export function useVerifyToken() {
 
   const verifyToken = async (token: string) => {
     try {
-      // await axios.post(`${env.serverUrl}/auth/verify-token`, {
-      //   token,
-      // });
+      await axios.post(`${env.serverUrl}/auth/verify-email`, {
+        token,
+      });
 
       setStatus("success");
       toast.success("Token verificado com sucesso!");
