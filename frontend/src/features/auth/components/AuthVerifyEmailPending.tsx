@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { SetupLayout } from "../layout/SetLayout";
 import { ArrowLeft } from "lucide-react";
 
-export default function AuthPendingVerifyTokenScreen() {
+export default function AuthVerifyEmailPending() {
   return (
     <SetupLayout>
       {/* Animated spinner ring */}
@@ -29,7 +29,7 @@ export default function AuthPendingVerifyTokenScreen() {
 
       <div className="flex justify-center">
         <Link
-          to="/signup"
+          to="/auth/signup"
           className=" text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

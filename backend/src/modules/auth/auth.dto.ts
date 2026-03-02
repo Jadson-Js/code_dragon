@@ -1,11 +1,11 @@
-export interface SignupAuthDTO {
+export interface SignupDTO {
   name: string;
   email: string;
   password: string;
   birthDate: string;
 }
 
-export interface ResendEmailDTO {
+export interface ResendVerificationDTO {
   email: string;
 }
 

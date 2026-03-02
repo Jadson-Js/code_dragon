@@ -31,7 +31,7 @@ export function useSignup() {
       );
       reset();
       toast.success("Conta criada com sucesso!");
-      navigate("/resend-email-verification/" + data.email);
+      navigate("/auth/verify-email", { state: { email: data.email } });
       return response;
     } catch (error) {
       toast.error("Erro ao criar conta");

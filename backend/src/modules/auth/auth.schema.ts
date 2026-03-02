@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const signupAuthSchema = z.object({
+export const signupSchema = z.object({
   body: z.object({
     name: z.string().min(2).max(100),
     email: z.email(),
@@ -9,7 +9,7 @@ export const signupAuthSchema = z.object({
   }),
 });
 
-export const resendEmailSchema = z.object({
+export const resendVerificationSchema = z.object({
   body: z.object({
     email: z.email(),
   }),

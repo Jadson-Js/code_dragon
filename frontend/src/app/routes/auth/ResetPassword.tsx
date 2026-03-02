@@ -37,12 +37,12 @@ export default function ResetPassword() {
     const result = await resetPassword(data);
 
     if (result.error === "token") {
-      navigate("/forgot-password");
+      navigate("/auth/forgot-password");
       return;
     }
 
     if (!result.error) {
-      navigate("/login");
+      navigate("/auth/login");
     }
   };
 
@@ -106,7 +106,7 @@ export default function ResetPassword() {
 
       <div className="flex justify-center">
         <Link
-          to="/login"
+          to="/auth/login"
           className="text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

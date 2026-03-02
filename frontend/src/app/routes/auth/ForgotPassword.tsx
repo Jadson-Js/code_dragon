@@ -113,7 +113,7 @@ export default function ForgotPassword() {
 
       <div className="flex justify-center">
         <Link
-          to="/login"
+          to="/auth/login"
           className=" text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

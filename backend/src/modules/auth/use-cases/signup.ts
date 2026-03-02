@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { SignupAuthDTO } from "../auth.dto";
+import type { SignupDTO } from "../auth.dto";
 import { User } from "@/domain/entities/user.entity";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
@@ -11,7 +11,7 @@ import { formatMs } from "@/shared/utils";
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 
 @injectable()
-export class SignupAuthUseCase {
+export class SignupUseCase {
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -29,7 +29,7 @@ export class SignupAuthUseCase {
     private readonly emailQueueProvider: IEmailQueueProvider,
   ) {}
 
-  async execute(params: SignupAuthDTO): Promise<void> {
+  async execute(params: SignupDTO): Promise<void> {
     const existingUser = await this.userRepository.findByEmail(params.email);
 
     if (existingUser) return;
@@ -61,7 +61,7 @@ export class SignupAuthUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.clientUrl}/verify-token/${emailToken}`,
+        link: `${env.clientUrl}/auth/verify-email/${emailToken}`,
         token: emailToken,
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },

@@ -3,28 +3,28 @@ import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
 
-export function useVerifyToken() {
+export function useVerifyEmail() {
   const [status, setStatus] = useState<"success" | "error" | "pending">(
     "pending",
   );
 
-  const verifyToken = async (token: string) => {
+  const verifyEmail = async (token: string) => {
     try {
       await axios.post(`${env.serverUrl}/auth/verify-email`, {
         token,
       });
 
       setStatus("success");
-      toast.success("Token verificado com sucesso!");
+      toast.success("E-mail verificado com sucesso!");
     } catch (error: any) {
       setStatus("error");
       console.log(error);
-      toast.error("Erro ao verificar token");
+      toast.error("Erro ao verificar e-mail");
     }
   };
 
   return {
-    verifyToken,
+    verifyEmail,
     status,
   };
 }

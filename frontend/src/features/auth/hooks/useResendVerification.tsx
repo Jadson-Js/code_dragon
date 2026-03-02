@@ -3,13 +3,13 @@ import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
 
-export function useResendEmailVerification() {
+export function useResendVerification() {
   const [isResending, setIsResending] = useState(false);
 
-  const resendEmail = async (email: string) => {
+  const resendVerification = async (email: string) => {
     setIsResending(true);
     try {
-      await axios.post(`${env.serverUrl}/auth/resend-email`, {
+      await axios.post(`${env.serverUrl}/auth/resend-verification`, {
         email,
       });
       toast.success("E-mail de verificação reenviado com sucesso!");
@@ -21,7 +21,7 @@ export function useResendEmailVerification() {
   };
 
   return {
-    resendEmail,
+    resendVerification,
     isResending,
   };
 }

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ResendEmailDTO } from "../auth.dto";
+import type { ResendVerificationDTO } from "../auth.dto";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
@@ -10,7 +10,7 @@ import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
 
 @injectable()
-export class ResendEmailUseCase {
+export class ResendVerificationUseCase {
   constructor(
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
@@ -28,7 +28,7 @@ export class ResendEmailUseCase {
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
-  async execute(params: ResendEmailDTO): Promise<void> {
+  async execute(params: ResendVerificationDTO): Promise<void> {
     const user = await this.userRepository.findByEmail(params.email);
 
     if (!user || user.isVerified()) return;
@@ -52,7 +52,7 @@ export class ResendEmailUseCase {
       template: "VERIFY_EMAIL",
       variables: {
         name: user.name,
-        link: `${env.clientUrl}/verify-token/${emailToken}`,
+        link: `${env.clientUrl}/auth/verify-email/${emailToken}`,
         token: emailToken,
         expiration: formatMs(env.jwtEmailVerificationExpiresInMs),
       },

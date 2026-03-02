@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
+import { InputWithIcons } from "@/components/ui/input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
@@ -51,7 +51,10 @@ export default function Login() {
             {...register("password")}
           />
           <FieldError errors={[errors.password]} />
-          <Link to="/forgot-password" className="text-right link typ-caption">
+          <Link
+            to="/auth/forgot-password"
+            className="text-right link typ-caption"
+          >
             Esqueceu sua senha?
           </Link>
         </Field>
@@ -60,7 +63,7 @@ export default function Login() {
           {isSubmitting ? "ENTRANDO..." : "ENTRAR"}
         </Button>
 
-        <Link to="/signup">
+        <Link to="/auth/signup">
           <p className="text-center text-white-2 typ-caption">
             Não tem uma conta? <span className="link">Crie uma conta</span>
           </p>

@@ -5,7 +5,7 @@ import AuthHeader from "./AuthHeader";
 import CircleCheck from "@/components/ui/circleCheck";
 import { Link, useNavigate } from "react-router";
 
-export default function AuthSuccessVerifyTokenScreen() {
+export default function AuthVerifyEmailSuccess() {
   const navigate = useNavigate();
   const [seconds, setSeconds] = React.useState(2);
   const [progress, setProgress] = React.useState(0);
@@ -99,7 +99,7 @@ export default function AuthSuccessVerifyTokenScreen() {
 
       <div className="flex justify-center">
         <Link
-          to="/signup"
+          to="/auth/signup"
           className=" text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { SignupAuthUseCase } from "./use-cases/signup-auth";
-import type { ResendEmailUseCase } from "./use-cases/resend-email";
+import type { SignupUseCase } from "./use-cases/signup";
+import type { ResendVerificationUseCase } from "./use-cases/resend-verification";
 import type { VerifyEmailUseCase } from "./use-cases/verify-email";
 import type { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import type { ResetPasswordUseCase } from "./use-cases/reset-password";
@@ -14,7 +14,7 @@ export class AuthController {
       "If this email is not registered, you will receive a verification email.",
   };
 
-  private readonly RESEND_EMAIL_RESPONSE = {
+  private readonly RESEND_VERIFICATION_RESPONSE = {
     message:
       "If this email is registered and not yet verified, you will receive a verification email.",
   };
@@ -33,11 +33,11 @@ export class AuthController {
   };
 
   constructor(
-    @inject("SignupAuthUseCase")
-    private readonly signupAuthUseCase: SignupAuthUseCase,
+    @inject("SignupUseCase")
+    private readonly signupUseCase: SignupUseCase,
 
-    @inject("ResendEmailUseCase")
-    private readonly resendEmailUseCase: ResendEmailUseCase,
+    @inject("ResendVerificationUseCase")
+    private readonly resendVerificationUseCase: ResendVerificationUseCase,
 
     @inject("VerifyEmailUseCase")
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
@@ -50,13 +50,13 @@ export class AuthController {
   ) {}
 
   async signup(request: Request, response: Response) {
-    await this.signupAuthUseCase.execute(request.body);
+    await this.signupUseCase.execute(request.body);
     return response.status(200).json(this.SIGNUP_RESPONSE);
   }
 
-  async resendEmail(request: Request, response: Response) {
-    await this.resendEmailUseCase.execute(request.body);
-    return response.status(200).json(this.RESEND_EMAIL_RESPONSE);
+  async resendVerification(request: Request, response: Response) {
+    await this.resendVerificationUseCase.execute(request.body);
+    return response.status(200).json(this.RESEND_VERIFICATION_RESPONSE);
   }
 
   async verifyEmail(request: Request, response: Response) {

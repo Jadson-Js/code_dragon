@@ -2,8 +2,8 @@ import { Router } from "express";
 import { validate } from "@/infra/http/middlewares/validate.middleware";
 import { authController } from "./auth.container";
 import {
-  signupAuthSchema,
-  resendEmailSchema,
+  signupSchema,
+  resendVerificationSchema,
   verifyEmailSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
@@ -14,15 +14,19 @@ const router = Router();
 
 router.post(
   "/signup",
-  validate(signupAuthSchema),
+  validate(signupSchema),
   authController.signup.bind(authController),
 );
 
 router.post(
-  "/resend-email",
-  rateLimitMiddleware({ max: 1, windowInMs: 60000, key: "resend-email" }),
-  validate(resendEmailSchema),
-  authController.resendEmail.bind(authController),
+  "/resend-verification",
+  rateLimitMiddleware({
+    max: 1,
+    windowInMs: 60000,
+    key: "resend-verification",
+  }),
+  validate(resendVerificationSchema),
+  authController.resendVerification.bind(authController),
 );
 
 router.post(

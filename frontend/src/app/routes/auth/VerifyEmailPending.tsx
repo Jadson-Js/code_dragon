@@ -1,16 +1,17 @@
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import * as React from "react";
-import { Link, useParams } from "react-router";
-import { Button, ButtonWithIcons } from "@/components/ui/button";
+import { Link, useLocation } from "react-router";
+import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Mail, RefreshCcw } from "lucide-react";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-import { useResendEmailVerification } from "@/features/auth/hooks/useResendEmailVerification";
+import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
 import ListNumber from "@/components/ui/listNumber";
 
-export default function ResendEmailVerification() {
-  const { email } = useParams();
+export default function VerifyEmailPending() {
+  const location = useLocation();
+  const email = location.state?.email as string | undefined;
   const STORAGE_KEY = `resend_countdown_${email}`;
-  const { resendEmail, isResending } = useResendEmailVerification();
+  const { resendVerification, isResending } = useResendVerification();
 
   const [countdown, setCountdown] = React.useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -43,7 +44,7 @@ export default function ResendEmailVerification() {
   const handleResend = async () => {
     if (!email) return;
 
-    await resendEmail(email);
+    await resendVerification(email);
 
     const expiresAt = Date.now() + 60 * 1000;
     localStorage.setItem(STORAGE_KEY, expiresAt.toString());
@@ -58,7 +59,7 @@ export default function ResendEmailVerification() {
 
       <AuthHeader
         title="Verifique seu e-mail"
-        description={`Enviamos um link de confirmação para ${email}. Para garantir a segurança da sua conta, por favor clique no link enviado antes de continuar.`}
+        description={`Enviamos um link de confirmação para ${email ?? "seu e-mail"}. Para garantir a segurança da sua conta, por favor clique no link enviado antes de continuar.`}
         className="text-center mb-12"
       />
 
@@ -68,7 +69,7 @@ export default function ResendEmailVerification() {
         className="w-full mb-12"
         leftIcon={isResending ? Loader2 : countdown > 0 ? null : RefreshCcw}
         onClick={handleResend}
-        disabled={countdown > 0 || isResending}
+        disabled={countdown > 0 || isResending || !email}
       >
         {isResending
           ? "Enviando..."
@@ -109,7 +110,7 @@ export default function ResendEmailVerification() {
 
       <div className="flex justify-center">
         <Link
-          to="/signup"
+          to="/auth/signup"
           className=" text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

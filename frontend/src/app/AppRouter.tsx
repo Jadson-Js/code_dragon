@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./routes/dashboard/Dashboard";
 import Signup from "./routes/auth/Signup";
-import ResendEmailVerification from "./routes/auth/ResendEmailVerification";
-import VerifyTokenEmailVerification from "./routes/auth/VerifyTokenEmailVerification";
+import VerifyEmailPending from "./routes/auth/VerifyEmailPending";
+import VerifyEmail from "./routes/auth/VerifyEmail";
 import Login from "./routes/auth/Login";
 import ForgotPassword from "./routes/auth/ForgotPassword";
 import ResetPassword from "./routes/auth/ResetPassword";
@@ -12,18 +12,12 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/resend-email-verification/:email"
-          element={<ResendEmailVerification />}
-        />
-        <Route
-          path="/verify-token/:token"
-          element={<VerifyTokenEmailVerification />}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/auth/signup" element={<Signup />} />
+        <Route path="/auth/verify-email" element={<VerifyEmailPending />} />
+        <Route path="/auth/verify-email/:token" element={<VerifyEmail />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

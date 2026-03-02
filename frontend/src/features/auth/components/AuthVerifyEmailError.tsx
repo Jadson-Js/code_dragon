@@ -1,26 +1,25 @@
 import * as React from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { X, Mail, Loader2, Send, ArrowLeft } from "lucide-react";
+import { X, Mail, Send, ArrowLeft } from "lucide-react";
 import { SetupLayout } from "../layout/SetLayout";
 import AuthHeader from "./AuthHeader";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
-import { Button, ButtonWithIcons } from "@/components/ui/button";
-import { useResendEmailVerification } from "@/features/auth/hooks/useResendEmailVerification";
+import { ButtonWithIcons } from "@/components/ui/button";
+import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
 
-const STORAGE_KEY = "verify-token-error-resend-cooldown";
+const STORAGE_KEY = "verify-email-error-resend-cooldown";
 
 const emailSchema = z.object({
   email: z.string().email("Insira um e-mail válido"),
 });
 type EmailFormData = z.infer<typeof emailSchema>;
 
-export default function AuthErrorVerifyTokenScreen() {
-  const navigate = useNavigate();
-  const { resendEmail, isResending } = useResendEmailVerification();
+export default function AuthVerifyEmailError() {
+  const { resendVerification, isResending } = useResendVerification();
 
   const {
     register,
@@ -56,7 +55,7 @@ export default function AuthErrorVerifyTokenScreen() {
   }, [countdown]);
 
   const onSubmit: SubmitHandler<EmailFormData> = async ({ email }) => {
-    await resendEmail(email);
+    await resendVerification(email);
     const expiresAt = Date.now() + 60 * 1000;
     localStorage.setItem(STORAGE_KEY, expiresAt.toString());
     setCountdown(60);
@@ -110,7 +109,7 @@ export default function AuthErrorVerifyTokenScreen() {
 
       <div className="flex justify-center">
         <Link
-          to="/signup"
+          to="/auth/signup"
           className=" text-white-2 hover:text-white-1 flex flex-row items-center"
         >
           <ArrowLeft className="mr-1" strokeWidth={1.5} />

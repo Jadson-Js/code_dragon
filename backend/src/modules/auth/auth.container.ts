@@ -2,8 +2,8 @@ import { container } from "tsyringe";
 import { AuthController } from "@/modules/auth/auth.controller";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
-import { SignupAuthUseCase } from "./use-cases/signup-auth";
-import { ResendEmailUseCase } from "./use-cases/resend-email";
+import { SignupUseCase } from "./use-cases/signup";
+import { ResendVerificationUseCase } from "./use-cases/resend-verification";
 import { VerifyEmailUseCase } from "./use-cases/verify-email";
 import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import { ResetPasswordUseCase } from "./use-cases/reset-password";
@@ -18,12 +18,12 @@ container.register("TokenRepository", {
 });
 
 // Registra os use cases
-container.register("SignupAuthUseCase", {
-  useClass: SignupAuthUseCase,
+container.register("SignupUseCase", {
+  useClass: SignupUseCase,
 });
 
-container.register("ResendEmailUseCase", {
-  useClass: ResendEmailUseCase,
+container.register("ResendVerificationUseCase", {
+  useClass: ResendVerificationUseCase,
 });
 
 container.register("VerifyEmailUseCase", {

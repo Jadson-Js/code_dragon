@@ -87,7 +87,7 @@ export default function Signup() {
           {isSubmitting ? "CRIANDO CONTA..." : "CRIAR CONTA"}
         </Button>
 
-        <Link to="/login">
+        <Link to="/auth/login">
           <p className="text-center text-white-2 typ-caption">
             Já tem uma conta? <span className="link">Faça login</span>
           </p>
