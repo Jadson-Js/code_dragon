@@ -54,7 +54,7 @@ export class ForgotPasswordUseCase {
       template: "RESET_PASSWORD",
       variables: {
         name: user.name,
-        link: `${env.clientUrl}/reset-password?token=${resetToken}`,
+        link: `${env.clientUrl}/reset-password/${resetToken}`,
         token: resetToken,
         expiration: formatMs(env.jwtResetPasswordExpiresInMs),
       },
