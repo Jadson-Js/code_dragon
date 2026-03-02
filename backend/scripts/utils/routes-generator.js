@@ -36,7 +36,7 @@ router.post(
   ${controllerVar}.create.bind(${controllerVar}),
 );
 
-router.put(
+router.patch(
   "/:id",
   ${controllerVar}.update.bind(${controllerVar}),
 );

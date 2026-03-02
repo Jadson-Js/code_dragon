@@ -5,15 +5,9 @@ import { tokenController } from "./token.container";
 
 const router = Router();
 
-router.get(
-  "/",
-  tokenController.findAll.bind(tokenController),
-);
+router.get("/", tokenController.findAll.bind(tokenController));
 
-router.get(
-  "/:id",
-  tokenController.findById.bind(tokenController),
-);
+router.get("/:id", tokenController.findById.bind(tokenController));
 
 router.post(
   "/",
@@ -21,14 +15,8 @@ router.post(
   tokenController.create.bind(tokenController),
 );
 
-router.put(
-  "/:id",
-  tokenController.update.bind(tokenController),
-);
+router.patch("/:id", tokenController.update.bind(tokenController));
 
-router.delete(
-  "/:id",
-  tokenController.delete.bind(tokenController),
-);
+router.delete("/:id", tokenController.delete.bind(tokenController));
 
 export default router;
