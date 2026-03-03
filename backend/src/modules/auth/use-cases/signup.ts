@@ -4,7 +4,7 @@ import { User } from "@/domain/entities/user.entity";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
-import type { IAuthTransactionRepository } from "@/domain/repositories/auth-transaction.repository";
+import type { ICreateUserWithEmailTokenRepository } from "@/domain/repositories/auth-transaction.repository";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
@@ -16,8 +16,8 @@ export class SignupUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
-    @inject("AuthTransactionRepository")
-    private readonly authTransactionRepository: IAuthTransactionRepository,
+    @inject("ICreateUserWithEmailTokenRepository")
+    private readonly createUserWithEmailTokenRepository: ICreateUserWithEmailTokenRepository,
 
     @inject("UserRepository")
     private readonly userRepository: IUserRepository,
@@ -53,7 +53,7 @@ export class SignupUseCase {
       expiresAt: new Date(Date.now() + env.jwtEmailVerificationExpiresInMs),
     });
 
-    await this.authTransactionRepository.createUserWithEmailToken(user, token);
+    await this.createUserWithEmailTokenRepository.execute(user, token);
 
     await this.emailQueueProvider.addJob({
       to: user.email,
