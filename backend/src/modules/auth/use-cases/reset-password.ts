@@ -4,6 +4,7 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
+import type { IResetPasswordRepository } from "@/domain/repositories/reset-password.repository";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
 @injectable()
@@ -20,6 +21,9 @@ export class ResetPasswordUseCase {
 
     @inject("TokenRepository")
     private readonly tokenRepository: ITokenRepository,
+
+    @inject("IResetPasswordRepository")
+    private readonly resetPasswordRepository: IResetPasswordRepository,
   ) {}
 
   async execute(params: ResetPasswordDTO): Promise<void> {
@@ -57,12 +61,10 @@ export class ResetPasswordUseCase {
     if (!isMatch) throw new BadRequestError("Token not found or invalid");
     if (token.isExpired()) throw new BadRequestError("Token has expired");
 
-    // 5. Hash the new password and update the user
+    // 5. Hash the new password and update atomically
     const passwordHash = await this.hashProvider.hash(params.password);
     const updatedUser = user.changePassword(passwordHash);
-    await this.userRepository.update(updatedUser);
 
-    // 6. Delete the used token
-    await this.tokenRepository.delete(token.id);
+    await this.resetPasswordRepository.execute(updatedUser, token.id);
   }
 }
