@@ -49,3 +49,36 @@ model Token {
 
   @@map("tokens")
 }
+
+model Seniority {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  order     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("seniorities")
+}
+
+model CareerObjective {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  order     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("career_objectives")
+}
+
+model Specialty {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  order     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("specialties")
+}
