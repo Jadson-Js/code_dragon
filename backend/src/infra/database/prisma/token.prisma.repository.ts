@@ -60,7 +60,7 @@ export class TokenPrismaRepository implements ITokenRepository {
     return response.map(tokenPrismaToDomain);
   }
 
-  async deleteAllByUserIdAndCreateToken(
+  async deleteByUserIdAndCreateNewToken(
     userId: string,
     token: Token,
   ): Promise<void> {

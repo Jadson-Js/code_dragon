@@ -7,5 +7,5 @@ export interface ITokenRepository {
   findById(id: string): Promise<Token | null>;
   findByUserId(userId: string): Promise<Token[]>;
   findAll(): Promise<Token[]>;
-  deleteAllByUserIdAndCreateToken(userId: string, token: Token): Promise<void>;
+  deleteByUserIdAndCreateNewToken(userId: string, token: Token): Promise<void>;
 }

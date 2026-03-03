@@ -46,7 +46,7 @@ export class ForgotPasswordUseCase {
       expiresAt: new Date(Date.now() + env.jwtResetPasswordExpiresInMs),
     });
 
-    await this.tokenRepository.deleteAllByUserIdAndCreateToken(user.id, token);
+    await this.tokenRepository.deleteByUserIdAndCreateNewToken(user.id, token);
 
     await this.emailQueueProvider.addJob({
       to: user.email,

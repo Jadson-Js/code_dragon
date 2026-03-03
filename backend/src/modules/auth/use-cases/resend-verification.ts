@@ -44,7 +44,7 @@ export class ResendVerificationUseCase {
       expiresAt: new Date(Date.now() + env.jwtEmailVerificationExpiresInMs),
     });
 
-    await this.tokenRepository.deleteAllByUserIdAndCreateToken(user.id, token);
+    await this.tokenRepository.deleteByUserIdAndCreateNewToken(user.id, token);
 
     await this.emailQueueProvider.addJob({
       to: user.email,
