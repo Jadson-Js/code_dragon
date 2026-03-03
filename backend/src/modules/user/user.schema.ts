@@ -7,7 +7,6 @@ export const createUserSchema = z.object({
     passwordHash: z.string(),
     birthDate: z.string().optional(),
     verifiedAt: z.string().optional(),
-    imageId: z.number().optional(),
     linkedinUrl: z.string().optional(),
     githubUrl: z.string().optional(),
     portfolioUrl: z.string().optional(),

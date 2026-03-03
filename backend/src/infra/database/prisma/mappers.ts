@@ -13,7 +13,6 @@ export function userPrismaToDomain(raw: PrismaUser): User {
     passwordHash: raw.passwordHash,
     birthDate: raw.birthDate ?? null,
     verifiedAt: raw.verifiedAt ?? null,
-    imageId: raw.imageId ?? null,
     linkedinUrl: raw.linkedinUrl ?? null,
     githubUrl: raw.githubUrl ?? null,
     portfolioUrl: raw.portfolioUrl ?? null,

@@ -5,7 +5,6 @@ interface CreateUserProps {
   passwordHash: string;
   birthDate?: Date | null;
   verifiedAt?: Date | null;
-  imageId?: number | null;
   linkedinUrl?: string | null;
   githubUrl?: string | null;
   portfolioUrl?: string | null;
@@ -15,42 +14,44 @@ interface CreateUserProps {
 }
 
 export class User {
-  readonly id: string;
-  readonly name: string;
-  readonly email: string;
-  readonly passwordHash: string;
-  readonly birthDate: Date | null;
-  readonly verifiedAt: Date | null;
-  readonly imageId: number | null;
-  readonly linkedinUrl: string | null;
-  readonly githubUrl: string | null;
-  readonly portfolioUrl: string | null;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly deletedAt: Date | null;
-
-  private constructor(props: CreateUserProps) {
-    this.id = props.id ?? crypto.randomUUID();
-    this.name = props.name;
-    this.email = props.email;
-    this.passwordHash = props.passwordHash;
-    this.birthDate = props.birthDate ?? null;
-    this.verifiedAt = props.verifiedAt ?? null;
-    this.imageId = props.imageId ?? null;
-    this.linkedinUrl = props.linkedinUrl ?? null;
-    this.githubUrl = props.githubUrl ?? null;
-    this.portfolioUrl = props.portfolioUrl ?? null;
-    this.createdAt = props.createdAt ?? new Date();
-    this.updatedAt = props.updatedAt ?? new Date();
-    this.deletedAt = props.deletedAt ?? null;
-  }
+  private constructor(
+    public readonly id: string,
+    public readonly name: string,
+    public readonly email: string,
+    public readonly passwordHash: string,
+    public readonly birthDate: Date | null,
+    public readonly verifiedAt: Date | null,
+    public readonly linkedinUrl: string | null,
+    public readonly githubUrl: string | null,
+    public readonly portfolioUrl: string | null,
+    public readonly createdAt: Date,
+    public readonly updatedAt: Date,
+    public readonly deletedAt: Date | null,
+  ) {}
 
   static create(props: CreateUserProps): User {
-    return new User(props);
+    return new User(
+      props.id ?? crypto.randomUUID(),
+      props.name,
+      props.email,
+      props.passwordHash,
+      props.birthDate ?? null,
+      props.verifiedAt ?? null,
+      props.linkedinUrl ?? null,
+      props.githubUrl ?? null,
+      props.portfolioUrl ?? null,
+      props.createdAt ?? new Date(),
+      props.updatedAt ?? new Date(),
+      props.deletedAt ?? null,
+    );
   }
 
   markAsVerified(): User {
-    return new User({ ...this, verifiedAt: new Date(), updatedAt: new Date() });
+    return User.create({
+      ...this,
+      verifiedAt: new Date(),
+      updatedAt: new Date(),
+    });
   }
 
   isVerified(): boolean {
@@ -58,6 +59,6 @@ export class User {
   }
 
   changePassword(passwordHash: string): User {
-    return new User({ ...this, passwordHash, updatedAt: new Date() });
+    return User.create({ ...this, passwordHash, updatedAt: new Date() });
   }
 }
