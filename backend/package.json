@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npx prisma generate && tsx watch --tsconfig tsconfig.json src/main.ts",
+    "start": "npx prisma generate && npx prisma db push && npx prisma db seed && tsx watch --tsconfig tsconfig.json src/main.ts",
     "create": "node scripts/create-module.js",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -48,5 +48,8 @@
     "resend": "^6.9.2",
     "tsyringe": "^4.10.0",
     "zod": "^4.3.6"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
