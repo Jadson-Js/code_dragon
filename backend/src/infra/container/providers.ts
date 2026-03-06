@@ -8,7 +8,7 @@ import { EmailQueueProvider } from "../providers/email/bullmq.provider";
 import {
   EnsureAuthenticated,
   type IEnsureAuthenticated,
-} from "../http/middlewares/ensure-authenticatedf.middleware";
+} from "../http/middlewares/ensure-authenticated.middleware";
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 
 container.registerSingleton("IHashProvider", HashProvider);
