@@ -1,6 +1,6 @@
 /**
  * Repository Interface Generator
- * Generates repository interfaces for domain layer.
+ * Generates repository interface for domain layer with findAll only.
  */
 
 import path from "node:path";
@@ -14,10 +14,6 @@ export function generateRepository(modelName) {
   const content = `import type { ${names.pascal} } from "@/domain/entities/${names.entityFile}";
 
 export interface ${names.repoInterface} {
-  create(data: ${names.pascal}): Promise<${names.pascal}>;
-  update(data: ${names.pascal}): Promise<${names.pascal}>;
-  delete(id: string): Promise<void>;
-  findById(id: string): Promise<${names.pascal} | null>;
   findAll(): Promise<${names.pascal}[]>;
 }
 `;

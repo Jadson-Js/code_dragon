@@ -1,6 +1,6 @@
 /**
  * Prisma Repository Implementation Generator
- * Generates concrete Prisma-based repository implementations.
+ * Generates concrete Prisma-based repository implementation with findAll only.
  */
 
 import path from "node:path";
@@ -32,46 +32,8 @@ function ${names.prismaToDomain}(raw: any): ${names.pascal} {
 
 @injectable()
 export class ${names.repoClass} implements ${names.repoInterface} {
-  async create(data: ${names.pascal}): Promise<${names.pascal}> {
-    const response = await prisma.${prismaModel}.create({
-      data: data,
-    });
-
-    return ${names.prismaToDomain}(response);
-  }
-
-  async update(data: ${names.pascal}): Promise<${names.pascal}> {
-    const response = await prisma.${prismaModel}.update({
-      where: {
-        id: data.id,
-      },
-      data: data,
-    });
-
-    return ${names.prismaToDomain}(response);
-  }
-
-  async delete(id: string): Promise<void> {
-    await prisma.${prismaModel}.delete({
-      where: {
-        id,
-      },
-    });
-  }
-
-  async findById(id: string): Promise<${names.pascal} | null> {
-    const response = await prisma.${prismaModel}.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    return response ? ${names.prismaToDomain}(response) : null;
-  }
-
   async findAll(): Promise<${names.pascal}[]> {
     const response = await prisma.${prismaModel}.findMany();
-
     return response.map(${names.prismaToDomain});
   }
 }
