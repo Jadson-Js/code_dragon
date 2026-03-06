@@ -3,7 +3,9 @@ import { Token } from "@/domain/entities/token.entity";
 import type {
   User as PrismaUser,
   Token as PrismaToken,
+  UserSetup as PrismaUserSetup,
 } from "../../../../generated/prisma/client";
+import { UserSetup } from "@/domain/entities/user-setup.entity";
 
 export function userPrismaToDomain(raw: PrismaUser): User {
   return User.create({
@@ -29,6 +31,18 @@ export function tokenPrismaToDomain(raw: PrismaToken): Token {
     tokenHash: raw.tokenHash,
     type: raw.type,
     expiresAt: raw.expiresAt,
+    createdAt: raw.createdAt,
+    updatedAt: raw.updatedAt,
+  });
+}
+
+export function userSetupPrismaToDomain(raw: PrismaUserSetup): UserSetup {
+  return UserSetup.create({
+    id: raw.id,
+    userId: raw.userId,
+    seniorityId: raw.seniorityId,
+    specialityId: raw.specialityId,
+    careerObjectiveId: raw.careerObjectiveId,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,
   });

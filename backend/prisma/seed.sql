@@ -39,5 +39,6 @@ INSERT INTO "stacks" ("name", "slug", "created_at", "updated_at") VALUES
 ON CONFLICT ("slug") DO NOTHING;
 
 -- User
-insert into "public"."users" ("birth_date", "created_at", "deleted_at", "email", "github_url", "id", "linkedin_url", "name", "password_hash", "portfolio_url", "updated_at", "userSetupId", "verified_at") values 
-('2005-03-08 00:00:00', '2026-03-04 01:16:39.67', NULL, 'admin@admin.com', NULL, '8f9e610e-ae40-4bd4-9438-959a256f2719', NULL, 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NULL, '2026-03-04 01:16:39.67', NULL, '2026-03-04 01:16:39.67')
+INSERT INTO "users" ("birth_date", "created_at", "deleted_at", "email", "github_url", "id", "linkedin_url", "name", "password_hash", "portfolio_url", "updated_at", "verified_at") VALUES 
+('2005-03-08 00:00:00', NOW(), NULL, 'admin@admin.com', NULL, '8f9e610e-ae40-4bd4-9438-959a256f2719', NULL, 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NULL, NOW(), NOW())
+ON CONFLICT ("email") DO NOTHING;

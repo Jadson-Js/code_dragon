@@ -55,14 +55,14 @@ model UserSetup {
   id                String   @id @default(uuid())
   userId            String   @unique @map("user_id")
   seniorityId       Int      @map("seniority_id")
-  specialtyId       Int      @map("specialty_id")
+  specialityId      Int      @map("specialty_id")
   careerObjectiveId Int      @map("career_objective_id")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
   user            User             @relation(fields: [userId], references: [id])
   seniority       Seniority        @relation(fields: [seniorityId], references: [id])
-  specialty       Specialty        @relation(fields: [specialtyId], references: [id])
+  specialty       Specialty        @relation(fields: [specialityId], references: [id])
   careerObjective CareerObjective  @relation(fields: [careerObjectiveId], references: [id])
   stacks          UserSetupStack[]
 

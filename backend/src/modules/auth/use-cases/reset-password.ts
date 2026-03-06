@@ -4,7 +4,7 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
-import type { IResetPasswordRepository } from "@/domain/repositories/reset-password.repository";
+import type { IResetPasswordRepository } from "@/domain/repositories/auth/reset-password.repository";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
 @injectable()

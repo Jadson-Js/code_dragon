@@ -4,7 +4,7 @@ import { User } from "@/domain/entities/user.entity";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
-import type { ICreateUserWithEmailTokenRepository } from "@/domain/repositories/auth-transaction.repository";
+import type { ICreateUserWithEmailTokenRepository } from "@/domain/repositories/auth/auth-transaction.repository";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";

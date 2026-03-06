@@ -1,4 +1,5 @@
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
+import { UnauthorizedError } from "@/shared/app.error";
 import { env } from "@/shared/env";
 import { msToSeconds } from "@/shared/utils";
 import jwt from "jsonwebtoken";
@@ -72,7 +73,10 @@ export class JwtProvider implements IJWTProvider {
     const decoded = jwt.decode(token) as {
       userId: string;
       [key: string]: unknown;
-    };
+    } | null;
+
+    if (!decoded) throw new UnauthorizedError("Malformed token");
+
     return { sub: decoded.userId, ...decoded };
   }
 }

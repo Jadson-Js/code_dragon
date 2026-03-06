@@ -6,7 +6,7 @@ export interface IRateLimit {
   max: number;
   windowInMs: number;
   key: string;
-  useEmail: boolean;
+  useEmail?: boolean;
 }
 
 export function rateLimitMiddleware(options: IRateLimit) {
