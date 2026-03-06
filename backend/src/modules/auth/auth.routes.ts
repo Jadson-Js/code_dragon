@@ -96,4 +96,10 @@ router.post(
   authController.logout.bind(authController),
 );
 
+router.post(
+  "/refresh",
+  ensureAuthenticated.authRefresh.bind(ensureAuthenticated),
+  authController.refreshToken.bind(authController),
+);
+
 export default router;

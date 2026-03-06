@@ -8,6 +8,7 @@ import type { ResetPasswordUseCase } from "./use-cases/reset-password";
 import { authToHTTP } from "./auth.presenter";
 import type { LoginUseCase } from "./use-cases/login";
 import type { LogoutUseCase } from "./use-cases/logout";
+import type { RefreshTokenUseCase } from "./use-cases/refresh-token";
 import { env } from "@/shared/env";
 
 @injectable()
@@ -33,6 +34,9 @@ export class AuthController {
 
     @inject("LogoutUseCase")
     private readonly logoutUseCase: LogoutUseCase,
+
+    @inject("RefreshTokenUseCase")
+    private readonly refreshTokenUseCase: RefreshTokenUseCase,
   ) {}
 
   async signup(request: Request, response: Response) {
@@ -94,6 +98,33 @@ export class AuthController {
     });
 
     return response.status(200).json(authToHTTP(user));
+  }
+
+  async refreshToken(request: Request, response: Response) {
+    const refreshToken = request.cookies.refreshToken;
+    const userId = request.user.id;
+
+    const { accessToken, newRefreshToken } =
+      await this.refreshTokenUseCase.execute({
+        userId,
+        refreshToken,
+      });
+
+    response.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: env.jwtRefreshExpiresInMs,
+    });
+
+    response.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: env.jwtAccessExpiresInMs,
+    });
+
+    return response.status(200).send();
   }
 
   async logout(request: Request, response: Response) {

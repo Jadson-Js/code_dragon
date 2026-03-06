@@ -9,6 +9,7 @@ import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import { ResetPasswordUseCase } from "./use-cases/reset-password";
 import { LoginUseCase } from "./use-cases/login";
 import { LogoutUseCase } from "./use-cases/logout";
+import { RefreshTokenUseCase } from "./use-cases/refresh-token";
 
 // Registra o repositório
 container.register("UserRepository", {
@@ -46,6 +47,10 @@ container.register("LoginUseCase", {
 
 container.register("LogoutUseCase", {
   useClass: LogoutUseCase,
+});
+
+container.register("RefreshTokenUseCase", {
+  useClass: RefreshTokenUseCase,
 });
 
 export const authController = container.resolve(AuthController);

@@ -31,3 +31,8 @@ export interface LogoutDTO {
   userId: string;
   refreshToken: string;
 }
+
+export interface RefreshTokenDTO {
+  userId: string;
+  refreshToken: string;
+}

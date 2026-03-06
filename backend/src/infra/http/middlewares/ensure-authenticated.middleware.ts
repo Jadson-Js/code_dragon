@@ -44,7 +44,7 @@ export class EnsureAuthenticated implements IEnsureAuthenticated {
       throw new UnauthorizedError("Session expired or revoked");
     }
 
-    req.authSession = { id: userId };
+    req.user = { id: userId };
     next();
   }
 
