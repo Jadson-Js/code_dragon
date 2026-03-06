@@ -1,4 +1,3 @@
-import type { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { inject, injectable } from "tsyringe";
 import type { LoginDTO } from "../auth.dto";
 import { NotFoundError, UnauthorizedError } from "@/shared/app.error";
@@ -6,6 +5,9 @@ import type { User } from "@/domain/entities/user.entity";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
+import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import { env } from "@/shared/env";
+import { msToSeconds, generateHash } from "@/shared/utils";
 
 @injectable()
 export class LoginUseCase {
@@ -18,6 +20,9 @@ export class LoginUseCase {
 
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
+
+    @inject("IRedisTokenRepository")
+    private readonly redisTokenRepository: IRedisTokenRepository,
   ) {}
 
   async execute(
@@ -36,6 +41,16 @@ export class LoginUseCase {
 
     const accessToken = await this.jwtProvider.generateAccessToken(user.id);
     const refreshToken = await this.jwtProvider.generateRefreshToken(user.id);
+
+    // Multi-session support: session:userId:sha256(token)
+    const tokenId = generateHash(refreshToken);
+    const ttlSeconds = msToSeconds(env.jwtRefreshExpiresInMs);
+
+    await this.redisTokenRepository.set(
+      `session:${user.id}:${tokenId}`,
+      "true",
+      ttlSeconds,
+    );
 
     return { user, accessToken, refreshToken };
   }

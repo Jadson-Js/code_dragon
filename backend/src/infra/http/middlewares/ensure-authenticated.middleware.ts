@@ -2,6 +2,8 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import { UnauthorizedError } from "@/shared/app.error";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import { generateHash } from "@/shared/utils";
 
 export interface IEnsureAuthenticated {
   authRefresh(req: Request, res: Response, next: NextFunction): Promise<void>;
@@ -13,6 +15,9 @@ export class EnsureAuthenticated implements IEnsureAuthenticated {
   constructor(
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
+
+    @inject("IRedisTokenRepository")
+    private readonly redisTokenRepository: IRedisTokenRepository,
   ) {}
 
   async authRefresh(
@@ -27,7 +32,19 @@ export class EnsureAuthenticated implements IEnsureAuthenticated {
     if (!isValid) throw new UnauthorizedError("Invalid refresh token");
 
     const decoded = await this.jwtProvider.decodeToken(token);
-    req.authSession = { id: decoded.sub as string };
+    const userId = decoded.sub as string;
+
+    // Check if session exists in Redis for multi-session support
+    const tokenId = generateHash(token);
+    const sessionExists = await this.redisTokenRepository.exists(
+      `session:${userId}:${tokenId}`,
+    );
+
+    if (!sessionExists) {
+      throw new UnauthorizedError("Session expired or revoked");
+    }
+
+    req.authSession = { id: userId };
     next();
   }
 

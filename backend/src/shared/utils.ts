@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 export function transformerStringDataToNumber(data: string) {
   return Number(data);
 }
@@ -29,4 +31,8 @@ export function formatMs(ms: number): string {
 
 export function stringToDate(date: string): Date {
   return new Date(date);
+}
+
+export function generateHash(payload: string): string {
+  return createHash("sha256").update(payload).digest("hex");
 }

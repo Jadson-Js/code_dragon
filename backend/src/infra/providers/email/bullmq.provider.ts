@@ -1,5 +1,5 @@
 import { Worker, Queue, type Job } from "bullmq";
-import { redisConnection } from "../redisConnection";
+import { redisConnection } from "../../database/redis/connection";
 import { EmailProvider } from "./email.provider";
 import type { SendEmailProps } from "@/domain/providers/email/email.provider";
 import { inject, injectable } from "tsyringe";

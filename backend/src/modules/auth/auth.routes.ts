@@ -9,13 +9,16 @@ import {
   resetPasswordSchema,
   loginSchema,
 } from "./auth.schema";
-import { rateLimitMiddleware } from "@/infra/http/middlewares/rate-limit.middleware";
+import {
+  ensureAuthenticated,
+  rateLimitMiddleware,
+} from "@/infra/container/providers";
 
 const router = Router();
 
 router.post(
   "/signup",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "signup",
@@ -26,7 +29,7 @@ router.post(
 
 router.post(
   "/resend-verification",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "resend-verification",
@@ -38,7 +41,7 @@ router.post(
 
 router.post(
   "/verify-email",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "verify-email",
@@ -49,7 +52,7 @@ router.post(
 
 router.post(
   "/forgot-password",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "forgot-password",
@@ -61,7 +64,7 @@ router.post(
 
 router.post(
   "/reset-password",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "reset-password",
@@ -72,7 +75,7 @@ router.post(
 
 router.post(
   "/login",
-  rateLimitMiddleware({
+  rateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
     key: "login",
@@ -80,6 +83,17 @@ router.post(
   }),
   validate(loginSchema),
   authController.login.bind(authController),
+);
+
+router.post(
+  "/logout",
+  rateLimitMiddleware.handle({
+    max: 6,
+    windowInMs: 60000,
+    key: "logout",
+  }),
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  authController.logout.bind(authController),
 );
 
 export default router;

@@ -26,3 +26,8 @@ export interface LoginDTO {
   email: string;
   password: string;
 }
+
+export interface LogoutDTO {
+  userId: string;
+  refreshToken: string;
+}

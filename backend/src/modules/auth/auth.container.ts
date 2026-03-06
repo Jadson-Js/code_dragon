@@ -8,6 +8,7 @@ import { VerifyEmailUseCase } from "./use-cases/verify-email";
 import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import { ResetPasswordUseCase } from "./use-cases/reset-password";
 import { LoginUseCase } from "./use-cases/login";
+import { LogoutUseCase } from "./use-cases/logout";
 
 // Registra o repositório
 container.register("UserRepository", {
@@ -41,6 +42,10 @@ container.register("ResetPasswordUseCase", {
 
 container.register("LoginUseCase", {
   useClass: LoginUseCase,
+});
+
+container.register("LogoutUseCase", {
+  useClass: LogoutUseCase,
 });
 
 export const authController = container.resolve(AuthController);

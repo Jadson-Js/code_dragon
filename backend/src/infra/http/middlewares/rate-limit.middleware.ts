@@ -1,4 +1,5 @@
-import { redisConnection } from "@/infra/providers/redisConnection";
+import { inject, injectable } from "tsyringe";
+import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
 import { NotFoundError, TooManyRequestsError } from "@/shared/app.error";
 import type { Request, Response, NextFunction } from "express";
 
@@ -9,26 +10,41 @@ export interface IRateLimit {
   useEmail?: boolean;
 }
 
-export function rateLimitMiddleware(options: IRateLimit) {
-  const windowInSeconds = Math.ceil(options.windowInMs / 1000);
+@injectable()
+export class RateLimitMiddleware {
+  constructor(
+    @inject("IRedisTokenRepository")
+    private readonly redisTokenRepository: IRedisTokenRepository,
+  ) {}
 
-  return async (request: Request, _response: Response, next: NextFunction) => {
-    const ip = request.ip;
-    if (!ip) throw new NotFoundError("IP not found");
+  handle(options: IRateLimit) {
+    const windowInSeconds = Math.ceil(options.windowInMs / 1000);
 
-    let redisKey = `ratelimit:${options.key}:${ip}`;
+    return async (
+      request: Request,
+      _response: Response,
+      next: NextFunction,
+    ) => {
+      const ip = request.ip;
+      if (!ip) throw new NotFoundError("IP not found");
 
-    if (options.useEmail && request.body?.email) {
-      redisKey += `:${request.body.email}`;
-    }
+      let redisKey = `ratelimit:${options.key}:${ip}`;
 
-    const currentCount = await redisConnection.incr(redisKey);
-    if (currentCount === 1) {
-      await redisConnection.expire(redisKey, windowInSeconds);
-    }
-    if (currentCount > options.max) {
-      throw new TooManyRequestsError();
-    }
-    next();
-  };
+      if (options.useEmail && request.body?.email) {
+        redisKey += `:${request.body.email}`;
+      }
+
+      const currentCount = await this.redisTokenRepository.incr(redisKey);
+
+      if (currentCount === 1) {
+        await this.redisTokenRepository.expire(redisKey, windowInSeconds);
+      }
+
+      if (currentCount > options.max) {
+        throw new TooManyRequestsError();
+      }
+
+      next();
+    };
+  }
 }
