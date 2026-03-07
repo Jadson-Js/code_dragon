@@ -7,11 +7,10 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
-import { useSignup } from "@/features/auth/hooks/useSignup";
+import { useLogin } from "@/features/auth/hooks/useLogin";
 
 export default function Login() {
-  const { register, handleSubmit, errors, isSubmitting, onSubmit } =
-    useSignup();
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLogin();
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -59,7 +58,12 @@ export default function Login() {
           </Link>
         </Field>
 
-        <Button variant="default" size="lg" type="submit" disabled={true}>
+        <Button
+          variant="default"
+          size="lg"
+          type="submit"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "ENTRANDO..." : "ENTRAR"}
         </Button>
 

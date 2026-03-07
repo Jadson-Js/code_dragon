@@ -2,6 +2,7 @@ import axios from "axios";
 import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
+import { api } from "@/lib/api-client";
 
 export function useForgotPassword() {
   const [isSending, setIsSending] = useState(false);
@@ -9,7 +10,7 @@ export function useForgotPassword() {
   const forgotPassword = async (email: string) => {
     setIsSending(true);
     try {
-      await axios.post(`${env.serverUrl}/auth/forgot-password`, {
+      await api.post("/auth/forgot-password", {
         email,
       });
       toast.success("E-mail de recuperação enviado com sucesso!");

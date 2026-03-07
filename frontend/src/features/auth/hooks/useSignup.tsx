@@ -5,6 +5,7 @@ import { env } from "@/shared/environments";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { api } from "@/lib/api-client";
 
 export function useSignup() {
   const navigate = useNavigate();
@@ -25,10 +26,7 @@ export function useSignup() {
         birthDate: `${year}-${month}-${day}`,
       };
 
-      const response = await axios.post(
-        env.serverUrl + "/auth/signup",
-        dataFormatted,
-      );
+      const response = await api.post("/auth/signup", dataFormatted);
       reset();
       toast.success("Conta criada com sucesso!");
       navigate("/auth/verify-email", { state: { email: data.email } });

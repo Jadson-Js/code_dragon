@@ -2,6 +2,7 @@ import axios from "axios";
 import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
+import { api } from "@/lib/api-client";
 
 export function useVerifyEmail() {
   const [status, setStatus] = useState<"success" | "error" | "pending">(
@@ -10,7 +11,7 @@ export function useVerifyEmail() {
 
   const verifyEmail = async (token: string) => {
     try {
-      await axios.post(`${env.serverUrl}/auth/verify-email`, {
+      await api.post("/auth/verify-email", {
         token,
       });
 

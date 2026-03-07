@@ -3,6 +3,7 @@ import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
 import type { ResetPasswordFormData } from "../schemas/resetPasswordSchema";
+import { api } from "@/lib/api-client";
 
 export type ResetPasswordError = "token" | "generic";
 
@@ -14,7 +15,7 @@ export function useResetPassword() {
   ): Promise<{ error?: ResetPasswordError }> => {
     setIsLoading(true);
     try {
-      await axios.post(`${env.serverUrl}/auth/reset-password`, {
+      await api.post("/auth/reset-password", {
         token: data.token,
         password: data.password,
       });
