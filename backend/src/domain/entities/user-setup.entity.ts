@@ -2,7 +2,7 @@ interface CreateUserSetupProps {
   id?: string;
   userId: string;
   seniorityId: number;
-  specialityId: number;
+  specialtyId: number;
   careerObjectiveId: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -13,7 +13,7 @@ export class UserSetup {
     public readonly id: string,
     public readonly userId: string,
     public readonly seniorityId: number,
-    public readonly specialityId: number,
+    public readonly specialtyId: number,
     public readonly careerObjectiveId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
@@ -24,7 +24,7 @@ export class UserSetup {
       props.id ?? crypto.randomUUID(),
       props.userId,
       props.seniorityId,
-      props.specialityId,
+      props.specialtyId,
       props.careerObjectiveId,
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),

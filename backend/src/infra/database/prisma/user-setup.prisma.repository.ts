@@ -8,7 +8,7 @@ function userSetupPrismaToDomain(raw: any): UserSetup {
     id: raw.id,
     userId: raw.userId,
     seniorityId: raw.seniorityId,
-    specialityId: raw.specialityId,
+    specialtyId: raw.specialtyId,
     careerObjectiveId: raw.careerObjectiveId,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,

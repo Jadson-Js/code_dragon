@@ -57,7 +57,7 @@ Table images {
 }
 
 // ==========================================
-// ENUM TABLES (seniority, objective, speciality)
+// ENUM TABLES (seniority, objective, specialty)
 // ==========================================
 
 Table seniorities {
@@ -92,7 +92,7 @@ Table career_objectives {
   Note: 'Examples: learn, practice, interview-prep, certification'
 }
 
-Table specialities {
+Table specialties {
   id integer [primary key]
   name varchar [not null]
   slug varchar [not null, unique]
@@ -116,14 +116,14 @@ Table user_setups {
   id integer [primary key]
   user_id integer [not null]
   seniority_id integer [not null]
-  speciality_id integer [not null]
+  specialty_id integer [not null]
   career_objective_id integer [not null]
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
   
   indexes {
     user_id
-    (seniority_id, speciality_id, career_objective_id)
+    (seniority_id, specialty_id, career_objective_id)
   }
   
   Note: 'User profile setup - their preferences and goals'
@@ -233,7 +233,7 @@ Table quiz_sessions {
   session_id integer [not null, unique]
   user_id integer [not null]
   quiz_objective_id integer [not null]
-  speciality_id integer [not null]
+  specialty_id integer [not null]
   seniority_id integer [not null]
   duration enum('5min', '10min', '15min', '30min', '45min', '60min') [not null]
   score integer [default: 0]
@@ -244,7 +244,7 @@ Table quiz_sessions {
   indexes {
     session_id [unique]
     user_id
-    (seniority_id, speciality_id, quiz_objective_id)
+    (seniority_id, specialty_id, quiz_objective_id)
     (user_id, created_at)
     deleted_at
   }
@@ -290,13 +290,13 @@ Table quiz_subjects {
   id integer [primary key]
   name varchar [not null]
   slug varchar [not null, unique]
-  speciality_id integer [not null]
+  specialty_id integer [not null]
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
   
   indexes {
     slug [unique]
-    speciality_id
+    specialty_id
   }
   
   Note: 'Quiz subjects: HTML, CSS, JavaScript, React, Algorithms, etc'
@@ -321,7 +321,7 @@ Table quiz_session_subjects {
 Table quiz_questions {
   id integer [primary key]
   quiz_objective_id integer [not null]
-  speciality_id integer [not null]
+  specialty_id integer [not null]
   seniority_id integer [not null]
   subject_id integer [not null]
   statement text [not null]
@@ -335,8 +335,8 @@ Table quiz_questions {
   
   indexes {
     subject_id
-    (seniority_id, speciality_id, subject_id)
-    (quiz_objective_id, seniority_id, speciality_id)  // ← ADICIONAR
+    (seniority_id, specialty_id, subject_id)
+    (quiz_objective_id, seniority_id, specialty_id)  // ← ADICIONAR
     deleted_at
     reports
   }
@@ -526,15 +526,15 @@ Ref: user_purchases.user_id > users.id [delete: cascade]
 
 // Enum tables relationships
 Ref: user_setups.seniority_id > seniorities.id
-Ref: user_setups.speciality_id > specialities.id
+Ref: user_setups.specialty_id > specialties.id
 Ref: user_setups.career_objective_id > career_objectives.id
 Ref: quiz_sessions.seniority_id > seniorities.id
-Ref: quiz_sessions.speciality_id > specialities.id
+Ref: quiz_sessions.specialty_id > specialties.id
 Ref: quiz_sessions.quiz_objective_id > quiz_objectives.id
 Ref: quiz_questions.seniority_id > seniorities.id
-Ref: quiz_questions.speciality_id > specialities.id
+Ref: quiz_questions.specialty_id > specialties.id
 Ref: quiz_questions.quiz_objective_id > quiz_objectives.id
-Ref: quiz_subjects.speciality_id > specialities.id
+Ref: quiz_subjects.specialty_id > specialties.id
 
 // User Setup & Stacks relationships
 Ref: user_setup_stacks.user_setup_id > user_setups.id [delete: cascade]

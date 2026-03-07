@@ -16,7 +16,7 @@ export class CreateUserSetupWithSetupStacksPrismaRepository implements ICreateUs
           data: {
             userId: params.userId,
             seniorityId: params.seniorityId,
-            specialityId: params.specialityId,
+            specialtyId: params.specialtyId,
             careerObjectiveId: params.careerObjectiveId,
           },
         });

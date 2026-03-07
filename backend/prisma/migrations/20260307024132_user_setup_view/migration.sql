@@ -44,7 +44,7 @@ CREATE TABLE "user_setups" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "seniority_id" INTEGER NOT NULL,
-    "speciality_id" INTEGER NOT NULL,
+    "specialty_id" INTEGER NOT NULL,
     "career_objective_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,7 +77,7 @@ CREATE TABLE "career_objectives" (
 );
 
 -- CreateTable
-CREATE TABLE "specialities" (
+CREATE TABLE "specialties" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE "specialities" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "specialities_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "specialties_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -126,7 +126,7 @@ CREATE UNIQUE INDEX "seniorities_slug_key" ON "seniorities"("slug");
 CREATE UNIQUE INDEX "career_objectives_slug_key" ON "career_objectives"("slug");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "specialities_slug_key" ON "specialities"("slug");
+CREATE UNIQUE INDEX "specialties_slug_key" ON "specialties"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "stacks_slug_key" ON "stacks"("slug");
@@ -141,7 +141,7 @@ ALTER TABLE "user_setups" ADD CONSTRAINT "user_setups_user_id_fkey" FOREIGN KEY 
 ALTER TABLE "user_setups" ADD CONSTRAINT "user_setups_seniority_id_fkey" FOREIGN KEY ("seniority_id") REFERENCES "seniorities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "user_setups" ADD CONSTRAINT "user_setups_speciality_id_fkey" FOREIGN KEY ("speciality_id") REFERENCES "specialities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "user_setups" ADD CONSTRAINT "user_setups_specialty_id_fkey" FOREIGN KEY ("specialty_id") REFERENCES "specialties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_setups" ADD CONSTRAINT "user_setups_career_objective_id_fkey" FOREIGN KEY ("career_objective_id") REFERENCES "career_objectives"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -151,26 +151,3 @@ ALTER TABLE "user_setup_stacks" ADD CONSTRAINT "user_setup_stacks_user_setup_id_
 
 -- AddForeignKey
 ALTER TABLE "user_setup_stacks" ADD CONSTRAINT "user_setup_stacks_stack_id_fkey" FOREIGN KEY ("stack_id") REFERENCES "stacks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
-CREATE VIEW user_setup_view AS
-SELECT 
-    u.id AS user_id,
-    u.name AS user_name,
-    us.id AS user_setup_id,
-    se.name AS seniority_name,
-    sp.name AS speciality_name,
-    ca.name AS career_objective_name,
-    COALESCE(ARRAY_AGG(DISTINCT s.name) FILTER (WHERE s.name IS NOT NULL), '{}') AS stack_names
-FROM
-    users u
-    LEFT JOIN user_setups us ON u.id = us.user_id
-    LEFT JOIN seniorities se ON us.seniority_id = se.id
-    LEFT JOIN specialities sp ON us.speciality_id = sp.id
-    LEFT JOIN career_objectives ca ON us.career_objective_id = ca.id
-    LEFT JOIN user_setup_stacks uss ON us.id = uss.user_setup_id
-    LEFT JOIN stacks s ON uss.stack_id = s.id
-GROUP BY
-    u.id, us.id, se.name, sp.name, ca.name;
-
-
-

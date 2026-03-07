@@ -1,7 +1,7 @@
 export interface CreateUserSetupDTO {
   userId: string;
   seniorityId: number;
-  specialityId: number;
+  specialtyId: number;
   careerObjectiveId: number;
   stacksId: number[];
 }
