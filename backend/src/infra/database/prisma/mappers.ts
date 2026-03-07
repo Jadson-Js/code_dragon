@@ -55,10 +55,11 @@ export function userSetupViewPrismaToDomain(
 ): UserSetupView {
   return UserSetupView.create({
     userId: raw.userId,
-    userSetupId: raw.userSetupId,
-    seniorityName: raw.seniorityName,
-    specialityName: raw.specialityName,
-    careerObjectiveName: raw.careerObjectiveName,
+    userName: raw.userName,
+    userSetupId: raw.userSetupId ?? null,
+    seniorityName: raw.seniorityName ?? null,
+    specialityName: raw.specialityName ?? null,
+    careerObjectiveName: raw.careerObjectiveName ?? null,
     stackNames: raw.stackNames,
   });
 }

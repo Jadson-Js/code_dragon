@@ -6,13 +6,15 @@ import { prisma } from "prisma/client";
 
 @injectable()
 export class UserSetupViewPrismaRepository implements IUserSetupViewRepository {
-  async findByUserId(userId: string): Promise<UserSetupView[]> {
-    const response = await prisma.userSetupView.findMany({
+  async findByUserId(userId: string): Promise<UserSetupView | null> {
+    const response = await prisma.userSetupView.findUnique({
       where: {
         userId,
       },
     });
 
-    return response.map(userSetupViewPrismaToDomain);
+    if (!response) return null;
+
+    return userSetupViewPrismaToDomain(response);
   }
 }

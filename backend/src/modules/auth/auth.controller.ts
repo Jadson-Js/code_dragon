@@ -45,9 +45,9 @@ export class AuthController {
 
   async me(request: Request, response: Response) {
     const userId = request.user.id;
-    const user = await this.getMeUseCase.execute(userId);
+    const result = await this.getMeUseCase.execute(userId);
 
-    return response.status(200).json(authToHTTP(user));
+    return response.status(200).json(result);
   }
 
   async signup(request: Request, response: Response) {

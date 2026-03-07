@@ -155,19 +155,20 @@ ALTER TABLE "user_setup_stacks" ADD CONSTRAINT "user_setup_stacks_stack_id_fkey"
 CREATE VIEW user_setup_view AS
 SELECT 
     u.id AS user_id,
+    u.name AS user_name,
     us.id AS user_setup_id,
     se.name AS seniority_name,
     sp.name AS speciality_name,
     ca.name AS career_objective_name,
-    ARRAY_AGG(DISTINCT s.name) AS stack_names
+    COALESCE(ARRAY_AGG(DISTINCT s.name) FILTER (WHERE s.name IS NOT NULL), '{}') AS stack_names
 FROM
     users u
-    JOIN user_setups us ON u.id = us.user_id
-    JOIN seniorities se ON us.seniority_id = se.id
-    JOIN specialities sp ON us.speciality_id = sp.id
-    JOIN career_objectives ca ON us.career_objective_id = ca.id
-    JOIN user_setup_stacks uss ON us.id = uss.user_setup_id
-    JOIN stacks s ON uss.stack_id = s.id
+    LEFT JOIN user_setups us ON u.id = us.user_id
+    LEFT JOIN seniorities se ON us.seniority_id = se.id
+    LEFT JOIN specialities sp ON us.speciality_id = sp.id
+    LEFT JOIN career_objectives ca ON us.career_objective_id = ca.id
+    LEFT JOIN user_setup_stacks uss ON us.id = uss.user_setup_id
+    LEFT JOIN stacks s ON uss.stack_id = s.id
 GROUP BY
     u.id, us.id, se.name, sp.name, ca.name;
 

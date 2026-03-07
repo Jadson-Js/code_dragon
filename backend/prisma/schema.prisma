@@ -136,9 +136,12 @@ model Stack {
 
 view UserSetupView {
   userId              String   @unique @map("user_id")
-  userSetupId         String   @map("user_setup_id")
-  seniorityName       String   @map("seniority_name")
-  specialityName      String   @map("speciality_name")
-  careerObjectiveName String   @map("career_objective_name")
+  userName            String   @map("user_name")
+  userSetupId         String?  @map("user_setup_id")
+  seniorityName       String?  @map("seniority_name")
+  specialityName      String?  @map("speciality_name")
+  careerObjectiveName String?  @map("career_objective_name")
   stackNames          String[] @map("stack_names")
+
+  @@map("user_setup_view")
 }

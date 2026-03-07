@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 import { AuthController } from "@/modules/auth/auth.controller";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
+import { UserSetupViewPrismaRepository } from "@/infra/database/prisma/user-setup/user-setup-view.repository";
 import { SignupUseCase } from "./use-cases/signup";
 import { ResendVerificationUseCase } from "./use-cases/resend-verification";
 import { VerifyEmailUseCase } from "./use-cases/verify-email";
@@ -19,6 +20,10 @@ container.register("UserRepository", {
 
 container.register("TokenRepository", {
   useClass: TokenPrismaRepository,
+});
+
+container.register("IUserSetupViewRepository", {
+  useClass: UserSetupViewPrismaRepository,
 });
 
 // Registra os use cases
