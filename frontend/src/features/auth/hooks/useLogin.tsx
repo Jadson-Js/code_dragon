@@ -20,7 +20,6 @@ export function useLogin() {
     try {
       const response = await api.post("/auth/login", data);
       reset();
-      toast.success("Login realizado com sucesso!");
       navigate("/");
       return response;
     } catch (error) {

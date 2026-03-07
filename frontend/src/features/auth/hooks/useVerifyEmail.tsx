@@ -16,7 +16,6 @@ export function useVerifyEmail() {
       });
 
       setStatus("success");
-      toast.success("E-mail verificado com sucesso!");
     } catch (error: any) {
       setStatus("error");
       console.log(error);

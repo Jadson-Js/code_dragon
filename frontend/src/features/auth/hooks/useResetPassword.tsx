@@ -20,7 +20,6 @@ export function useResetPassword() {
         password: data.password,
       });
 
-      toast.success("Senha redefinida com sucesso!");
       return {};
     } catch (error: any) {
       const status = error?.response?.status;

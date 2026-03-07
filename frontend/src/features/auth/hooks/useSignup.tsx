@@ -28,7 +28,6 @@ export function useSignup() {
 
       const response = await api.post("/auth/signup", dataFormatted);
       reset();
-      toast.success("Conta criada com sucesso!");
       navigate("/auth/verify-email", { state: { email: data.email } });
       return response;
     } catch (error) {
