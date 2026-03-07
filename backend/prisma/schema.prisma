@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -131,4 +132,13 @@ model Stack {
   userSetupStacks UserSetupStack[]
 
   @@map("stacks")
+}
+
+view UserSetupView {
+  userId              String   @map("user_id")
+  userSetupId         String   @map("user_setup_id")
+  seniorityName       String   @map("seniority_name")
+  specialityName      String   @map("speciality_name")
+  careerObjectiveName String   @map("career_objective_name")
+  stackNames          String[] @map("stack_names")
 }
