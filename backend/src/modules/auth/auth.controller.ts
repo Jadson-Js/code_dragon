@@ -9,6 +9,7 @@ import { authToHTTP } from "./auth.presenter";
 import type { LoginUseCase } from "./use-cases/login";
 import type { LogoutUseCase } from "./use-cases/logout";
 import type { RefreshTokenUseCase } from "./use-cases/refresh-token";
+import type { GetMeUseCase } from "./use-cases/get-me";
 import { env } from "@/shared/env";
 
 @injectable()
@@ -37,7 +38,17 @@ export class AuthController {
 
     @inject("RefreshTokenUseCase")
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
+
+    @inject("GetMeUseCase")
+    private readonly getMeUseCase: GetMeUseCase,
   ) {}
+
+  async me(request: Request, response: Response) {
+    const userId = request.user.id;
+    const user = await this.getMeUseCase.execute(userId);
+
+    return response.status(200).json(authToHTTP(user));
+  }
 
   async signup(request: Request, response: Response) {
     await this.signupUseCase.execute(request.body);

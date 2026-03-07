@@ -27,6 +27,12 @@ router.post(
   authController.signup.bind(authController),
 );
 
+router.get(
+  "/me",
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  authController.me.bind(authController),
+);
+
 router.post(
   "/resend-verification",
   rateLimitMiddleware.handle({
