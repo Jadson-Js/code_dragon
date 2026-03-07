@@ -56,14 +56,14 @@ model UserSetup {
   id                String   @id @default(uuid())
   userId            String   @unique @map("user_id")
   seniorityId       Int      @map("seniority_id")
-  specialityId      Int      @map("specialty_id")
+  specialityId      Int      @map("speciality_id")
   careerObjectiveId Int      @map("career_objective_id")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
   user            User             @relation(fields: [userId], references: [id])
   seniority       Seniority        @relation(fields: [seniorityId], references: [id])
-  specialty       Specialty        @relation(fields: [specialityId], references: [id])
+  speciality      speciality       @relation(fields: [specialityId], references: [id])
   careerObjective CareerObjective  @relation(fields: [careerObjectiveId], references: [id])
   stacks          UserSetupStack[]
 
@@ -96,7 +96,7 @@ model CareerObjective {
   @@map("career_objectives")
 }
 
-model Specialty {
+model speciality {
   id        Int      @id @default(autoincrement())
   name      String
   slug      String   @unique
@@ -106,7 +106,7 @@ model Specialty {
 
   userSetups UserSetup[]
 
-  @@map("specialties")
+  @@map("specialities")
 }
 
 model UserSetupStack {
@@ -135,7 +135,7 @@ model Stack {
 }
 
 view UserSetupView {
-  userId              String   @map("user_id")
+  userId              String   @unique @map("user_id")
   userSetupId         String   @map("user_setup_id")
   seniorityName       String   @map("seniority_name")
   specialityName      String   @map("speciality_name")

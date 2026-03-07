@@ -12,11 +12,6 @@ function userSetupPrismaToDomain(raw: any): UserSetup {
     careerObjectiveId: raw.careerObjectiveId,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,
-    user: raw.user,
-    seniority: raw.seniority,
-    specialty: raw.specialty,
-    careerObjective: raw.careerObjective,
-    stacks: raw.stacks,
   });
 }
 

@@ -4,8 +4,10 @@ import type {
   User as PrismaUser,
   Token as PrismaToken,
   UserSetup as PrismaUserSetup,
+  UserSetupView as PrismaUserSetupView,
 } from "../../../../generated/prisma/client";
 import { UserSetup } from "@/domain/entities/user-setup.entity";
+import { UserSetupView } from "@/domain/entities/user-setup-view";
 
 export function userPrismaToDomain(raw: PrismaUser): User {
   return User.create({
@@ -45,5 +47,18 @@ export function userSetupPrismaToDomain(raw: PrismaUserSetup): UserSetup {
     careerObjectiveId: raw.careerObjectiveId,
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,
+  });
+}
+
+export function userSetupViewPrismaToDomain(
+  raw: PrismaUserSetupView,
+): UserSetupView {
+  return UserSetupView.create({
+    userId: raw.userId,
+    userSetupId: raw.userSetupId,
+    seniorityName: raw.seniorityName,
+    specialityName: raw.specialityName,
+    careerObjectiveName: raw.careerObjectiveName,
+    stackNames: raw.stackNames,
   });
 }

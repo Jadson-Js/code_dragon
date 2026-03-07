@@ -92,7 +92,7 @@ Table career_objectives {
   Note: 'Examples: learn, practice, interview-prep, certification'
 }
 
-Table specialties {
+Table specialities {
   id integer [primary key]
   name varchar [not null]
   slug varchar [not null, unique]
@@ -526,15 +526,15 @@ Ref: user_purchases.user_id > users.id [delete: cascade]
 
 // Enum tables relationships
 Ref: user_setups.seniority_id > seniorities.id
-Ref: user_setups.speciality_id > specialties.id
+Ref: user_setups.speciality_id > specialities.id
 Ref: user_setups.career_objective_id > career_objectives.id
 Ref: quiz_sessions.seniority_id > seniorities.id
-Ref: quiz_sessions.speciality_id > specialties.id
+Ref: quiz_sessions.speciality_id > specialities.id
 Ref: quiz_sessions.quiz_objective_id > quiz_objectives.id
 Ref: quiz_questions.seniority_id > seniorities.id
-Ref: quiz_questions.speciality_id > specialties.id
+Ref: quiz_questions.speciality_id > specialities.id
 Ref: quiz_questions.quiz_objective_id > quiz_objectives.id
-Ref: quiz_subjects.speciality_id > specialties.id
+Ref: quiz_subjects.speciality_id > specialities.id
 
 // User Setup & Stacks relationships
 Ref: user_setup_stacks.user_setup_id > user_setups.id [delete: cascade]

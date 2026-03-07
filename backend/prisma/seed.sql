@@ -7,8 +7,8 @@ INSERT INTO "seniorities" ("name", "slug", "order", "created_at", "updated_at") 
 ('Especialista', 'specialist', 5, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
--- Specialties
-INSERT INTO "specialties" ("name", "slug", "order", "created_at", "updated_at") VALUES
+-- specialities
+INSERT INTO "specialities" ("name", "slug", "order", "created_at", "updated_at") VALUES
 ('Frontend', 'frontend', 1, NOW(), NOW()),
 ('Backend', 'backend', 2, NOW(), NOW()),
 ('Full Stack', 'fullstack', 3, NOW(), NOW()),
