@@ -6,11 +6,11 @@
 
 import { Router } from "express";
 import authRoutes from "@/modules/auth/auth.routes";
-import userSetupRoutes from "@/modules/user-setup/user-setup.routes";
+import profileRoutes from "@/modules/profile/profile.routes";
 
 const router = Router();
 
 router.use("/api/auth", authRoutes);
-router.use("/api/user-setups", userSetupRoutes);
+router.use("/api/profiles", profileRoutes);
 
 export default router;

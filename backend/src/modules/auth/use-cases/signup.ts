@@ -37,7 +37,6 @@ export class SignupUseCase {
     const passwordHash = await this.hashProvider.hash(params.password);
     const user = User.create({
       ...params,
-      birthDate: new Date(params.birthDate),
       passwordHash,
     });
 

@@ -20,20 +20,17 @@ enum TokenType {
 }
 
 model User {
-  id           String     @id @default(uuid())
+  id           String    @id @default(uuid())
   name         String
-  email        String     @unique
-  passwordHash String     @map("password_hash")
-  birthDate    DateTime?  @map("birth_date")
-  verifiedAt   DateTime?  @map("verified_at")
-  linkedinUrl  String?    @map("linkedin_url")
-  githubUrl    String?    @map("github_url")
-  portfolioUrl String?    @map("portfolio_url")
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at")
-  deletedAt    DateTime?  @map("deleted_at")
-  tokens       Token[]
-  userSetup    UserSetup?
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  verifiedAt   DateTime? @map("verified_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  tokens  Token[]
+  profile Profile?
 
   @@map("users")
 }
@@ -52,22 +49,40 @@ model Token {
   @@map("tokens")
 }
 
-model UserSetup {
+model Profile {
   id                String   @id @default(uuid())
   userId            String   @unique @map("user_id")
-  seniorityId       Int      @map("seniority_id")
-  specialtyId       Int      @map("specialty_id")
-  careerObjectiveId Int      @map("career_objective_id")
+  linkedinUrl       String?  @map("linkedin_url")
+  githubUrl         String?  @map("github_url")
+  portfolioUrl      String?  @map("portfolio_url")
+  ageRangeId        Int?     @map("age_range_id")
+  seniorityId       Int?     @map("seniority_id")
+  specialtyId       Int?     @map("specialty_id")
+  careerObjectiveId Int?     @map("career_objective_id")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
   user            User             @relation(fields: [userId], references: [id])
-  seniority       Seniority        @relation(fields: [seniorityId], references: [id])
-  specialty       specialty        @relation(fields: [specialtyId], references: [id])
-  careerObjective CareerObjective  @relation(fields: [careerObjectiveId], references: [id])
-  stacks          UserSetupStack[]
+  ageRange        AgeRange?        @relation(fields: [ageRangeId], references: [id])
+  seniority       Seniority?       @relation(fields: [seniorityId], references: [id])
+  specialty       Specialty?       @relation(fields: [specialtyId], references: [id])
+  careerObjective CareerObjective? @relation(fields: [careerObjectiveId], references: [id])
+  stacks          ProfileStack[]
 
-  @@map("user_setups")
+  @@map("profiles")
+}
+
+model AgeRange {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  order     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  profiles Profile[]
+
+  @@map("age_ranges")
 }
 
 model Seniority {
@@ -78,7 +93,7 @@ model Seniority {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  userSetups UserSetup[]
+  profiles Profile[]
 
   @@map("seniorities")
 }
@@ -91,12 +106,12 @@ model CareerObjective {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  userSetups UserSetup[]
+  profiles Profile[]
 
   @@map("career_objectives")
 }
 
-model specialty {
+model Specialty {
   id        Int      @id @default(autoincrement())
   name      String
   slug      String   @unique
@@ -104,22 +119,22 @@ model specialty {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  userSetups UserSetup[]
+  profiles Profile[]
 
   @@map("specialties")
 }
 
-model UserSetupStack {
-  id          String   @id @default(uuid())
-  userSetupId String   @map("user_setup_id")
-  stackId     Int      @map("stack_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+model ProfileStack {
+  id        String   @id @default(uuid())
+  profileId String   @map("profile_id")
+  stackId   Int      @map("stack_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  userSetup UserSetup @relation(fields: [userSetupId], references: [id])
-  stack     Stack     @relation(fields: [stackId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id])
+  stack   Stack   @relation(fields: [stackId], references: [id])
 
-  @@map("user_setup_stacks")
+  @@map("profile_stacks")
 }
 
 model Stack {
@@ -129,7 +144,7 @@ model Stack {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  userSetupStacks UserSetupStack[]
+  profileStacks ProfileStack[]
 
   @@map("stacks")
 }

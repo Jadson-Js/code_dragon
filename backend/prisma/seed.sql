@@ -1,3 +1,12 @@
+-- Age Ranges
+INSERT INTO "age_ranges" ("name", "slug", "order", "created_at", "updated_at") VALUES
+('Menos de 18', 'under-18', 1, NOW(), NOW()),
+('18 a 24', '18-24', 2, NOW(), NOW()),
+('25 a 34', '25-34', 3, NOW(), NOW()),
+('35 a 44', '35-44', 4, NOW(), NOW()),
+('45 ou mais', '45-plus', 5, NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
 -- Seniorities
 INSERT INTO "seniorities" ("name", "slug", "order", "created_at", "updated_at") VALUES
 ('Estagiário', 'intern', 1, NOW(), NOW()),
@@ -7,7 +16,7 @@ INSERT INTO "seniorities" ("name", "slug", "order", "created_at", "updated_at") 
 ('Especialista', 'specialist', 5, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
--- specialties
+-- Specialties
 INSERT INTO "specialties" ("name", "slug", "order", "created_at", "updated_at") VALUES
 ('Frontend', 'frontend', 1, NOW(), NOW()),
 ('Backend', 'backend', 2, NOW(), NOW()),
@@ -39,6 +48,6 @@ INSERT INTO "stacks" ("name", "slug", "created_at", "updated_at") VALUES
 ON CONFLICT ("slug") DO NOTHING;
 
 -- User
-INSERT INTO "users" ("birth_date", "created_at", "deleted_at", "email", "github_url", "id", "linkedin_url", "name", "password_hash", "portfolio_url", "updated_at", "verified_at") VALUES 
-('2005-03-08 00:00:00', NOW(), NULL, 'admin@admin.com', NULL, '8f9e610e-ae40-4bd4-9438-959a256f2719', NULL, 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NULL, NOW(), NOW())
+INSERT INTO "users" ("created_at", "deleted_at", "email", "id", "name", "password_hash", "updated_at", "verified_at") VALUES 
+(NOW(), NULL, 'admin@admin.com', '8f9e610e-ae40-4bd4-9438-959a256f2719', 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NOW(), NOW())
 ON CONFLICT ("email") DO NOTHING;
