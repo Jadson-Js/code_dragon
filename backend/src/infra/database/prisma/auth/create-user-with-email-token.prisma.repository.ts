@@ -10,7 +10,7 @@ import { userPrismaToDomain } from "../mappers";
 export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWithEmailTokenRepository {
   async execute(user: User, token: Token): Promise<User> {
     try {
-      return await prisma.$transaction(async (tx) => {
+      return await prisma.$transaction(async (tx: any) => {
         const createdUser = await tx.user.create({
           data: user,
         });

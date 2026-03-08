@@ -1,19 +1,18 @@
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
-import type { User } from "@/domain/entities/user.entity";
-import type { IUserRepository } from "@/domain/repositories/user.repository";
+import type { IGetMeRepository } from "@/domain/repositories/auth/get-me.repository";
 
 @injectable()
 export class GetMeUseCase {
   constructor(
-    @inject("UserRepository")
-    private readonly userRepository: IUserRepository,
+    @inject("GetMeRepository")
+    private readonly getMeRepository: IGetMeRepository,
   ) {}
 
-  async execute(userId: string): Promise<User> {
-    const user = await this.userRepository.findById(userId);
-    if (!user) throw new NotFoundError("User not found");
+  async execute(userId: string) {
+    const data = await this.getMeRepository.execute(userId);
+    if (!data) throw new NotFoundError("User not found");
 
-    return user;
+    return data;
   }
 }

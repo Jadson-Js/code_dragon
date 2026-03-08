@@ -5,12 +5,12 @@ import type { ResendVerificationUseCase } from "./use-cases/resend-verification"
 import type { VerifyEmailUseCase } from "./use-cases/verify-email";
 import type { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import type { ResetPasswordUseCase } from "./use-cases/reset-password";
-import { authToHTTP } from "./auth.presenter";
+import { authToHTTP, getMeToHTTP } from "./auth.presenter";
 import type { LoginUseCase } from "./use-cases/login";
 import type { LogoutUseCase } from "./use-cases/logout";
 import type { RefreshTokenUseCase } from "./use-cases/refresh-token";
-import type { GetMeUseCase } from "./use-cases/get-me";
 import { env } from "@/shared/env";
+import type { GetMeUseCase } from "./use-cases/get-me";
 
 @injectable()
 export class AuthController {
@@ -47,7 +47,7 @@ export class AuthController {
     const userId = request.user.id;
     const result = await this.getMeUseCase.execute(userId);
 
-    return response.status(200).json(result);
+    return response.status(200).json(getMeToHTTP(result));
   }
 
   async signup(request: Request, response: Response) {
