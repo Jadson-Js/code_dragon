@@ -26,30 +26,16 @@ export default function Signup() {
         className="flex flex-col gap-4 mb-8"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-row gap-4">
-          <Field>
-            <FieldLabel htmlFor="name">Nome</FieldLabel>
-            <Input
-              id="name"
-              placeholder="Digite seu nome"
-              aria-invalid={!!errors.name}
-              {...register("name")}
-            />
-            <FieldError errors={[errors.name]} />
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="birthDate">Data de Nascimento</FieldLabel>
-            <InputMask
-              id="birthDate"
-              mask="__/__/____"
-              placeholder="Digite sua data de nascimento"
-              aria-invalid={!!errors.birthDate}
-              {...register("birthDate")}
-            />
-            <FieldError errors={[errors.birthDate]} />
-          </Field>
-        </div>
+        <Field>
+          <FieldLabel htmlFor="name">Nome</FieldLabel>
+          <Input
+            id="name"
+            placeholder="Digite seu nome"
+            aria-invalid={!!errors.name}
+            {...register("name")}
+          />
+          <FieldError errors={[errors.name]} />
+        </Field>
 
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>

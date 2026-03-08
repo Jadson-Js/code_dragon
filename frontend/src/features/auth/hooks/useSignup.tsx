@@ -20,13 +20,7 @@ export function useSignup() {
 
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
-      const [day, month, year] = data.birthDate.split("/");
-      const dataFormatted = {
-        ...data,
-        birthDate: `${year}-${month}-${day}`,
-      };
-
-      const response = await api.post("/auth/signup", dataFormatted);
+      const response = await api.post("/auth/signup", data);
       reset();
       navigate("/auth/verify-email", { state: { email: data.email } });
       return response;

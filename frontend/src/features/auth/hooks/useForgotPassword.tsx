@@ -1,5 +1,3 @@
-import axios from "axios";
-import { env } from "@/shared/environments";
 import { toast } from "sonner";
 import { useState } from "react";
 import { api } from "@/lib/api-client";
