@@ -24,10 +24,6 @@ export class EmailQueueProvider implements IEmailQueueProvider {
     const worker = new Worker(
       QUEUE_NAME,
       async (job: Job<SendEmailProps>) => {
-        console.log(
-          `⚙️  Processando job #${job.id} - tipo: ${job.data.subject}`,
-        );
-
         await this.emailProvider.send(job.data);
       },
       {

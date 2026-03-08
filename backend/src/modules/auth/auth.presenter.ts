@@ -12,6 +12,7 @@ export function getMeToHTTP(entity: { user: User; profile: Profile | null }) {
     id: entity.user.id,
     name: entity.user.name,
     email: entity.user.email,
+    isVerified: entity.user.isVerified(),
     hasProfile: !!entity.profile,
   };
 }

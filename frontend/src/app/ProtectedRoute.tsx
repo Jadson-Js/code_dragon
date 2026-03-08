@@ -8,7 +8,6 @@ export function ProtectedRoute() {
     queryKey: ["auth-user"],
     queryFn: async () => {
       const { data } = await api.get("/auth/me");
-      console.log(data);
       return data;
     },
     retry: false,

@@ -37,7 +37,7 @@ export class LoginUseCase {
     );
     if (!passwordIsValid) throw new NotFoundError("User not found");
 
-    if (!user.isVerified) throw new UnauthorizedError("User not verified");
+    if (!user.isVerified()) throw new UnauthorizedError("User not verified");
 
     const accessToken = await this.jwtProvider.generateAccessToken(user.id);
     const refreshToken = await this.jwtProvider.generateRefreshToken(user.id);
