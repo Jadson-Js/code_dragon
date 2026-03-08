@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
 import { api } from "@/lib/api-client";
+import { AxiosError } from "axios";
 
 export function useLogin() {
   const navigate = useNavigate();
@@ -22,7 +23,14 @@ export function useLogin() {
       reset();
       navigate("/");
       return response;
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status == 401) {
+        await api.post("/auth/resend-verification", {
+          email: data.email,
+        });
+
+        navigate("/auth/verify-email", { state: { email: data.email } });
+      }
       toast.error("Erro ao realizar login");
       return error;
     }
