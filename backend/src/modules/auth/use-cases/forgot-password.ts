@@ -15,10 +15,10 @@ export class ForgotPasswordUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
-    @inject("UserRepository")
+    @inject("IUserRepository")
     private readonly userRepository: IUserRepository,
 
-    @inject("TokenRepository")
+    @inject("ITokenRepository")
     private readonly tokenRepository: ITokenRepository,
 
     @inject("IEmailQueueProvider")

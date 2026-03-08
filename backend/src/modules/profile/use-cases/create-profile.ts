@@ -5,7 +5,7 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class CreateProfileUseCase {
   constructor(
-    @inject("CreateProfileWithStacksRepository")
+    @inject("ICreateProfileWithStacksRepository")
     private readonly createProfileWithStacksRepository: ICreateProfileWithStacksRepository,
   ) {}
 

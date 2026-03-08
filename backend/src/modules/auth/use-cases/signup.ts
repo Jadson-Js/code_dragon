@@ -19,7 +19,7 @@ export class SignupUseCase {
     @inject("ICreateUserWithEmailTokenRepository")
     private readonly createUserWithEmailTokenRepository: ICreateUserWithEmailTokenRepository,
 
-    @inject("UserRepository")
+    @inject("IUserRepository")
     private readonly userRepository: IUserRepository,
 
     @inject("IJWTProvider")

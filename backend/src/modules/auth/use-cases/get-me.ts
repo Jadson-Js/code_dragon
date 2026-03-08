@@ -5,7 +5,7 @@ import type { IGetMeRepository } from "@/domain/repositories/auth/get-me.reposit
 @injectable()
 export class GetMeUseCase {
   constructor(
-    @inject("GetMeRepository")
+    @inject("IGetMeRepository")
     private readonly getMeRepository: IGetMeRepository,
   ) {}
 

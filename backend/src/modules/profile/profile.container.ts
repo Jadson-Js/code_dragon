@@ -4,7 +4,7 @@ import { CreateProfileWithStacksPrismaRepository } from "@/infra/database/prisma
 import { CreateProfileUseCase } from "@/modules/profile/use-cases/create-profile";
 
 // Registra o repositório
-container.register("CreateProfileWithStacksRepository", {
+container.register("ICreateProfileWithStacksRepository", {
   useClass: CreateProfileWithStacksPrismaRepository,
 });
 

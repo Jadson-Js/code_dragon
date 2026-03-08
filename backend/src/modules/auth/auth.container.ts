@@ -15,15 +15,15 @@ import { RefreshTokenUseCase } from "./use-cases/refresh-token";
 import { GetMeUseCase } from "./use-cases/get-me";
 
 // Registra o repositório
-container.register("UserRepository", {
+container.register("IUserRepository", {
   useClass: UserPrismaRepository,
 });
 
-container.register("TokenRepository", {
+container.register("ITokenRepository", {
   useClass: TokenPrismaRepository,
 });
 
-container.register("GetMeRepository", {
+container.register("IGetMeRepository", {
   useClass: GetMePrismaRepository,
 });
 
