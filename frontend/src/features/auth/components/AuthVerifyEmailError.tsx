@@ -5,11 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Mail, Send, ArrowLeft } from "lucide-react";
 import { SetupLayout } from "../layout/SetLayout";
-import AuthHeader from "./AuthHeader";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
+import PageHeader from "@/components/PageHeader";
 
 const STORAGE_KEY = "verify-email-error-resend-cooldown";
 
@@ -68,7 +68,7 @@ export default function AuthVerifyEmailError() {
         <X className="w-12 h-12 text-red" />
       </div>
 
-      <AuthHeader
+      <PageHeader
         title="Link Inválido ou Expirado"
         description="O link de verificação que você usou não é mais válido ou já expirou. Insira seu e-mail abaixo para receber um novo link."
         className="text-center mb-8 max-w-md"

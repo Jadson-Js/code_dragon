@@ -7,6 +7,7 @@ import Login from "./routes/auth/Login";
 import ForgotPassword from "./routes/auth/ForgotPassword";
 import ResetPassword from "./routes/auth/ResetPassword";
 import { ProtectedRoute } from "./ProtectedRoute";
+import Profile from "./routes/profile/Profile";
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,8 @@ export default function AppRouter() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
+
+        <Route path="/profile" element={<Profile />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />

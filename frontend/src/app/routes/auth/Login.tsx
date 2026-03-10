@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
-import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
 import { useLogin } from "@/features/auth/hooks/useLogin";
+import PageHeader from "@/components/PageHeader";
 
 export default function Login() {
   const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLogin();
@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <AuthHeader
+      <PageHeader
         title="Bem vindo de volta!"
         description="Junte-se a milhares de devs acelerando a carreira"
         className="mb-8"

@@ -2,7 +2,6 @@ import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Link, useNavigate, useParams } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, Eye, EyeOff, Lock } from "lucide-react";
-import AuthHeader from "@/features/auth/components/AuthHeader";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
@@ -13,6 +12,7 @@ import {
   resetPasswordSchema,
   type ResetPasswordFormData,
 } from "@/features/auth/schemas/resetPasswordSchema";
+import PageHeader from "@/components/PageHeader";
 
 export default function ResetPassword() {
   const { token } = useParams<{ token: string }>();
@@ -52,7 +52,7 @@ export default function ResetPassword() {
         <Lock className="w-12 h-12 text-primary-1" strokeWidth={1.5} />
       </div>
 
-      <AuthHeader
+      <PageHeader
         title="Recuperar Senha"
         description="Digite a nova senha para a sua conta."
         className="text-center mb-8"

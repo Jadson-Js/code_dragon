@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
-import AuthHeader from "@/features/auth/components/AuthHeader";
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 import AuthFooter from "@/features/auth/components/AuthFooter";
 import { useSignup } from "@/features/auth/hooks/useSignup";
+import PageHeader from "@/components/PageHeader";
 
 export default function Signup() {
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
@@ -16,7 +16,7 @@ export default function Signup() {
 
   return (
     <AuthLayout>
-      <AuthHeader
+      <PageHeader
         title="Crie sua conta gratuita"
         description="Junte-se a milhares de devs acelerando a carreira"
         className="mb-8"

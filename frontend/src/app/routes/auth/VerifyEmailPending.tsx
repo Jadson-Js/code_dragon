@@ -3,9 +3,9 @@ import * as React from "react";
 import { Link, useLocation } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Mail, RefreshCcw } from "lucide-react";
-import AuthHeader from "@/features/auth/components/AuthHeader";
 import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
 import ListNumber from "@/components/ui/listNumber";
+import PageHeader from "@/components/PageHeader";
 
 export default function VerifyEmailPending() {
   const location = useLocation();
@@ -57,7 +57,7 @@ export default function VerifyEmailPending() {
         <Mail className="w-12 h-12 text-primary-1" strokeWidth={1.5} />
       </div>
 
-      <AuthHeader
+      <PageHeader
         title="Verifique seu e-mail"
         description={`Enviamos um link de confirmação para ${email ?? "seu e-mail"}. Para garantir a segurança da sua conta, por favor clique no link enviado antes de continuar.`}
         className="text-center mb-12"

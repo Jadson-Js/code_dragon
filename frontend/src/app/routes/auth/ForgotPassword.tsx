@@ -2,7 +2,6 @@ import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Link } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, KeyRound, Mail, Send } from "lucide-react";
-import AuthHeader from "@/features/auth/components/AuthHeader";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
@@ -10,6 +9,7 @@ import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+import PageHeader from "@/components/PageHeader";
 
 export default function ForgotPassword() {
   const STORAGE_KEY = `forgot_password_countdown`;
@@ -72,7 +72,7 @@ export default function ForgotPassword() {
         <KeyRound className="w-12 h-12 text-primary-1" strokeWidth={1.5} />
       </div>
 
-      <AuthHeader
+      <PageHeader
         title="Recuperar Senha"
         description={`Digite o e-mail associado à sua conta e enviaremos um link de recuperação.`}
         className="text-center mb-8"

@@ -1,9 +1,9 @@
 import React from "react";
 import { SetupLayout } from "../layout/SetLayout";
 import { ArrowLeft, Check } from "lucide-react";
-import AuthHeader from "./AuthHeader";
 import CircleCheck from "@/components/ui/circleCheck";
 import { Link, useNavigate } from "react-router";
+import PageHeader from "@/components/PageHeader";
 
 export default function AuthVerifyEmailSuccess() {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export default function AuthVerifyEmailSuccess() {
       </div>
 
       {/* Text Header */}
-      <AuthHeader
+      <PageHeader
         title="E-mail verificado com sucesso!"
         description="Sua conta está segura e pronta para uso. Vamos configurar seu perfil agora."
         className="text-center mb-8"
