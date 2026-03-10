@@ -7,7 +7,7 @@ import { Monitor, Server, Layers, Smartphone } from "lucide-react";
 export default function ProfileStep2() {
   const { control } = useFormContext<ProfileSetupFormData>();
 
-  const objectives = [
+  const specialties = [
     {
       id: 1,
       title: "Frontend",
@@ -42,13 +42,13 @@ export default function ProfileStep2() {
         className="mb-8"
       />
 
-      <div className="grid grid-cols-2 gap-4 w-full ">
+      <div className="grid grid-cols-2 gap-4 w-full h-[400px]">
         <Controller
-          name="careerObjectiveId"
+          name="specialtyId"
           control={control}
           render={({ field }) => (
             <>
-              {objectives.map((item) => (
+              {specialties.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => field.onChange(item.id)}
