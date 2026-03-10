@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import ProfileStep1 from "@/features/profile/components/ProfileStep1";
+import ProfileStep2 from "@/features/profile/components/ProfileStep2";
 import ProfileStepBar from "@/features/profile/components/ProfileStepBar";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import { ProfileLayout } from "@/features/profile/layout/ProfileLayout";
@@ -36,6 +37,7 @@ export default function Profile() {
           onSubmit={handleSubmit(onSubmit)}
         >
           {step === 1 && <ProfileStep1 />}
+          {step === 2 && <ProfileStep2 />}
 
           <div className="w-full flex justify-between">
             <Button

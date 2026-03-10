@@ -61,11 +61,7 @@ export default function ProfileStep1() {
                   <ListItem
                     title={item.title}
                     description={item.description}
-                    className={
-                      field.value === item.id
-                        ? "selected border-primary-1 bg-primary-1/5"
-                        : ""
-                    }
+                    isSelected={field.value === item.id}
                   />
                 </div>
               ))}
