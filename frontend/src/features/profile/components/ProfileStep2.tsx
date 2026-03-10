@@ -42,7 +42,7 @@ export default function ProfileStep2() {
         className="mb-8"
       />
 
-      <div className="grid grid-cols-2 gap-4 w-full h-[400px]">
+      <div className="grid grid-cols-2 gap-4 w-full">
         <Controller
           name="specialtyId"
           control={control}

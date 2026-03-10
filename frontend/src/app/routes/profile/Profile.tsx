@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import ProfileStep1 from "@/features/profile/components/ProfileStep1";
 import ProfileStep2 from "@/features/profile/components/ProfileStep2";
+import ProfileStep3 from "@/features/profile/components/ProfileStep3";
 import ProfileStepBar from "@/features/profile/components/ProfileStepBar";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import { ProfileLayout } from "@/features/profile/layout/ProfileLayout";
@@ -38,6 +39,7 @@ export default function Profile() {
         >
           {step === 1 && <ProfileStep1 />}
           {step === 2 && <ProfileStep2 />}
+          {step === 3 && <ProfileStep3 />}
 
           <div className="w-full flex justify-between">
             <Button
