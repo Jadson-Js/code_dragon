@@ -4,6 +4,7 @@ import ProfileStep2 from "@/features/profile/components/ProfileStep2";
 import ProfileStep3 from "@/features/profile/components/ProfileStep3";
 import ProfileStep4 from "@/features/profile/components/ProfileStep4";
 import ProfileStep5 from "@/features/profile/components/ProfileStep5";
+import SuccessView from "@/features/profile/components/SuccessView";
 import ProfileStepBar from "@/features/profile/components/ProfileStepBar";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import { ProfileLayout } from "@/features/profile/layout/ProfileLayout";
@@ -11,7 +12,7 @@ import React from "react";
 import { FormProvider, useWatch } from "react-hook-form";
 
 export default function Profile() {
-  const { methods, onSubmit } = useProfile();
+  const { methods, onSubmit, isSuccess } = useProfile();
   const {
     handleSubmit,
     control,
@@ -20,10 +21,17 @@ export default function Profile() {
 
   const [step, setStep] = React.useState(1);
 
-  // useWatch garante que o componente Profile re-renderize sempre que QUALQUER um desses campos mudar
   const formValues = useWatch({
     control,
   });
+
+  if (isSuccess) {
+    return (
+      <ProfileLayout>
+        <SuccessView />
+      </ProfileLayout>
+    );
+  }
 
   const isStepValid = () => {
     switch (step) {
