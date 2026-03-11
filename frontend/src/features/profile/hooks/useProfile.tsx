@@ -20,17 +20,20 @@ export function useProfile() {
   const mutation = useMutation({
     mutationFn: (data: ProfileSetupFormData) => api.post("/profiles", data),
     onSuccess: () => {
-      // Atualiza o cache do usuário imediatamente para evitar redirecionamento incorreto
-      queryClient.setQueryData(["auth-user"], (old: any) => {
-        if (!old) return old;
-        return { ...old, hasProfile: true };
-      });
+      // Aguardar a animação do SuccessScreen por 4 segundos antes de atualizar o cache e navegar
+      setTimeout(() => {
+        // Atualiza o cache do usuário AGORA, o que permitirá o acesso às rotas protegidas
+        queryClient.setQueryData(["auth-user"], (old: any) => {
+          if (!old) return old;
+          return { ...old, hasProfile: true };
+        });
 
-      // Invalida para garantir que os dados do servidor sejam sincronizados
-      queryClient.invalidateQueries({ queryKey: ["auth-user"] });
+        // Invalida para garantir sincronia nas próximas requisições
+        queryClient.invalidateQueries({ queryKey: ["auth-user"] });
 
-      // Aguardar a animação por 4 segundos antes de navegar
-      setTimeout(() => navigate("/"), 4000);
+        // Navega para o dashboard
+        navigate("/");
+      }, 5000);
     },
     onError: () => {
       toast.error("Erro ao realizar o setup do perfil");

@@ -4,7 +4,7 @@ import ProfileStep2 from "@/features/profile/components/ProfileStep2";
 import ProfileStep3 from "@/features/profile/components/ProfileStep3";
 import ProfileStep4 from "@/features/profile/components/ProfileStep4";
 import ProfileStep5 from "@/features/profile/components/ProfileStep5";
-import SuccessView from "@/features/profile/components/SuccessView";
+import SuccessScreen from "@/features/profile/components/SuccessScreen";
 import ProfileStepBar from "@/features/profile/components/ProfileStepBar";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import { ProfileLayout } from "@/features/profile/layout/ProfileLayout";
@@ -24,7 +24,7 @@ export default function Profile() {
   if (mutation.isSuccess) {
     return (
       <ProfileLayout>
-        <SuccessView />
+        <SuccessScreen />
       </ProfileLayout>
     );
   }
