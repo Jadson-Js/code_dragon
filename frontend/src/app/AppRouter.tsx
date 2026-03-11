@@ -20,9 +20,8 @@ export default function AppRouter() {
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
 
-        <Route path="/profile" element={<Profile />} />
-
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Dashboard />} />
         </Route>
       </Routes>

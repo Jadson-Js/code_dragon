@@ -12,12 +12,8 @@ import React from "react";
 import { FormProvider, useWatch } from "react-hook-form";
 
 export default function Profile() {
-  const { methods, onSubmit, isSuccess } = useProfile();
-  const {
-    handleSubmit,
-    control,
-    formState: { isSubmitting },
-  } = methods;
+  const { form, mutation } = useProfile();
+  const { handleSubmit, control } = form;
 
   const [step, setStep] = React.useState(1);
 
@@ -25,7 +21,7 @@ export default function Profile() {
     control,
   });
 
-  if (isSuccess) {
+  if (mutation.isSuccess) {
     return (
       <ProfileLayout>
         <SuccessView />
@@ -68,10 +64,10 @@ export default function Profile() {
     <ProfileLayout>
       <ProfileStepBar className="mb-8" currentStep={step} />
 
-      <FormProvider {...methods}>
+      <FormProvider {...form}>
         <form
           className="flex flex-col gap-4 mb-8 w-full"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit((data) => mutation.mutate(data))}
         >
           {step === 1 && <ProfileStep1 />}
           {step === 2 && <ProfileStep2 />}
@@ -93,7 +89,7 @@ export default function Profile() {
             <Button
               className="mt-12"
               type={step === 5 ? "submit" : "button"}
-              disabled={isSubmitting || !isStepValid()}
+              disabled={mutation.isPending || !isStepValid()}
               onClick={step === 5 ? undefined : handleNextStep}
             >
               {step === 5 ? "Finalizar" : "Próximo"}

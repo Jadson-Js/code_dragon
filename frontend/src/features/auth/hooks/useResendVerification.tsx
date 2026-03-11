@@ -1,28 +1,18 @@
-import axios from "axios";
-import { env } from "@/shared/environments";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useState } from "react";
 import { api } from "@/lib/api-client";
 
 export function useResendVerification() {
-  const [isResending, setIsResending] = useState(false);
-
-  const resendVerification = async (email: string) => {
-    setIsResending(true);
-    try {
-      await api.post("/auth/resend-verification", {
-        email,
-      });
+  const mutation = useMutation({
+    mutationFn: (email: string) =>
+      api.post("/auth/resend-verification", { email }),
+    onSuccess: () => {
       toast.success("E-mail de verificação reenviado com sucesso!");
-    } catch (error: any) {
+    },
+    onError: () => {
       toast.error("Erro ao reenviar e-mail de verificação");
-    } finally {
-      setIsResending(false);
-    }
-  };
+    },
+  });
 
-  return {
-    resendVerification,
-    isResending,
-  };
+  return { mutation };
 }

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Link } from "react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,9 +8,8 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
+import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import PageHeader from "@/components/PageHeader";
-
-const STORAGE_KEY = "verify-email-error-resend-cooldown";
 
 const emailSchema = z.object({
   email: z.string().email("Insira um e-mail válido"),
@@ -19,7 +17,10 @@ const emailSchema = z.object({
 type EmailFormData = z.infer<typeof emailSchema>;
 
 export default function AuthVerifyEmailError() {
-  const { resendVerification, isResending } = useResendVerification();
+  const { mutation } = useResendVerification();
+  const { countdown, start, isActive } = useCountdown(
+    "verify-email-error-resend-cooldown",
+  );
 
   const {
     register,
@@ -29,36 +30,9 @@ export default function AuthVerifyEmailError() {
     resolver: zodResolver(emailSchema),
   });
 
-  const [countdown, setCountdown] = React.useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return 0;
-    const remaining = Math.ceil((parseInt(saved) - Date.now()) / 1000);
-    return remaining > 0 ? remaining : 0;
-  });
-
-  React.useEffect(() => {
-    if (countdown <= 0) {
-      localStorage.removeItem(STORAGE_KEY);
-      return;
-    }
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        const next = prev - 1;
-        if (next <= 0) {
-          localStorage.removeItem(STORAGE_KEY);
-          return 0;
-        }
-        return next;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [countdown]);
-
   const onSubmit: SubmitHandler<EmailFormData> = async ({ email }) => {
-    await resendVerification(email);
-    const expiresAt = Date.now() + 60 * 1000;
-    localStorage.setItem(STORAGE_KEY, expiresAt.toString());
-    setCountdown(60);
+    await mutation.mutateAsync(email);
+    start();
   };
 
   return (
@@ -96,12 +70,12 @@ export default function AuthVerifyEmailError() {
           variant="default"
           size="lg"
           className="w-full"
-          leftIcon={isResending ? null : Send}
-          disabled={countdown > 0 || isResending}
+          leftIcon={mutation.isPending ? null : Send}
+          disabled={isActive || mutation.isPending}
         >
-          {isResending
+          {mutation.isPending
             ? "Enviando..."
-            : countdown > 0
+            : isActive
               ? `Aguarde ${countdown}s para reenviar`
               : "Enviar novo link de verificação"}
         </ButtonWithIcons>

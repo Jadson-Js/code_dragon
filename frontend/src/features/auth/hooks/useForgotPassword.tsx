@@ -1,26 +1,28 @@
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useState } from "react";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from "../schemas/forgotPasswordSchema";
 import { api } from "@/lib/api-client";
 
 export function useForgotPassword() {
-  const [isSending, setIsSending] = useState(false);
+  const form = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
 
-  const forgotPassword = async (email: string) => {
-    setIsSending(true);
-    try {
-      await api.post("/auth/forgot-password", {
-        email,
-      });
+  const mutation = useMutation({
+    mutationFn: (data: ForgotPasswordFormData) =>
+      api.post("/auth/forgot-password", data),
+    onSuccess: () => {
       toast.success("E-mail de recuperação enviado com sucesso!");
-    } catch (error: any) {
+    },
+    onError: () => {
       toast.error("Erro ao enviar e-mail de recuperação");
-    } finally {
-      setIsSending(false);
-    }
-  };
+    },
+  });
 
-  return {
-    forgotPassword,
-    isSending,
-  };
+  return { form, mutation };
 }

@@ -1,47 +1,34 @@
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
 import { api } from "@/lib/api-client";
-import { AxiosError } from "axios";
 
 export function useLogin() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<LoginFormData>({
+
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-    try {
-      const response = await api.post("/auth/login", data);
-      reset();
+  const mutation = useMutation({
+    mutationFn: (data: LoginFormData) => api.post("/auth/login", data),
+    onSuccess: () => {
+      form.reset();
       navigate("/");
-      return response;
-    } catch (error: any) {
-      if (error.response.status == 401) {
+    },
+    onError: async (error: any, variables) => {
+      if (error.response?.status === 401) {
         await api.post("/auth/resend-verification", {
-          email: data.email,
+          email: variables.email,
         });
-
-        navigate("/auth/verify-email", { state: { email: data.email } });
+        navigate("/auth/verify-email", { state: { email: variables.email } });
       }
       toast.error("Erro ao realizar login");
-      return error;
-    }
-  };
+    },
+  });
 
-  return {
-    register,
-    handleSubmit,
-    errors,
-    isSubmitting,
-    reset,
-    onSubmit,
-  };
+  return { form, mutation };
 }

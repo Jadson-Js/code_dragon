@@ -1,41 +1,28 @@
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
-import { env } from "@/shared/environments";
-import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
 import { api } from "@/lib/api-client";
 
 export function useSignup() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<SignupFormData>({
+
+  const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
-    try {
-      const response = await api.post("/auth/signup", data);
-      reset();
-      navigate("/auth/verify-email", { state: { email: data.email } });
-      return response;
-    } catch (error) {
+  const mutation = useMutation({
+    mutationFn: (data: SignupFormData) => api.post("/auth/signup", data),
+    onSuccess: (_data, variables) => {
+      form.reset();
+      navigate("/auth/verify-email", { state: { email: variables.email } });
+    },
+    onError: () => {
       toast.error("Erro ao criar conta");
-      return error;
-    }
-  };
+    },
+  });
 
-  return {
-    register,
-    handleSubmit,
-    errors,
-    isSubmitting,
-    reset,
-    onSubmit,
-  };
+  return { form, mutation };
 }

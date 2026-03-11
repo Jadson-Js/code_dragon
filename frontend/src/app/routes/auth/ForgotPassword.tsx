@@ -5,65 +5,23 @@ import { ArrowLeft, KeyRound, Mail, Send } from "lucide-react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
-import React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import PageHeader from "@/components/PageHeader";
 
 export default function ForgotPassword() {
-  const STORAGE_KEY = `forgot_password_countdown`;
-  const { forgotPassword, isSending } = useForgotPassword();
-
-  const [countdown, setCountdown] = React.useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return 0;
-
-    const remaining = Math.ceil((parseInt(saved) - Date.now()) / 1000);
-    return remaining > 0 ? remaining : 0;
-  });
-
-  React.useEffect(() => {
-    if (countdown <= 0) {
-      localStorage.removeItem(STORAGE_KEY);
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        const next = prev - 1;
-        if (next <= 0) {
-          localStorage.removeItem(STORAGE_KEY);
-          return 0;
-        }
-        return next;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [countdown, STORAGE_KEY]);
-
-  const onSubmit: SubmitHandler<EmailFormData> = async ({ email }) => {
-    if (!email) return;
-
-    await forgotPassword(email);
-
-    const expiresAt = Date.now() + 60 * 1000;
-    localStorage.setItem(STORAGE_KEY, expiresAt.toString());
-    setCountdown(60);
-  };
-
-  const emailSchema = z.object({
-    email: z.email("Insira um e-mail válido"),
-  });
-  type EmailFormData = z.infer<typeof emailSchema>;
-
+  const { form, mutation } = useForgotPassword();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EmailFormData>({
-    resolver: zodResolver(emailSchema),
+  } = form;
+  const { countdown, start, isActive } = useCountdown(
+    "forgot_password_countdown",
+  );
+
+  const onSubmit = handleSubmit(async (data) => {
+    await mutation.mutateAsync(data);
+    start();
   });
 
   return (
@@ -74,13 +32,13 @@ export default function ForgotPassword() {
 
       <PageHeader
         title="Recuperar Senha"
-        description={`Digite o e-mail associado à sua conta e enviaremos um link de recuperação.`}
+        description="Digite o e-mail associado à sua conta e enviaremos um link de recuperação."
         className="text-center mb-8"
       />
 
       <form
         className="w-full bg-bg-2 card mb-8 p-6 border border-bg-3"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
       >
         <Field className="mb-8">
           <FieldLabel className="typ-h3">E-mail</FieldLabel>
@@ -100,12 +58,12 @@ export default function ForgotPassword() {
           variant="default"
           size="lg"
           className="w-full"
-          leftIcon={isSending ? null : Send}
-          disabled={countdown > 0 || isSending}
+          leftIcon={mutation.isPending ? null : Send}
+          disabled={isActive || mutation.isPending}
         >
-          {isSending
+          {mutation.isPending
             ? "Enviando..."
-            : countdown > 0
+            : isActive
               ? `Aguarde ${countdown}s para reenviar`
               : "Enviar Link de Recuperação"}
         </ButtonWithIcons>

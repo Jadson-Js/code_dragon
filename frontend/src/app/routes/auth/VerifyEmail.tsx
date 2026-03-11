@@ -6,18 +6,18 @@ import AuthVerifyEmailPending from "@/features/auth/components/AuthVerifyEmailPe
 import AuthVerifyEmailError from "@/features/auth/components/AuthVerifyEmailError";
 
 export default function VerifyEmail() {
-  const { verifyEmail, status } = useVerifyEmail();
+  const { mutation } = useVerifyEmail();
   const { token } = useParams();
 
   React.useEffect(() => {
-    verifyEmail(token as string);
+    mutation.mutate(token as string);
   }, [token]);
 
-  if (status === "pending") {
+  if (mutation.isPending || mutation.isIdle) {
     return <AuthVerifyEmailPending />;
   }
 
-  if (status === "error") {
+  if (mutation.isError) {
     return <AuthVerifyEmailError />;
   }
 

@@ -10,7 +10,13 @@ import { useLogin } from "@/features/auth/hooks/useLogin";
 import PageHeader from "@/components/PageHeader";
 
 export default function Login() {
-  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLogin();
+  const { form, mutation } = useLogin();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -23,7 +29,7 @@ export default function Login() {
 
       <form
         className="flex flex-col gap-4 mb-8"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutation.mutate(data))}
       >
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -62,9 +68,9 @@ export default function Login() {
           variant="default"
           size="lg"
           type="submit"
-          disabled={isSubmitting}
+          disabled={mutation.isPending}
         >
-          {isSubmitting ? "ENTRANDO..." : "ENTRAR"}
+          {mutation.isPending ? "ENTRANDO..." : "ENTRAR"}
         </Button>
 
         <Link to="/auth/signup">

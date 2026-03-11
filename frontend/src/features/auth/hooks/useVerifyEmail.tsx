@@ -1,30 +1,14 @@
-import axios from "axios";
-import { env } from "@/shared/environments";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useState } from "react";
 import { api } from "@/lib/api-client";
 
 export function useVerifyEmail() {
-  const [status, setStatus] = useState<"success" | "error" | "pending">(
-    "pending",
-  );
-
-  const verifyEmail = async (token: string) => {
-    try {
-      await api.post("/auth/verify-email", {
-        token,
-      });
-
-      setStatus("success");
-    } catch (error: any) {
-      setStatus("error");
-      console.log(error);
+  const mutation = useMutation({
+    mutationFn: (token: string) => api.post("/auth/verify-email", { token }),
+    onError: () => {
       toast.error("Erro ao verificar e-mail");
-    }
-  };
+    },
+  });
 
-  return {
-    verifyEmail,
-    status,
-  };
+  return { mutation };
 }

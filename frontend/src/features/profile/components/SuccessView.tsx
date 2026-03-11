@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SuccessView() {
   const [particles, setParticles] = useState<

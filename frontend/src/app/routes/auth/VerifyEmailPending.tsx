@@ -1,54 +1,24 @@
 import AuthLayout from "@/features/auth/layout/AuthLayout";
-import * as React from "react";
 import { Link, useLocation } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Mail, RefreshCcw } from "lucide-react";
 import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
+import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import ListNumber from "@/components/ui/listNumber";
 import PageHeader from "@/components/PageHeader";
 
 export default function VerifyEmailPending() {
   const location = useLocation();
   const email = location.state?.email as string | undefined;
-  const STORAGE_KEY = `resend_countdown_${email}`;
-  const { resendVerification, isResending } = useResendVerification();
-
-  const [countdown, setCountdown] = React.useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return 0;
-
-    const remaining = Math.ceil((parseInt(saved) - Date.now()) / 1000);
-    return remaining > 0 ? remaining : 0;
-  });
-
-  React.useEffect(() => {
-    if (countdown <= 0) {
-      localStorage.removeItem(STORAGE_KEY);
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        const next = prev - 1;
-        if (next <= 0) {
-          localStorage.removeItem(STORAGE_KEY);
-          return 0;
-        }
-        return next;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [countdown, STORAGE_KEY]);
+  const { mutation } = useResendVerification();
+  const { countdown, start, isActive } = useCountdown(
+    `resend_countdown_${email}`,
+  );
 
   const handleResend = async () => {
     if (!email) return;
-
-    await resendVerification(email);
-
-    const expiresAt = Date.now() + 60 * 1000;
-    localStorage.setItem(STORAGE_KEY, expiresAt.toString());
-    setCountdown(60);
+    await mutation.mutateAsync(email);
+    start();
   };
 
   return (
@@ -67,13 +37,13 @@ export default function VerifyEmailPending() {
         variant="secondary"
         size="lg"
         className="w-full mb-12"
-        leftIcon={isResending ? Loader2 : countdown > 0 ? null : RefreshCcw}
+        leftIcon={mutation.isPending ? Loader2 : isActive ? null : RefreshCcw}
         onClick={handleResend}
-        disabled={countdown > 0 || isResending || !email}
+        disabled={isActive || mutation.isPending || !email}
       >
-        {isResending
+        {mutation.isPending
           ? "Enviando..."
-          : countdown > 0
+          : isActive
             ? `Aguarde ${countdown}s para reenviar`
             : "Não recebeu? Clique para reenviar"}
       </ButtonWithIcons>

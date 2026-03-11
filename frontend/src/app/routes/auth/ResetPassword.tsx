@@ -1,50 +1,23 @@
 import AuthLayout from "@/features/auth/layout/AuthLayout";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link } from "react-router";
 import { ButtonWithIcons } from "@/components/ui/button";
 import { ArrowLeft, Eye, EyeOff, Lock } from "lucide-react";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { InputWithIcons } from "@/components/ui/input";
 import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
 import React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  resetPasswordSchema,
-  type ResetPasswordFormData,
-} from "@/features/auth/schemas/resetPasswordSchema";
 import PageHeader from "@/components/PageHeader";
 
 export default function ResetPassword() {
-  const { token } = useParams<{ token: string }>();
-  const navigate = useNavigate();
-  const { resetPassword, isLoading } = useResetPassword();
-
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-
+  const { form, mutation } = useResetPassword();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      token: token ?? "",
-    },
-  });
+  } = form;
 
-  const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
-    const result = await resetPassword(data);
-
-    if (result.error === "token") {
-      navigate("/auth/forgot-password");
-      return;
-    }
-
-    if (!result.error) {
-      navigate("/auth/login");
-    }
-  };
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   return (
     <AuthLayout>
@@ -60,7 +33,7 @@ export default function ResetPassword() {
 
       <form
         className="w-full bg-bg-2 card mb-8 p-6 border border-bg-3"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutation.mutate(data))}
       >
         {/* Campo oculto para o token */}
         <input type="hidden" {...register("token")} />
@@ -98,9 +71,9 @@ export default function ResetPassword() {
           variant="default"
           size="lg"
           className="w-full"
-          disabled={isLoading}
+          disabled={mutation.isPending}
         >
-          {isLoading ? "Redefinindo..." : "Redefinir Senha"}
+          {mutation.isPending ? "Redefinindo..." : "Redefinir Senha"}
         </ButtonWithIcons>
       </form>
 

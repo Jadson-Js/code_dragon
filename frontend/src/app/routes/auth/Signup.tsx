@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input, InputMask, InputWithIcons } from "@/components/ui/input";
+import { Input, InputWithIcons } from "@/components/ui/input";
 import AuthLayout from "@/features/auth/layout/AuthLayout";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React from "react";
@@ -10,8 +10,13 @@ import { useSignup } from "@/features/auth/hooks/useSignup";
 import PageHeader from "@/components/PageHeader";
 
 export default function Signup() {
-  const { register, handleSubmit, errors, isSubmitting, onSubmit } =
-    useSignup();
+  const { form, mutation } = useSignup();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -24,7 +29,7 @@ export default function Signup() {
 
       <form
         className="flex flex-col gap-4 mb-8"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutation.mutate(data))}
       >
         <Field>
           <FieldLabel htmlFor="name">Nome</FieldLabel>
@@ -68,9 +73,9 @@ export default function Signup() {
           variant="default"
           size="lg"
           type="submit"
-          disabled={isSubmitting}
+          disabled={mutation.isPending}
         >
-          {isSubmitting ? "CRIANDO CONTA..." : "CRIAR CONTA"}
+          {mutation.isPending ? "CRIANDO CONTA..." : "CRIAR CONTA"}
         </Button>
 
         <Link to="/auth/login">
