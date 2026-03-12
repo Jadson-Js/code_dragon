@@ -9,6 +9,17 @@ import {
 
 const router = Router();
 
+router.get(
+  "/setup",
+  rateLimitMiddleware.handle({
+    max: 60,
+    windowInMs: 60000,
+    key: "get-profile-setup",
+  }),
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  profileController.getSetup.bind(profileController),
+);
+
 router.post(
   "/",
   rateLimitMiddleware.handle({
