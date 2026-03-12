@@ -1,4 +1,4 @@
-interface CreateProfileProps {
+interface ICreateProfileProps {
   id?: string;
   userId: string;
   linkedinUrl?: string | null;
@@ -27,7 +27,7 @@ export class Profile {
     public readonly updatedAt: Date,
   ) {}
 
-  static create(props: CreateProfileProps): Profile {
+  static create(props: ICreateProfileProps): Profile {
     return new Profile(
       props.id ?? crypto.randomUUID(),
       props.userId,

@@ -4,7 +4,7 @@ import { BadRequestError } from "@/shared/app.error";
 import { injectable } from "tsyringe";
 import type {
   IEmailProvider,
-  SendEmailProps,
+  ISendEmailProps,
 } from "@/domain/providers/email/email.provider";
 import type { IEMAIL_TEMPLATES } from "@/shared/environments";
 import { emailRenderProvider } from "./email-render.provider";
@@ -12,7 +12,7 @@ const resend = new Resend(env.resendApiKey);
 
 @injectable()
 export class EmailProvider implements IEmailProvider {
-  async send({ to, subject, template, variables }: SendEmailProps) {
+  async send({ to, subject, template, variables }: ISendEmailProps) {
     const { data, error } = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
       to: [to],

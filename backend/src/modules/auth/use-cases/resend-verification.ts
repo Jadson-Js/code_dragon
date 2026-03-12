@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ResendVerificationDTO } from "../auth.dto";
+import type { IResendVerificationInputDTO } from "../auth.dto";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
@@ -28,7 +28,7 @@ export class ResendVerificationUseCase {
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
-  async execute(params: ResendVerificationDTO): Promise<void> {
+  async execute(params: IResendVerificationInputDTO): Promise<void> {
     const user = await this.userRepository.findByEmail(params.email);
 
     if (!user || user.isVerified()) return;

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { SignupDTO } from "../auth.dto";
+import type { ISignupInputDTO } from "../auth.dto";
 import { User } from "@/domain/entities/user.entity";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
@@ -29,7 +29,7 @@ export class SignupUseCase {
     private readonly emailQueueProvider: IEmailQueueProvider,
   ) {}
 
-  async execute(params: SignupDTO): Promise<void> {
+  async execute(params: ISignupInputDTO): Promise<void> {
     const existingUser = await this.userRepository.findByEmail(params.email);
 
     if (existingUser) return;

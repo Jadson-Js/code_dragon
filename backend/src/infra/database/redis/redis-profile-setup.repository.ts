@@ -1,16 +1,16 @@
 import { injectable } from "tsyringe";
 import type { IRedisProfileSetupRepository } from "@/domain/repositories/redis-profile-setup.repository";
 import { redisConnection } from "./connection";
-import type { IGetSetupDTO } from "@/modules/profile/profile.dto";
+import type { IGetSetupOutputDTO } from "@/modules/profile/profile.dto";
 
 @injectable()
 export class RedisProfileSetupRepository implements IRedisProfileSetupRepository {
-  async get(): Promise<IGetSetupDTO | null> {
+  async get(): Promise<IGetSetupOutputDTO | null> {
     const value = await redisConnection.get("profile-setup");
     return value ? JSON.parse(value) : null;
   }
 
-  async set(value: IGetSetupDTO): Promise<void> {
+  async set(value: IGetSetupOutputDTO): Promise<void> {
     await redisConnection.set("profile-setup", JSON.stringify(value));
   }
 

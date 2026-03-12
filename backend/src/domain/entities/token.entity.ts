@@ -1,6 +1,6 @@
 import type { TokenType } from "generated/prisma/enums";
 
-interface CreateTokenProps {
+interface ICreateTokenProps {
   id?: string;
   userId: string;
   tokenHash: string;
@@ -19,7 +19,7 @@ export class Token {
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
-  private constructor(props: CreateTokenProps) {
+  private constructor(props: ICreateTokenProps) {
     this.id = props.id ?? crypto.randomUUID();
     this.userId = props.userId;
     this.tokenHash = props.tokenHash;
@@ -29,7 +29,7 @@ export class Token {
     this.updatedAt = props.updatedAt ?? new Date();
   }
 
-  static create(props: CreateTokenProps): Token {
+  static create(props: ICreateTokenProps): Token {
     return new Token(props);
   }
 

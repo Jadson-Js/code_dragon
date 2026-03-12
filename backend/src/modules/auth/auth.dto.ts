@@ -1,37 +1,49 @@
-export interface SignupDTO {
+export interface ISignupInputDTO {
   name: string;
   email: string;
   password: string;
 }
 
-export interface ResendVerificationDTO {
+export interface IResendVerificationInputDTO {
   email: string;
 }
 
-export interface VerifyEmailDTO {
+export interface IVerifyEmailInputDTO {
   token: string;
 }
 
-export interface ForgotPasswordDTO {
+export interface IForgotPasswordInputDTO {
   email: string;
 }
 
-export interface ResetPasswordDTO {
+export interface IResetPasswordInputDTO {
   token: string;
   password: string;
 }
 
-export interface LoginDTO {
+export interface ILoginInputDTO {
   email: string;
   password: string;
 }
 
-export interface LogoutDTO {
+export interface ILoginOutputDTO {
+  id: string;
+}
+
+export interface ILogoutInputDTO {
   userId: string;
   refreshToken: string;
 }
 
-export interface RefreshTokenDTO {
+export interface IRefreshTokenInputDTO {
   userId: string;
   refreshToken: string;
+}
+
+export interface IGetMeOutputDTO {
+  id: string;
+  name: string;
+  email: string;
+  isVerified: boolean;
+  hasProfile: boolean;
 }

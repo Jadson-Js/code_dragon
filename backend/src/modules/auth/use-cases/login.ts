@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { LoginDTO } from "../auth.dto";
+import type { ILoginInputDTO } from "../auth.dto";
 import { NotFoundError, UnauthorizedError } from "@/shared/app.error";
 import type { User } from "@/domain/entities/user.entity";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
@@ -26,7 +26,7 @@ export class LoginUseCase {
   ) {}
 
   async execute(
-    data: LoginDTO,
+    data: ILoginInputDTO,
   ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
     const user = await this.userRepository.findByEmail(data.email);
     if (!user) throw new NotFoundError("User not found");

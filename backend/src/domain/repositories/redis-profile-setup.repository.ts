@@ -1,7 +1,7 @@
-import type { IGetSetupDTO } from "@/modules/profile/profile.dto";
+import type { IGetSetupOutputDTO } from "@/modules/profile/profile.dto";
 
 export interface IRedisProfileSetupRepository {
-  get(): Promise<IGetSetupDTO | null>;
-  set(value: IGetSetupDTO): Promise<void>;
+  get(): Promise<IGetSetupOutputDTO | null>;
+  set(value: IGetSetupOutputDTO): Promise<void>;
   exists(): Promise<boolean>;
 }

@@ -3,7 +3,7 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
 import { generateHash, msToSeconds } from "@/shared/utils";
 import { env } from "@/shared/env";
-import type { RefreshTokenDTO } from "../auth.dto";
+import type { IRefreshTokenInputDTO } from "../auth.dto";
 
 @injectable()
 export class RefreshTokenUseCase {
@@ -16,7 +16,7 @@ export class RefreshTokenUseCase {
   ) {}
 
   async execute(
-    params: RefreshTokenDTO,
+    params: IRefreshTokenInputDTO,
   ): Promise<{ newRefreshToken: string; accessToken: string }> {
     // 1. Delete the old refresh token session from Redis
     const tokenId = generateHash(params.refreshToken);

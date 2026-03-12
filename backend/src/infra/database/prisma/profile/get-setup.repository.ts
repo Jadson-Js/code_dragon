@@ -1,11 +1,11 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { IGetSetupDTO } from "@/modules/profile/profile.dto";
+import type { IGetSetupOutputDTO } from "@/modules/profile/profile.dto";
 import type { IGetSetupRepository } from "@/domain/repositories/profile/get-setup.repository";
 
 @injectable()
 export class GetSetupPrismaRepository implements IGetSetupRepository {
-  async execute(): Promise<IGetSetupDTO> {
+  async execute(): Promise<IGetSetupOutputDTO> {
     const [seniority, specialties, careerObjectives, ageRanges, stacks] =
       await prisma.$transaction([
         prisma.seniority.findMany({ orderBy: { order: "asc" } }),

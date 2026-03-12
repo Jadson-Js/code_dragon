@@ -11,10 +11,10 @@ export function generateController(modelName) {
   const names = getModelNames(modelName);
   const paths = getModulePaths(names.kebab);
 
-  const content = `import { ${names.presenterFn} } from "./${names.presenterFile}";
-import type { Request, Response } from "express";
+  const content = `import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import type { ${names.findAllUseCase} } from "./use-cases/find-all-${names.kebab}";
+import type { ${names.responseDto} } from "./${names.dtoFile}";
 
 @injectable()
 export class ${names.controllerClass} {
@@ -23,10 +23,12 @@ export class ${names.controllerClass} {
     private readonly findAll${names.pascal}UseCase: ${names.findAllUseCase},
   ) {}
 
-  async findAll(request: Request, response: Response) {
+  async findAll(
+    request: Request,
+    response: Response,
+  ): Promise<Response<${names.responseDto}[]>> {
     const result = await this.findAll${names.pascal}UseCase.execute();
-    const httpResponse = result.map(${names.presenterFn});
-    return response.status(200).json(httpResponse);
+    return response.status(200).json(result);
   }
 }
 `;

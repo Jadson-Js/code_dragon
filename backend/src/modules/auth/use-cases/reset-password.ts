@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ResetPasswordDTO } from "../auth.dto";
+import type { IResetPasswordInputDTO } from "../auth.dto";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
@@ -26,7 +26,7 @@ export class ResetPasswordUseCase {
     private readonly resetPasswordRepository: IResetPasswordRepository,
   ) {}
 
-  async execute(params: ResetPasswordDTO): Promise<void> {
+  async execute(params: IResetPasswordInputDTO): Promise<void> {
     // 1. Verify the JWT signature
     const isValidToken = await this.jwtProvider.verifyPasswordResetToken(
       params.token,

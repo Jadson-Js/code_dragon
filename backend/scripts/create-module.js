@@ -11,7 +11,6 @@ import { generateRoutes } from "./utils/routes-generator.js";
 import { generateRepository } from "./utils/repository-generator.js";
 import { generateSchema } from "./utils/schema-generator.js";
 import { generatePrismaRepository } from "./utils/prisma-repository-generator.js";
-import { generatePresenter } from "./utils/presenter-generator.js";
 import { generateDTO } from "./utils/dto-generator.js";
 import { generateController } from "./utils/controller-generator.js";
 import { generateContainer } from "./utils/container-generator.js";
@@ -46,7 +45,6 @@ rl.question("Qual o nome do model? ", (modelName) => {
       generateSchema(modelName, model);
       generatePrismaRepository(modelName, model);
       generateDTO(modelName, model);
-      generatePresenter(modelName);
       generateController(modelName);
       generateContainer(modelName);
       generateUseCases(modelName);

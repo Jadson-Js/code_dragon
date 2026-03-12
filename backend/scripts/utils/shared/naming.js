@@ -79,8 +79,8 @@ export function getModelNames(modelName) {
     deleteUseCaseToken: `Delete${pascal}UseCase`,
 
     // DTO names
-    createDto: `Create${pascal}DTO`,
-    responseDto: `${pascal}ResponseDTO`,
+    createDto: `ICreate${pascal}InputDTO`,
+    responseDto: `I${pascal}OutputDTO`,
 
     // Presenter function
     presenterFn: `${camel}ToHTTP`,

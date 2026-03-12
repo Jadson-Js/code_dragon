@@ -5,7 +5,7 @@ import type { ResendVerificationUseCase } from "./use-cases/resend-verification"
 import type { VerifyEmailUseCase } from "./use-cases/verify-email";
 import type { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import type { ResetPasswordUseCase } from "./use-cases/reset-password";
-import { authToHTTP, getMeToHTTP } from "./auth.presenter";
+import type { IGetMeOutputDTO, ILoginOutputDTO } from "./auth.dto";
 import type { LoginUseCase } from "./use-cases/login";
 import type { LogoutUseCase } from "./use-cases/logout";
 import type { RefreshTokenUseCase } from "./use-cases/refresh-token";
@@ -43,14 +43,28 @@ export class AuthController {
     private readonly getMeUseCase: GetMeUseCase,
   ) {}
 
-  async me(request: Request, response: Response) {
+  async me(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IGetMeOutputDTO>> {
     const userId = request.user.id;
     const result = await this.getMeUseCase.execute(userId);
 
-    return response.status(200).json(getMeToHTTP(result));
+    const httpResponse: IGetMeOutputDTO = {
+      id: result.user.id,
+      name: result.user.name,
+      email: result.user.email,
+      isVerified: result.user.isVerified(),
+      hasProfile: !!result.profile,
+    };
+
+    return response.status(200).json(httpResponse);
   }
 
-  async signup(request: Request, response: Response) {
+  async signup(
+    request: Request,
+    response: Response,
+  ): Promise<Response<string>> {
     await this.signupUseCase.execute(request.body);
     return response
       .status(200)
@@ -59,7 +73,10 @@ export class AuthController {
       );
   }
 
-  async resendVerification(request: Request, response: Response) {
+  async resendVerification(
+    request: Request,
+    response: Response,
+  ): Promise<Response<string>> {
     await this.resendVerificationUseCase.execute(request.body);
     return response
       .status(200)
@@ -68,14 +85,20 @@ export class AuthController {
       );
   }
 
-  async verifyEmail(request: Request, response: Response) {
+  async verifyEmail(
+    request: Request,
+    response: Response,
+  ): Promise<Response<string>> {
     await this.verifyEmailUseCase.execute(request.body);
     return response
       .status(200)
       .json("This email has been verified successfully.");
   }
 
-  async forgotPassword(request: Request, response: Response) {
+  async forgotPassword(
+    request: Request,
+    response: Response,
+  ): Promise<Response<string>> {
     await this.forgotPasswordUseCase.execute(request.body);
     return response
       .status(200)
@@ -84,12 +107,18 @@ export class AuthController {
       );
   }
 
-  async resetPassword(request: Request, response: Response) {
+  async resetPassword(
+    request: Request,
+    response: Response,
+  ): Promise<Response<string>> {
     await this.resetPasswordUseCase.execute(request.body);
     return response.status(200).json("Password reset successfully.");
   }
 
-  async login(request: Request, response: Response) {
+  async login(
+    request: Request,
+    response: Response,
+  ): Promise<Response<ILoginOutputDTO>> {
     const { user, accessToken, refreshToken } = await this.loginUseCase.execute(
       request.body,
     );
@@ -108,10 +137,17 @@ export class AuthController {
       maxAge: env.jwtAccessExpiresInMs,
     });
 
-    return response.status(200).json(authToHTTP(user));
+    const httpResponse: ILoginOutputDTO = {
+      id: user.id,
+    };
+
+    return response.status(200).json(httpResponse);
   }
 
-  async refreshToken(request: Request, response: Response) {
+  async refreshToken(
+    request: Request,
+    response: Response,
+  ): Promise<Response<void>> {
     const refreshToken = request.cookies.refreshToken;
     const userId = request.user.id;
 
@@ -138,7 +174,10 @@ export class AuthController {
     return response.status(200).send();
   }
 
-  async logout(request: Request, response: Response) {
+  async logout(
+    request: Request,
+    response: Response,
+  ): Promise<Response<void>> {
     const userId = request.user.id;
     const refreshToken = request.cookies.refreshToken;
 

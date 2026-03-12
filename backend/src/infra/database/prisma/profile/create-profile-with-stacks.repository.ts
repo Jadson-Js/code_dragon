@@ -2,14 +2,14 @@ import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { profilePrismaToDomain } from "../mappers";
 import type { ICreateProfileWithStacksRepository } from "@/domain/repositories/profile/create-profile-with-stacks.repository";
-import type { CreateProfileDTO } from "@/modules/profile/profile.dto";
+import type { ICreateProfileInputDTO } from "@/modules/profile/profile.dto";
 import type { Profile } from "@/domain/entities/profile.entity";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 @injectable()
 export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWithStacksRepository {
-  async execute(params: CreateProfileDTO): Promise<Profile> {
+  async execute(params: ICreateProfileInputDTO): Promise<Profile> {
     try {
       return await prisma.$transaction(async (tx: any) => {
         const profile = await tx.profile.create({

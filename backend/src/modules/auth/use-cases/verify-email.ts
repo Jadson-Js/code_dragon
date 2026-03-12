@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { VerifyEmailDTO } from "../auth.dto";
+import type { IVerifyEmailInputDTO } from "../auth.dto";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IUserRepository } from "@/domain/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/repositories/token.repository";
@@ -22,7 +22,7 @@ export class VerifyEmailUseCase {
     private readonly tokenRepository: ITokenRepository,
   ) {}
 
-  async execute(params: VerifyEmailDTO): Promise<void> {
+  async execute(params: IVerifyEmailInputDTO): Promise<void> {
     // 1. Verify the JWT signature
     const isValidToken = await this.jwtProvider.verifyEmailVerificationToken(
       params.token,

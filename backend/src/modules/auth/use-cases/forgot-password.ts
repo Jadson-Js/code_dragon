@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ForgotPasswordDTO } from "../auth.dto";
+import type { IForgotPasswordInputDTO } from "../auth.dto";
 import { Token } from "@/domain/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
@@ -28,7 +28,7 @@ export class ForgotPasswordUseCase {
     private readonly jwtProvider: IJWTProvider,
   ) {}
 
-  async execute(params: ForgotPasswordDTO): Promise<void> {
+  async execute(params: IForgotPasswordInputDTO): Promise<void> {
     const user = await this.userRepository.findByEmail(params.email);
 
     // Only proceed if the user exists and is verified

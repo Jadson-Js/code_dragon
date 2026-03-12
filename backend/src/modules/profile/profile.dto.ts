@@ -1,4 +1,4 @@
-export interface CreateProfileDTO {
+export interface ICreateProfileInputDTO {
   userId: string;
   ageRangeId: number;
   seniorityId: number;
@@ -7,11 +7,11 @@ export interface CreateProfileDTO {
   stacksId: number[];
 }
 
-export interface ProfileResponseDTO {
+export interface ICreateProfileOutputDTO {
   id: string;
 }
 
-export interface IGetSetupDTO {
+export interface IGetSetupOutputDTO {
   seniority: { id: number; name: string; description: string }[];
   specialties: { id: number; name: string; description: string }[];
   careerObjectives: { id: number; name: string; description: string }[];

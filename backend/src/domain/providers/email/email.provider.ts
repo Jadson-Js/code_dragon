@@ -1,6 +1,6 @@
 import type { IEMAIL_TEMPLATES } from "@/shared/environments";
 
-export interface SendEmailProps {
+export interface ISendEmailProps {
   to: string;
   subject: string;
   template: IEMAIL_TEMPLATES;
@@ -8,5 +8,5 @@ export interface SendEmailProps {
 }
 
 export interface IEmailProvider {
-  send(props: SendEmailProps): Promise<void>;
+  send(props: ISendEmailProps): Promise<void>;
 }

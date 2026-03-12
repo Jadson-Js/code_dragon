@@ -1,7 +1,7 @@
 import { Worker, Queue, type Job } from "bullmq";
 import { redisConnection } from "../../database/redis/connection";
 import { EmailProvider } from "./email.provider";
-import type { SendEmailProps } from "@/domain/providers/email/email.provider";
+import type { ISendEmailProps } from "@/domain/providers/email/email.provider";
 import { inject, injectable } from "tsyringe";
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 
@@ -9,7 +9,7 @@ const QUEUE_NAME = "email";
 
 @injectable()
 export class EmailQueueProvider implements IEmailQueueProvider {
-  private readonly queue: Queue<SendEmailProps>;
+  private readonly queue: Queue<ISendEmailProps>;
 
   constructor(
     @inject("IEmailProvider")
@@ -23,7 +23,7 @@ export class EmailQueueProvider implements IEmailQueueProvider {
   start(): void {
     const worker = new Worker(
       QUEUE_NAME,
-      async (job: Job<SendEmailProps>) => {
+      async (job: Job<ISendEmailProps>) => {
         await this.emailProvider.send(job.data);
       },
       {
@@ -51,7 +51,7 @@ export class EmailQueueProvider implements IEmailQueueProvider {
     console.log("👷 Worker de emails started");
   }
 
-  async addJob(data: SendEmailProps): Promise<void> {
+  async addJob(data: ISendEmailProps): Promise<void> {
     await this.queue.add("email", data);
   }
 }

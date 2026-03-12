@@ -1,5 +1,5 @@
-import type { IGetSetupDTO } from "@/modules/profile/profile.dto";
+import type { IGetSetupOutputDTO } from "@/modules/profile/profile.dto";
 
 export interface IGetSetupRepository {
-  execute(): Promise<IGetSetupDTO>;
+  execute(): Promise<IGetSetupOutputDTO>;
 }

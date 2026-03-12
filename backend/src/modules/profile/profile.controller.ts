@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import type { CreateProfileUseCase } from "./use-cases/create-profile";
 import type { GetSetupUseCase } from "./use-cases/get-setup";
-import type { IGetSetupDTO } from "./profile.dto";
+import type { IGetSetupOutputDTO, ICreateProfileOutputDTO } from "./profile.dto";
 
 @injectable()
 export class ProfileController {
@@ -14,7 +14,10 @@ export class ProfileController {
     private readonly getSetupUseCase: GetSetupUseCase,
   ) {}
 
-  async create(request: Request, response: Response) {
+  async create(
+    request: Request,
+    response: Response,
+  ): Promise<Response<ICreateProfileOutputDTO>> {
     const body = request.body;
     const userId = request.user.id;
 
@@ -23,10 +26,14 @@ export class ProfileController {
       userId,
     });
 
-    return response.status(201).json({ id: result.id });
+    const httpResponse: ICreateProfileOutputDTO = { id: result.id };
+    return response.status(201).json(httpResponse);
   }
 
-  async getSetup(request: Request, response: Response): Promise<Response> {
+  async getSetup(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IGetSetupOutputDTO>> {
     const result = await this.getSetupUseCase.execute();
 
     return response.status(200).json(result);

@@ -13,7 +13,7 @@ export function generateDTO(modelName, modelDefinition) {
   const names = getModelNames(modelName);
   const paths = getModulePaths(names.kebab);
 
-  // CreateDTO - Only mandatory fields (non-optional, no defaults, not system-generated)
+  // InputDTO - Only mandatory fields (non-optional, no defaults, not system-generated)
   let content = `export interface ${names.createDto} {\n`;
   for (const field of fields) {
     // Skip system-generated and optional fields
@@ -27,7 +27,7 @@ export function generateDTO(modelName, modelDefinition) {
   }
   content += "}\n\n";
 
-  // ResponseDTO - Only ID for security
+  // OutputDTO - Only ID for security
   content += `export interface ${names.responseDto} {\n`;
   content += "  id: string;\n";
   content += "}\n";

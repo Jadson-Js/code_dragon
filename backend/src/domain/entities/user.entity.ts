@@ -1,4 +1,4 @@
-interface CreateUserProps {
+interface ICreateUserProps {
   id?: string;
   name: string;
   email: string;
@@ -21,7 +21,7 @@ export class User {
     public readonly deletedAt: Date | null,
   ) {}
 
-  static create(props: CreateUserProps): User {
+  static create(props: ICreateUserProps): User {
     return new User(
       props.id ?? crypto.randomUUID(),
       props.name,
