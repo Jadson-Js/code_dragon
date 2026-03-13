@@ -25,12 +25,12 @@ INSERT INTO "career_objectives" ("name", "description", "slug", "order", "create
 ON CONFLICT ("slug") DO NOTHING;
 
 -- Age Ranges
-INSERT INTO "age_ranges" ("name",  "slug", "order", "created_at", "updated_at") VALUES
-('Menos de 18', 'under-18', 1, NOW(), NOW()),
-('18 a 24', '18-24', 2, NOW(), NOW()),
-('25 a 34', '25-34', 3, NOW(), NOW()),
-('35 a 44', '35-44', 4, NOW(), NOW()),
-('45 ou mais', '45-plus', 5, NOW(), NOW())
+INSERT INTO "age_ranges" ("name", "start_age", "end_age", "slug", "order", "created_at", "updated_at") VALUES
+('Menos de 18', 0, 17, 'under-18', 1, NOW(), NOW()),
+('18 a 24', 18, 24, '18-24', 2, NOW(), NOW()),
+('25 a 34', 25, 34, '25-34', 3, NOW(), NOW()),
+('35 a 44', 35, 44, '35-44', 4, NOW(), NOW()),
+('45 ou mais', 45, 120, '45-plus', 5, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
 -- Stacks

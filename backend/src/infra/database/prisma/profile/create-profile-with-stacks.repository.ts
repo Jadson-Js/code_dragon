@@ -1,6 +1,5 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import { profilePrismaToDomain } from "../mappers";
 import type { ICreateProfileWithStacksRepository } from "@/domain/repositories/profile/create-profile-with-stacks.repository";
 import type { ICreateProfileInputDTO } from "@/modules/profile/profile.dto";
 import type { Profile } from "@/domain/entities/profile.entity";
@@ -13,13 +12,7 @@ export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWi
     try {
       return await prisma.$transaction(async (tx: any) => {
         const profile = await tx.profile.create({
-          data: {
-            userId: params.userId,
-            ageRangeId: params.ageRangeId,
-            seniorityId: params.seniorityId,
-            specialtyId: params.specialtyId,
-            careerObjectiveId: params.careerObjectiveId,
-          },
+          data: params,
         });
 
         if (params.stacksId && params.stacksId.length > 0) {
@@ -31,7 +24,7 @@ export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWi
           });
         }
 
-        return profilePrismaToDomain(profile);
+        return profile;
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

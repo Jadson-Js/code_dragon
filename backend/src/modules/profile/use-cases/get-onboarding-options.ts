@@ -1,4 +1,7 @@
-import type { IGetOnboardingOptionsRepository } from "@/domain/repositories/profile/get-onboarding-options.repository";
+import type {
+  IGetOnboardingOptionsRepository,
+  IOnboardingOptions,
+} from "@/domain/repositories/profile/get-onboarding-options.repository";
 import type { IRedisOnboardingOptionsRepository } from "@/domain/repositories/redis-onboarding-options.repository";
 import { inject, injectable } from "tsyringe";
 
@@ -17,12 +20,13 @@ export class GetOnboardingOptionsUseCase {
 
     if (exists) {
       const response = await this.redisOnboardingOptionsRepository.get();
-      return response;
+      if (response) return response;
     }
 
-    const response = await this.getOnboardingOptionsRepository.execute();
-    await this.redisOnboardingOptionsRepository.set(response);
+    const options = await this.getOnboardingOptionsRepository.execute();
 
-    return response;
+    await this.redisOnboardingOptionsRepository.set(options);
+
+    return options;
   }
 }

@@ -1,11 +1,18 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { IGetOnboardingOptionsOutputDTO } from "@/modules/profile/profile.dto";
-import type { IGetOnboardingOptionsRepository } from "@/domain/repositories/profile/get-onboarding-options.repository";
+import type {
+  IOnboardingOptions,
+  IGetOnboardingOptionsRepository,
+} from "@/domain/repositories/profile/get-onboarding-options.repository";
+import { Seniority } from "@/domain/entities/seniority.entity";
+import { Specialty } from "@/domain/entities/specialty.entity";
+import { CareerObjective } from "@/domain/entities/career-objective.entity";
+import { AgeRange } from "@/domain/entities/age-range.entity";
+import { Stack } from "@/domain/entities/stack.entity";
 
 @injectable()
 export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptionsRepository {
-  async execute(): Promise<IGetOnboardingOptionsOutputDTO> {
+  async execute(): Promise<IOnboardingOptions> {
     const [seniorities, specialties, careerObjectives, ageRanges, stacks] =
       await prisma.$transaction([
         prisma.seniority.findMany({ orderBy: { order: "asc" } }),
@@ -16,23 +23,13 @@ export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptio
       ]);
 
     return {
-      seniorities: seniorities.map((s: any) => ({
-        id: s.id,
-        name: s.name,
-        description: s.description,
-      })),
-      specialties: specialties.map((s: any) => ({
-        id: s.id,
-        name: s.name,
-        description: s.description,
-      })),
-      careerObjectives: careerObjectives.map((o: any) => ({
-        id: o.id,
-        name: o.name,
-        description: o.description,
-      })),
-      ageRanges: ageRanges.map((a: any) => ({ id: a.id, name: a.name })),
-      stacks: stacks.map((s: any) => ({ id: s.id, name: s.name })),
+      seniorities: seniorities.map((s) => Seniority.create({ ...s })),
+      specialties: specialties.map((s) => Specialty.create({ ...s })),
+      careerObjectives: careerObjectives.map((o) =>
+        CareerObjective.create({ ...o }),
+      ),
+      ageRanges: ageRanges.map((a) => AgeRange.create({ ...a })),
+      stacks: stacks.map((s) => Stack.create({ ...s })),
     };
   }
 }

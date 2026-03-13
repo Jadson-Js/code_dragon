@@ -75,8 +75,10 @@ model Profile {
 model AgeRange {
   id        Int      @id @default(autoincrement())
   name      String
+  startAge  Int      @map("start_age")
+  endAge    Int      @map("end_age")
   slug      String   @unique
-  order     Int
+  order     Int      @unique @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -90,7 +92,7 @@ model Seniority {
   name        String
   description String
   slug        String   @unique
-  order       Int
+  order       Int      @unique @default(autoincrement())
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -104,7 +106,7 @@ model CareerObjective {
   name        String
   description String
   slug        String   @unique
-  order       Int
+  order       Int      @unique @default(autoincrement())
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -118,7 +120,7 @@ model Specialty {
   name        String
   description String
   slug        String   @unique
-  order       Int
+  order       Int      @unique @default(autoincrement())
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 

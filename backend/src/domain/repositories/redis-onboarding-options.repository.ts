@@ -1,7 +1,7 @@
-import type { IGetOnboardingOptionsOutputDTO } from "@/modules/profile/profile.dto";
+import type { IOnboardingOptions } from "./profile/get-onboarding-options.repository";
 
 export interface IRedisOnboardingOptionsRepository {
-  get(): Promise<IGetOnboardingOptionsOutputDTO | null>;
-  set(value: IGetOnboardingOptionsOutputDTO): Promise<void>;
+  get(): Promise<IOnboardingOptions | null>;
+  set(value: IOnboardingOptions): Promise<void>;
   exists(): Promise<boolean>;
 }

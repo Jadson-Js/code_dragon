@@ -1,16 +1,16 @@
 import { injectable } from "tsyringe";
 import type { IRedisOnboardingOptionsRepository } from "@/domain/repositories/redis-onboarding-options.repository";
 import { redisConnection } from "./connection";
-import type { IGetOnboardingOptionsOutputDTO } from "@/modules/profile/profile.dto";
+import type { IOnboardingOptions } from "@/domain/repositories/profile/get-onboarding-options.repository";
 
 @injectable()
 export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptionsRepository {
-  async get(): Promise<IGetOnboardingOptionsOutputDTO | null> {
+  async get(): Promise<IOnboardingOptions | null> {
     const value = await redisConnection.get("onboarding-options");
     return value ? JSON.parse(value) : null;
   }
 
-  async set(value: IGetOnboardingOptionsOutputDTO): Promise<void> {
+  async set(value: IOnboardingOptions): Promise<void> {
     await redisConnection.set("onboarding-options", JSON.stringify(value));
   }
 
