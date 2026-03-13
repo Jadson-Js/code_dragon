@@ -32,7 +32,6 @@
     "**/.env": true,
     "**/package.json": true,
     "**/@types": true,
-    //"**/seed.sql": true,
     "**/seed.ts": true,
     "**/public": true
   }
