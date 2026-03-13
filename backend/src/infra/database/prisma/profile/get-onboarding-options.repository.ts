@@ -3,7 +3,7 @@ import { injectable } from "tsyringe";
 import type {
   IOnboardingOptions,
   IGetOnboardingOptionsRepository,
-} from "@/domain/repositories/profile/get-onboarding-options.repository";
+} from "@/domain/database/repositories/profile/get-onboarding-options.repository";
 import { Seniority } from "@/domain/entities/seniority.entity";
 import { Specialty } from "@/domain/entities/specialty.entity";
 import { CareerObjective } from "@/domain/entities/career-objective.entity";

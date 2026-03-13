@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
 import { redisConnection } from "./connection";
 
 @injectable()

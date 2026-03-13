@@ -3,7 +3,7 @@ import { Token } from "@/domain/entities/token.entity";
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
-import type { ICreateUserWithEmailTokenRepository } from "@/domain/repositories/auth/auth-transaction.repository";
+import type { ICreateUserWithEmailTokenRepository } from "@/domain/database/repositories/auth/auth-transaction.repository";
 import { userPrismaToDomain } from "../mappers";
 
 @injectable()

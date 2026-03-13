@@ -1,8 +1,8 @@
 import type {
   IGetOnboardingOptionsRepository,
   IOnboardingOptions,
-} from "@/domain/repositories/profile/get-onboarding-options.repository";
-import type { IRedisOnboardingOptionsRepository } from "@/domain/repositories/redis-onboarding-options.repository";
+} from "@/domain/database/repositories/profile/get-onboarding-options.repository";
+import type { IRedisOnboardingOptionsRepository } from "@/domain/database/redis/onboarding-options.repository";
 import { inject, injectable } from "tsyringe";
 
 @injectable()

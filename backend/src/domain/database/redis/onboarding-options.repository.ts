@@ -1,4 +1,4 @@
-import type { IOnboardingOptions } from "./profile/get-onboarding-options.repository";
+import type { IOnboardingOptions } from "../repositories/profile/get-onboarding-options.repository";
 
 export interface IRedisOnboardingOptionsRepository {
   get(): Promise<IOnboardingOptions | null>;

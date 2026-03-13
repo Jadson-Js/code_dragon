@@ -1,5 +1,5 @@
 import { Token } from "@/domain/entities/token.entity";
-import type { ITokenRepository } from "@/domain/repositories/token.repository";
+import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { tokenPrismaToDomain } from "./mappers";

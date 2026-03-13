@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import type { IRedisOnboardingOptionsRepository } from "@/domain/repositories/redis-onboarding-options.repository";
+import type { IRedisOnboardingOptionsRepository } from "@/domain/database/redis/onboarding-options.repository";
 import { redisConnection } from "./connection";
-import type { IOnboardingOptions } from "@/domain/repositories/profile/get-onboarding-options.repository";
+import type { IOnboardingOptions } from "@/domain/database/repositories/profile/get-onboarding-options.repository";
 
 @injectable()
 export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptionsRepository {

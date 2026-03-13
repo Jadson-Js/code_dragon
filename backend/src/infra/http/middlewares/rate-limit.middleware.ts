@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
 import { NotFoundError, TooManyRequestsError } from "@/shared/app.error";
 import type { Request, Response, NextFunction } from "express";
 

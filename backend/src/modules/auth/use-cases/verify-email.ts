@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import type { IVerifyEmailInputDTO } from "../auth.dto";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IUserRepository } from "@/domain/repositories/user.repository";
-import type { ITokenRepository } from "@/domain/repositories/token.repository";
+import type { IUserRepository } from "@/domain/database/repositories/user.repository";
+import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 

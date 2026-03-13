@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
 import { generateHash } from "@/shared/utils";
 import type { ILogoutInputDTO } from "../auth.dto";
 

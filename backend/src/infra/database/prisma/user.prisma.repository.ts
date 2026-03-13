@@ -1,5 +1,5 @@
 import { User } from "@/domain/entities/user.entity";
-import type { IUserRepository } from "@/domain/repositories/user.repository";
+import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError } from "@/shared/app.error";

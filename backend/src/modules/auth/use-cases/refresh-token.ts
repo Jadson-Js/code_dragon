@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IRedisTokenRepository } from "@/domain/repositories/redis-token.repository";
+import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
 import { generateHash, msToSeconds } from "@/shared/utils";
 import { env } from "@/shared/env";
 import type { IRefreshTokenInputDTO } from "../auth.dto";
