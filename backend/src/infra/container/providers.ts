@@ -10,13 +10,13 @@ import {
   type IEnsureAuthenticated,
 } from "../http/middlewares/ensure-authenticated.middleware";
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
-import { RedisTokenRepository } from "../database/redis/redis-token.repository";
+import { RedisProvider } from "../providers/redis.provider";
 import { RateLimitMiddleware } from "../http/middlewares/rate-limit.middleware";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
 container.registerSingleton("IJWTProvider", JwtProvider);
-container.registerSingleton("IRedisTokenRepository", RedisTokenRepository);
+container.registerSingleton("IRedisProvider", RedisProvider);
 container.registerSingleton("RateLimitMiddleware", RateLimitMiddleware);
 container.registerSingleton(
   "ICreateUserWithEmailTokenRepository",

@@ -5,7 +5,7 @@ import type { User } from "@/domain/entities/user.entity";
 import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { env } from "@/shared/env";
 import { msToSeconds, generateHash } from "@/shared/utils";
 
@@ -21,8 +21,8 @@ export class LoginUseCase {
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
 
-    @inject("IRedisTokenRepository")
-    private readonly redisTokenRepository: IRedisTokenRepository,
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
   async execute(
@@ -46,7 +46,7 @@ export class LoginUseCase {
     const tokenId = generateHash(refreshToken);
     const ttlSeconds = msToSeconds(env.jwtRefreshExpiresInMs);
 
-    await this.redisTokenRepository.set(
+    await this.redisProvider.set(
       `session:${user.id}:${tokenId}`,
       "true",
       ttlSeconds,

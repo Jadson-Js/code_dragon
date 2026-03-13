@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { NotFoundError, TooManyRequestsError } from "@/shared/app.error";
 import type { Request, Response, NextFunction } from "express";
 
@@ -13,8 +13,8 @@ export interface IRateLimit {
 @injectable()
 export class RateLimitMiddleware {
   constructor(
-    @inject("IRedisTokenRepository")
-    private readonly redisTokenRepository: IRedisTokenRepository,
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
   handle(options: IRateLimit) {
@@ -34,10 +34,10 @@ export class RateLimitMiddleware {
         redisKey += `:${request.body.email}`;
       }
 
-      const currentCount = await this.redisTokenRepository.incr(redisKey);
+      const currentCount = await this.redisProvider.incr(redisKey);
 
       if (currentCount === 1) {
-        await this.redisTokenRepository.expire(redisKey, windowInSeconds);
+        await this.redisProvider.expire(redisKey, windowInSeconds);
       }
 
       if (currentCount > options.max) {

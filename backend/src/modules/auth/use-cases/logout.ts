@@ -1,17 +1,17 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { generateHash } from "@/shared/utils";
 import type { ILogoutInputDTO } from "../auth.dto";
 
 @injectable()
 export class LogoutUseCase {
   constructor(
-    @inject("IRedisTokenRepository")
-    private readonly redisTokenRepository: IRedisTokenRepository,
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
   async execute({ userId, refreshToken }: ILogoutInputDTO): Promise<void> {
     const tokenId = generateHash(refreshToken);
-    await this.redisTokenRepository.delete(`session:${userId}:${tokenId}`);
+    await this.redisProvider.delete(`session:${userId}:${tokenId}`);
   }
 }

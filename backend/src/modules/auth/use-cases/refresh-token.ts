@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { generateHash, msToSeconds } from "@/shared/utils";
 import { env } from "@/shared/env";
 import type { IRefreshTokenInputDTO } from "../auth.dto";
@@ -11,8 +11,8 @@ export class RefreshTokenUseCase {
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
 
-    @inject("IRedisTokenRepository")
-    private readonly redisTokenRepository: IRedisTokenRepository,
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
   async execute(
@@ -20,7 +20,7 @@ export class RefreshTokenUseCase {
   ): Promise<{ newRefreshToken: string; accessToken: string }> {
     // 1. Delete the old refresh token session from Redis
     const tokenId = generateHash(params.refreshToken);
-    await this.redisTokenRepository.delete(
+    await this.redisProvider.delete(
       `session:${params.userId}:${tokenId}`,
     );
 
@@ -36,7 +36,7 @@ export class RefreshTokenUseCase {
     const newTokenId = generateHash(newRefreshToken);
     const ttlSeconds = msToSeconds(env.jwtRefreshExpiresInMs);
 
-    await this.redisTokenRepository.set(
+    await this.redisProvider.set(
       `session:${params.userId}:${newTokenId}`,
       "true",
       ttlSeconds,

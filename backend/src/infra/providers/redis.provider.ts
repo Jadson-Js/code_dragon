@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
-import { redisConnection } from "./connection";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
+import { redisConnection } from "../database/redis/connection";
 
 @injectable()
-export class RedisTokenRepository implements IRedisTokenRepository {
+export class RedisProvider implements IRedisProvider {
   async get(key: string): Promise<string | null> {
     return await redisConnection.get(key);
   }

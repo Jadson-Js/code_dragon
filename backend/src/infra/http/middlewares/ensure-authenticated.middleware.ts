@@ -2,7 +2,7 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import { UnauthorizedError } from "@/shared/app.error";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { IRedisTokenRepository } from "@/domain/database/redis/token.repository";
+import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { generateHash } from "@/shared/utils";
 
 export interface IEnsureAuthenticated {
@@ -16,8 +16,8 @@ export class EnsureAuthenticated implements IEnsureAuthenticated {
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,
 
-    @inject("IRedisTokenRepository")
-    private readonly redisTokenRepository: IRedisTokenRepository,
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
   async authRefresh(
@@ -36,7 +36,7 @@ export class EnsureAuthenticated implements IEnsureAuthenticated {
 
     // Check if session exists in Redis for multi-session support
     const tokenId = generateHash(token);
-    const sessionExists = await this.redisTokenRepository.exists(
+    const sessionExists = await this.redisProvider.exists(
       `session:${userId}:${tokenId}`,
     );
 
