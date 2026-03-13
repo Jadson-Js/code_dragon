@@ -1,36 +1,36 @@
+-- Seniorities
+INSERT INTO "seniorities" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
+('Sem Experiência', 'Iniciando estudos na área de tecnologia e ainda sem vivência profissional.', 'no-experience', 1, NOW(), NOW()),
+('Estagiário', 'Estudantes ativos em busca de aprendizado e desenvolvimento prático profissional.', 'intern', 2, NOW(), NOW()),
+('Júnior', 'Até 2 anos de experiência, realizando tarefas sob supervisão e apoio técnico.', 'junior', 3, NOW(), NOW()),
+('Pleno', 'Autonomia técnica comprovada para execução de tarefas e apoio a iniciantes.', 'mid-level', 4, NOW(), NOW()),
+('Sênior', 'Especialista em soluções técnicas, visão estratégica e mentoria para o time.', 'senior', 5, NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
+-- Specialties
+INSERT INTO "specialties" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
+('Frontend', 'Desenvolvimento de interfaces Web modernas, performance e experiência do usuário.', 'frontend', 1, NOW(), NOW()),
+('Backend', 'Engenharia de APIs, lógica de servidor, bancos de dados e performance sistêmica.', 'backend', 2, NOW(), NOW()),
+('Full Stack', 'Visão técnica completa que transita entre o frontend e backend com facilidade.', 'fullstack', 3, NOW(), NOW()),
+('Mobile', 'Desenvolvimento mobile de alto nível para ecossistemas Android e iOS.', 'mobile', 4, NOW(), NOW()),
+('DevOps', 'Foco em CI/CD, infraestrutura em nuvem, automação e alta disponibilidade.', 'devops', 5, NOW(), NOW()) 
+ON CONFLICT ("slug") DO NOTHING;
+
+-- Career Objectives
+INSERT INTO "career_objectives" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
+('Transição de Carreira', 'Profissionais migrando de outras áreas em busca da primeira chance em tecnologia.', 'career-transition', 1, NOW(), NOW()),
+('Primeiro Emprego', 'Busca inicial de oportunidades no mercado de trabalho para ganhar experiência.', 'first-job', 2, NOW(), NOW()),
+('Evolução Profissional', 'Foco no crescimento técnico e progressão salarial dentro do ecossistema de TI.', 'professional-evolution', 3, NOW(), NOW()),
+('Liderança', 'Transição técnica para gestão de projetos ou coordenação de equipes de engenharia.', 'leadership', 4, NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
 -- Age Ranges
-INSERT INTO "age_ranges" ("name", "slug", "order", "created_at", "updated_at") VALUES
+INSERT INTO "age_ranges" ("name",  "slug", "order", "created_at", "updated_at") VALUES
 ('Menos de 18', 'under-18', 1, NOW(), NOW()),
 ('18 a 24', '18-24', 2, NOW(), NOW()),
 ('25 a 34', '25-34', 3, NOW(), NOW()),
 ('35 a 44', '35-44', 4, NOW(), NOW()),
 ('45 ou mais', '45-plus', 5, NOW(), NOW())
-ON CONFLICT ("slug") DO NOTHING;
-
--- Seniorities
-INSERT INTO "seniorities" ("name", "slug", "order", "created_at", "updated_at") VALUES
-('Estagiário', 'intern', 1, NOW(), NOW()),
-('Júnior', 'junior', 2, NOW(), NOW()),
-('Pleno', 'mid-level', 3, NOW(), NOW()),
-('Sênior', 'senior', 4, NOW(), NOW()),
-('Especialista', 'specialist', 5, NOW(), NOW())
-ON CONFLICT ("slug") DO NOTHING;
-
--- Specialties
-INSERT INTO "specialties" ("name", "slug", "order", "created_at", "updated_at") VALUES
-('Frontend', 'frontend', 1, NOW(), NOW()),
-('Backend', 'backend', 2, NOW(), NOW()),
-('Full Stack', 'fullstack', 3, NOW(), NOW()),
-('Mobile', 'mobile', 4, NOW(), NOW()),
-('DevOps', 'devops', 5, NOW(), NOW())
-ON CONFLICT ("slug") DO NOTHING;
-
--- Career Objectives
-INSERT INTO "career_objectives" ("name", "slug", "order", "created_at", "updated_at") VALUES
-('Primeiro Emprego', 'first-job', 1, NOW(), NOW()),
-('Transição de Carreira', 'career-transition', 2, NOW(), NOW()),
-('Evolução Profissional', 'professional-evolution', 3, NOW(), NOW()),
-('Liderança', 'leadership', 4, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
 -- Stacks

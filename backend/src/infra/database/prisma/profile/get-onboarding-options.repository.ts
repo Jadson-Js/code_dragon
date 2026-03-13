@@ -1,12 +1,12 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { IGetSetupOutputDTO } from "@/modules/profile/profile.dto";
-import type { IGetSetupRepository } from "@/domain/repositories/profile/get-setup.repository";
+import type { IGetOnboardingOptionsOutputDTO } from "@/modules/profile/profile.dto";
+import type { IGetOnboardingOptionsRepository } from "@/domain/repositories/profile/get-onboarding-options.repository";
 
 @injectable()
-export class GetSetupPrismaRepository implements IGetSetupRepository {
-  async execute(): Promise<IGetSetupOutputDTO> {
-    const [seniority, specialties, careerObjectives, ageRanges, stacks] =
+export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptionsRepository {
+  async execute(): Promise<IGetOnboardingOptionsOutputDTO> {
+    const [seniorities, specialties, careerObjectives, ageRanges, stacks] =
       await prisma.$transaction([
         prisma.seniority.findMany({ orderBy: { order: "asc" } }),
         prisma.specialty.findMany({ orderBy: { order: "asc" } }),
@@ -16,20 +16,20 @@ export class GetSetupPrismaRepository implements IGetSetupRepository {
       ]);
 
     return {
-      seniority: seniority.map((s: any) => ({
+      seniorities: seniorities.map((s: any) => ({
         id: s.id,
         name: s.name,
-        description: s.description || "",
+        description: s.description,
       })),
       specialties: specialties.map((s: any) => ({
         id: s.id,
         name: s.name,
-        description: s.description || "",
+        description: s.description,
       })),
       careerObjectives: careerObjectives.map((o: any) => ({
         id: o.id,
         name: o.name,
-        description: o.description || "",
+        description: o.description,
       })),
       ageRanges: ageRanges.map((a: any) => ({ id: a.id, name: a.name })),
       stacks: stacks.map((s: any) => ({ id: s.id, name: s.name })),

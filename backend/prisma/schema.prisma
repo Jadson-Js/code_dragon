@@ -86,12 +86,13 @@ model AgeRange {
 }
 
 model Seniority {
-  id        Int      @id @default(autoincrement())
-  name      String
-  slug      String   @unique
-  order     Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  slug        String   @unique
+  order       Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   profiles Profile[]
 
@@ -99,12 +100,13 @@ model Seniority {
 }
 
 model CareerObjective {
-  id        Int      @id @default(autoincrement())
-  name      String
-  slug      String   @unique
-  order     Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  slug        String   @unique
+  order       Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   profiles Profile[]
 
@@ -112,12 +114,13 @@ model CareerObjective {
 }
 
 model Specialty {
-  id        Int      @id @default(autoincrement())
-  name      String
-  slug      String   @unique
-  order     Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  slug        String   @unique
+  order       Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   profiles Profile[]
 

@@ -11,8 +11,8 @@ export interface ICreateProfileOutputDTO {
   id: string;
 }
 
-export interface IGetSetupOutputDTO {
-  seniority: { id: number; name: string; description: string }[];
+export interface IGetOnboardingOptionsOutputDTO {
+  seniorities: { id: number; name: string; description: string }[];
   specialties: { id: number; name: string; description: string }[];
   careerObjectives: { id: number; name: string; description: string }[];
   ageRanges: { id: number; name: string }[];

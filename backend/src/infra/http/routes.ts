@@ -10,7 +10,7 @@ import profileRoutes from "@/modules/profile/profile.routes";
 
 const router = Router();
 
-router.use("/api/auths", authRoutes);
+router.use("/api/auth", authRoutes);
 router.use("/api/profiles", profileRoutes);
 
 export default router;

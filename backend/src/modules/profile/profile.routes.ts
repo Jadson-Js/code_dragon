@@ -10,14 +10,14 @@ import {
 const router = Router();
 
 router.get(
-  "/setup",
+  "/onboarding-options",
   rateLimitMiddleware.handle({
     max: 60,
     windowInMs: 60000,
-    key: "get-profile-setup",
+    key: "get-profile-onboarding-options",
   }),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
-  profileController.getSetup.bind(profileController),
+  profileController.getOnboardingOptions.bind(profileController),
 );
 
 router.post(
