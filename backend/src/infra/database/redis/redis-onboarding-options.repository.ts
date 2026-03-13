@@ -10,8 +10,12 @@ export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptions
     return value ? JSON.parse(value) : null;
   }
 
-  async set(value: IOnboardingOptions): Promise<void> {
-    await redisConnection.set("onboarding-options", JSON.stringify(value));
+  async set(value: IOnboardingOptions, ttlSeconds: number): Promise<void> {
+    await redisConnection.setex(
+      "onboarding-options",
+      JSON.stringify(value),
+      ttlSeconds,
+    );
   }
 
   async exists(): Promise<boolean> {

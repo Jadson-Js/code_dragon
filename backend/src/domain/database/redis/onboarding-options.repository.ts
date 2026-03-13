@@ -2,6 +2,6 @@ import type { IOnboardingOptions } from "../repositories/profile/get-onboarding-
 
 export interface IRedisOnboardingOptionsRepository {
   get(): Promise<IOnboardingOptions | null>;
-  set(value: IOnboardingOptions): Promise<void>;
+  set(value: IOnboardingOptions, ttlSeconds: number): Promise<void>;
   exists(): Promise<boolean>;
 }

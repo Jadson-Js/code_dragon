@@ -7,6 +7,8 @@ import { inject, injectable } from "tsyringe";
 
 @injectable()
 export class GetOnboardingOptionsUseCase {
+  private readonly ttlSeconds = 24 * 60 * 60;
+
   constructor(
     @inject("getOnboardingOptionsRepository")
     private readonly getOnboardingOptionsRepository: IGetOnboardingOptionsRepository,
@@ -25,7 +27,7 @@ export class GetOnboardingOptionsUseCase {
 
     const options = await this.getOnboardingOptionsRepository.execute();
 
-    await this.redisOnboardingOptionsRepository.set(options);
+    await this.redisOnboardingOptionsRepository.set(options, this.ttlSeconds);
 
     return options;
   }
