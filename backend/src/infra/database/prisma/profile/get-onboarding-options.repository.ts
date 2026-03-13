@@ -19,7 +19,7 @@ export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptio
         prisma.specialty.findMany({ orderBy: { order: "asc" } }),
         prisma.careerObjective.findMany({ orderBy: { order: "asc" } }),
         prisma.ageRange.findMany({ orderBy: { order: "asc" } }),
-        prisma.stack.findMany({ orderBy: { name: "asc" } }),
+        prisma.stack.findMany({ orderBy: { usageCount: "desc" } }),
       ]);
 
     return {

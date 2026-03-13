@@ -13,8 +13,8 @@ export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptions
   async set(value: IOnboardingOptions, ttlSeconds: number): Promise<void> {
     await redisConnection.setex(
       "onboarding-options",
-      JSON.stringify(value),
       ttlSeconds,
+      JSON.stringify(value),
     );
   }
 
