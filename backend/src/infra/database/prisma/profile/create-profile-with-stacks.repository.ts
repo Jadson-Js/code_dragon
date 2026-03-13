@@ -11,18 +11,30 @@ export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWi
   async execute(params: ICreateProfileInputDTO): Promise<Profile> {
     try {
       return await prisma.$transaction(async (tx: any) => {
+        const { stacksId, ...profileData } = params;
         const profile = await tx.profile.create({
-          data: params,
+          data: profileData,
         });
 
-        if (params.stacksId && params.stacksId.length > 0) {
-          await tx.profileStack.createMany({
-            data: params.stacksId.map((stackId) => ({
-              profileId: profile.id,
-              stackId: stackId,
-            })),
-          });
-        }
+        await tx.profileStack.createMany({
+          data: params.stacksId.map((stackId) => ({
+            profileId: profile.id,
+            stackId: stackId,
+          })),
+        });
+
+        await tx.stack.updateMany({
+          where: {
+            id: {
+              in: params.stacksId,
+            },
+          },
+          data: {
+            usageCount: {
+              increment: 1,
+            },
+          },
+        });
 
         return profile;
       });

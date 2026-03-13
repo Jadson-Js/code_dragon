@@ -18,8 +18,8 @@ ON CONFLICT ("slug") DO NOTHING;
 
 -- Career Objectives
 INSERT INTO "career_objectives" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
-('Transição de Carreira', 'Profissionais migrando de outras áreas em busca da primeira chance em tecnologia.', 'career-transition', 1, NOW(), NOW()),
-('Primeiro Emprego', 'Busca inicial de oportunidades no mercado de trabalho para ganhar experiência.', 'first-job', 2, NOW(), NOW()),
+('Primeiro Emprego', 'Busca inicial de oportunidades no mercado de trabalho para ganhar experiência.', 'first-job', 1, NOW(), NOW()),
+('Transição de Carreira', 'Profissionais migrando de outras áreas em busca da primeira chance em tecnologia.', 'career-transition', 2, NOW(), NOW()),
 ('Evolução Profissional', 'Foco no crescimento técnico e progressão salarial dentro do ecossistema de TI.', 'professional-evolution', 3, NOW(), NOW()),
 ('Liderança', 'Transição técnica para gestão de projetos ou coordenação de equipes de engenharia.', 'leadership', 4, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
@@ -34,17 +34,17 @@ INSERT INTO "age_ranges" ("name", "start_age", "end_age", "slug", "order", "crea
 ON CONFLICT ("slug") DO NOTHING;
 
 -- Stacks
-INSERT INTO "stacks" ("name", "slug", "created_at", "updated_at") VALUES
-('React', 'react', NOW(), NOW()),
-('React Native', 'react-native', NOW(), NOW()),
-('Node.js', 'nodejs', NOW(), NOW()),
-('TypeScript', 'typescript', NOW(), NOW()),
-('Python', 'python', NOW(), NOW()),
-('Java', 'java', NOW(), NOW()),
-('Go', 'go', NOW(), NOW()),
-('Rust', 'rust', NOW(), NOW()),
-('SQL', 'sql', NOW(), NOW()),
-('Docker', 'docker', NOW(), NOW())
+INSERT INTO "stacks" ("name", "slug", "usage_count", "created_at", "updated_at") VALUES
+('React', 'react', 0, NOW(), NOW()),
+('React Native', 'react-native', 0, NOW(), NOW()),
+('Node.js', 'nodejs', 0, NOW(), NOW()),
+('TypeScript', 'typescript', 0, NOW(), NOW()),
+('Python', 'python', 0, NOW(), NOW()),
+('Java', 'java', 0, NOW(), NOW()),
+('Go', 'go', 0, NOW(), NOW()),
+('Rust', 'rust', 0, NOW(), NOW()),
+('SQL', 'sql', 0, NOW(), NOW()),
+('Docker', 'docker', 0, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
 -- User

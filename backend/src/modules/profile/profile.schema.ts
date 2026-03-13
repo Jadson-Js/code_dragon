@@ -6,6 +6,6 @@ export const createProfileSchema = z.object({
     seniorityId: z.number(),
     specialtyId: z.number(),
     careerObjectiveId: z.number(),
-    stacksId: z.array(z.number()),
+    stacksId: z.array(z.number()).min(1, "At least one stack is required"),
   }),
 });
