@@ -32,10 +32,14 @@ function Badge({
   className,
   variant = "default",
   asChild = false,
+  hasIcon = false,
   children,
   ...props
 }: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  VariantProps<typeof badgeVariants> & {
+    asChild?: boolean;
+    hasIcon?: boolean;
+  }) {
   const Comp = asChild ? Slot.Root : "span";
 
   return (
@@ -46,14 +50,16 @@ function Badge({
       {...props}
     >
       {children}
-      <X
-        className={cn(
-          "transition-colors",
-          variant === "default"
-            ? "text-white-1"
-            : "text-white-2 group-hover:text-white-1",
-        )}
-      />
+      {hasIcon && (
+        <X
+          className={cn(
+            "transition-colors",
+            variant === "default"
+              ? "text-white-1"
+              : "text-white-2 group-hover:text-white-1",
+          )}
+        />
+      )}
     </Comp>
   );
 }
