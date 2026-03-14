@@ -4,17 +4,16 @@ import { createProfileSchema } from "./profile.schema";
 import { profileController } from "./profile.container";
 import {
   ensureAuthenticated,
-  rateLimitMiddleware,
+  simpleRateLimitMiddleware,
 } from "@/infra/container/providers";
 
 const router = Router();
 
 router.get(
   "/onboarding-options",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 60,
     windowInMs: 60000,
-    key: "get-profile-onboarding-options",
   }),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   profileController.getOnboardingOptions.bind(profileController),
@@ -22,10 +21,9 @@ router.get(
 
 router.post(
   "/",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 60,
     windowInMs: 60000,
-    key: "create-profile",
   }),
   validate(createProfileSchema),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),

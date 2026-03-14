@@ -13,7 +13,7 @@ export function generateRoutes(modelName) {
   const controllerVar = `${toCamelCase(modelName)}Controller`;
 
   const content = `import { Router } from "express";
-import { rateLimitMiddleware } from "@/infra/http/middlewares/rate-limit.middleware";
+import { simpleRateLimitMiddleware } from "@/infra/container/providers";
 import { ${controllerVar} } from "./${names.containerFile}";
 import { ensureAuthenticated } from "@/infra/container/providers";
 
@@ -21,11 +21,9 @@ const router = Router();
 
 router.get(
   "/",
-  rateLimitMiddleware({
+  simpleRateLimitMiddleware.handle({
     max: 60,
     windowInMs: 60000,
-    key: "find-all-${names.kebab}",
-    useEmail: false,
   }),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   ${controllerVar}.findAll.bind(${controllerVar}),

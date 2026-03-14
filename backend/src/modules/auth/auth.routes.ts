@@ -12,6 +12,7 @@ import {
 import {
   ensureAuthenticated,
   rateLimitMiddleware,
+  simpleRateLimitMiddleware,
 } from "@/infra/container/providers";
 
 const router = Router();
@@ -29,6 +30,10 @@ router.post(
 
 router.get(
   "/me",
+  simpleRateLimitMiddleware.handle({
+    max: 10,
+    windowInMs: 60000,
+  }),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   authController.me.bind(authController),
 );
@@ -47,10 +52,9 @@ router.post(
 
 router.post(
   "/verify-email",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
-    key: "verify-email",
   }),
   validate(verifyEmailSchema),
   authController.verifyEmail.bind(authController),
@@ -70,10 +74,9 @@ router.post(
 
 router.post(
   "/reset-password",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
-    key: "reset-password",
   }),
   validate(resetPasswordSchema),
   authController.resetPassword.bind(authController),
@@ -81,11 +84,9 @@ router.post(
 
 router.post(
   "/login",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 5,
     windowInMs: 60000,
-    key: "login",
-    useEmail: true,
   }),
   validate(loginSchema),
   authController.login.bind(authController),
@@ -93,10 +94,9 @@ router.post(
 
 router.post(
   "/logout",
-  rateLimitMiddleware.handle({
+  simpleRateLimitMiddleware.handle({
     max: 6,
     windowInMs: 60000,
-    key: "logout",
   }),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   authController.logout.bind(authController),
@@ -104,6 +104,10 @@ router.post(
 
 router.post(
   "/refresh",
+  simpleRateLimitMiddleware.handle({
+    max: 10,
+    windowInMs: 60000,
+  }),
   ensureAuthenticated.authRefresh.bind(ensureAuthenticated),
   authController.refreshToken.bind(authController),
 );

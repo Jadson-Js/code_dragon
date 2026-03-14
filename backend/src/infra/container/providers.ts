@@ -12,12 +12,17 @@ import {
 import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
 import { RedisProvider } from "../providers/redis.provider";
 import { RateLimitMiddleware } from "../http/middlewares/rate-limit.middleware";
+import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit.middleware";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
 container.registerSingleton("IJWTProvider", JwtProvider);
 container.registerSingleton("IRedisProvider", RedisProvider);
 container.registerSingleton("RateLimitMiddleware", RateLimitMiddleware);
+container.registerSingleton(
+  "SimpleRateLimitMiddleware",
+  SimpleRateLimitMiddleware,
+);
 container.registerSingleton(
   "ICreateUserWithEmailTokenRepository",
   CreateUserWithEmailTokenPrismaRepository,
@@ -36,3 +41,6 @@ export const ensureAuthenticated = container.resolve<IEnsureAuthenticated>(
   "IEnsureAuthenticated",
 );
 export const rateLimitMiddleware = container.resolve(RateLimitMiddleware);
+export const simpleRateLimitMiddleware = container.resolve(
+  SimpleRateLimitMiddleware,
+);
