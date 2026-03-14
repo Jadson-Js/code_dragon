@@ -1,23 +1,21 @@
-import { Loader2 } from "lucide-react";
-
 export function LoadingScreen() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-bg-1 selection:bg-primary/30">
+      <div className="flex flex-col items-center gap-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        {/* Logo Container com um brilho super suave e elegante */}
         <div className="relative flex items-center justify-center">
-          {/* Outer Ring */}
-          <div className="absolute w-16 h-16 border-4 border-primary/20 rounded-full"></div>
-          {/* Spinning Ring */}
-          <Loader2 className="w-16 h-16 text-primary animate-spin" />
+          <div className="absolute w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-pulse" />
+          <img
+            src="/logo.svg"
+            alt="Code Dragon Logo"
+            className=" object-contain relative z-10 drop-shadow-2xl"
+          />
         </div>
 
-        <div className="flex flex-col items-center gap-1">
-          <h2 className="text-xl font-semibold text-foreground tracking-tight">
-            Code Dragon
-          </h2>
-          <p className="text-sm text-muted-foreground animate-pulse">
-            Verificando sua conta...
-          </p>
+        {/* Indicador de Carregamento Refinado */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 rounded-full border-2 border-t-bg-1 animate-spin border-white-1 " />
+          <p className="typ-h3 text-white-2">Iniciando</p>
         </div>
       </div>
     </div>

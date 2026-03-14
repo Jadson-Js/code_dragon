@@ -5,32 +5,11 @@ import { SearchInput } from "@/components/ui/searchInput";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 
-const ALL_TECHNOLOGIES = [
-  { id: 1, title: "React" },
-  { id: 2, title: "TypeScript" },
-  { id: 3, title: "Node.js" },
-  { id: 4, title: "Next.js" },
-  { id: 5, title: "Tailwind CSS" },
-  { id: 6, title: "Prisma" },
-  { id: 7, title: "PostgreSQL" },
-  { id: 8, title: "Docker" },
-  { id: 9, title: "Go" },
-  { id: 10, title: "Python" },
-];
+interface ProfileStep5Props {
+  stacks?: { id: number; name: string }[];
+}
 
-const POPULAR_TECHNOLOGIES = [
-  { id: 2, title: "TypeScript" },
-  { id: 9, title: "Go" },
-  { id: 10, title: "Python" },
-  { id: 1, title: "React" },
-  { id: 3, title: "Node.js" },
-  { id: 4, title: "Next.js" },
-  { id: 7, title: "PostgreSQL" },
-  { id: 6, title: "Prisma" },
-  { id: 8, title: "Docker" },
-];
-
-export default function ProfileStep5() {
+export default function ProfileStep5({ stacks }: ProfileStep5Props) {
   const { control } = useFormContext<ProfileSetupFormData>();
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -42,7 +21,7 @@ export default function ProfileStep5() {
         className="mb-8"
       />
 
-      <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col w-full">
         <Controller
           name="stacksId"
           control={control}
@@ -57,19 +36,23 @@ export default function ProfileStep5() {
               setSearchTerm("");
             };
 
-            const selectedStacks = ALL_TECHNOLOGIES.filter((tech) =>
+            const safeStacks = stacks || [];
+
+            const selectedStacks = safeStacks.filter((tech) =>
               selectedIds.includes(tech.id),
             );
 
-            const filteredSearch = ALL_TECHNOLOGIES.filter(
-              (tech) =>
-                tech.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                !selectedIds.includes(tech.id),
-            ).slice(0, 8);
+            const filteredSearch = safeStacks
+              .filter(
+                (tech) =>
+                  tech.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                  !selectedIds.includes(tech.id),
+              )
+              .slice(0, 8);
 
-            const availablePopular = POPULAR_TECHNOLOGIES.filter(
-              (tech) => !selectedIds.includes(tech.id),
-            );
+            const availablePopular = safeStacks
+              .filter((tech) => !selectedIds.includes(tech.id))
+              .slice(0, 20); // Pega as 10 primeiras (que vêm ordenadas do DB)
 
             return (
               <div className="flex flex-col gap-8">
@@ -91,7 +74,7 @@ export default function ProfileStep5() {
                             className="w-full text-left px-4 py-3 hover:bg-bg-3 transition-colors text-white-1 text-sm border-b border-bg-3 last:border-b-0 cursor-pointer"
                             onClick={() => toggleSelection(tech.id)}
                           >
-                            {tech.title}
+                            {tech.name}
                           </button>
                         ))
                       ) : (
@@ -104,14 +87,14 @@ export default function ProfileStep5() {
                 </div>
 
                 {/* Selected Stacks Chips - Always below Search Input */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   {selectedStacks.map((tech) => (
                     <Badge
                       key={tech.id}
                       variant="default"
                       onClick={() => toggleSelection(tech.id)}
                     >
-                      {tech.title}
+                      {tech.name}
                     </Badge>
                   ))}
                 </div>
@@ -121,14 +104,14 @@ export default function ProfileStep5() {
                   <h4 className="text-white-2 text-sm font-medium">
                     Tecnologias populares:
                   </h4>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {availablePopular.map((tech) => (
                       <Badge
                         key={tech.id}
                         variant="outline"
                         onClick={() => toggleSelection(tech.id)}
                       >
-                        {tech.title}
+                        {tech.name}
                       </Badge>
                     ))}
                     {availablePopular.length === 0 && (

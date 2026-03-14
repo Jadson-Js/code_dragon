@@ -3,36 +3,14 @@ import ListItem from "./ListItem";
 import { useFormContext, Controller } from "react-hook-form";
 import type { ProfileSetupFormData } from "../schemas/profileSetupSchema";
 
-export default function ProfileStep4() {
+interface ProfileStep4Props {
+  ageRanges?: { id: number; name: string }[];
+}
+
+export default function ProfileStep4({ ageRanges = [] }: ProfileStep4Props) {
   const { control } = useFormContext<ProfileSetupFormData>();
 
-  const ageRanges = [
-    {
-      id: 1,
-      title: "Menos de 18 anos",
-      description: "",
-    },
-    {
-      id: 2,
-      title: "18 a 24 anos",
-      description: "",
-    },
-    {
-      id: 3,
-      title: "25 a 34 anos",
-      description: "",
-    },
-    {
-      id: 4,
-      title: "35 a 44 anos",
-      description: "",
-    },
-    {
-      id: 5,
-      title: "45 anos ou mais",
-      description: "",
-    },
-  ];
+
 
   return (
     <>
@@ -55,8 +33,8 @@ export default function ProfileStep4() {
                   className="w-full"
                 >
                   <ListItem
-                    title={item.title}
-                    description={item.description}
+                    title={item.name}
+                    description=""
                     isSelected={field.value === item.id}
                   />
                 </div>

@@ -20,18 +20,8 @@ export function useProfile() {
   const mutation = useMutation({
     mutationFn: (data: ProfileSetupFormData) => api.post("/profiles", data),
     onSuccess: () => {
-      // Aguardar a animação do SuccessScreen por 4 segundos antes de atualizar o cache e navegar
       setTimeout(() => {
-        // Atualiza o cache do usuário AGORA, o que permitirá o acesso às rotas protegidas
-        queryClient.setQueryData(["auth-user"], (old: any) => {
-          if (!old) return old;
-          return { ...old, hasProfile: true };
-        });
-
-        // Invalida para garantir sincronia nas próximas requisições
-        queryClient.invalidateQueries({ queryKey: ["auth-user"] });
-
-        // Navega para o dashboard
+        queryClient.resetQueries({ queryKey: ["auth-user"] });
         navigate("/");
       }, 5000);
     },

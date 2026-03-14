@@ -19,7 +19,7 @@ export default function GridItem({
   return (
     <div
       className={cn(
-        "flex flex-col items-center text-center gap-4 bg-bg-2 border border-bg-3 p-8 rounded-sm cursor-pointer hover:border-primary-1 transition-all w-full relative group",
+        "flex flex-col items-center text-center gap-4 bg-bg-2 border border-bg-3 p-4 rounded-sm cursor-pointer hover:border-primary-1 transition-all w-full relative group",
         isSelected && "selected border-primary-1 bg-primary-1/5",
         className,
       )}

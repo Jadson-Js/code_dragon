@@ -2,37 +2,34 @@ import PageHeader from "@/components/PageHeader";
 import GridItem from "./GridItem";
 import { useFormContext, Controller } from "react-hook-form";
 import type { ProfileSetupFormData } from "../schemas/profileSetupSchema";
-import { Monitor, Server, Layers, Smartphone } from "lucide-react";
+import {
+  Monitor,
+  Server,
+  Layers,
+  Smartphone,
+  Code,
+  Cloud,
+  Shield,
+} from "lucide-react";
 
-export default function ProfileStep2() {
+interface ProfileStep2Props {
+  specialties?: { id: number; name: string; description: string }[];
+}
+
+export default function ProfileStep2({ specialties = [] }: ProfileStep2Props) {
   const { control } = useFormContext<ProfileSetupFormData>();
 
-  const specialties = [
-    {
-      id: 1,
-      title: "Frontend",
-      description: "Interfaces, UX/UI, React, Vue, Angular",
-      Icon: Monitor,
-    },
-    {
-      id: 2,
-      title: "Backend",
-      description: "APIs, Bancos de dados, Node.js, Java, Python",
-      Icon: Server,
-    },
-    {
-      id: 3,
-      title: "Fullstack",
-      description: "Interfaces, APIs, DBs, Node.js, React, Mobile",
-      Icon: Layers,
-    },
-    {
-      id: 4,
-      title: "Mobile",
-      description: "Aplicativos iOS/Android, React Native, Flutter, Swift",
-      Icon: Smartphone,
-    },
-  ];
+  // Mapeia ícones baseados no name/categoria retornado da API
+  const getIconForSpecialty = (name: string) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes("front")) return Monitor;
+    if (lowerName.includes("back")) return Server;
+    if (lowerName.includes("full")) return Layers;
+    if (lowerName.includes("mobile")) return Smartphone;
+    if (lowerName.includes("devops")) return Cloud;
+    if (lowerName.includes("security")) return Shield;
+    return Code;
+  };
 
   return (
     <>
@@ -42,7 +39,7 @@ export default function ProfileStep2() {
         className="mb-8"
       />
 
-      <div className="grid grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-3 gap-4 w-full">
         <Controller
           name="specialtyId"
           control={control}
@@ -55,9 +52,9 @@ export default function ProfileStep2() {
                   className="w-full flex"
                 >
                   <GridItem
-                    title={item.title}
+                    title={item.name}
                     description={item.description}
-                    Icon={item.Icon}
+                    Icon={getIconForSpecialty(item.name)}
                     isSelected={field.value === item.id}
                   />
                 </div>

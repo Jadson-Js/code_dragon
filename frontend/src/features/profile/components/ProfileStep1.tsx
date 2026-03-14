@@ -3,40 +3,12 @@ import ListItem from "./ListItem";
 import { useFormContext, Controller } from "react-hook-form";
 import type { ProfileSetupFormData } from "../schemas/profileSetupSchema";
 
-export default function ProfileStep1() {
-  const { control } = useFormContext<ProfileSetupFormData>();
+interface IProps {
+  seniorities?: { id: number; name: string; description: string }[];
+}
 
-  const seniorities = [
-    {
-      id: 1,
-      title: "Sem Experiência",
-      description:
-        "Estudando ou com menos de 1 ano de experiência profissional",
-    },
-    {
-      id: 2,
-      title: "Estagiário / Trainee",
-      description: "Atuando como estagiário ou em programas de trainee",
-    },
-    {
-      id: 3,
-      title: "Júnior",
-      description:
-        "Profissional em início de carreira (geralmente 1-2 anos exp.)",
-    },
-    {
-      id: 4,
-      title: "Pleno",
-      description:
-        "Profissional com experiência intermediária (geralmente 3-5 anos exp.)",
-    },
-    {
-      id: 5,
-      title: "Sênior",
-      description:
-        "Profissional experiente, referência técnica (geralmente 5+ anos exp.)",
-    },
-  ];
+export default function ProfileStep1({ seniorities }: IProps) {
+  const { control } = useFormContext<ProfileSetupFormData>();
 
   return (
     <>
@@ -52,14 +24,14 @@ export default function ProfileStep1() {
           control={control}
           render={({ field }) => (
             <>
-              {seniorities.map((item) => (
+              {seniorities?.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => field.onChange(item.id)}
                   className="w-full"
                 >
                   <ListItem
-                    title={item.title}
+                    title={item.name}
                     description={item.description}
                     isSelected={field.value === item.id}
                   />

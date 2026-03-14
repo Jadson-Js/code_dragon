@@ -10,16 +10,26 @@ import { useProfile } from "@/features/profile/hooks/useProfile";
 import { ProfileLayout } from "@/features/profile/layout/ProfileLayout";
 import React from "react";
 import { FormProvider, useWatch } from "react-hook-form";
+import { useOnboardingOptions } from "@/features/profile/hooks/useOnboardingOptions";
+import { ProfileLoading } from "@/features/profile/components/ProfileLoading";
+import { toast } from "sonner";
 
 export default function Profile() {
+  const { data, isLoading } = useOnboardingOptions();
   const { form, mutation } = useProfile();
   const { handleSubmit, control } = form;
-
   const [step, setStep] = React.useState(1);
-
   const formValues = useWatch({
     control,
   });
+
+  if (isLoading) {
+    return (
+      <ProfileLayout>
+        <ProfileLoading />
+      </ProfileLayout>
+    );
+  }
 
   if (mutation.isSuccess) {
     return (
@@ -67,13 +77,23 @@ export default function Profile() {
       <FormProvider {...form}>
         <form
           className="flex flex-col gap-4 mb-8 w-full"
-          onSubmit={handleSubmit((data) => mutation.mutate(data))}
+          onSubmit={handleSubmit(
+            (data) => mutation.mutate(data),
+            (errors) => {
+              const firstError = Object.values(errors)[0];
+              firstError?.message
+                ? toast.error(firstError.message as string)
+                : toast.error("Por favor, verifique os campos do formulário.");
+            },
+          )}
         >
-          {step === 1 && <ProfileStep1 />}
-          {step === 2 && <ProfileStep2 />}
-          {step === 3 && <ProfileStep3 />}
-          {step === 4 && <ProfileStep4 />}
-          {step === 5 && <ProfileStep5 />}
+          {step === 1 && <ProfileStep1 seniorities={data?.seniorities} />}
+          {step === 2 && <ProfileStep2 specialties={data?.specialties} />}
+          {step === 3 && (
+            <ProfileStep3 careerObjectives={data?.careerObjectives} />
+          )}
+          {step === 4 && <ProfileStep4 ageRanges={data?.ageRanges} />}
+          {step === 5 && <ProfileStep5 stacks={data?.stacks} />}
 
           <div className="w-full flex justify-between">
             <Button
