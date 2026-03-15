@@ -2,7 +2,7 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 
 export default function AuthSidebar() {
   return (
-    <div className="hidden md:block content bg-linear-to-tl from-[#242565] to-[#2B2F3A] py-8 md:py-16 md:max-w-sm xl:max-w-xl">
+    <div className="hidden md:block px-4 md:px-8 bg-linear-to-tl from-[#242565] to-[#2B2F3A] py-8 md:py-16 md:max-w-sm xl:max-w-xl">
       <div className="flex flex-row justify-center mb-8">
         <div className="h-12">
           <img src="/public/logo.svg" alt="logo" className="img" />

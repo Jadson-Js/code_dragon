@@ -1,8 +1,12 @@
-import { Mic, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
-export default function DashboardHeader() {
+interface Props {
+  className?: string;
+}
+
+export default function DashboardHeader({ className }: Props) {
   return (
-    <div className="flex justify-between items-start gap-16">
+    <div className={`flex justify-between items-start gap-16 ${className}`}>
       <div className="space-y-2 flex-1">
         <div className="flex items-center gap-2">
           <Sparkles size={30} className="text-primary-1" />
