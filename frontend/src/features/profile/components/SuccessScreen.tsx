@@ -35,7 +35,7 @@ export default function SuccessScreen() {
         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
         colors: ["#6366f1", "#10b981", "#3b82f6"],
       });
-    }, 250);
+    }, 200);
 
     return () => clearInterval(interval);
   }, []);
@@ -76,7 +76,7 @@ export default function SuccessScreen() {
         }
         
         .animate-progress-fill {
-          animation: progress-fill 3s linear forwards;
+          animation: progress-fill 2s linear forwards;
         }
       `}</style>
     </div>

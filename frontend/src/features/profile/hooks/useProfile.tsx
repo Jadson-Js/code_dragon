@@ -23,7 +23,7 @@ export function useProfile() {
       setTimeout(() => {
         queryClient.resetQueries({ queryKey: ["auth-user"] });
         navigate("/");
-      }, 3000);
+      }, 2000);
     },
     onError: () => {
       toast.error("Erro ao realizar o setup do perfil");
