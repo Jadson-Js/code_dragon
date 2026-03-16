@@ -44,10 +44,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function DashboardMapSkills() {
   return (
-    <div className="card bg-bg-2 h-full flex flex-col gap-6">
-      <h3 className="text-white-1 font-bold text-xl">Mapa de Habilidades</h3>
+    <div className="card bg-bg-2 h-full flex flex-col gap-4 min-h-80">
+      <h3 className="text-white-1 typ-h3">Mapa de Habilidades</h3>
 
-      <div className="flex-1 w-full min-h-[300px]">
+      <div className="flex-1 w-full h-full">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart
             cx="50%"
