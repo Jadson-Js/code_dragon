@@ -189,6 +189,14 @@
   }
 
   --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+
+  @keyframes progress-grow {
+    from {
+      width: 0%;
+    }
+  }
+
+  --animate-progress-grow: progress-grow 1s ease-out forwards;
 }
 
 :root {
