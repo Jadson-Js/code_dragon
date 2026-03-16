@@ -3,8 +3,8 @@ import {
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
-  PolarRadiusAxis,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
 const data = [
@@ -15,6 +15,33 @@ const data = [
   { subject: "CS Fund.", A: 85, B: 65, fullMark: 100 },
 ];
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-bg-3 card">
+        <p className="text-white-1 font-bold mb-2">{label}</p>
+
+        <div className="space-y-1">
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              />
+
+              <span className="text-white-2 typ-caption">
+                {entry.name}:{" "}
+                <span className="text-white-1 font-medium">{entry.value}%</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function DashboardMapSkills() {
   return (
     <div className="card bg-bg-2 h-full flex flex-col gap-6">
@@ -22,12 +49,19 @@ export default function DashboardMapSkills() {
 
       <div className="flex-1 w-full min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <RadarChart
+            cx="50%"
+            cy="50%"
+            outerRadius="80%"
+            data={data}
+            style={{ outline: "none" }}
+          >
             <PolarGrid stroke="#334155" />
             <PolarAngleAxis
               dataKey="subject"
               tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 500 }}
             />
+            <Tooltip content={<CustomTooltip />} />
             {/* Market Average (Dashed Grey) */}
             <Radar
               name="Média do Mercado"
@@ -53,11 +87,11 @@ export default function DashboardMapSkills() {
       {/* Legend */}
       <div className="flex items-center justify-between gap-8 px-2">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-primary-1" />
+          <div className="w-4 h-4 rounded-full bg-primary-1 border-2 border-primary-1" />
           <span className="text-white-2 text-sm font-medium">Você</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-600" />
+          <div className="w-4 h-4 rounded-full bg-slate-600 border-2 border-slate-600" />
           <span className="text-white-2 text-sm font-medium">
             Média do Mercado
           </span>
