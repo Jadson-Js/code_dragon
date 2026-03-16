@@ -17,7 +17,7 @@ const data = [
 
 export default function DashboardMapSkills() {
   return (
-    <div className="card bg-bg-2 shadow-2xl p-6 h-full flex flex-col gap-6">
+    <div className="card bg-bg-2 h-full flex flex-col gap-6">
       <h3 className="text-white-1 font-bold text-xl">Mapa de Habilidades</h3>
 
       <div className="flex-1 w-full min-h-[300px]">
@@ -27,13 +27,6 @@ export default function DashboardMapSkills() {
             <PolarAngleAxis
               dataKey="subject"
               tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 500 }}
-            />
-            <PolarRadiusAxis
-              angle={90}
-              domain={[0, 100]}
-              tick={{ fill: "#94a3b8", fontSize: 10 }}
-              axisLine={false}
-              tickCount={5}
             />
             {/* Market Average (Dashed Grey) */}
             <Radar
