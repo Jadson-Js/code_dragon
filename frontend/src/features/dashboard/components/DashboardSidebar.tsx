@@ -36,7 +36,7 @@ export default function DashboardSidebar() {
             <div
               key={item.to}
               className={cn(
-                "p-4  rounded-sm transition-colors duration-200",
+                "p-4 rounded-sm transition-colors duration-200",
                 isActive && "bg-primary-1",
               )}
             >
@@ -47,7 +47,7 @@ export default function DashboardSidebar() {
                   isActive && "text-white-1",
                 )}
               >
-                <Icon size={24} />
+                <Icon size={20} />
                 <span>{item.label}</span>
               </Link>
             </div>
