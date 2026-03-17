@@ -11,13 +11,13 @@ export default function DashboardCreditsAlert({ className }: Props) {
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row items-center justify-between card bg-yellow/10 border border-yellow/20",
+        "flex flex-col md:flex-row items-center justify-between card bg-bg-1 border border-yellow/20",
         className,
       )}
     >
       <div className="flex gap-4 items-start">
-        <div className="mt-1">
-          <Zap size={24} className="text-yellow fill-yellow" />
+        <div className="mt-1 bg-yellow/20 card p-1">
+          <Zap size={18} className="text-yellow " />
         </div>
         <div>
           <PageHeader

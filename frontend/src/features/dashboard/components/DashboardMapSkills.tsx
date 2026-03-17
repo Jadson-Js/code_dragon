@@ -91,7 +91,7 @@ export default function DashboardMapSkills() {
           <span className="text-white-2 text-sm font-medium">Você</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-slate-600 border-2 border-slate-600" />
+          <div className="w-4 h-4 rounded-full border-2 border-slate-600" />
           <span className="text-white-2 text-sm font-medium">
             Média do Mercado
           </span>
