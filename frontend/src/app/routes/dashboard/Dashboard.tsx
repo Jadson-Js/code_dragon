@@ -4,6 +4,7 @@ import DashboardInterviewGraph from "@/features/dashboard/components/DashboardIn
 import DashboardMapSkills from "@/features/dashboard/components/DashboardMapSkills";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import DashboardAuditGraph from "@/features/dashboard/components/DashboardAuditGraph";
+import DashboardRoadmap from "@/features/dashboard/components/DashboardRoadmap";
 
 export default function Dashboard() {
   return (
@@ -23,7 +24,7 @@ export default function Dashboard() {
             <DashboardAuditGraph />
           </div>
           <div className="col-span-8">
-            <DashboardMapSkills />
+            <DashboardRoadmap />
           </div>
         </div>
       </div>

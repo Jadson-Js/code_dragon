@@ -8,7 +8,7 @@ export default function DashboardAuditGraph() {
   ];
 
   return (
-    <div className="card bg-bg-2 h-full flex flex-col gap-6 p-6">
+    <div className="card bg-bg-2 h-fit flex flex-col gap-6 p-6">
       <h3 className="text-white-1 typ-h3">Empregabilidade</h3>
 
       <div className="flex flex-col gap-5">

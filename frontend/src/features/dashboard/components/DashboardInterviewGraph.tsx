@@ -7,7 +7,6 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { ExternalLink } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
 const data = [
