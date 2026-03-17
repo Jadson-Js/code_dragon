@@ -28,7 +28,7 @@
     "**/.dockerignore": true,
     "**/docker-compose.yml": true,
     "**/nginx": true,
-    "**/dbdiagram.txt": true,
+    //"**/dbdiagram.txt": true,
     "**/.env": true,
     "**/package.json": true,
     "**/@types": true,
