@@ -22,7 +22,7 @@ export default function DashboardSidebar() {
   ];
 
   return (
-    <div className="w-xs bg-bg-2 px-4 py-8 border-r border-bg-3 h-screen fixed">
+    <div className="w-3xs bg-bg-2 px-4 py-8 border-r border-bg-3 h-screen fixed">
       <div className="h-12 mb-12">
         <img src="/logo.svg" alt="logo" className="h-full" />
       </div>
@@ -36,7 +36,7 @@ export default function DashboardSidebar() {
             <div
               key={item.to}
               className={cn(
-                "p-4 rounded-sm transition-colors duration-200",
+                "p-2 rounded-sm transition-colors duration-200",
                 isActive && "bg-primary-1",
               )}
             >

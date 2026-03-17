@@ -11,7 +11,7 @@ export default function DashboardCreditsAlert({ className }: Props) {
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row items-center justify-between card bg-bg-1 border border-yellow/20",
+        "flex flex-col md:flex-row items-center justify-between card border border-yellow/20",
         className,
       )}
     >
@@ -32,7 +32,7 @@ export default function DashboardCreditsAlert({ className }: Props) {
         variant="default"
         className="bg-primary-1 hover:bg-primary-1/80 text-white-1  transition-colors duration-200"
       >
-        Adquirir Pack por R$ 49,90
+        Adquirir Pack por R$49,90
       </Button>
     </div>
   );
