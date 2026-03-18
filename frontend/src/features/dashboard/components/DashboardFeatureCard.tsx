@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/shared/utils";
-import { Mic } from "lucide-react";
 import type { IFeature } from "./DashboardFeatures";
 
 interface Props {
   feature: IFeature;
   className?: string;
-  progressValue?: number; // Optional prop to make it dynamic
 }
 
 export default function DashboardFeatureCard({ feature, className }: Props) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const Modal = feature.modalComponent;
+
   return (
     <div className={cn("bg-bg-2 card", className)}>
       {/* Header section with Icon and Category */}
@@ -24,7 +26,11 @@ export default function DashboardFeatureCard({ feature, className }: Props) {
       {/* Description */}
       <p className="text-white-2 mb-8">{feature.description}</p>
 
-      <Button size="lg" className="w-full mb-8">
+      <Button
+        size="lg"
+        className="w-full mb-8"
+        onClick={() => setModalOpen(true)}
+      >
         INICIAR
       </Button>
 
@@ -45,17 +51,20 @@ export default function DashboardFeatureCard({ feature, className }: Props) {
           className="absolute top-0 left-0 h-full bg-green animate-progress-grow shadow-[0_0_8px_rgba(16,185,129,0.4)]"
           style={{ width: `${(feature.used / feature.total) * 100}%` }}
         />
-        
+
         {/* Máscaras para simular os "espaços" (dashes) do background */}
         <div className="absolute inset-0 flex w-full h-full pointer-events-none">
           {Array.from({ length: feature.total }).map((_, index) => (
-            <div 
-              key={index} 
-              className="flex-1 border-r-[4px] border-bg-2 last:border-none" 
+            <div
+              key={index}
+              className="flex-1 border-r-4 border-bg-2 last:border-none"
             />
           ))}
         </div>
       </div>
+
+      {/* Modal de Configuração (ex: Quiz) */}
+      {Modal && <Modal open={modalOpen} onOpenChange={setModalOpen} />}
     </div>
   );
 }

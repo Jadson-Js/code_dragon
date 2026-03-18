@@ -2,6 +2,7 @@ import DashboardFeatureCard from "./DashboardFeatureCard";
 import DashboardCreditsAlert from "./DashboardCreditsAlert";
 import type { IconType } from "react-icons/lib";
 import { Activity, Mic, UserSearch } from "lucide-react";
+import QuizConfigModal from "./QuizConfigModal";
 
 export interface IFeature {
   id: number;
@@ -10,6 +11,10 @@ export interface IFeature {
   used: number;
   total: number;
   icon: IconType;
+  modalComponent?: React.ComponentType<{
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }>;
 }
 
 export default function DashboardFeatures() {
@@ -21,6 +26,7 @@ export default function DashboardFeatures() {
       used: 1,
       total: 10,
       icon: Activity,
+      modalComponent: QuizConfigModal,
     },
     {
       id: 2,

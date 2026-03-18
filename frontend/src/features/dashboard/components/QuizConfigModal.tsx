@@ -1,0 +1,157 @@
+import { Activity, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Field, FieldLabel } from "@/components/ui/field";
+
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function QuizConfigModal({ open, onOpenChange }: Props) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader className="items-center text-center sm:text-center pb-4 border-b border-white-1/5">
+          <div className="mb-4 relative">
+            <div className="absolute inset-0 bg-primary-1/20 rounded-full blur-xl scale-150" />
+            <div className="relative w-14 h-14 rounded-full bg-primary-1/10 border border-primary-1/20 flex items-center justify-center">
+              <Activity className="text-primary-1" size={28} />
+            </div>
+          </div>
+
+          <DialogTitle>Configurar Diagnóstico</DialogTitle>
+          <DialogDescription>
+            Defina os parâmetros do teste. As perguntas serão geradas pela IA
+            com base nas suas escolhas.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-4 ">
+          <Field>
+            <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+              Objetivo do Quiz
+            </FieldLabel>
+
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Praticar por questões" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="practice">Praticar por questões</SelectItem>
+                <SelectItem value="simulate">Simular entrevista</SelectItem>
+                <SelectItem value="review">Revisar conceitos</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+
+          <Field>
+            <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+              Assunto
+            </FieldLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Arquitetura" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="architecture">Arquitetura</SelectItem>
+                <SelectItem value="algorithms">Algoritmos</SelectItem>
+                <SelectItem value="data-structures">
+                  Estrutura de Dados
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+
+          <Field>
+            <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+              Área de atuação
+            </FieldLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Backend" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="backend">Backend</SelectItem>
+                <SelectItem value="frontend">Frontend</SelectItem>
+                <SelectItem value="fullstack">Fullstack</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+
+          <Field>
+            <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+              Sênioridade
+            </FieldLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Júnior" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="junior">Júnior</SelectItem>
+                <SelectItem value="mid">Pleno</SelectItem>
+                <SelectItem value="senior">Sênior</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+
+          <Field>
+            <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+              Tamanho do quiz
+            </FieldLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Longo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="short">Curto (5 questões)</SelectItem>
+                <SelectItem value="medium">Médio (10 questões)</SelectItem>
+                <SelectItem value="long">Longo (20 questões)</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+        </div>
+
+        <label className="flex items-start gap-3 p-4 rounded-xl bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-1/10 transition-colors">
+          <Checkbox id="save-config" className="mt-1" />
+          <div className="space-y-1">
+            <p className="text-white-1 text-sm font-semibold leading-none">
+              Salvar configuração no meu perfil
+            </p>
+            <p className="text-white-2 text-xs leading-relaxed">
+              Use estas configurações como padrão para próximos testes
+            </p>
+          </div>
+        </label>
+
+        <div className="flex gap-4 mt-2">
+          <Button
+            variant="outline"
+            className="flex-1 h-12"
+            onClick={() => onOpenChange(false)}
+          >
+            CANCELAR
+          </Button>
+          <Button className="flex-1 h-12 gap-2 text-base font-bold shadow-lg shadow-primary-1/20">
+            <Sparkles size={18} />
+            INICIAR
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
