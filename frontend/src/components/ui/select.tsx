@@ -35,7 +35,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "border-bg-3 data-placeholder:text-white-2 [&_svg:not([class*='text-'])]:text-white-2 focus-visible:border-primary-1/50 focus-visible:ring-primary-1/20 flex w-full items-center justify-between gap-2 rounded-lg border bg-bg-1 px-4 py-2.5 text-sm whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-11 data-[size=sm]:h-9 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-white-1",
+        "border-bg-3 data-placeholder:text-white-2 [&_svg:not([class*='text-'])]:text-white-2 focus-visible:border-primary-1/50 focus-visible:ring-primary-1/20 flex w-full items-center justify-between gap-2 rounded-lg border bg-bg-1 px-4 py-2.5 text-sm whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-11 data-[size=sm]:h-9 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-white-1 cursor-pointer",
         className,
       )}
       {...props}
@@ -92,7 +92,10 @@ function SelectLabel({
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn("text-white-2 px-2 py-1.5 text-xs font-semibold", className)}
+      className={cn(
+        "text-white-2 px-2 py-1.5 text-xs font-semibold",
+        className,
+      )}
       {...props}
     />
   );

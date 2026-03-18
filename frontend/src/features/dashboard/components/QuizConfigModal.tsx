@@ -126,7 +126,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </Field>
         </div>
 
-        <label className="flex items-start gap-3 p-4 rounded-xl bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-1/10 transition-colors">
+        <label className="flex items-start gap-2 p-4 rounded-sm bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-2/15 transition-colors">
           <Checkbox id="save-config" className="mt-1" />
           <div className="space-y-1">
             <p className="text-white-1 text-sm font-semibold leading-none">
@@ -140,13 +140,17 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
         <div className="flex gap-4 mt-2">
           <Button
+            size="lg"
             variant="outline"
-            className="flex-1 h-12"
+            className="flex-1"
             onClick={() => onOpenChange(false)}
           >
             CANCELAR
           </Button>
-          <Button className="flex-1 h-12 gap-2 text-base font-bold shadow-lg shadow-primary-1/20">
+          <Button
+            size="lg"
+            className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20"
+          >
             <Sparkles size={18} />
             INICIAR
           </Button>
