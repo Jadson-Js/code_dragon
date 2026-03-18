@@ -19,6 +19,16 @@ router.get(
   profileController.getOnboardingOptions.bind(profileController),
 );
 
+router.get(
+  "/me",
+  simpleRateLimitMiddleware.handle({
+    max: 60,
+    windowInMs: 60000,
+  }),
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  profileController.getMe.bind(profileController),
+);
+
 router.post(
   "/",
   simpleRateLimitMiddleware.handle({

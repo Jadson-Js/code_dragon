@@ -2,9 +2,11 @@ import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import type { CreateProfileUseCase } from "./use-cases/create-profile";
 import type { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
+import type { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
 import type {
   IGetOnboardingOptionsOutputDTO,
   ICreateProfileOutputDTO,
+  IGetProfileByUserIdOutputDTO,
 } from "./profile.dto";
 
 @injectable()
@@ -15,6 +17,9 @@ export class ProfileController {
 
     @inject("GetOnboardingOptionsUseCase")
     private readonly getOnboardingOptionsUseCase: GetOnboardingOptionsUseCase,
+
+    @inject("GetProfileByUserIdUseCase")
+    private readonly getProfileByUserIdUseCase: GetProfileByUserIdUseCase,
   ) {}
 
   async create(
@@ -38,6 +43,17 @@ export class ProfileController {
     response: Response,
   ): Promise<Response<IGetOnboardingOptionsOutputDTO>> {
     const result = await this.getOnboardingOptionsUseCase.execute();
+
+    return response.status(200).json(result);
+  }
+
+  async getMe(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IGetProfileByUserIdOutputDTO>> {
+    const userId = request.user.id;
+
+    const result = await this.getProfileByUserIdUseCase.execute(userId);
 
     return response.status(200).json(result);
   }
