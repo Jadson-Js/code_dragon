@@ -6,7 +6,7 @@
   "files.exclude": {
     "**/generated": true,
     "**/prisma/migrations": true,
-    //"**/dbdiagram.txt": true,
+    "**/dbdiagram.txt": true,
     "**/node_modules": true,
     "**/prisma/client.ts": true,
     "**/.gitignore": true,

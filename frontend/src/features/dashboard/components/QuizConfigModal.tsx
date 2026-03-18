@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { useProfile } from "@/shared/context/ProfileContext";
 
 interface Props {
   open: boolean;
@@ -23,6 +24,10 @@ interface Props {
 }
 
 export default function QuizConfigModal({ open, onOpenChange }: Props) {
+  const { profile, isLoading } = useProfile();
+
+  console.log(profile);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
