@@ -1,3 +1,4 @@
+import React from "react";
 import { Activity, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useProfile } from "@/shared/context/ProfileContext";
 import { useOnboardingOptions } from "@/features/profile/hooks/useOnboardingOptions";
 
@@ -27,10 +29,13 @@ interface Props {
 export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { data: profile } = useProfile();
   const { data: onboardingOptions } = useOnboardingOptions();
+  const [selectedStackIds, setSelectedStackIds] = React.useState<number[]>(
+    () => profile?.stackIds ?? [],
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar">
         <DialogHeader className="items-center">
           <div className="relative">
             <div className="absolute inset-0 bg-primary-1/20 rounded-full blur-xl scale-150" />
@@ -118,7 +123,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </FieldLabel>
           <Select>
             <SelectTrigger>
-              <SelectValue placeholder="Arquitetura" />
+              <SelectValue placeholder="Selecione o assunto" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="architecture">Arquitetura</SelectItem>
@@ -134,18 +139,16 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
             Quais stacks serão avaliadas
           </FieldLabel>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Arquitetura" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="architecture">Arquitetura</SelectItem>
-              <SelectItem value="algorithms">Algoritmos</SelectItem>
-              <SelectItem value="data-structures">
-                Estrutura de Dados
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <SearchSelectField
+            items={onboardingOptions?.stacks ?? []}
+            value={selectedStackIds}
+            onChange={setSelectedStackIds}
+            searchPlaceholder="Buscar tecnologia (ex: React, Java)..."
+            popularLabel="Tecnologias populares:"
+            emptyMessage="Nenhuma tecnologia disponível encontrada"
+            className="bg-bg-1 border-bg-3 focus:border-primary-1"
+            showPopular={false}
+          />
         </Field>
 
         <Field>
@@ -157,15 +160,15 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               <SelectValue placeholder="Longo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="short">Curto (5 questões)</SelectItem>
-              <SelectItem value="medium">Médio (10 questões)</SelectItem>
-              <SelectItem value="long">Longo (20 questões)</SelectItem>
+              <SelectItem value="short">Curto (10 questões)</SelectItem>
+              <SelectItem value="medium">Médio (20 questões)</SelectItem>
+              <SelectItem value="long">Longo (40 questões)</SelectItem>
             </SelectContent>
           </Select>
         </Field>
 
         <label className="flex items-start gap-2 p-4 rounded-sm bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-2/15 transition-colors">
-          <Checkbox id="save-config" className="mt-1" />
+          <Checkbox id="save-config" className="mt-1 cursor-pointer" />
           <div className="space-y-1">
             <p className="text-white-1 font-bold">
               Salvar configuração no meu perfil
