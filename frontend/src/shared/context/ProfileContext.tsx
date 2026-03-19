@@ -16,7 +16,7 @@ interface IProfile {
 }
 
 interface IProfileContextData {
-  profile: IProfile | undefined;
+  data: IProfile | undefined;
   isLoading: boolean;
 }
 
@@ -27,14 +27,14 @@ const ProfileContext = createContext<IProfileContextData | undefined>(
 
 // 3. O componente Provider que vai envolver a aplicação
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const { data: profile, isLoading } = useQuery<IProfile>({
+  const { data, isLoading } = useQuery<IProfile>({
     queryKey: ["profile"],
     queryFn: () => api.get("/profiles/me").then((res) => res.data),
     retry: false,
   });
 
   return (
-    <ProfileContext.Provider value={{ profile, isLoading }}>
+    <ProfileContext.Provider value={{ data, isLoading }}>
       {children}
     </ProfileContext.Provider>
   );
