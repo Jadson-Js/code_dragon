@@ -30,7 +30,7 @@
     "**/docker-compose.yml": true,
     "**/nginx": true,
     "**/.env": true,
-    //"**/package.json": true,
+    "**/package.json": true,
     "**/@types": true,
     "**/seed.ts": true,
     "**/public": true,
