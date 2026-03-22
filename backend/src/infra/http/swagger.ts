@@ -73,12 +73,12 @@ const swaggerOptions: Options = {
               type: "string",
               minLength: 2,
               maxLength: 100,
-              example: "Magnus",
+              example: "admin",
             },
             email: {
               type: "string",
               format: "email",
-              example: "magnus@email.com",
+              example: "admin@admin.com",
             },
             password: { type: "string", minLength: 8, example: "12345678" },
           },
@@ -90,7 +90,7 @@ const swaggerOptions: Options = {
             email: {
               type: "string",
               format: "email",
-              example: "magnus@email.com",
+              example: "admin@admin.com",
             },
             password: { type: "string", minLength: 8, example: "12345678" },
           },
@@ -102,7 +102,7 @@ const swaggerOptions: Options = {
             email: {
               type: "string",
               format: "email",
-              example: "magnus@email.com",
+              example: "admin@admin.com",
             },
           },
           required: ["email"],

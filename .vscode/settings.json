@@ -33,6 +33,7 @@
     "**/package.json": true,
     "**/@types": true,
     "**/seed.ts": true,
-    "**/public": true
+    "**/public": true,
+    "**/jest.config.cjs": true
   }
 }
