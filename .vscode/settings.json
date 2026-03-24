@@ -4,9 +4,10 @@
     "editor.formatOnSave": true
   },
   "files.exclude": {
+    "**/.env": true,
+    //"**/dbdiagram.txt": true,
     "**/generated": true,
     "**/prisma/migrations": true,
-    "**/dbdiagram.txt": true,
     "**/node_modules": true,
     "**/prisma/client.ts": true,
     "**/.gitignore": true,
@@ -29,7 +30,6 @@
     "**/.dockerignore": true,
     "**/docker-compose.yml": true,
     "**/nginx": true,
-    "**/.env": true,
     "**/package.json": true,
     "**/@types": true,
     "**/seed.ts": true,

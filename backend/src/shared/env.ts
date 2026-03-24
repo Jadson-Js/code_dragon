@@ -29,4 +29,6 @@ export const env = {
 
   redisHost: process.env.REDIS_HOST || "",
   redisPort: Number(process.env.REDIS_PORT) || 6379,
+
+  geminiApiKey: process.env.GEMINI_API_KEY || "",
 };

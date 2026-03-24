@@ -13,6 +13,7 @@ import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provide
 import { RedisProvider } from "../providers/redis.provider";
 import { RateLimitMiddleware } from "../http/middlewares/rate-limit.middleware";
 import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit.middleware";
+import { GeminiProvider } from "../providers/gemini.provider";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
@@ -33,10 +34,12 @@ container.registerSingleton(
 );
 container.registerSingleton("IEmailQueueProvider", EmailQueueProvider);
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
+container.registerSingleton("IGeminiProvider", GeminiProvider);
 
 export const queueProvider = container.resolve<IEmailQueueProvider>(
   "IEmailQueueProvider",
 );
+export const geminiProvider = container.resolve("IGeminiProvider");
 export const ensureAuthenticated = container.resolve<IEnsureAuthenticated>(
   "IEnsureAuthenticated",
 );

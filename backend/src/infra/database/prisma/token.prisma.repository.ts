@@ -65,7 +65,7 @@ export class TokenPrismaRepository implements ITokenRepository {
     token: Token,
   ): Promise<void> {
     try {
-      return await prisma.$transaction(async (tx) => {
+      return await prisma.$transaction(async (tx: any) => {
         await tx.token.deleteMany({
           where: {
             userId,
