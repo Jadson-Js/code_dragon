@@ -28,21 +28,27 @@ api.interceptors.response.use(
       !originalRequest.url?.includes("/auth/refresh")
     ) {
       if (originalRequest._retry) {
+        if (typeof window !== "undefined") {
+          window.location.href = "/auth/login";
+        }
         return Promise.reject(error);
       }
 
       originalRequest._retry = true;
 
       if (!refreshPromise) {
-        // Usamos a refreshApi (instância limpa) para evitar recursão
-        refreshPromise = refreshApi.post("/auth/refresh").finally(() => {
-          refreshPromise = null;
-        });
+        refreshPromise = refreshApi
+          .post("/auth/refresh")
+          .then((res) => res.data)
+          .finally(() => {
+            refreshPromise = null;
+          });
       }
 
       try {
         await refreshPromise;
-        return api(originalRequest);
+        // Importante: usar await aqui para que erros no retry caiam no catch abaixo
+        return await api(originalRequest);
       } catch (refreshError) {
         if (typeof window !== "undefined") {
           window.location.href = "/auth/login";

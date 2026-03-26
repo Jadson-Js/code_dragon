@@ -7,12 +7,12 @@
 import { Router } from "express";
 import authRoutes from "@/modules/auth/auth.routes";
 import profileRoutes from "@/modules/profile/profile.routes";
-import quizRoutes from "@/modules/quiz/quiz.routes";
+import quizQuestionsRoutes from "@/modules/quiz/questions/questions.routes";
 
 const router = Router();
 
 router.use("/api/auth", authRoutes);
 router.use("/api/profiles", profileRoutes);
-router.use("/api/quiz", quizRoutes);
+router.use("/api/quiz/questions", quizQuestionsRoutes);
 
 export default router;

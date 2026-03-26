@@ -96,7 +96,8 @@ model Seniority {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  profiles Profile[]
+  profiles      Profile[]
+  quizQuestions QuizQuestion[]
 
   @@map("seniorities")
 }
@@ -124,7 +125,8 @@ model Specialty {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  profiles Profile[]
+  profiles      Profile[]
+  quizQuestions QuizQuestion[]
 
   @@map("specialties")
 }
@@ -153,4 +155,49 @@ model Stack {
   profileStacks ProfileStack[]
 
   @@map("stacks")
+}
+
+model QuizObjective {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  slug        String   @unique
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  quizQuestions QuizQuestion[]
+
+  @@map("quiz_objectives")
+}
+
+model QuizSubject {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  slug        String   @unique
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("quiz_subjects")
+}
+
+model QuizQuestion {
+  id                      Int      @id @default(autoincrement())
+  quizObjectiveId         Int      @map("quiz_objective_id")
+  quizSubjectId           Int?     @map("quiz_subject_id")
+  seniorityId             Int      @map("seniority_id")
+  specialtyId             Int      @map("specialty_id")
+  statement               String
+  alternatives            String
+  correctAlternativeIndex Int      @map("correct_alternative_index")
+  code                    String?
+  reports                 Int      @default(0)
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
+
+  quizObjective QuizObjective @relation(fields: [quizObjectiveId], references: [id])
+  seniority     Seniority     @relation(fields: [seniorityId], references: [id])
+  specialty     Specialty     @relation(fields: [specialtyId], references: [id])
+
+  @@map("quiz_questions")
 }

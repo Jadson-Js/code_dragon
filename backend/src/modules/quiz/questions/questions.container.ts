@@ -1,9 +1,11 @@
 import { container } from "tsyringe";
-import { QuestionsController } from "./questions.controller";
-import { GenerateQuestionsUseCase } from "./use-cases/generate-questions";
+import { QuizQuestionsController } from "./questions.controller";
+import { QuizQuestionGenerateUseCase } from "./use-cases/generate-questions";
 
-container.register("GenerateQuestionsUseCase", {
-  useClass: GenerateQuestionsUseCase,
+container.register("QuizQuestionGenerateUseCase", {
+  useClass: QuizQuestionGenerateUseCase,
 });
 
-export const questionsController = container.resolve(QuestionsController);
+export const quizQuestionsController = container.resolve(
+  QuizQuestionsController,
+);

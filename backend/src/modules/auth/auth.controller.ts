@@ -174,10 +174,7 @@ export class AuthController {
     return response.status(200).send();
   }
 
-  async logout(
-    request: Request,
-    response: Response,
-  ): Promise<Response<void>> {
+  async logout(request: Request, response: Response): Promise<Response<void>> {
     const userId = request.user.id;
     const refreshToken = request.cookies.refreshToken;
 

@@ -5,7 +5,7 @@
   },
   "files.exclude": {
     "**/.env": true,
-    //"**/dbdiagram.txt": true,
+    "**/dbdiagram.txt": true,
     "**/generated": true,
     "**/prisma/migrations": true,
     "**/node_modules": true,

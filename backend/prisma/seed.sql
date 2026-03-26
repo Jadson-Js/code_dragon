@@ -1,3 +1,42 @@
+-- User
+INSERT INTO "users" ("created_at", "deleted_at", "email", "id", "name", "password_hash", "updated_at", "verified_at") VALUES 
+(NOW(), NULL, 'admin@admin.com', '8f9e610e-ae40-4bd4-9438-959a256f2719', 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NOW(), NOW())
+ON CONFLICT ("email") DO NOTHING;
+
+-- Quiz Objectives
+INSERT INTO "quiz_objectives" ("name", "description", "slug", "created_at", "updated_at") VALUES
+('Treinamento', 'Perguntas focadas em aprendizado e prática de conceitos.', 'training', NOW(), NOW()),
+('Entrevista Técnica', 'Simulação de questões comuns em processos seletivos.', 'technical-interview', NOW(), NOW()),
+('Certificação', 'Preparação para exames de certificação profissional.', 'certification', NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
+-- Quiz Subjects
+INSERT INTO "quiz_subjects" ("name", "description", "slug", "created_at", "updated_at") VALUES
+-- Frontend
+('React & Hooks', 'Estado, Ciclo de vida e performance no React.', 'react-hooks', NOW(), NOW()),
+('CSS Avançado', 'Flexbox, Grid, Animações e Responsive Design.', 'advanced-css', NOW(), NOW()),
+('Next.js', 'SSR, SSG e roteamento no Next.', 'nextjs-subjects', NOW(), NOW()),
+
+-- Backend
+('Node.js Event Loop', 'Arquitetura assíncrona e gestão de memória.', 'nodejs-event-loop', NOW(), NOW()),
+('SQL & Bancos Relationais', 'Queries complexas, Indexação e ACID.', 'sql-databases', NOW(), NOW()),
+('Arquitetura de Microserviços', 'Comunicação entre serviços, Gateways e Mensageria.', 'microservices', NOW(), NOW()),
+
+-- Mobile
+('React Native', 'Pontes nativas, Gestos e Performance Mobile.', 'react-native-subjects', NOW(), NOW()),
+('Flutter & Dart', 'Widgets, State Management e Renderização.', 'flutter-dart', NOW(), NOW()),
+
+-- DevOps & Cloud
+('Docker & Containers', 'Orquestração, Imagens e Redes.', 'docker-containers', NOW(), NOW()),
+('CI/CD Pipelines', 'Automação de testes e deploy contínuo.', 'cicd-pipelines', NOW(), NOW()),
+('Kubernetes', 'Pods, Services e Ingress controllers.', 'kubernetes-subjects', NOW(), NOW()),
+
+-- Security
+('OWASP Top 10', 'Vulnerabilidades comuns e como mitigá-las.', 'owasp-top-10', NOW(), NOW()),
+('Criptografia', 'Algoritmos simétricos, assimétricos e Hashing.', 'cryptography', NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
+
 -- Seniorities
 INSERT INTO "seniorities" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
 ('Sem Experiência', 'Iniciando estudos na área de tecnologia e ainda sem vivência profissional.', 'no-experience', 1, NOW(), NOW()),
@@ -120,7 +159,3 @@ INSERT INTO "stacks" ("name", "slug", "usage_count", "created_at", "updated_at")
 ('Unreal Engine', 'unreal-engine', 0, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
--- User
-INSERT INTO "users" ("created_at", "deleted_at", "email", "id", "name", "password_hash", "updated_at", "verified_at") VALUES 
-(NOW(), NULL, 'admin@admin.com', '8f9e610e-ae40-4bd4-9438-959a256f2719', 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NOW(), NOW())
-ON CONFLICT ("email") DO NOTHING;

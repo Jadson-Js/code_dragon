@@ -1,7 +1,13 @@
-export interface IGenerateQuizQuestionInputDTO {
-  objectiveId: number;
+export interface IQuizGenerateQuestionsDTO {
+  quizObjectiveId: number;
+  quizSubjectId?: number[];
   seniorityId: number;
   specialtyId: number;
-  careerObjectiveId: number;
   stacksId: number[];
+  quantity: number;
+  saveInProfile: boolean;
+}
+
+export interface IQuizGenerateQuestionsResponseDTO {
+  id: string;
 }

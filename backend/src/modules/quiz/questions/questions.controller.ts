@@ -1,20 +1,25 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { GenerateQuestionsUseCase } from "./use-cases/generate-questions";
+import type { QuizQuestionGenerateUseCase } from "./use-cases/generate-questions";
+import type { IQuizGenerateQuestionsResponseDTO } from "./questions.dto";
 
 @injectable()
-export class QuestionsController {
+export class QuizQuestionsController {
   constructor(
-    @inject("GenerateQuestionsUseCase")
-    private readonly generateQuestionsUseCase: GenerateQuestionsUseCase,
+    @inject("QuizQuestionGenerateUseCase")
+    private readonly quizQuestionGenerateUseCase: QuizQuestionGenerateUseCase,
   ) {}
 
   async generateQuestions(
-    _request: Request,
+    request: Request,
     response: Response,
-  ): Promise<Response<{ quizQuestions: string }>> {
-    const result = await this.generateQuestionsUseCase.execute();
+  ): Promise<Response<IQuizGenerateQuestionsResponseDTO>> {
+    const question = await this.quizQuestionGenerateUseCase.execute(
+      request.body,
+    );
 
-    return response.status(200).json({ quizQuestions: result });
+    return response.status(201).json({
+      id: question.id,
+    });
   }
 }
