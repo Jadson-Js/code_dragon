@@ -1,4 +1,4 @@
-export interface IQuizGenerateQuestionsDTO {
+export interface IQuizQuestionGenerateInputDTO {
   quizObjectiveId: number;
   quizSubjectId?: number[];
   seniorityId: number;
@@ -6,8 +6,4 @@ export interface IQuizGenerateQuestionsDTO {
   stacksId: number[];
   quantity: number;
   saveInProfile: boolean;
-}
-
-export interface IQuizGenerateQuestionsResponseDTO {
-  id: string;
 }

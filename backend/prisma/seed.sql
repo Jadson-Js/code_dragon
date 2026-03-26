@@ -3,40 +3,6 @@ INSERT INTO "users" ("created_at", "deleted_at", "email", "id", "name", "passwor
 (NOW(), NULL, 'admin@admin.com', '8f9e610e-ae40-4bd4-9438-959a256f2719', 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NOW(), NOW())
 ON CONFLICT ("email") DO NOTHING;
 
--- Quiz Objectives
-INSERT INTO "quiz_objectives" ("name", "description", "slug", "created_at", "updated_at") VALUES
-('Treinamento', 'Perguntas focadas em aprendizado e prática de conceitos.', 'training', NOW(), NOW()),
-('Entrevista Técnica', 'Simulação de questões comuns em processos seletivos.', 'technical-interview', NOW(), NOW()),
-('Certificação', 'Preparação para exames de certificação profissional.', 'certification', NOW(), NOW())
-ON CONFLICT ("slug") DO NOTHING;
-
--- Quiz Subjects
-INSERT INTO "quiz_subjects" ("name", "description", "slug", "created_at", "updated_at") VALUES
--- Frontend
-('React & Hooks', 'Estado, Ciclo de vida e performance no React.', 'react-hooks', NOW(), NOW()),
-('CSS Avançado', 'Flexbox, Grid, Animações e Responsive Design.', 'advanced-css', NOW(), NOW()),
-('Next.js', 'SSR, SSG e roteamento no Next.', 'nextjs-subjects', NOW(), NOW()),
-
--- Backend
-('Node.js Event Loop', 'Arquitetura assíncrona e gestão de memória.', 'nodejs-event-loop', NOW(), NOW()),
-('SQL & Bancos Relationais', 'Queries complexas, Indexação e ACID.', 'sql-databases', NOW(), NOW()),
-('Arquitetura de Microserviços', 'Comunicação entre serviços, Gateways e Mensageria.', 'microservices', NOW(), NOW()),
-
--- Mobile
-('React Native', 'Pontes nativas, Gestos e Performance Mobile.', 'react-native-subjects', NOW(), NOW()),
-('Flutter & Dart', 'Widgets, State Management e Renderização.', 'flutter-dart', NOW(), NOW()),
-
--- DevOps & Cloud
-('Docker & Containers', 'Orquestração, Imagens e Redes.', 'docker-containers', NOW(), NOW()),
-('CI/CD Pipelines', 'Automação de testes e deploy contínuo.', 'cicd-pipelines', NOW(), NOW()),
-('Kubernetes', 'Pods, Services e Ingress controllers.', 'kubernetes-subjects', NOW(), NOW()),
-
--- Security
-('OWASP Top 10', 'Vulnerabilidades comuns e como mitigá-las.', 'owasp-top-10', NOW(), NOW()),
-('Criptografia', 'Algoritmos simétricos, assimétricos e Hashing.', 'cryptography', NOW(), NOW())
-ON CONFLICT ("slug") DO NOTHING;
-
-
 -- Seniorities
 INSERT INTO "seniorities" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
 ('Sem Experiência', 'Iniciando estudos na área de tecnologia e ainda sem vivência profissional.', 'no-experience', 1, NOW(), NOW()),
@@ -159,3 +125,40 @@ INSERT INTO "stacks" ("name", "slug", "usage_count", "created_at", "updated_at")
 ('Unreal Engine', 'unreal-engine', 0, NOW(), NOW())
 ON CONFLICT ("slug") DO NOTHING;
 
+-- ==========================================
+-- 1. QUIZ OBJECTIVES
+-- A descrição aqui dita o 'tom' e a 'dificuldade' da pergunta para a LLM.
+-- ==========================================
+INSERT INTO "quiz_objectives" ("name", "description", "slug", "created_at", "updated_at") VALUES
+('Treinamento e Fixação', 'Crie perguntas com foco educativo. Aborde fundamentos, sintaxe, boas práticas e o funcionamento interno da tecnologia. O objetivo é validar se o usuário compreende os conceitos base antes de aplicá-los.', 'training', NOW(), NOW()),
+('Entrevista Técnica (Tech Screen)', 'Crie perguntas focadas em resolução de problemas reais, trade-offs (vantagens e desvantagens), edge cases (casos extremos) e arquitetura. Simule cenários práticos que testam a experiência real do candidato, não apenas teoria.', 'technical-interview', NOW(), NOW()),
+('Certificação Profissional', 'Crie perguntas extremamente rigorosas baseadas em documentação oficial. Foque em detalhes de implementação, limites de API, configurações específicas e terminologia exata exigida por exames oficiais de certificação.', 'certification', NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
+-- ==========================================
+-- 1. QUIZ SUBJECTS (Agnósticos e Generalistas)
+-- ==========================================
+INSERT INTO "quiz_subjects" ("name", "description", "slug", "created_at", "updated_at") VALUES
+
+-- Fundamentos & Ciência da Computação
+('Estruturas de Dados e Algoritmos', 'Conceitos fundamentais como complexidade de tempo/espaço (Big-O), árvores, grafos, filas, pilhas e algoritmos de ordenação/busca.', 'data-structures-algorithms', NOW(), NOW()),
+('Redes e Protocolos', 'Funcionamento da internet, modelo OSI, TCP/UDP, HTTP/1.1 vs HTTP/2, WebSockets, DNS, latência e conceitos de rede em geral.', 'networks-protocols', NOW(), NOW()),
+
+-- Frontend & Clients (Independente de Framework)
+('Arquitetura de Interface e Renderização', 'Estratégias de renderização (Client-side, Server-side, Static), manipulação de elementos visuais, componentização e acessibilidade (a11y).', 'ui-architecture-rendering', NOW(), NOW()),
+('Gerenciamento de Estado e Reatividade', 'Padrões de controle de fluxo de dados na interface, ciclo de vida da tela, reatividade, imutabilidade e propagação de eventos.', 'state-management-reactivity', NOW(), NOW()),
+
+-- Backend & Servidores (Independente de Linguagem)
+('Design de APIs e Comunicação', 'Padrões de arquitetura de comunicação como REST, GraphQL, gRPC, SOAP, webhooks, idempotência, paginação e versionamento de contratos.', 'api-design-communication', NOW(), NOW()),
+('Concorrência e Execução', 'Processamento assíncrono, threads vs processos, event loops, deadlocks, race conditions, paralelismo e filas de execução.', 'concurrency-execution', NOW(), NOW()),
+('Persistência e Banco de Dados', 'Modelagem de dados (Relacional e NoSQL), propriedades ACID, transações, normalização, indexação e estratégias de cache em memória.', 'persistence-databases', NOW(), NOW()),
+
+-- Arquitetura & Engenharia
+('Arquitetura de Software e Design Patterns', 'Padrões de projeto (GoF), SOLID, Clean Architecture, Monólitos vs Microserviços, Event-Driven Architecture e Domain-Driven Design (DDD).', 'software-architecture-patterns', NOW(), NOW()),
+('Segurança da Informação', 'Criptografia (hash vs encriptação), autenticação, autorização (OAuth, JWT, Sessões) e prevenção de vulnerabilidades comuns (Injection, XSS, CSRF).', 'information-security', NOW(), NOW()),
+
+-- Operações & Qualidade
+('DevOps, CI/CD e Infraestrutura', 'Conceitos de integração e entrega contínuas, versionamento de código, conteinerização, virtualização e estratégias de deploy (Blue/Green, Canary).', 'devops-cicd-infra', NOW(), NOW()),
+('Engenharia de Qualidade e Testes', 'Pirâmide de testes (Unitários, Integração, E2E), TDD, BDD, mocks, stubs e cobertura de código.', 'quality-engineering-testing', NOW(), NOW())
+
+ON CONFLICT ("slug") DO NOTHING;

@@ -18,31 +18,43 @@ export class GeminiProvider implements IGeminiProvider {
     data: IQuizQuestionGenerateByGeminiInputProvider,
   ): Promise<IQuizQuestionGenerateByGeminiOutputProvider[]> {
     const prompt = `
-Você é um especialista técnico em tecnologia da informação.
-Gere TRÊS questão de múltipla escolha de nível técnico para uma plataforma de quiz de desenvolvimento de software.
+Você é um Tech Lead Sênior e especialista em criação de avaliações técnicas avançadas para desenvolvedores de software.
+Sua missão é gerar exatamente 3 (três) questões de múltipla escolha, rigorosas e precisas.
 
-Contexto da questão:
-- Objetivo: ${data.quizObjective}
-- Assunto(s): ${data.quizSubject.join(", ")}
+=== CONTEXTO DA AVALIAÇÃO ===
+- Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
+- Assunto(s): ${data.quizSubject?.map((s) => `${s.name} - ${s.description}`).join(" | ") ?? "Nenhum assunto específico"}
 - Nível de senioridade: ${data.seniority}
 - Especialidade(s): ${data.specialty.join(", ")}
-- Tecnologias/Stacks: ${data.stacks.length ? data.stacks.join(", ") : "qualquer tecnologia relevante"}
+- Tecnologias/Stacks: ${data.stacks.join(", ")}
 
-Retorne APENAS um ARRAY de JSON válido, sem markdown, sem explicações, seguindo EXATAMENTE este formato:
+=== REGRAS DE QUALIDADE DAS QUESTÕES ===
+1. Adequação ao Nível: As questões DEVEM refletir exatamente o nível de senioridade (${data.seniority}).
+   - Se Júnior: Foco em fundamentos, sintaxe e ciclo de vida.
+   - Se Pleno/Sênior: Foco em cenários reais, arquitetura, trade-offs, performance e edge-cases (evite perguntas de "o que é X?").
+2. Distratores Plausíveis: As 3 alternativas incorretas devem ser erros comuns, pegadinhas lógicas ou ferramentas similares que confundam quem não tem domínio prático do assunto. Não crie alternativas obviamente falsas.
+3. Randomização: Varie a posição da alternativa correta. O 'correctAlternativeIndex' deve ter uma distribuição imprevisível entre 0, 1, 2 e 3.
+4. Código: Se a questão envolver leitura de código, coloque-o em "code". O código deve ser limpo e estar devidamente escapado para JSON (use \\n para quebras de linha).
+
+=== FORMATO DE SAÍDA EXIGIDO ===
+Retorne a resposta EXCLUSIVAMENTE em um ARRAY de objetos JSON.
+NÃO inclua blocos de formatação markdown (como \`\`\`json ou \`\`\`).
+NÃO adicione nenhum texto antes ou depois do array.
+
+Exemplo da estrutura exata esperada:
 [
   {
-    "statement": "enunciado da questão aqui",
-    "alternatives": ["alternativa A", "alternativa B", "alternativa C", "alternativa D"],
-    "correctAlternativeIndex": 0,
-    "code": "trecho de código opcional, ou null"
+    "statement": "Enunciado claro e direto descrevendo o cenário ou problema tecnológico.",
+    "alternatives": [
+      "Distrator plausível baseado em um erro comum de conceito.",
+      "A resposta correta e tecnicamente precisa.",
+      "Distrator que mistura dois conceitos parecidos.",
+      "Distrator que faz sentido apenas em uma versão antiga da tecnologia."
+    ],
+    "correctAlternativeIndex": 1,
+    "code": "function example() {\\n  return true;\\n}" // ou null se não houver código
   }
 ]
-
-Regras:
-- A questão deve ser desafiadora e relevante para o nível de senioridade informado.
-- Sempre forneça exatamente 4 alternativas.
-- "correctAlternativeIndex" deve ser o índice (0-3) da alternativa correta.
-- "code" deve ser null se não houver código relevante.
 `.trim();
 
     const response = await ai.models.generateContent({

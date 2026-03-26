@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import type { QuizQuestionGenerateUseCase } from "./use-cases/generate-questions";
-import type { IQuizGenerateQuestionsResponseDTO } from "./questions.dto";
 
 @injectable()
 export class QuizQuestionsController {
@@ -13,13 +12,11 @@ export class QuizQuestionsController {
   async generateQuestions(
     request: Request,
     response: Response,
-  ): Promise<Response<IQuizGenerateQuestionsResponseDTO>> {
+  ): Promise<Response<string>> {
     const questions = await this.quizQuestionGenerateUseCase.execute(
       request.body,
     );
 
-    return response.status(201).json({
-      id: String(questions[0]?.id),
-    });
+    return response.status(201).json("Questions generated successfully");
   }
 }

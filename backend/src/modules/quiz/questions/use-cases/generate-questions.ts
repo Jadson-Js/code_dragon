@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IGeminiProvider } from "@/domain/providers/gemini.provider";
-import type { IQuizGenerateQuestionsDTO } from "../questions.dto";
+import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { IGetQuizContextRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
@@ -18,7 +18,7 @@ export class QuizQuestionGenerateUseCase {
     private readonly quizQuestionRepository: IQuizQuestionRepository,
   ) {}
 
-  async execute(data: IQuizGenerateQuestionsDTO): Promise<QuizQuestion[]> {
+  async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     const context = await this.getQuizContextRepository.execute(data);
 
     const generateds = await this.geminiProvider.generateQuizQuestion(context);

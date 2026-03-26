@@ -160,7 +160,7 @@ model Stack {
 model QuizObjective {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String
   slug        String   @unique
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
@@ -173,7 +173,7 @@ model QuizObjective {
 model QuizSubject {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String
   slug        String   @unique
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")

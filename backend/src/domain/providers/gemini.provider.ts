@@ -1,8 +1,6 @@
-import type { QuizQuestion } from "../entities/quiz-question.entity";
-
 export interface IQuizQuestionGenerateByGeminiInputProvider {
-  quizObjective: string;
-  quizSubject: string[];
+  quizObjective: { name: string; description: string };
+  quizSubject: { name: string; description: string }[] | null;
   seniority: string;
   specialty: string[];
   stacks: string[];
