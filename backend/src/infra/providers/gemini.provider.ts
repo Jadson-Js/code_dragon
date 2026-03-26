@@ -3,9 +3,9 @@ import { env } from "@/shared/env";
 import { injectable } from "tsyringe";
 import type {
   IGeminiProvider,
-  IQuizQuestionGenerateByGeminiProvider,
+  IQuizQuestionGenerateByGeminiInputProvider,
+  IQuizQuestionGenerateByGeminiOutputProvider,
 } from "@/domain/providers/gemini.provider";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import { InternalServerError } from "@/shared/app.error";
 
 const ai = new GoogleGenAI({
@@ -15,11 +15,11 @@ const ai = new GoogleGenAI({
 @injectable()
 export class GeminiProvider implements IGeminiProvider {
   async generateQuizQuestion(
-    data: IQuizQuestionGenerateByGeminiProvider,
-  ): Promise<QuizQuestion> {
+    data: IQuizQuestionGenerateByGeminiInputProvider,
+  ): Promise<IQuizQuestionGenerateByGeminiOutputProvider[]> {
     const prompt = `
 Você é um especialista técnico em tecnologia da informação.
-Gere UMA questão de múltipla escolha de nível técnico para uma plataforma de quiz de desenvolvimento de software.
+Gere TRÊS questão de múltipla escolha de nível técnico para uma plataforma de quiz de desenvolvimento de software.
 
 Contexto da questão:
 - Objetivo: ${data.quizObjective}
@@ -28,13 +28,15 @@ Contexto da questão:
 - Especialidade(s): ${data.specialty.join(", ")}
 - Tecnologias/Stacks: ${data.stacks.length ? data.stacks.join(", ") : "qualquer tecnologia relevante"}
 
-Retorne APENAS um JSON válido, sem markdown, sem explicações, seguindo EXATAMENTE este formato:
-{
-  "statement": "enunciado da questão aqui",
-  "alternatives": ["alternativa A", "alternativa B", "alternativa C", "alternativa D"],
-  "correctAlternativeIndex": 0,
-  "code": "trecho de código opcional, ou null"
-}
+Retorne APENAS um ARRAY de JSON válido, sem markdown, sem explicações, seguindo EXATAMENTE este formato:
+[
+  {
+    "statement": "enunciado da questão aqui",
+    "alternatives": ["alternativa A", "alternativa B", "alternativa C", "alternativa D"],
+    "correctAlternativeIndex": 0,
+    "code": "trecho de código opcional, ou null"
+  }
+]
 
 Regras:
 - A questão deve ser desafiadora e relevante para o nível de senioridade informado.
@@ -49,21 +51,18 @@ Regras:
     });
 
     const raw = response.text?.trim();
-    if (!raw) throw new InternalServerError();
+    if (!raw)
+      throw new InternalServerError("Failed to generate quiz questions");
 
     try {
       const parsed = JSON.parse(raw);
 
-      return QuizQuestion.create({
-        quizObjectiveId: 0, // será sobrescrito pelo use case com o ID real
-        quizSubjectId: 0, // idem
-        seniorityId: 0,
-        specialtyId: 0,
+      return parsed.map((parsed: any) => ({
         statement: parsed.statement,
-        alternatives: JSON.stringify(parsed.alternatives),
+        alternatives: parsed.alternatives,
         correctAlternativeIndex: parsed.correctAlternativeIndex,
         code: parsed.code ?? null,
-      });
+      }));
     } catch {
       throw new InternalServerError();
     }

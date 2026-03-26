@@ -18,23 +18,24 @@ export class QuizQuestionGenerateUseCase {
     private readonly quizQuestionRepository: IQuizQuestionRepository,
   ) {}
 
-  async execute(data: IQuizGenerateQuestionsDTO): Promise<QuizQuestion> {
+  async execute(data: IQuizGenerateQuestionsDTO): Promise<QuizQuestion[]> {
     const context = await this.getQuizContextRepository.execute(data);
 
-    const generated = await this.geminiProvider.generateQuizQuestion(context);
+    const generateds = await this.geminiProvider.generateQuizQuestion(context);
 
-    // Re-cria a entidade com os IDs reais do DTO
-    const questionToSave = QuizQuestion.create({
-      quizObjectiveId: data.quizObjectiveId,
-      quizSubjectId: data.quizSubjectId?.[0] ?? 0,
-      seniorityId: data.seniorityId,
-      specialtyId: data.specialtyId,
-      statement: generated.statement,
-      alternatives: generated.alternatives,
-      correctAlternativeIndex: generated.correctAlternativeIndex,
-      code: generated.code,
+    const questions = generateds.map((generated) => {
+      return QuizQuestion.create({
+        quizObjectiveId: data.quizObjectiveId,
+        quizSubjectId: data.quizSubjectId?.[0] ?? null,
+        seniorityId: data.seniorityId,
+        specialtyId: data.specialtyId,
+        statement: generated.statement,
+        alternatives: generated.alternatives,
+        correctAlternativeIndex: generated.correctAlternativeIndex,
+        code: generated.code,
+      });
     });
 
-    return await this.quizQuestionRepository.create(questionToSave);
+    return await this.quizQuestionRepository.createMany(questions);
   }
 }

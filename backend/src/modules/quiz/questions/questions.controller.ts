@@ -14,12 +14,12 @@ export class QuizQuestionsController {
     request: Request,
     response: Response,
   ): Promise<Response<IQuizGenerateQuestionsResponseDTO>> {
-    const question = await this.quizQuestionGenerateUseCase.execute(
+    const questions = await this.quizQuestionGenerateUseCase.execute(
       request.body,
     );
 
     return response.status(201).json({
-      id: question.id,
+      id: String(questions[0]?.id),
     });
   }
 }

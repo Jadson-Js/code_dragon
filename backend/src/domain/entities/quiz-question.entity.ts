@@ -5,7 +5,7 @@ interface ICreateQuizQuestionProps {
   seniorityId: number;
   specialtyId: number;
   statement: string;
-  alternatives: string;
+  alternatives: string[];
   correctAlternativeIndex: number;
   code?: string | null;
   reports?: number;
@@ -21,7 +21,7 @@ export class QuizQuestion {
     public readonly seniorityId: number,
     public readonly specialtyId: number,
     public readonly statement: string,
-    public readonly alternatives: string,
+    public readonly alternatives: string[],
     public readonly correctAlternativeIndex: number,
     public readonly code: string | null,
     public readonly reports: number,

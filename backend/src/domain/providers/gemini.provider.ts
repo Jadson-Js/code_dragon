@@ -1,6 +1,6 @@
 import type { QuizQuestion } from "../entities/quiz-question.entity";
 
-export interface IQuizQuestionGenerateByGeminiProvider {
+export interface IQuizQuestionGenerateByGeminiInputProvider {
   quizObjective: string;
   quizSubject: string[];
   seniority: string;
@@ -8,8 +8,15 @@ export interface IQuizQuestionGenerateByGeminiProvider {
   stacks: string[];
 }
 
+export interface IQuizQuestionGenerateByGeminiOutputProvider {
+  statement: string;
+  alternatives: string[];
+  correctAlternativeIndex: number;
+  code: string | null;
+}
+
 export interface IGeminiProvider {
   generateQuizQuestion(
-    data: IQuizQuestionGenerateByGeminiProvider,
-  ): Promise<QuizQuestion>;
+    data: IQuizQuestionGenerateByGeminiInputProvider,
+  ): Promise<IQuizQuestionGenerateByGeminiOutputProvider[]>;
 }
