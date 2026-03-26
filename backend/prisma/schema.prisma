@@ -127,6 +127,7 @@ model Specialty {
 
   profiles      Profile[]
   quizQuestions QuizQuestion[]
+  quizSubjects  QuizSpecialtySubject[]
 
   @@map("specialties")
 }
@@ -178,7 +179,23 @@ model QuizSubject {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
+  specialties   QuizSpecialtySubject[]
+  quizQuestions QuizQuestion[]
+
   @@map("quiz_subjects")
+}
+
+model QuizSpecialtySubject {
+  id            Int      @id @default(autoincrement())
+  specialtyId   Int      @map("specialty_id")
+  quizSubjectId Int      @map("quiz_subject_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  specialty   Specialty   @relation(fields: [specialtyId], references: [id])
+  quizSubject QuizSubject @relation(fields: [quizSubjectId], references: [id])
+
+  @@unique([specialtyId, quizSubjectId])
+  @@map("specialty_quiz_subjects")
 }
 
 model QuizQuestion {
@@ -196,6 +213,7 @@ model QuizQuestion {
   updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
 
   quizObjective QuizObjective @relation(fields: [quizObjectiveId], references: [id])
+  quizSubject   QuizSubject?  @relation(fields: [quizSubjectId], references: [id])
   seniority     Seniority     @relation(fields: [seniorityId], references: [id])
   specialty     Specialty     @relation(fields: [specialtyId], references: [id])
 

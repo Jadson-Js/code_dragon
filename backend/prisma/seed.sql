@@ -136,29 +136,159 @@ INSERT INTO "quiz_objectives" ("name", "description", "slug", "created_at", "upd
 ON CONFLICT ("slug") DO NOTHING;
 
 -- ==========================================
--- 1. QUIZ SUBJECTS (Agnósticos e Generalistas)
+-- 2. QUIZ SUBJECTS
+-- A description instrui a LLM sobre quais conceitos, termos e cenários explorar ao gerar questões para este assunto.
 -- ==========================================
 INSERT INTO "quiz_subjects" ("name", "description", "slug", "created_at", "updated_at") VALUES
 
--- Fundamentos & Ciência da Computação
-('Estruturas de Dados e Algoritmos', 'Conceitos fundamentais como complexidade de tempo/espaço (Big-O), árvores, grafos, filas, pilhas e algoritmos de ordenação/busca.', 'data-structures-algorithms', NOW(), NOW()),
-('Redes e Protocolos', 'Funcionamento da internet, modelo OSI, TCP/UDP, HTTP/1.1 vs HTTP/2, WebSockets, DNS, latência e conceitos de rede em geral.', 'networks-protocols', NOW(), NOW()),
+-- Fundamentos universais (relevantes a toda especialidade técnica)
+(
+  'Estruturas de Dados e Algoritmos',
+  'Gere questões sobre escolha e trade-offs de estruturas de dados (arrays, listas encadeadas, árvores binárias, heaps, grafos, tabelas hash) e algoritmos clássicos (ordenação, busca binária, BFS/DFS). Exija raciocínio sobre complexidade de tempo e espaço com notação Big-O. Prefira cenários práticos: "qual estrutura você usaria para X e por quê?". Evite perguntas puramente decorativas de sintaxe.',
+  'data-structures-algorithms', NOW(), NOW()
+),
+(
+  'Redes e Protocolos',
+  'Gere questões sobre o funcionamento da pilha de rede: modelo OSI/TCP-IP, diferenças entre TCP e UDP, handshake TLS, ciclo de vida de uma requisição HTTP (DNS → TCP → TLS → Request → Response). Explore HTTP/1.1 vs HTTP/2 vs HTTP/3, WebSockets, long-polling, CDNs, latência vs throughput e conceitos de balanceamento de carga. Foque em como o protocolo escolhido impacta a arquitetura e a performance da aplicação.',
+  'networks-protocols', NOW(), NOW()
+),
 
--- Frontend & Clients (Independente de Framework)
-('Arquitetura de Interface e Renderização', 'Estratégias de renderização (Client-side, Server-side, Static), manipulação de elementos visuais, componentização e acessibilidade (a11y).', 'ui-architecture-rendering', NOW(), NOW()),
-('Gerenciamento de Estado e Reatividade', 'Padrões de controle de fluxo de dados na interface, ciclo de vida da tela, reatividade, imutabilidade e propagação de eventos.', 'state-management-reactivity', NOW(), NOW()),
+-- Frontend & Clientes
+(
+  'Arquitetura de Interface e Renderização',
+  'Gere questões sobre as diferenças, vantagens e custos de CSR (Client-Side Rendering), SSR (Server-Side Rendering), SSG (Static Site Generation) e ISR. Explore o DOM virtual, reconciliação, Shadow DOM, Web Components, estratégias de hidratação e acessibilidade (ARIA, semântica HTML5, WCAG). Exija que o candidato justifique a escolha de uma estratégia de renderização para um cenário específico (e-commerce, dashboard, blog).',
+  'ui-architecture-rendering', NOW(), NOW()
+),
+(
+  'Gerenciamento de Estado e Reatividade',
+  'Gere questões sobre os padrões de gerenciamento de estado em aplicações de interface: Flux, Redux (ações, reducers, seletores), Context API, signals e reatividade fina. Explore imutabilidade, derivação de estado, lifting state up, prop drilling e quando usar estado local vs global. Questione sobre ciclos de vida de componentes, efeitos colaterais e o problema de stale closures em hooks.',
+  'state-management-reactivity', NOW(), NOW()
+),
 
--- Backend & Servidores (Independente de Linguagem)
-('Design de APIs e Comunicação', 'Padrões de arquitetura de comunicação como REST, GraphQL, gRPC, SOAP, webhooks, idempotência, paginação e versionamento de contratos.', 'api-design-communication', NOW(), NOW()),
-('Concorrência e Execução', 'Processamento assíncrono, threads vs processos, event loops, deadlocks, race conditions, paralelismo e filas de execução.', 'concurrency-execution', NOW(), NOW()),
-('Persistência e Banco de Dados', 'Modelagem de dados (Relacional e NoSQL), propriedades ACID, transações, normalização, indexação e estratégias de cache em memória.', 'persistence-databases', NOW(), NOW()),
+-- Backend & Servidores
+(
+  'Design de APIs e Comunicação',
+  'Gere questões sobre a escolha e design de contratos de API: REST (métodos HTTP, códigos de status, HATEOAS), GraphQL (queries, mutations, N+1 problem, DataLoader), gRPC (Protocol Buffers, streaming), webhooks e event-driven communication. Aborde idempotência, paginação (offset vs cursor-based), versionamento de API e estratégias de backward compatibility. O candidato deve saber quando cada abordagem é a mais adequada.',
+  'api-design-communication', NOW(), NOW()
+),
+(
+  'Concorrência e Execução',
+  'Gere questões sobre os modelos de concorrência: threads vs processos, event loop (Node.js, libuv), coroutines, async/await, Promises e como evitar deadlocks e race conditions. Explore o modelo de atores, filas de mensagens, backpressure e a diferença entre concorrência e paralelismo. Exija que o candidato identifique e resolva problemas de sincronização em cenários de múltiplos workers acessando um recurso compartilhado.',
+  'concurrency-execution', NOW(), NOW()
+),
+(
+  'Persistência e Banco de Dados',
+  'Gere questões sobre modelagem relacional (normalização, formas normais, chaves estrangeiras) vs NoSQL (documento, chave-valor, grafo, coluna). Explore as propriedades ACID, isolamento de transações (Read Uncommitted → Serializable), índices (B-Tree, Hash, GIN/GiST), query planning e os padrões de cache (Cache-Aside, Write-Through, Read-Through). Inclua cenários de escala: sharding, replicação e consistência eventual.',
+  'persistence-databases', NOW(), NOW()
+),
 
--- Arquitetura & Engenharia
-('Arquitetura de Software e Design Patterns', 'Padrões de projeto (GoF), SOLID, Clean Architecture, Monólitos vs Microserviços, Event-Driven Architecture e Domain-Driven Design (DDD).', 'software-architecture-patterns', NOW(), NOW()),
-('Segurança da Informação', 'Criptografia (hash vs encriptação), autenticação, autorização (OAuth, JWT, Sessões) e prevenção de vulnerabilidades comuns (Injection, XSS, CSRF).', 'information-security', NOW(), NOW()),
+-- Arquitetura & Engenharia de Software
+(
+  'Arquitetura de Software e Design Patterns',
+  'Gere questões sobre os padrões de projeto GoF (criacionais, estruturais e comportamentais) aplicados a problemas reais. Explore os princípios SOLID com exemplos de violação e correção. Questione sobre escolhas arquiteturais: Monólito vs Microserviços (quando cada um faz sentido), CQRS, Event Sourcing, Saga e DDD (Entidades, Agregados, Bounded Contexts). O candidato deve justificar a escolha de um padrão para um requisito de negócio específico.',
+  'software-architecture-patterns', NOW(), NOW()
+),
+(
+  'Segurança da Informação',
+  'Gere questões sobre os fundamentos de segurança ofensiva e defensiva: vulnerabilidades do OWASP Top 10 (SQLi, XSS, CSRF, IDOR, SSRF), criptografia simétrica vs assimétrica, hashing seguro de senhas (bcrypt, Argon2), fluxos de autenticação (OAuth 2.0, OpenID Connect, JWT vs Sessions) e segurança em APIs (rate limiting, validação de entrada, CORS). Para especialistas em Security, inclua questões sobre threat modeling, pentest, análise de CVEs e segurança em nível de rede (firewalls, WAF, TLS).',
+  'information-security', NOW(), NOW()
+),
 
 -- Operações & Qualidade
-('DevOps, CI/CD e Infraestrutura', 'Conceitos de integração e entrega contínuas, versionamento de código, conteinerização, virtualização e estratégias de deploy (Blue/Green, Canary).', 'devops-cicd-infra', NOW(), NOW()),
-('Engenharia de Qualidade e Testes', 'Pirâmide de testes (Unitários, Integração, E2E), TDD, BDD, mocks, stubs e cobertura de código.', 'quality-engineering-testing', NOW(), NOW())
+(
+  'DevOps, CI/CD e Infraestrutura',
+  'Gere questões sobre o ciclo de vida de entrega de software: pipelines de CI/CD (build, test, deploy), estratégias de deploy (Blue/Green, Canary, Rolling Update) e rollback. Explore conteinerização (Docker: camadas de imagem, volumes, redes), orquestração (Kubernetes: Pods, Deployments, Services, Ingress), IaC (Terraform), observabilidade (métricas, logs, tracing distribuído) e os fundamentos de Cloud (regiões, zonas, IAM, managed services). O candidato deve conhecer o trade-off entre custo, disponibilidade e complexidade operacional.',
+  'devops-cicd-infra', NOW(), NOW()
+),
+(
+  'Engenharia de Qualidade e Testes',
+  'Gere questões sobre a pirâmide de testes (Unitários, Integração, Contrato, E2E) e o custo/benefício de cada nível. Explore TDD (ciclo Red-Green-Refactor), BDD (Gherkin), o uso correto de mocks, stubs, spies e fakes, cobertura de código (o que mede e o que não mede) e testes de performance/carga. Questione sobre como testar código assíncrono, módulos com efeitos colaterais e como estruturar uma suíte de testes sustentável em projetos grandes.',
+  'quality-engineering-testing', NOW(), NOW()
+)
 
 ON CONFLICT ("slug") DO NOTHING;
+
+-- ==========================================
+-- 3. MAPEAMENTO: SPECIALTY <-> QUIZ SUBJECT
+-- Define quais assuntos são relevantes para cada especialidade.
+-- Lógica: um dev de Security não recebe questões de UI/Estado;
+--         um dev de Frontend não é bombardeado com tópicos pesados de DevOps.
+-- ==========================================
+INSERT INTO "specialty_quiz_subjects" ("specialty_id", "quiz_subject_id", "created_at")
+SELECT s.id, qs.id, NOW()
+FROM "specialties" s
+CROSS JOIN "quiz_subjects" qs
+WHERE
+  -- FRONTEND: UI, estado, APIs, algoritmos, redes, qualidade, arquitetura
+  (s.slug = 'frontend' AND qs.slug IN (
+    'ui-architecture-rendering',
+    'state-management-reactivity',
+    'api-design-communication',
+    'data-structures-algorithms',
+    'networks-protocols',
+    'software-architecture-patterns',
+    'quality-engineering-testing',
+    'information-security'
+  ))
+  OR
+  -- BACKEND: APIs, banco, concorrência, algoritmos, redes, arquitetura, qualidade, segurança
+  (s.slug = 'backend' AND qs.slug IN (
+    'api-design-communication',
+    'persistence-databases',
+    'concurrency-execution',
+    'data-structures-algorithms',
+    'networks-protocols',
+    'software-architecture-patterns',
+    'quality-engineering-testing',
+    'information-security'
+  ))
+  OR
+  -- FULL STACK: tudo (é o generalista por excelência)
+  (s.slug = 'fullstack' AND qs.slug IN (
+    'ui-architecture-rendering',
+    'state-management-reactivity',
+    'api-design-communication',
+    'persistence-databases',
+    'concurrency-execution',
+    'data-structures-algorithms',
+    'networks-protocols',
+    'software-architecture-patterns',
+    'quality-engineering-testing',
+    'information-security',
+    'devops-cicd-infra'
+  ))
+  OR
+  -- MOBILE: UI/estado (adaptados para mobile), APIs, algoritmos, qualidade, arquitetura
+  (s.slug = 'mobile' AND qs.slug IN (
+    'ui-architecture-rendering',
+    'state-management-reactivity',
+    'api-design-communication',
+    'data-structures-algorithms',
+    'networks-protocols',
+    'software-architecture-patterns',
+    'quality-engineering-testing',
+    'information-security'
+  ))
+  OR
+  -- DEVOPS: infra/CI-CD, redes, segurança, banco (operacional), algoritmos, arquitetura
+  (s.slug = 'devops' AND qs.slug IN (
+    'devops-cicd-infra',
+    'networks-protocols',
+    'information-security',
+    'persistence-databases',
+    'data-structures-algorithms',
+    'software-architecture-patterns',
+    'concurrency-execution'
+  ))
+  OR
+  -- SECURITY: segurança é o core; redes, algoritmos (criptografia), APIs, banco e devops como contexto necessário
+  (s.slug = 'security' AND qs.slug IN (
+    'information-security',
+    'networks-protocols',
+    'api-design-communication',
+    'persistence-databases',
+    'data-structures-algorithms',
+    'devops-cicd-infra',
+    'software-architecture-patterns'
+  ))
+ON CONFLICT ("specialty_id", "quiz_subject_id") DO NOTHING;
