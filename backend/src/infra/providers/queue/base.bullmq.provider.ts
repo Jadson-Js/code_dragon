@@ -1,0 +1,29 @@
+import { Queue, Worker, Job, type ConnectionOptions } from "bullmq";
+
+export abstract class BaseBullMQProvider<T> {
+  protected readonly queue: Queue;
+
+  constructor(
+    protected readonly queueName: string,
+    protected readonly connection: ConnectionOptions,
+  ) {
+    this.queue = new Queue(this.queueName, { connection: this.connection });
+  }
+
+  abstract process(job: Job<T>): Promise<void>;
+
+  public start(concurrency = 1): void {
+    new Worker(this.queueName, (job) => this.process(job), {
+      connection: this.connection,
+      concurrency,
+    });
+    console.log(`👷 Worker [${this.queueName}] started`);
+  }
+
+  public async addJob(data: T): Promise<void> {
+    await this.queue.add(this.queueName, data, {
+      attempts: 3,
+      backoff: { type: "exponential", delay: 1000 },
+    });
+  }
+}

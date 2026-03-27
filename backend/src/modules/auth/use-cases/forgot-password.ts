@@ -5,7 +5,7 @@ import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
-import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
+import type { IEmailQueueProvider } from "@/domain/providers/email/email-queue.provider";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
 

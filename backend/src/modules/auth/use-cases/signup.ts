@@ -8,7 +8,7 @@ import type { ICreateUserWithEmailTokenRepository } from "@/domain/database/repo
 import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
-import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
+import type { IEmailQueueProvider } from "@/domain/providers/email/email-queue.provider";
 
 @injectable()
 export class SignupUseCase {

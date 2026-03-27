@@ -4,12 +4,12 @@ import { EmailProvider } from "@/infra/providers/email/email.provider";
 import { JwtProvider } from "@/infra/providers/jwt.provider";
 import { CreateUserWithEmailTokenPrismaRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
 import { ResetPasswordPrismaRepository } from "@/infra/database/prisma/auth/reset-password.prisma.repository";
-import { EmailQueueProvider } from "../providers/email/bullmq.provider";
+import { EmailBullMQProvider } from "../providers/queue/email.bullmq.provider";
 import {
   EnsureAuthenticated,
   type IEnsureAuthenticated,
 } from "../http/middlewares/ensure-authenticated.middleware";
-import type { IEmailQueueProvider } from "@/domain/providers/email/queue.provider";
+import type { IEmailQueueProvider } from "@/domain/providers/email/email-queue.provider";
 import { RedisProvider } from "../providers/redis.provider";
 import { RateLimitMiddleware } from "../http/middlewares/rate-limit.middleware";
 import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit.middleware";
@@ -34,7 +34,7 @@ container.registerSingleton(
   "IResetPasswordRepository",
   ResetPasswordPrismaRepository,
 );
-container.registerSingleton("IEmailQueueProvider", EmailQueueProvider);
+container.registerSingleton("IEmailQueueProvider", EmailBullMQProvider);
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
 container.registerSingleton("IGeminiProvider", GeminiProvider);
 container.registerSingleton(
