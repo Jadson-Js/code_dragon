@@ -9,15 +9,16 @@ import {
   EnsureAuthenticated,
   type IEnsureAuthenticated,
 } from "../http/middlewares/ensure-authenticated.middleware";
-import type { IEmailQueueProvider } from "@/domain/providers/email/email-queue.provider";
 import { RedisProvider } from "../providers/redis.provider";
 import { RateLimitMiddleware } from "../http/middlewares/rate-limit.middleware";
 import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit.middleware";
 import { GeminiProvider } from "../providers/gemini.provider";
-import { GetQuizContextPrismaRepository } from "@/infra/database/prisma/quiz/get-quiz-context.prisma.repository";
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import { GenerateQuizQuestionBullMQProvider } from "../providers/queue/generate-quiz-question.provider";
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
+import type { ISendEmailProps } from "@/domain/providers/email/email.provider";
+import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
+import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/get-quiz-context.prisma.repository";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
@@ -38,13 +39,13 @@ container.registerSingleton(
 );
 container.registerSingleton("IEmailQueueProvider", EmailBullMQProvider);
 container.registerSingleton(
-  "IGenerateQuizQuestionQueue",
+  "IGenerateQuizQuestionQueueProvider",
   GenerateQuizQuestionBullMQProvider,
 );
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
 container.registerSingleton("IGeminiProvider", GeminiProvider);
 container.registerSingleton(
-  "IGetQuizContextRepository",
+  "IGetQuizQuestionContextRepository",
   GetQuizContextPrismaRepository,
 );
 container.registerSingleton(
@@ -52,13 +53,15 @@ container.registerSingleton(
   QuizQuestionPrismaRepository,
 );
 
-export const queueProvider = container.resolve<IEmailQueueProvider>(
-  "IEmailQueueProvider",
-);
-export const geminiProvider = container.resolve("IGeminiProvider");
+export const emailQueueProvider = container.resolve<
+  IBaseQueueProvider<ISendEmailProps>
+>("IEmailQueueProvider");
+
 export const generateQuizQuestionQueueProvider = container.resolve<
-  IBaseQueueProvider<any>
->("IGenerateQuizQuestionQueue");
+  IBaseQueueProvider<IGenerateQuizQuestionByGeminiInputProvider>
+>("IGenerateQuizQuestionQueueProvider");
+
+export const geminiProvider = container.resolve("IGeminiProvider");
 export const ensureAuthenticated = container.resolve<IEnsureAuthenticated>(
   "IEnsureAuthenticated",
 );

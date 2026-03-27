@@ -20,7 +20,10 @@ export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
     });
 
     worker.on("failed", (job, err) => {
-      console.error(`❌ Worker [${this.queueName}] job ${job?.id} failed:`, err);
+      console.error(
+        `❌ Worker [${this.queueName}] job ${job?.id} failed:`,
+        err,
+      );
     });
 
     worker.on("error", (err) => {

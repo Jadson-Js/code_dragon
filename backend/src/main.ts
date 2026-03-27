@@ -4,11 +4,11 @@ import "@/infra/container/providers";
 import app from "./infra/http/server";
 import { env } from "./shared/env";
 import {
-  queueProvider,
+  emailQueueProvider,
   generateQuizQuestionQueueProvider,
 } from "@/infra/container/providers";
 
-queueProvider.start();
+emailQueueProvider.start();
 generateQuizQuestionQueueProvider.start();
 
 app.listen(env.serverPort, () => {

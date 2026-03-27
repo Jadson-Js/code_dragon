@@ -4,13 +4,13 @@ import type { Job } from "bullmq";
 import { inject, injectable } from "tsyringe";
 import type {
   IGeminiProvider,
-  IQuizQuestionGenerateByGeminiInputProvider,
+  IGenerateQuizQuestionByGeminiInputProvider,
 } from "@/domain/providers/gemini.provider";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 
 @injectable()
-export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IQuizQuestionGenerateByGeminiInputProvider> {
+export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionByGeminiInputProvider> {
   constructor(
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
@@ -22,7 +22,7 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IQuiz
   }
 
   async process(
-    job: Job<IQuizQuestionGenerateByGeminiInputProvider>,
+    job: Job<IGenerateQuizQuestionByGeminiInputProvider>,
   ): Promise<void> {
     const generateds = await this.geminiProvider.generateQuizQuestion(job.data);
 

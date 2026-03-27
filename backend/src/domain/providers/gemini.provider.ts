@@ -1,12 +1,12 @@
-export interface IQuizQuestionGenerateByGeminiInputProvider {
+export interface IGenerateQuizQuestionByGeminiInputProvider {
   quizObjective: { id: number; name: string; description: string };
   quizSubject: { id: number; name: string; description: string }[] | null;
-  seniority: { id: number; name: string; description: string };
-  specialty: { id: number; name: string; description: string };
-  stacks: { id: number; name: string; description: string }[];
+  seniority: { id: number; name: string };
+  specialty: { id: number; name: string };
+  stacks: { id: number; name: string }[];
 }
 
-export interface IQuizQuestionGenerateByGeminiOutputProvider {
+export interface IGenerateQuizQuestionByGeminiOutputProvider {
   statement: string;
   alternatives: string[];
   correctAlternativeIndex: number;
@@ -15,6 +15,6 @@ export interface IQuizQuestionGenerateByGeminiOutputProvider {
 
 export interface IGeminiProvider {
   generateQuizQuestion(
-    data: IQuizQuestionGenerateByGeminiInputProvider,
-  ): Promise<IQuizQuestionGenerateByGeminiOutputProvider[]>;
+    data: IGenerateQuizQuestionByGeminiInputProvider,
+  ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]>;
 }

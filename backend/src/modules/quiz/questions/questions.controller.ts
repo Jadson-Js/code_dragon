@@ -13,9 +13,7 @@ export class QuizQuestionsController {
     request: Request,
     response: Response,
   ): Promise<Response<string>> {
-    const questions = await this.quizQuestionGenerateUseCase.execute(
-      request.body,
-    );
+    await this.quizQuestionGenerateUseCase.execute(request.body);
 
     return response.status(201).json("Questions generated successfully");
   }
