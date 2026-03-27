@@ -4,13 +4,11 @@ import type {
   IGenerateQuizQuestionByGeminiInputProvider,
 } from "@/domain/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
-import type {
-  IGetQuizQuestionContextOutputRepository,
-  IGetQuizQuestionContextRepository,
-} from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
+import type { IGetQuizQuestionContextRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { mapContextToGeminiInput } from "../questions.mapper";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
@@ -28,79 +26,33 @@ export class QuizQuestionGenerateUseCase {
     private readonly quizQuestionRepository: IQuizQuestionRepository,
   ) {}
 
-  async execute(data: IQuizQuestionGenerateInputDTO): Promise<void> {
+  async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     const context = await this.getQuizContextRepository.execute(data);
+    const geminiInput = mapContextToGeminiInput(context);
 
-    await this.generateQuestion(context);
+    // Primeiro lote: síncrono — o frontend recebe as primeiras questões na hora
+    const generateds =
+      await this.geminiProvider.generateQuizQuestion(geminiInput);
 
-    for (let i = 1; i < data.quantity; i++) {
-      await this.generateQuizQuestionQueue.addJob({
-        quizObjective: {
-          id: context.quizObjective.id as number,
-          name: context.quizObjective.name,
-          description: context.quizObjective.description,
-        },
-        quizSubject: context.quizSubject.map((s) => ({
-          id: s.id as number,
-          name: s.name,
-          description: s.description,
-        })),
-        seniority: {
-          id: context.seniority.id as number,
-          name: context.seniority.name,
-        },
-        specialty: {
-          id: context.specialty.id as number,
-          name: context.specialty.name,
-        },
-        stacks: context.stacks.map((s) => ({
-          id: s.id as number,
-          name: s.name,
-        })),
-      });
-    }
-  }
-
-  private async generateQuestion(
-    context: IGetQuizQuestionContextOutputRepository,
-  ) {
-    const generateds = await this.geminiProvider.generateQuizQuestion({
-      quizObjective: {
-        id: context.quizObjective.id as number,
-        name: context.quizObjective.name,
-        description: context.quizObjective.description,
-      },
-      quizSubject: context.quizSubject.map((s) => ({
-        id: s.id as number,
-        name: s.name,
-        description: s.description,
-      })),
-      seniority: {
-        id: context.seniority.id as number,
-        name: context.seniority.name,
-      },
-      specialty: {
-        id: context.specialty.id as number,
-        name: context.specialty.name,
-      },
-      stacks: context.stacks.map((s) => ({
-        id: s.id as number,
-        name: s.name,
-      })),
-    });
-
-    const questions = generateds.map((generated) => {
-      return QuizQuestion.create({
-        quizObjectiveId: context.quizObjective.id as number,
-        seniorityId: context.seniority.id as number,
-        specialtyId: context.specialty.id as number,
+    const questions = generateds.map((generated) =>
+      QuizQuestion.create({
+        quizObjectiveId: geminiInput.quizObjective.id,
+        seniorityId: geminiInput.seniority.id,
+        specialtyId: geminiInput.specialty.id,
         statement: generated.statement,
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
-      });
-    });
+      }),
+    );
 
-    await this.quizQuestionRepository.createMany(questions);
+    const savedQuestions =
+      await this.quizQuestionRepository.createMany(questions);
+
+    for (let i = 1; i < data.quantity; i++) {
+      await this.generateQuizQuestionQueue.addJob(geminiInput);
+    }
+
+    return savedQuestions;
   }
 }
