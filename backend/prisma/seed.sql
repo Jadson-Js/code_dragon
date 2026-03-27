@@ -214,7 +214,7 @@ ON CONFLICT ("slug") DO NOTHING;
 -- Lógica: um dev de Security não recebe questões de UI/Estado;
 --         um dev de Frontend não é bombardeado com tópicos pesados de DevOps.
 -- ==========================================
-INSERT INTO "specialty_quiz_subjects" ("specialty_id", "quiz_subject_id", "created_at")
+INSERT INTO "quiz_specialty_subject" ("specialty_id", "quiz_subject_id", "created_at")
 SELECT s.id, qs.id, NOW()
 FROM "specialties" s
 CROSS JOIN "quiz_subjects" qs

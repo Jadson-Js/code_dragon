@@ -195,7 +195,7 @@ model QuizSpecialtySubject {
   quizSubject QuizSubject @relation(fields: [quizSubjectId], references: [id])
 
   @@unique([specialtyId, quizSubjectId])
-  @@map("specialty_quiz_subjects")
+  @@map("quiz_specialty_subject")
 }
 
 model QuizQuestion {

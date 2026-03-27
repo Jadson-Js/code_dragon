@@ -21,29 +21,31 @@ export class QuizQuestionGenerateUseCase {
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<void> {
     const context = await this.getQuizContextRepository.execute(data);
 
-    await this.generateQuizQuestionQueue.addJob({
-      quizObjective: {
-        id: context.quizObjective.id as number,
-        name: context.quizObjective.name,
-        description: context.quizObjective.description,
-      },
-      quizSubject: context.quizSubject.map((s) => ({
-        id: s.id as number,
-        name: s.name,
-        description: s.description,
-      })),
-      seniority: {
-        id: context.seniority.id as number,
-        name: context.seniority.name,
-      },
-      specialty: {
-        id: context.specialty.id as number,
-        name: context.specialty.name,
-      },
-      stacks: context.stacks.map((s) => ({
-        id: s.id as number,
-        name: s.name,
-      })),
-    });
+    for (let i = 0; i < data.quantity; i++) {
+      await this.generateQuizQuestionQueue.addJob({
+        quizObjective: {
+          id: context.quizObjective.id as number,
+          name: context.quizObjective.name,
+          description: context.quizObjective.description,
+        },
+        quizSubject: context.quizSubject.map((s) => ({
+          id: s.id as number,
+          name: s.name,
+          description: s.description,
+        })),
+        seniority: {
+          id: context.seniority.id as number,
+          name: context.seniority.name,
+        },
+        specialty: {
+          id: context.specialty.id as number,
+          name: context.specialty.name,
+        },
+        stacks: context.stacks.map((s) => ({
+          id: s.id as number,
+          name: s.name,
+        })),
+      });
+    }
   }
 }
