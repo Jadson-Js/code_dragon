@@ -1,6 +1,7 @@
+import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import { Queue, Worker, Job, type ConnectionOptions } from "bullmq";
 
-export abstract class BaseBullMQProvider<T> {
+export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
   protected readonly queue: Queue;
 
   constructor(
@@ -13,10 +14,19 @@ export abstract class BaseBullMQProvider<T> {
   abstract process(job: Job<T>): Promise<void>;
 
   public start(concurrency = 1): void {
-    new Worker(this.queueName, (job) => this.process(job), {
+    const worker = new Worker(this.queueName, (job) => this.process(job), {
       connection: this.connection,
       concurrency,
     });
+
+    worker.on("failed", (job, err) => {
+      console.error(`❌ Worker [${this.queueName}] job ${job?.id} failed:`, err);
+    });
+
+    worker.on("error", (err) => {
+      console.error(`❌ Worker [${this.queueName}] error:`, err);
+    });
+
     console.log(`👷 Worker [${this.queueName}] started`);
   }
 

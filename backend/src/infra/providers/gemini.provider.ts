@@ -24,12 +24,12 @@ Sua missão é gerar exatamente 3 (três) questões de múltipla escolha, rigoro
 === CONTEXTO DA AVALIAÇÃO ===
 - Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
 - Assunto(s): ${data.quizSubject?.map((s) => `${s.name} - ${s.description}`).join(" | ") ?? "Nenhum assunto específico"}
-- Nível de senioridade: ${data.seniority}
-- Especialidade(s): ${data.specialty.join(", ")}
-- Tecnologias/Stacks: ${data.stacks.join(", ")}
+- Nível de senioridade: ${data.seniority.name}
+- Especialidade(s): ${data.specialty.name}
+- Tecnologias/Stacks: ${data.stacks.map((s) => s.name).join(", ")}
 
 === REGRAS DE QUALIDADE DAS QUESTÕES ===
-1. Adequação ao Nível: As questões DEVEM refletir exatamente o nível de senioridade (${data.seniority}).
+1. Adequação ao Nível: As questões DEVEM refletir exatamente o nível de senioridade (${data.seniority.name}).
    - Se Júnior: Foco em fundamentos, sintaxe e ciclo de vida.
    - Se Pleno/Sênior: Foco em cenários reais, arquitetura, trade-offs, performance e edge-cases (evite perguntas de "o que é X?").
 2. Distratores Plausíveis: As 3 alternativas incorretas devem ser erros comuns, pegadinhas lógicas ou ferramentas similares que confundam quem não tem domínio prático do assunto. Não crie alternativas obviamente falsas.

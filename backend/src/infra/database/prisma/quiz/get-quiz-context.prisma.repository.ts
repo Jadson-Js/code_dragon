@@ -15,19 +15,19 @@ export class GetQuizContextPrismaRepository implements IGetQuizContextRepository
         await Promise.all([
           tx.quizObjective.findUnique({
             where: { id: data.quizObjectiveId },
-            select: { name: true, description: true },
+            select: { id: true, name: true, description: true },
           }),
           tx.quizSubject.findMany({
             where: { id: { in: data.quizSubjectId } },
-            select: { name: true, description: true },
+            select: { id: true, name: true, description: true },
           }),
           tx.seniority.findUnique({
             where: { id: data.seniorityId },
-            select: { name: true },
+            select: { id: true, name: true, description: true },
           }),
           tx.specialty.findUnique({
             where: { id: data.specialtyId },
-            select: { name: true },
+            select: { id: true, name: true },
           }),
           tx.stack.findMany({
             where: { id: { in: data.stacksId } },
@@ -43,16 +43,18 @@ export class GetQuizContextPrismaRepository implements IGetQuizContextRepository
 
       return {
         quizObjective: {
+          id: quizObjective.id,
           name: quizObjective.name,
           description: quizObjective.description,
         },
         quizSubject: quizSubjects.map((s: any) => ({
+          id: s.id,
           name: s.name,
           description: s.description,
         })),
-        seniority: seniority.name,
-        specialty: [specialties.name],
-        stacks: stacks.map((s: any) => s.name),
+        seniority: { id: seniority.id, name: seniority.name },
+        specialty: { id: specialties.id, name: specialties.name },
+        stacks: stacks.map((s: any) => ({ id: s.id, name: s.name })),
       };
     });
   }

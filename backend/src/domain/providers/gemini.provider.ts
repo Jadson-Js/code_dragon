@@ -1,9 +1,9 @@
 export interface IQuizQuestionGenerateByGeminiInputProvider {
-  quizObjective: { name: string; description: string };
-  quizSubject: { name: string; description: string }[] | null;
-  seniority: string;
-  specialty: string[];
-  stacks: string[];
+  quizObjective: { id: number; name: string; description: string };
+  quizSubject: { id: number; name: string; description: string }[] | null;
+  seniority: { id: number; name: string; description: string };
+  specialty: { id: number; name: string; description: string };
+  stacks: { id: number; name: string; description: string }[];
 }
 
 export interface IQuizQuestionGenerateByGeminiOutputProvider {

@@ -201,7 +201,6 @@ model QuizSpecialtySubject {
 model QuizQuestion {
   id                      Int      @id @default(autoincrement())
   quizObjectiveId         Int      @map("quiz_objective_id")
-  quizSubjectId           Int?     @map("quiz_subject_id")
   seniorityId             Int      @map("seniority_id")
   specialtyId             Int      @map("specialty_id")
   statement               String
@@ -213,9 +212,10 @@ model QuizQuestion {
   updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
 
   quizObjective QuizObjective @relation(fields: [quizObjectiveId], references: [id])
-  quizSubject   QuizSubject?  @relation(fields: [quizSubjectId], references: [id])
   seniority     Seniority     @relation(fields: [seniorityId], references: [id])
   specialty     Specialty     @relation(fields: [specialtyId], references: [id])
+  quizSubject   QuizSubject?  @relation(fields: [quizSubjectId], references: [id])
+  quizSubjectId Int?
 
   @@map("quiz_questions")
 }

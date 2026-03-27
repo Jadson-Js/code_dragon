@@ -1,7 +1,6 @@
 interface ICreateQuizQuestionProps {
   id?: number;
   quizObjectiveId: number;
-  quizSubjectId?: number | null;
   seniorityId: number;
   specialtyId: number;
   statement: string;
@@ -17,7 +16,6 @@ export class QuizQuestion {
   private constructor(
     public readonly id: number | undefined,
     public readonly quizObjectiveId: number,
-    public readonly quizSubjectId: number | null,
     public readonly seniorityId: number,
     public readonly specialtyId: number,
     public readonly statement: string,
@@ -33,7 +31,6 @@ export class QuizQuestion {
     return new QuizQuestion(
       props.id,
       props.quizObjectiveId,
-      props.quizSubjectId ?? null,
       props.seniorityId,
       props.specialtyId,
       props.statement,

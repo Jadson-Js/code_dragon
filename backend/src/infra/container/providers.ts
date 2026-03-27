@@ -16,6 +16,8 @@ import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit
 import { GeminiProvider } from "../providers/gemini.provider";
 import { GetQuizContextPrismaRepository } from "@/infra/database/prisma/quiz/get-quiz-context.prisma.repository";
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import { GenerateQuizQuestionBullMQProvider } from "../providers/queue/generate-quiz-question.provider";
+import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
@@ -35,6 +37,10 @@ container.registerSingleton(
   ResetPasswordPrismaRepository,
 );
 container.registerSingleton("IEmailQueueProvider", EmailBullMQProvider);
+container.registerSingleton(
+  "IGenerateQuizQuestionQueue",
+  GenerateQuizQuestionBullMQProvider,
+);
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
 container.registerSingleton("IGeminiProvider", GeminiProvider);
 container.registerSingleton(
@@ -50,6 +56,9 @@ export const queueProvider = container.resolve<IEmailQueueProvider>(
   "IEmailQueueProvider",
 );
 export const geminiProvider = container.resolve("IGeminiProvider");
+export const generateQuizQuestionQueueProvider = container.resolve<
+  IBaseQueueProvider<any>
+>("IGenerateQuizQuestionQueue");
 export const ensureAuthenticated = container.resolve<IEnsureAuthenticated>(
   "IEnsureAuthenticated",
 );

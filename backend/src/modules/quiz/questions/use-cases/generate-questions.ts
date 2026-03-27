@@ -1,9 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import type { IGeminiProvider } from "@/domain/providers/gemini.provider";
+import type {
+  IGeminiProvider,
+  IQuizQuestionGenerateByGeminiInputProvider,
+} from "@/domain/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { IGetQuizContextRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import type { GenerateQuizQuestionBullMQProvider } from "@/infra/providers/queue/generate-quiz-question.provider";
+import type { BaseBullMQProvider } from "@/infra/providers/queue/base.bullmq.provider";
+import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
@@ -16,26 +22,14 @@ export class QuizQuestionGenerateUseCase {
 
     @inject("IQuizQuestionRepository")
     private readonly quizQuestionRepository: IQuizQuestionRepository,
+
+    @inject("IGenerateQuizQuestionQueue")
+    private readonly generateQuizQuestionQueue: IBaseQueueProvider<IQuizQuestionGenerateByGeminiInputProvider>,
   ) {}
 
-  async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
+  async execute(data: IQuizQuestionGenerateInputDTO): Promise<void> {
     const context = await this.getQuizContextRepository.execute(data);
 
-    const generateds = await this.geminiProvider.generateQuizQuestion(context);
-
-    const questions = generateds.map((generated) => {
-      return QuizQuestion.create({
-        quizObjectiveId: data.quizObjectiveId,
-        quizSubjectId: data.quizSubjectId?.[0] ?? null,
-        seniorityId: data.seniorityId,
-        specialtyId: data.specialtyId,
-        statement: generated.statement,
-        alternatives: generated.alternatives,
-        correctAlternativeIndex: generated.correctAlternativeIndex,
-        code: generated.code,
-      });
-    });
-
-    return await this.quizQuestionRepository.createMany(questions);
+    await this.generateQuizQuestionQueue.addJob(context);
   }
 }
