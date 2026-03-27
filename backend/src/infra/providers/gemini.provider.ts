@@ -3,8 +3,8 @@ import { env } from "@/shared/env";
 import { injectable } from "tsyringe";
 import type {
   IGeminiProvider,
-  IQuizQuestionGenerateByGeminiInputProvider,
-  IQuizQuestionGenerateByGeminiOutputProvider,
+  IGenerateQuizQuestionByGeminiInputProvider,
+  IGenerateQuizQuestionByGeminiOutputProvider,
 } from "@/domain/providers/gemini.provider";
 import { InternalServerError } from "@/shared/app.error";
 
@@ -15,8 +15,8 @@ const ai = new GoogleGenAI({
 @injectable()
 export class GeminiProvider implements IGeminiProvider {
   async generateQuizQuestion(
-    data: IQuizQuestionGenerateByGeminiInputProvider,
-  ): Promise<IQuizQuestionGenerateByGeminiOutputProvider[]> {
+    data: IGenerateQuizQuestionByGeminiInputProvider,
+  ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]> {
     const prompt = `
 Você é um Tech Lead Sênior e especialista em criação de avaliações técnicas avançadas para desenvolvedores de software.
 Sua missão é gerar exatamente 3 (três) questões de múltipla escolha, rigorosas e precisas.
