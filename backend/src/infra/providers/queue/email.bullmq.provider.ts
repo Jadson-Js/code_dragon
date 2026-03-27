@@ -13,6 +13,7 @@ export class EmailBullMQProvider extends BaseBullMQProvider<ISendEmailProps> {
     @inject("IEmailProvider")
     private readonly emailProvider: IEmailProvider,
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     super("email", redisConnection as any);
   }
 

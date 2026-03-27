@@ -65,6 +65,7 @@ export class TokenPrismaRepository implements ITokenRepository {
     token: Token,
   ): Promise<void> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await prisma.$transaction(async (tx: any) => {
         await tx.token.deleteMany({
           where: {
@@ -75,7 +76,7 @@ export class TokenPrismaRepository implements ITokenRepository {
           data: token,
         });
       });
-    } catch (error: any) {
+    } catch (_error) {
       throw new InternalServerError();
     }
   }

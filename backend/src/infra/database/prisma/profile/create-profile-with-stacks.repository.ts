@@ -10,8 +10,9 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWithStacksRepository {
   async execute(params: ICreateProfileInputDTO): Promise<Profile> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await prisma.$transaction(async (tx: any) => {
-        const { stacksId, ...profileData } = params;
+        const { stacksId: _stacksId, ...profileData } = params;
         const profile = await tx.profile.create({
           data: profileData,
         });

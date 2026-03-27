@@ -10,6 +10,7 @@ import { userPrismaToDomain } from "../mappers";
 export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWithEmailTokenRepository {
   async execute(user: User, token: Token): Promise<User> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await prisma.$transaction(async (tx: any) => {
         const createdUser = await tx.user.create({
           data: user,
@@ -19,8 +20,13 @@ export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWith
         });
         return userPrismaToDomain(createdUser);
       });
-    } catch (error: any) {
-      if (error.code === "P2002") {
+    } catch (error) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "code" in error &&
+        error.code === "P2002"
+      ) {
         throw new ConflictError("User already exists.");
       }
       throw new InternalServerError();

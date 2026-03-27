@@ -14,8 +14,8 @@ export class UserPrismaRepository implements IUserRepository {
       });
 
       return userPrismaToDomain(response);
-    } catch (error: any) {
-      if (error.code === "P2002") {
+    } catch (error) {
+      if ((error as { code?: string }).code === "P2002") {
         throw new ConflictError("Email already in use");
       }
       throw error;

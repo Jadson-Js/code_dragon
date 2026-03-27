@@ -27,8 +27,9 @@ export function errorHandler(
     });
   }
 
-  if ((error as any).code?.startsWith("P")) {
-    if ((error as any).code === "P2002") {
+  const code = (error as { code?: string }).code;
+  if (code?.startsWith("P")) {
+    if (code === "P2002") {
       return response.status(409).json({
         status: "conflict",
         message: "This record already exists in the system.",

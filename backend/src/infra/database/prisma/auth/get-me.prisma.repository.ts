@@ -11,6 +11,7 @@ export class GetMePrismaRepository implements IGetMeRepository {
     user: User;
     profile: Profile | null;
   } | null> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return await prisma.$transaction(async (tx: any) => {
       const user = await tx.user.findUnique({
         where: { id: userId },

@@ -69,12 +69,14 @@ Exemplo da estrutura exata esperada:
     try {
       const parsed = JSON.parse(raw);
 
-      return parsed.map((parsed: any) => ({
-        statement: parsed.statement,
-        alternatives: parsed.alternatives,
-        correctAlternativeIndex: parsed.correctAlternativeIndex,
-        code: parsed.code ?? null,
-      }));
+      return (parsed as IGenerateQuizQuestionByGeminiOutputProvider[]).map(
+        (p) => ({
+          statement: p.statement,
+          alternatives: p.alternatives,
+          correctAlternativeIndex: p.correctAlternativeIndex,
+          code: p.code ?? null,
+        }),
+      );
     } catch {
       throw new InternalServerError();
     }

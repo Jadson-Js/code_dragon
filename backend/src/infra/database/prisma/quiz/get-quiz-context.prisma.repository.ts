@@ -17,6 +17,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
   async execute(
     data: IQuizQuestionGenerateInputDTO,
   ): Promise<IGetQuizQuestionContextOutputRepository> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return await prisma.$transaction(async (tx: any) => {
       const [quizObjective, quizSubjects, seniority, specialty, stacks] =
         await Promise.all([
@@ -52,6 +53,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
           createdAt: quizObjective.createdAt,
           updatedAt: quizObjective.updatedAt,
         }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         quizSubject: quizSubjects.map((s: any) =>
           QuizSubject.create({
             id: s.id,
@@ -80,6 +82,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
           createdAt: specialty.createdAt,
           updatedAt: specialty.updatedAt,
         }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         stacks: stacks.map((s: any) =>
           Stack.create({
             id: s.id,

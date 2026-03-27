@@ -6,14 +6,13 @@ import type {
   IEmailProvider,
   ISendEmailProps,
 } from "@/domain/providers/email/email.provider";
-import type { IEMAIL_TEMPLATES } from "@/shared/environments";
 import { emailRenderProvider } from "./email-render.provider";
 const resend = new Resend(env.resendApiKey);
 
 @injectable()
 export class EmailProvider implements IEmailProvider {
   async send({ to, subject, template, variables }: ISendEmailProps) {
-    const { data, error } = await resend.emails.send({
+    const { data: _data, error } = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
       to: [to],
       subject: subject,
