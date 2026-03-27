@@ -10,11 +10,10 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWithStacksRepository {
   async execute(params: ICreateProfileInputDTO): Promise<Profile> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return await prisma.$transaction(async (tx: any) => {
+      return await prisma.$transaction(async (tx) => {
         const { stacksId: _stacksId, ...profileData } = params;
         const profile = await tx.profile.create({
-          data: profileData,
+          data: profileData as any,
         });
 
         await tx.profileStack.createMany({
@@ -37,7 +36,7 @@ export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWi
           },
         });
 
-        return profile;
+        return profile.toDomain;
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

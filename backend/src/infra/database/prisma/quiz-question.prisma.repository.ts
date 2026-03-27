@@ -1,6 +1,5 @@
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
-import { quizQuestionPrismaToDomain } from "./mappers";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 
@@ -10,7 +9,6 @@ export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {
     const response = await prisma.quizQuestion.create({
       data: {
         quizObjectiveId: data.quizObjectiveId,
-        quizSubjectId: data.quizSubjectId,
         seniorityId: data.seniorityId,
         specialtyId: data.specialtyId,
         statement: data.statement,
@@ -23,14 +21,13 @@ export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {
       },
     });
 
-    return quizQuestionPrismaToDomain(response);
+    return response.toDomain;
   }
 
   async createMany(data: QuizQuestion[]): Promise<QuizQuestion[]> {
     const response = await prisma.quizQuestion.createManyAndReturn({
       data: data.map((item) => ({
         quizObjectiveId: item.quizObjectiveId,
-        quizSubjectId: item.quizSubjectId,
         seniorityId: item.seniorityId,
         specialtyId: item.specialtyId,
         statement: item.statement,
@@ -43,6 +40,6 @@ export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {
       })),
     });
 
-    return response.map(quizQuestionPrismaToDomain);
+    return response.map((item) => item.toDomain);
   }
 }

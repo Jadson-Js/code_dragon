@@ -4,11 +4,6 @@ import type {
   IOnboardingOptions,
   IGetOnboardingOptionsRepository,
 } from "@/domain/database/repositories/profile/get-onboarding-options.repository";
-import { Seniority } from "@/domain/entities/seniority.entity";
-import { Specialty } from "@/domain/entities/specialty.entity";
-import { CareerObjective } from "@/domain/entities/career-objective.entity";
-import { AgeRange } from "@/domain/entities/age-range.entity";
-import { Stack } from "@/domain/entities/stack.entity";
 
 @injectable()
 export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptionsRepository {
@@ -23,13 +18,11 @@ export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptio
       ]);
 
     return {
-      seniorities: seniorities.map((s) => Seniority.create({ ...s })),
-      specialties: specialties.map((s) => Specialty.create({ ...s })),
-      careerObjectives: careerObjectives.map((o) =>
-        CareerObjective.create({ ...o }),
-      ),
-      ageRanges: ageRanges.map((a) => AgeRange.create({ ...a })),
-      stacks: stacks.map((s) => Stack.create({ ...s })),
+      seniorities: seniorities.map((s) => s.toDomain),
+      specialties: specialties.map((s) => s.toDomain),
+      careerObjectives: careerObjectives.map((o) => o.toDomain),
+      ageRanges: ageRanges.map((a) => a.toDomain),
+      stacks: stacks.map((s) => s.toDomain),
     };
   }
 }

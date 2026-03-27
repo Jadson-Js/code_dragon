@@ -2,7 +2,6 @@ import { Token } from "@/domain/entities/token.entity";
 import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
-import { tokenPrismaToDomain } from "./mappers";
 import { InternalServerError } from "@/shared/app.error";
 
 @injectable()
@@ -12,7 +11,7 @@ export class TokenPrismaRepository implements ITokenRepository {
       data: data,
     });
 
-    return tokenPrismaToDomain(response);
+    return response.toDomain;
   }
 
   async update(data: Token): Promise<Token> {
@@ -23,7 +22,7 @@ export class TokenPrismaRepository implements ITokenRepository {
       data: data,
     });
 
-    return tokenPrismaToDomain(response);
+    return response.toDomain;
   }
 
   async delete(id: string): Promise<void> {
@@ -41,7 +40,7 @@ export class TokenPrismaRepository implements ITokenRepository {
       },
     });
 
-    return response ? tokenPrismaToDomain(response) : null;
+    return response ? response.toDomain : null;
   }
 
   async findByUserId(userId: string): Promise<Token[]> {
@@ -51,13 +50,13 @@ export class TokenPrismaRepository implements ITokenRepository {
       },
     });
 
-    return response.map(tokenPrismaToDomain);
+    return response.map((token) => token.toDomain);
   }
 
   async findAll(): Promise<Token[]> {
     const response = await prisma.token.findMany();
 
-    return response.map(tokenPrismaToDomain);
+    return response.map((token) => token.toDomain);
   }
 
   async deleteByUserIdAndCreateNewToken(
@@ -65,8 +64,7 @@ export class TokenPrismaRepository implements ITokenRepository {
     token: Token,
   ): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return await prisma.$transaction(async (tx: any) => {
+      return await prisma.$transaction(async (tx) => {
         await tx.token.deleteMany({
           where: {
             userId,

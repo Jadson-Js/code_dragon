@@ -3,7 +3,6 @@ import type { IUserRepository } from "@/domain/database/repositories/user.reposi
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError } from "@/shared/app.error";
-import { userPrismaToDomain } from "./mappers";
 
 @injectable()
 export class UserPrismaRepository implements IUserRepository {
@@ -13,7 +12,7 @@ export class UserPrismaRepository implements IUserRepository {
         data: data,
       });
 
-      return userPrismaToDomain(response);
+      return response.toDomain;
     } catch (error) {
       if ((error as { code?: string }).code === "P2002") {
         throw new ConflictError("Email already in use");
@@ -30,7 +29,7 @@ export class UserPrismaRepository implements IUserRepository {
       data: data,
     });
 
-    return userPrismaToDomain(response);
+    return response.toDomain;
   }
 
   async delete(id: string): Promise<void> {
@@ -48,13 +47,13 @@ export class UserPrismaRepository implements IUserRepository {
       },
     });
 
-    return response ? userPrismaToDomain(response) : null;
+    return response ? response.toDomain : null;
   }
 
   async findAll(): Promise<User[]> {
     const response = await prisma.user.findMany();
 
-    return response.map(userPrismaToDomain);
+    return response.map((user) => user.toDomain);
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -64,6 +63,6 @@ export class UserPrismaRepository implements IUserRepository {
       },
     });
 
-    return response ? userPrismaToDomain(response) : null;
+    return response ? response.toDomain : null;
   }
 }
