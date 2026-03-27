@@ -12,19 +12,28 @@ interface ICreateProfileProps {
   updatedAt?: Date;
 }
 
+interface IUpdateProfileProps {
+  linkedinUrl?: string | null;
+  githubUrl?: string | null;
+  portfolioUrl?: string | null;
+  seniorityId?: number | null;
+  specialtyId?: number | null;
+  careerObjectiveId?: number | null;
+}
+
 export class Profile {
   private constructor(
     public readonly id: string,
     public readonly userId: string,
-    public readonly linkedinUrl: string | null,
-    public readonly githubUrl: string | null,
-    public readonly portfolioUrl: string | null,
+    public linkedinUrl: string | null,
+    public githubUrl: string | null,
+    public portfolioUrl: string | null,
     public readonly ageRangeId: number | null,
-    public readonly seniorityId: number | null,
-    public readonly specialtyId: number | null,
-    public readonly careerObjectiveId: number | null,
+    public seniorityId: number | null,
+    public specialtyId: number | null,
+    public careerObjectiveId: number | null,
     public readonly createdAt: Date,
-    public readonly updatedAt: Date,
+    public updatedAt: Date,
   ) {}
 
   static create(props: ICreateProfileProps): Profile {
@@ -41,5 +50,15 @@ export class Profile {
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );
+  }
+
+  update(props: IUpdateProfileProps): void {
+    this.linkedinUrl = props.linkedinUrl ?? this.linkedinUrl;
+    this.githubUrl = props.githubUrl ?? this.githubUrl;
+    this.portfolioUrl = props.portfolioUrl ?? this.portfolioUrl;
+    this.seniorityId = props.seniorityId ?? this.seniorityId;
+    this.specialtyId = props.specialtyId ?? this.specialtyId;
+    this.careerObjectiveId = props.careerObjectiveId ?? this.careerObjectiveId;
+    this.updatedAt = new Date();
   }
 }

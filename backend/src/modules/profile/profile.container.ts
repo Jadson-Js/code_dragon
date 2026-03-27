@@ -1,21 +1,12 @@
 import { container } from "tsyringe";
 import { ProfileController } from "@/modules/profile/profile.controller";
-import { CreateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/create-profile-with-stacks.repository";
-import { GetOnboardingOptionsPrismaRepository } from "@/infra/database/prisma/profile/get-onboarding-options.repository";
-import { GetProfileByUserIdPrismaRepository } from "@/infra/database/prisma/profile/get-profile-by-user-id.repository";
 import { CreateProfileUseCase } from "@/modules/profile/use-cases/create-profile";
 import { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
 import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
 import { RedisOnboardingOptionsRepository } from "@/infra/database/redis/redis-onboarding-options.repository";
 
-// Registra os repositórios
-container.register("ICreateProfileWithStacksRepository", {
-  useClass: CreateProfileWithStacksPrismaRepository,
-});
-
-container.register("getOnboardingOptionsRepository", {
-  useClass: GetOnboardingOptionsPrismaRepository,
-});
+// Repositórios compartilhados e específicos já são registrados em infra/container/providers.ts
+// Registramos aqui apenas o que for exclusivo deste módulo e não estiver no container global
 
 container.register("redisOnboardingOptionsRepository", {
   useClass: RedisOnboardingOptionsRepository,
@@ -28,10 +19,6 @@ container.register("CreateProfileUseCase", {
 
 container.register("GetOnboardingOptionsUseCase", {
   useClass: GetOnboardingOptionsUseCase,
-});
-
-container.register("IGetProfileByUserIdRepository", {
-  useClass: GetProfileByUserIdPrismaRepository,
 });
 
 container.register("GetProfileByUserIdUseCase", {

@@ -9,6 +9,8 @@ import type { IQuizQuestionRepository } from "@/domain/database/repositories/qui
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
+import { Profile } from "@/domain/entities/profile.entity";
+import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
@@ -24,13 +26,17 @@ export class QuizQuestionGenerateUseCase {
 
     @inject("IQuizQuestionRepository")
     private readonly quizQuestionRepository: IQuizQuestionRepository,
+
+    @inject("IUpdateProfileWithStacksRepository")
+    private readonly updateProfileWithStacksRepository: IUpdateProfileWithStacksRepository,
   ) {}
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
+    if (data.saveInProfile) this.saveInProfile(data);
+
     const context = await this.getQuizContextRepository.execute(data);
     const geminiInput = mapContextToGeminiInput(context);
 
-    // Primeiro lote: síncrono — o frontend recebe as primeiras questões na hora
     const generateds =
       await this.geminiProvider.generateQuizQuestion(geminiInput);
 
@@ -54,5 +60,18 @@ export class QuizQuestionGenerateUseCase {
     }
 
     return savedQuestions;
+  }
+
+  private async saveInProfile(data: IQuizQuestionGenerateInputDTO) {
+    const profileUpdated = Profile.create({
+      userId: data.userId,
+      seniorityId: data.seniorityId,
+      specialtyId: data.specialtyId,
+    });
+
+    await this.updateProfileWithStacksRepository.execute({
+      profile: profileUpdated,
+      stacksId: data.stacksId,
+    });
   }
 }

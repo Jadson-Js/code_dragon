@@ -4,6 +4,10 @@ import { EmailProvider } from "@/infra/providers/email/email.provider";
 import { JwtProvider } from "@/infra/providers/jwt.provider";
 import { CreateUserWithEmailTokenPrismaRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
 import { ResetPasswordPrismaRepository } from "@/infra/database/prisma/auth/reset-password.prisma.repository";
+import { CreateProfileWithStacksPrismaRepository } from "../database/prisma/profile/create-profile-with-stacks.repository";
+import { UpdateProfileWithStacksPrismaRepository } from "../database/prisma/profile/update-profile-with-stacks.repository";
+import { GetProfileByUserIdPrismaRepository } from "../database/prisma/profile/get-profile-by-user-id.repository";
+import { GetOnboardingOptionsPrismaRepository } from "../database/prisma/profile/get-onboarding-options.repository";
 import { EmailBullMQProvider } from "../providers/queue/email.bullmq.provider";
 import {
   EnsureAuthenticated,
@@ -41,6 +45,22 @@ container.registerSingleton("IEmailQueueProvider", EmailBullMQProvider);
 container.registerSingleton(
   "IGenerateQuizQuestionQueueProvider",
   GenerateQuizQuestionBullMQProvider,
+);
+container.registerSingleton(
+  "ICreateProfileWithStacksRepository",
+  CreateProfileWithStacksPrismaRepository,
+);
+container.registerSingleton(
+  "IUpdateProfileWithStacksRepository",
+  UpdateProfileWithStacksPrismaRepository,
+);
+container.registerSingleton(
+  "IGetProfileByUserIdRepository",
+  GetProfileByUserIdPrismaRepository,
+);
+container.registerSingleton(
+  "getOnboardingOptionsRepository",
+  GetOnboardingOptionsPrismaRepository,
 );
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
 container.registerSingleton("IGeminiProvider", GeminiProvider);
