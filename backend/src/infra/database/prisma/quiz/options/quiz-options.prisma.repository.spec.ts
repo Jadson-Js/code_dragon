@@ -31,11 +31,12 @@ describe("QuizOptionsPrismaRepository", () => {
     jest.clearAllMocks();
   });
 
-  const makeRow = (id: number, name: string, entity: any) => ({
+  const makeRow = (id: number, name: string, entity: any, extras: any = {}) => ({
     id,
     name,
     slug: name.toLowerCase().replace(/\s+/g, "-"),
     description: "Description",
+    ...extras,
     get toDomain() {
       return entity.create(this as any);
     },
@@ -46,7 +47,7 @@ describe("QuizOptionsPrismaRepository", () => {
 
     const mockResults = [
         [makeRow(1, "Pre-Onboarding", QuizObjective)],
-        [makeRow(10, "React", QuizSubject)],
+        [makeRow(10, "React", QuizSubject, { specialties: [] })],
         [makeRow(2, "Junior", Seniority)],
         [makeRow(3, "Frontend", Specialty)],
         [makeRow(100, "TypeScript", Stack)],

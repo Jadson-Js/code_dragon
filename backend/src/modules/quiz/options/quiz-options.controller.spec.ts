@@ -40,7 +40,13 @@ describe("QuizOptionsController", () => {
 
     const options: IGetQuizOptionsOutputDTO = {
       quizObjectives: [{ id: 1, name: "Objetivo 1" }],
-      quizSubjects: [{ id: 2, name: "Assunto 1" }],
+      quizSubjects: [
+        {
+          id: 2,
+          name: "Assunto 1",
+          specialties: [{ id: 1, name: "Backend" }],
+        },
+      ],
       seniorities: [{ id: 3, name: "Sênior" }],
       specialties: [{ id: 4, name: "Backend" }],
       stacks: [{ id: 5, name: "TypeScript" }],

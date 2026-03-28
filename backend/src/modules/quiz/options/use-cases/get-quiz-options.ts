@@ -21,6 +21,10 @@ export class GetQuizOptionsUseCase {
       quizSubjects: rawData.quizSubjects.map((s) => ({
         id: s.id as number,
         name: s.name,
+        specialties: (s.specialties ?? []).map((sp) => ({
+          id: sp.id as number,
+          name: sp.name,
+        })),
       })),
       seniorities: rawData.seniorities.map((s) => ({
         id: s.id as number,

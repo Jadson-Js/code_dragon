@@ -14,9 +14,7 @@ function makeUseCase() {
     execute: jest.fn<() => Promise<any>>(),
   };
 
-  const sut = new GetQuizOptionsUseCase(
-    getQuizOptionsRepository as any,
-  );
+  const sut = new GetQuizOptionsUseCase(getQuizOptionsRepository as any);
 
   return { sut, getQuizOptionsRepository };
 }
@@ -80,7 +78,7 @@ describe("GetQuizOptionsUseCase", () => {
 
     const mockResponse = {
       quizObjectives: [makeQuizObjective(1)],
-      quizSubjects: [makeQuizSubject(2)],
+      quizSubjects: [{ ...makeQuizSubject(2), specialties: [] }],
       seniorities: [makeSeniority(3)],
       specialties: [makeSpecialty(4)],
       stacks: [makeStack(5)],
@@ -91,11 +89,11 @@ describe("GetQuizOptionsUseCase", () => {
     const result = await sut.execute();
 
     expect(getQuizOptionsRepository.execute).toHaveBeenCalledTimes(1);
-    
+
     // Check if mapping is correct (returning only id and name)
     expect(result).toEqual({
       quizObjectives: [{ id: 1, name: "Objective 1" }],
-      quizSubjects: [{ id: 2, name: "Subject 2" }],
+      quizSubjects: [{ id: 2, name: "Subject 2", specialties: [] }],
       seniorities: [{ id: 3, name: "Seniority 3" }],
       specialties: [{ id: 4, name: "Specialty 4" }],
       stacks: [{ id: 5, name: "Stack 5" }],
