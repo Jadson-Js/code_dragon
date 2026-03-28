@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
-import { useProfile } from "@/shared/context/ProfileContext";
 import { useOnboardingOptions } from "@/features/profile/hooks/useOnboardingOptions";
+import { useGetProfile } from "../hooks/useGetProfile";
 
 interface Props {
   open: boolean;
@@ -27,7 +27,7 @@ interface Props {
 }
 
 export default function QuizConfigModal({ open, onOpenChange }: Props) {
-  const { data: profile } = useProfile();
+  const { data: profile } = useGetProfile();
   const { data: onboardingOptions } = useOnboardingOptions();
   const [selectedStackIds, setSelectedStackIds] = React.useState<number[]>(
     () => profile?.stackIds ?? [],
@@ -59,6 +59,24 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <Select>
             <SelectTrigger>
               <SelectValue placeholder="Selecione o objetivo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="practice">Praticar por questões</SelectItem>
+              <SelectItem value="review">Revisar conceitos</SelectItem>
+              <SelectItem value="self-assessment">Autoavaliação</SelectItem>
+              <SelectItem value="interview">Simular entrevista</SelectItem>
+            </SelectContent>
+          </Select>
+        </Field>
+
+        <Field>
+          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+            Assunto
+          </FieldLabel>
+
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione o assunto" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="practice">Praticar por questões</SelectItem>

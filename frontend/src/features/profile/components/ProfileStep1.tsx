@@ -13,7 +13,7 @@ export default function ProfileStep1({ seniorities }: IProps) {
   return (
     <>
       <PageHeader
-        title="Qual seu nível atual de experiência?"
+        title="Qual cargo você está buscando?"
         description="Isso nos ajuda a personalizar seus diagnósticos e desafios"
         className="mb-8"
       />

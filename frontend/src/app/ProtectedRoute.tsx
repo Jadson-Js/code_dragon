@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Navigate, Outlet, useLocation } from "react-router"; // Importe useLocation
 import { LoadingScreen } from "@/components/loading-screen";
 import { api } from "@/lib/api-client";
-import { ProfileProvider } from "@/shared/context/ProfileContext";
 
 export function ProtectedRoute() {
   const location = useLocation();
@@ -34,9 +33,5 @@ export function ProtectedRoute() {
     return <Navigate to="/" replace />;
   }
 
-  return (
-    <ProfileProvider>
-      <Outlet context={data} />
-    </ProfileProvider>
-  );
+  return <Outlet context={data} />;
 }
