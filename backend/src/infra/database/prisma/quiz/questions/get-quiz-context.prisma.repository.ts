@@ -1,4 +1,4 @@
-import { prisma } from "../../../../../prisma/client";
+import { prisma } from "../../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
 import type {
@@ -19,7 +19,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
             where: { id: data.quizObjectiveId },
           }),
           tx.quizSubject.findMany({
-            where: { id: { in: data.quizSubjectId } },
+            where: { id: { in: data.quizSubjectId ?? [] } },
           }),
           tx.seniority.findUnique({
             where: { id: data.seniorityId },
@@ -34,9 +34,8 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
 
       if (!quizObjective) throw new NotFoundError("Quiz objective not found.");
       if (!seniority) throw new NotFoundError("Seniority not found.");
-      if (!quizSubjects.length)
-        throw new NotFoundError("Quiz subjects not found.");
       if (!specialty) throw new NotFoundError("Specialty not found.");
+      if (stacks.length === 0) throw new NotFoundError("Stacks not found.");
 
       return {
         quizObjective: quizObjective.toDomain,

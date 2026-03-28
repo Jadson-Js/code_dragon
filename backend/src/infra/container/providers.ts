@@ -22,7 +22,7 @@ import { GenerateQuizQuestionBullMQProvider } from "../providers/queue/generate-
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import type { ISendEmailProps } from "@/domain/providers/email/email.provider";
 import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
-import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/get-quiz-context.prisma.repository";
+import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
