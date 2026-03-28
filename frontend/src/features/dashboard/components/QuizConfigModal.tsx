@@ -18,8 +18,9 @@ import {
 } from "@/components/ui/select";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
-import { useOnboardingOptions } from "@/features/profile/hooks/useOnboardingOptions";
 import { useGetProfile } from "../hooks/useGetProfile";
+import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
+import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
 
 interface Props {
   open: boolean;
@@ -28,10 +29,14 @@ interface Props {
 
 export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { data: profile } = useGetProfile();
-  const { data: onboardingOptions } = useOnboardingOptions();
-  const [selectedStackIds, setSelectedStackIds] = React.useState<number[]>(
-    () => profile?.stackIds ?? [],
-  );
+  const { data: quizOptions } = useGetQuizOptions();
+  const { form, mutation } = useQuizQuestionsGenerate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -61,28 +66,11 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               <SelectValue placeholder="Selecione o objetivo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="practice">Praticar por questões</SelectItem>
-              <SelectItem value="review">Revisar conceitos</SelectItem>
-              <SelectItem value="self-assessment">Autoavaliação</SelectItem>
-              <SelectItem value="interview">Simular entrevista</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Assunto
-          </FieldLabel>
-
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione o assunto" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="practice">Praticar por questões</SelectItem>
-              <SelectItem value="review">Revisar conceitos</SelectItem>
-              <SelectItem value="self-assessment">Autoavaliação</SelectItem>
-              <SelectItem value="interview">Simular entrevista</SelectItem>
+              {quizOptions?.quizObjectives.map((objective) => (
+                <SelectItem key={objective.id} value={String(objective.id)}>
+                  {objective.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </Field>
@@ -100,7 +88,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               <SelectValue placeholder="Selecione a sênioridade" />
             </SelectTrigger>
             <SelectContent>
-              {onboardingOptions?.seniorities.map((seniority) => {
+              {quizOptions?.seniorities.map((seniority) => {
                 return (
                   <SelectItem key={seniority.id} value={String(seniority.id)}>
                     {seniority.name}
@@ -117,14 +105,15 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </FieldLabel>
           <Select
             defaultValue={
-              profile?.specialtyId ? String(profile.specialtyId) : undefined
+              selectedSpecialty ? String(selectedSpecialty) : undefined
             }
+            onValueChange={(value) => setSelectedSpecialty(Number(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Selecione a área" />
             </SelectTrigger>
             <SelectContent>
-              {onboardingOptions?.specialties.map((specialty) => {
+              {quizOptions?.specialties.map((specialty) => {
                 return (
                   <SelectItem key={specialty.id} value={String(specialty.id)}>
                     {specialty.name}
@@ -139,16 +128,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
             Assunto
           </FieldLabel>
+
           <Select>
             <SelectTrigger>
               <SelectValue placeholder="Selecione o assunto" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="architecture">Arquitetura</SelectItem>
-              <SelectItem value="algorithms">Algoritmos</SelectItem>
-              <SelectItem value="data-structures">
-                Estrutura de Dados
-              </SelectItem>
+              <SelectItem value="1">Estrutua de dados</SelectItem>
             </SelectContent>
           </Select>
         </Field>
@@ -158,7 +144,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             Quais stacks serão avaliadas
           </FieldLabel>
           <SearchSelectField
-            items={onboardingOptions?.stacks ?? []}
+            items={quizOptions?.stacks ?? []}
             value={selectedStackIds}
             onChange={setSelectedStackIds}
             searchPlaceholder="Buscar tecnologia (ex: React, Java)..."
