@@ -12,6 +12,20 @@ jest.unstable_mockModule("../../../../../prisma/client", () => ({
   prisma: prismaMock,
 }));
 
+// Mocking PrismaClientKnownRequestError
+class MockPrismaError extends Error {
+  code: string;
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+    this.name = "PrismaClientKnownRequestError";
+  }
+}
+
+jest.unstable_mockModule("@prisma/client/runtime/client", () => ({
+  PrismaClientKnownRequestError: MockPrismaError,
+}));
+
 const { CreateUserWithEmailTokenPrismaRepository } =
   await import("./create-user-with-email-token.prisma.repository");
 
@@ -89,7 +103,9 @@ describe("CreateUserWithEmailTokenPrismaRepository", () => {
       expiresAt: new Date(Date.now() + 1000 * 60),
     });
 
-    prismaMock.$transaction.mockRejectedValue({ code: "P2002" });
+    prismaMock.$transaction.mockRejectedValue(
+      new MockPrismaError("Unique constraint failed", "P2002"),
+    );
 
     await expect(repository.execute(user, token)).rejects.toBeInstanceOf(
       ConflictError,
