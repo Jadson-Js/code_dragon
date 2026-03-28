@@ -13,7 +13,7 @@ export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWi
       return await prisma.$transaction(async (tx) => {
         const { stacksId: _stacksId, ...profileData } = params;
         const profile = await tx.profile.create({
-          data: profileData as any,
+          data: profileData as Omit<ICreateProfileInputDTO, "stacksId">,
         });
 
         await tx.profileStack.createMany({

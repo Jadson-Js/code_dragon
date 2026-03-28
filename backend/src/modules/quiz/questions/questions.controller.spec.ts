@@ -68,6 +68,7 @@ describe("QuizQuestionsController", () => {
         quantity: 5,
         saveInProfile: false,
       },
+      user: { id: "user-1" },
     } as unknown as Request;
     const response = makeResponse();
 
@@ -77,9 +78,10 @@ describe("QuizQuestionsController", () => {
     );
 
     expect(quizQuestionGenerateUseCase.execute).toHaveBeenCalledTimes(1);
-    expect(quizQuestionGenerateUseCase.execute).toHaveBeenCalledWith(
-      request.body,
-    );
+    expect(quizQuestionGenerateUseCase.execute).toHaveBeenCalledWith({
+      ...request.body,
+      userId: "user-1",
+    });
   });
 
   it("should respond with 201 and the questions returned by the use case", async () => {
@@ -92,7 +94,7 @@ describe("QuizQuestionsController", () => {
     ];
     quizQuestionGenerateUseCase.execute.mockResolvedValue(questions);
 
-    const request = { body: {} } as unknown as Request;
+    const request = { body: {}, user: { id: "user-1" } } as unknown as Request;
     const response = makeResponse();
 
     await controller.generateQuestions(
@@ -109,7 +111,7 @@ describe("QuizQuestionsController", () => {
 
     quizQuestionGenerateUseCase.execute.mockResolvedValue([]);
 
-    const request = { body: {} } as unknown as Request;
+    const request = { body: {}, user: { id: "user-1" } } as unknown as Request;
     const response = makeResponse();
 
     await controller.generateQuestions(
@@ -128,7 +130,7 @@ describe("QuizQuestionsController", () => {
       new Error("Use case failed"),
     );
 
-    const request = { body: {} } as unknown as Request;
+    const request = { body: {}, user: { id: "user-1" } } as unknown as Request;
     const response = makeResponse();
 
     await expect(

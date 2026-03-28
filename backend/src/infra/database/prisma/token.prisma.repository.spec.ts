@@ -52,8 +52,9 @@ describe("TokenPrismaRepository", () => {
     });
     prismaMock.token.create.mockResolvedValue({
       ...token,
-      createdAt: token.createdAt,
-      updatedAt: token.updatedAt,
+      get toDomain() {
+        return Token.create(this as any);
+      },
     });
 
     const result = await repository.create(token);
@@ -84,6 +85,9 @@ describe("TokenPrismaRepository", () => {
         expiresAt: new Date(now.getTime() + 60_000),
         createdAt: now,
         updatedAt: now,
+        get toDomain() {
+          return Token.create(this as any);
+        },
       },
     ]);
 

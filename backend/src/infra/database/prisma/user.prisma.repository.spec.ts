@@ -67,6 +67,9 @@ describe("UserPrismaRepository", () => {
       createdAt: now,
       updatedAt: now,
       deletedAt: null,
+      get toDomain() {
+        return User.create(this as any);
+      },
     });
 
     const result = await repository.create(user);
@@ -101,6 +104,9 @@ describe("UserPrismaRepository", () => {
       createdAt: now,
       updatedAt: now,
       deletedAt: null,
+      get toDomain() {
+        return User.create(this as any);
+      },
     });
 
     const result = await repository.findByEmail("admin@admin.com");
@@ -131,6 +137,9 @@ describe("UserPrismaRepository", () => {
         createdAt: now,
         updatedAt: now,
         deletedAt: null,
+        get toDomain() {
+          return User.create(this as any);
+        },
       },
     ]);
 

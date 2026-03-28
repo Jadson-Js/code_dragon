@@ -4,6 +4,7 @@ import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 import type { ICreateUserWithEmailTokenRepository } from "@/domain/database/repositories/auth/auth-transaction.repository";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 @injectable()
 export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWithEmailTokenRepository {
@@ -18,9 +19,9 @@ export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWith
         });
         return createdUser.toDomain;
       });
-    } catch (error: any) {
+    } catch (error) {
       if (
-        error &&
+        error instanceof PrismaClientKnownRequestError &&
         error.code === "P2002"
       ) {
         throw new ConflictError("User already exists.");

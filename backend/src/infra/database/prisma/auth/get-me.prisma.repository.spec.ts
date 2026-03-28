@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { User } from "@/domain/entities/user.entity";
+import { Profile } from "@/domain/entities/profile.entity";
 
 const prismaMock = {
   $transaction: jest.fn<any>(),
@@ -33,6 +34,9 @@ describe("GetMePrismaRepository", () => {
             createdAt: now,
             updatedAt: now,
             deletedAt: null,
+            get toDomain(): User {
+              return User.create(this as any);
+            },
           })),
         },
         profile: {
@@ -48,6 +52,9 @@ describe("GetMePrismaRepository", () => {
             careerObjectiveId: 4,
             createdAt: now,
             updatedAt: now,
+            get toDomain(): Profile {
+              return Profile.create(this as any);
+            },
           })),
         },
       };
@@ -77,6 +84,9 @@ describe("GetMePrismaRepository", () => {
             createdAt: now,
             updatedAt: now,
             deletedAt: null,
+            get toDomain(): User {
+              return User.create(this as any);
+            },
           })),
         },
         profile: {

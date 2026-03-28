@@ -44,18 +44,22 @@ describe("CreateUserWithEmailTokenPrismaRepository", () => {
     });
 
     prismaMock.$transaction.mockImplementation(async (callback: any) => {
+      const createdUserRow = {
+        id: "user-1",
+        name: "admin",
+        email: "admin@admin.com",
+        passwordHash: "hash",
+        verifiedAt: null,
+        createdAt: now,
+        updatedAt: now,
+        deletedAt: null,
+        get toDomain() {
+          return User.create(this);
+        },
+      };
       const tx = {
         user: {
-          create: jest.fn(async (_args: unknown) => ({
-            id: "user-1",
-            name: "admin",
-            email: "admin@admin.com",
-            passwordHash: "hash",
-            verifiedAt: null,
-            createdAt: now,
-            updatedAt: now,
-            deletedAt: null,
-          })),
+          create: jest.fn(async (_args: unknown) => createdUserRow),
         },
         token: {
           create: jest.fn(async (_args: unknown) => undefined),
