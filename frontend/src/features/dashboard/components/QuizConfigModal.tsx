@@ -19,6 +19,8 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
+import { Controller } from "react-hook-form";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   open: boolean;
@@ -32,16 +34,10 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
   const {
     setValue,
-    watch,
+    control,
     handleSubmit,
     formState: { errors },
   } = form;
-
-  const quizSubjectIds = watch("quizSubjectIds") || [];
-
-  const selectedSubjects = quizOptions?.quizSubjects.filter((subject) =>
-    quizSubjectIds.includes(subject.id),
-  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -136,34 +132,61 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </Select>
         </Field>
 
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Assunto
-          </FieldLabel>
+        <Controller
+          control={control}
+          name="quizSubjectIds"
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                Assunto
+              </FieldLabel>
 
-          <Select
-            onValueChange={(value) => {
-              setValue("quizSubjectIds", [...quizSubjectIds, Number(value)]);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione o assunto" />
-            </SelectTrigger>
-            <SelectContent>
-              {quizOptions?.quizSubjects.map((subject) => {
-                return (
-                  <SelectItem key={subject.id} value={String(subject.id)}>
-                    {subject.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+              <Select
+                value=""
+                onValueChange={(value) => {
+                  if (!value) return;
+                  const current = field.value ?? [];
+                  field.onChange([...current, Number(value)]);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o assunto" />
+                </SelectTrigger>
+                <SelectContent>
+                  {quizOptions?.quizSubjects
+                    .filter((subject) => !field.value?.includes(subject.id))
+                    .map((subject) => {
+                      return (
+                        <SelectItem key={subject.id} value={String(subject.id)}>
+                          {subject.name}
+                        </SelectItem>
+                      );
+                    })}
+                </SelectContent>
+              </Select>
 
-          {selectedSubjects?.map((subject) => (
-            <p key={subject.id}>{subject.name}</p>
-          ))}
-        </Field>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {quizOptions?.quizSubjects
+                  .filter((subject) => field.value?.includes(subject.id))
+                  .map((subject) => (
+                    <Badge
+                      key={subject.id}
+                      variant="default"
+                      hasIcon={true}
+                      onClick={() => {
+                        const current = field.value ?? [];
+                        field.onChange(
+                          current.filter((id: number) => id !== subject.id),
+                        );
+                      }}
+                    >
+                      {subject.name}
+                    </Badge>
+                  ))}
+              </div>
+            </Field>
+          )}
+        />
 
         <Field>
           <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">

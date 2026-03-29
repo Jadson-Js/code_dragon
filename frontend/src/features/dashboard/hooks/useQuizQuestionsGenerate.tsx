@@ -14,9 +14,6 @@ export function useQuizQuestionsGenerate() {
 
   const form = useForm<QuizQuestionsGenerateFormData>({
     resolver: zodResolver(quizQuestionsGenerateSchema),
-    defaultValues: {
-      quizSubjectIds: [],
-    },
   });
 
   const mutation = useMutation({
