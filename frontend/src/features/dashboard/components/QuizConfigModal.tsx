@@ -19,7 +19,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useEffect } from "react";
@@ -40,7 +40,19 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { data: quizOptions } = useGetQuizOptions();
   const { form, mutation } = useQuizQuestionsGenerate();
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit, getValues, setValue } = form;
+
+  // Remove assuntos selecionados que não pertencem à nova especialidade
+  function cleanSubjectsForSpecialty(newSpecialtyId: number) {
+    const currentSubjectIds = getValues("quizSubjectIds") ?? [];
+    const validSubjectIds = currentSubjectIds.filter((id: number) => {
+      const subject = quizOptions?.quizSubjects.find((s) => s.id === id);
+      return subject?.specialties.some((s) => s.id === newSpecialtyId);
+    });
+    if (validSubjectIds.length !== currentSubjectIds.length) {
+      setValue("quizSubjectIds", validSubjectIds);
+    }
+  }
 
   useEffect(() => {
     if (!profile) return;
@@ -138,7 +150,11 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               </FieldLabel>
               <Select
                 value={field.value ? String(field.value) : ""}
-                onValueChange={(value) => field.onChange(Number(value))}
+                onValueChange={(value) => {
+                  const newId = Number(value);
+                  cleanSubjectsForSpecialty(newId);
+                  field.onChange(newId);
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione a área" />
@@ -186,7 +202,8 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                           (subject) =>
                             !subjectField.value?.includes(subject.id) &&
                             subject.specialties.some(
-                              (s) => s.id === specialtyField.value,
+                              (specialty) =>
+                                specialty.id === specialtyField.value,
                             ),
                         )
                         .map((subject) => (
@@ -202,8 +219,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {quizOptions?.quizSubjects
-                      .filter((subject) =>
-                        subjectField.value?.includes(subject.id),
+                      .filter(
+                        (subject) =>
+                          subjectField.value?.includes(subject.id) &&
+                          subject.specialties.some(
+                            (specialty) =>
+                              specialty.id === specialtyField.value,
+                          ),
                       )
                       .map((subject) => (
                         <Badge
