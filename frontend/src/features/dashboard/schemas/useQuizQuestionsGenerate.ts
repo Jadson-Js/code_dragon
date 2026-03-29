@@ -5,8 +5,8 @@ export const quizQuestionsGenerateSchema = z.object({
   quizSubjectIds: z.array(z.number()).optional(),
   seniorityId: z.number(),
   specialtyId: z.number(),
-  stacksId: z.array(z.number()).min(1),
-  quantity: z.number().min(1).max(20),
+  stacksId: z.array(z.number()).optional(),
+  quantity: z.number().min(1).max(40),
   saveInProfile: z.boolean(),
 });
 export type QuizQuestionsGenerateFormData = z.infer<

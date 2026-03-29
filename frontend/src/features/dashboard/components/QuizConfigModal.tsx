@@ -1,4 +1,4 @@
-import { Activity, Sparkles } from "lucide-react";
+import { Activity, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -332,6 +332,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             size="lg"
             variant="outline"
             className="flex-1"
+            disabled={mutation.isPending}
             onClick={() => onOpenChange(false)}
           >
             CANCELAR
@@ -339,9 +340,15 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <Button
             size="lg"
             className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20"
+            disabled={mutation.isPending}
+            onClick={handleSubmit((data) => mutation.mutate(data))}
           >
-            <Sparkles size={18} />
-            INICIAR
+            {mutation.isPending ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <Sparkles size={18} />
+            )}
+            {mutation.isPending ? "GERANDO..." : "INICIAR"}
           </Button>
         </div>
       </DialogContent>
