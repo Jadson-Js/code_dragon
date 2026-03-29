@@ -2,7 +2,7 @@ import z from "zod";
 
 export const quizQuestionsGenerateSchema = z.object({
   quizObjectiveId: z.number(),
-  quizSubjectId: z.array(z.number()).optional(),
+  quizSubjectIds: z.array(z.number()).optional(),
   seniorityId: z.number(),
   specialtyId: z.number(),
   stacksId: z.array(z.number()).min(1),

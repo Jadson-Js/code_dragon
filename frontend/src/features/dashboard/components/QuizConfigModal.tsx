@@ -1,4 +1,3 @@
-import React from "react";
 import { Activity, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
@@ -33,10 +31,17 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { form, mutation } = useQuizQuestionsGenerate();
 
   const {
-    register,
+    setValue,
+    watch,
     handleSubmit,
     formState: { errors },
   } = form;
+
+  const quizSubjectIds = watch("quizSubjectIds") || [];
+
+  const selectedSubjects = quizOptions?.quizSubjects.filter((subject) =>
+    quizSubjectIds.includes(subject.id),
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -61,10 +66,15 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             Objetivo do Quiz
           </FieldLabel>
 
-          <Select>
+          <Select
+            onValueChange={(value) =>
+              setValue("quizObjectiveId", Number(value))
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Selecione o objetivo" />
             </SelectTrigger>
+
             <SelectContent>
               {quizOptions?.quizObjectives.map((objective) => (
                 <SelectItem key={objective.id} value={String(objective.id)}>
@@ -79,10 +89,12 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
             Sênioridade
           </FieldLabel>
+
           <Select
             defaultValue={
               profile?.seniorityId ? String(profile.seniorityId) : undefined
             }
+            onValueChange={(value) => setValue("seniorityId", Number(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Selecione a sênioridade" />
@@ -105,9 +117,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </FieldLabel>
           <Select
             defaultValue={
-              selectedSpecialty ? String(selectedSpecialty) : undefined
+              profile?.specialtyId ? String(profile.specialtyId) : undefined
             }
-            onValueChange={(value) => setSelectedSpecialty(Number(value))}
+            onValueChange={(value) => setValue("specialtyId", Number(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Selecione a área" />
@@ -129,21 +141,35 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             Assunto
           </FieldLabel>
 
-          <Select>
+          <Select
+            onValueChange={(value) => {
+              setValue("quizSubjectIds", [...quizSubjectIds, Number(value)]);
+            }}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Selecione o assunto" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Estrutua de dados</SelectItem>
+              {quizOptions?.quizSubjects.map((subject) => {
+                return (
+                  <SelectItem key={subject.id} value={String(subject.id)}>
+                    {subject.name}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
+
+          {selectedSubjects?.map((subject) => (
+            <p key={subject.id}>{subject.name}</p>
+          ))}
         </Field>
 
         <Field>
           <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
             Quais stacks serão avaliadas
           </FieldLabel>
-          <SearchSelectField
+          {/* <SearchSelectField
             items={quizOptions?.stacks ?? []}
             value={selectedStackIds}
             onChange={setSelectedStackIds}
@@ -152,7 +178,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             emptyMessage="Nenhuma tecnologia disponível encontrada"
             className="bg-bg-1 border-bg-3 focus:border-primary-1"
             showPopular={false}
-          />
+          /> */}
         </Field>
 
         <Field>
