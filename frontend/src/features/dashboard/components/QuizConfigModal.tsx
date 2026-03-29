@@ -21,6 +21,14 @@ import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
 import { Controller } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
+import { SearchSelectField } from "@/components/ui/searchSelectField";
+import { useEffect } from "react";
+
+const QUANTITY_MAP: Record<string, number> = {
+  short: 10,
+  medium: 20,
+  long: 40,
+};
 
 interface Props {
   open: boolean;
@@ -32,12 +40,16 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { data: quizOptions } = useGetQuizOptions();
   const { form, mutation } = useQuizQuestionsGenerate();
 
-  const {
-    setValue,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { control, handleSubmit } = form;
+
+  useEffect(() => {
+    if (!profile) return;
+    form.reset({
+      seniorityId: profile.seniorityId,
+      specialtyId: profile.specialtyId,
+      stacksId: profile.stackIds ?? [],
+    });
+  }, [profile]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -57,181 +69,241 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </DialogDescription>
         </DialogHeader>
 
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Objetivo do Quiz
-          </FieldLabel>
-
-          <Select
-            onValueChange={(value) =>
-              setValue("quizObjectiveId", Number(value))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione o objetivo" />
-            </SelectTrigger>
-
-            <SelectContent>
-              {quizOptions?.quizObjectives.map((objective) => (
-                <SelectItem key={objective.id} value={String(objective.id)}>
-                  {objective.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Sênioridade
-          </FieldLabel>
-
-          <Select
-            defaultValue={
-              profile?.seniorityId ? String(profile.seniorityId) : undefined
-            }
-            onValueChange={(value) => setValue("seniorityId", Number(value))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione a sênioridade" />
-            </SelectTrigger>
-            <SelectContent>
-              {quizOptions?.seniorities.map((seniority) => {
-                return (
-                  <SelectItem key={seniority.id} value={String(seniority.id)}>
-                    {seniority.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Área de atuação
-          </FieldLabel>
-          <Select
-            defaultValue={
-              profile?.specialtyId ? String(profile.specialtyId) : undefined
-            }
-            onValueChange={(value) => setValue("specialtyId", Number(value))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione a área" />
-            </SelectTrigger>
-            <SelectContent>
-              {quizOptions?.specialties.map((specialty) => {
-                return (
-                  <SelectItem key={specialty.id} value={String(specialty.id)}>
-                    {specialty.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </Field>
-
+        {/* Objetivo do Quiz */}
         <Controller
           control={control}
-          name="quizSubjectIds"
+          name="quizObjectiveId"
           render={({ field }) => (
             <Field>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Assunto
+                Objetivo do Quiz
               </FieldLabel>
-
               <Select
-                value=""
-                onValueChange={(value) => {
-                  if (!value) return;
-                  const current = field.value ?? [];
-                  field.onChange([...current, Number(value)]);
-                }}
+                value={field.value ? String(field.value) : ""}
+                onValueChange={(value) => field.onChange(Number(value))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o assunto" />
+                  <SelectValue placeholder="Selecione o objetivo" />
                 </SelectTrigger>
                 <SelectContent>
-                  {quizOptions?.quizSubjects
-                    .filter((subject) => !field.value?.includes(subject.id))
-                    .map((subject) => {
-                      return (
-                        <SelectItem key={subject.id} value={String(subject.id)}>
-                          {subject.name}
-                        </SelectItem>
-                      );
-                    })}
+                  {quizOptions?.quizObjectives.map((objective) => (
+                    <SelectItem key={objective.id} value={String(objective.id)}>
+                      {objective.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-
-              <div className="flex flex-wrap space-y-1 mt-2">
-                {quizOptions?.quizSubjects
-                  .filter((subject) => field.value?.includes(subject.id))
-                  .map((subject) => (
-                    <Badge
-                      key={subject.id}
-                      variant="secondary"
-                      size="sm"
-                      hasIcon={true}
-                      onClick={() => {
-                        const current = field.value ?? [];
-                        field.onChange(
-                          current.filter((id: number) => id !== subject.id),
-                        );
-                      }}
-                    >
-                      {subject.name}
-                    </Badge>
-                  ))}
-              </div>
             </Field>
           )}
         />
 
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Quais stacks serão avaliadas
-          </FieldLabel>
-          {/* <SearchSelectField
-            items={quizOptions?.stacks ?? []}
-            value={selectedStackIds}
-            onChange={setSelectedStackIds}
-            searchPlaceholder="Buscar tecnologia (ex: React, Java)..."
-            popularLabel="Tecnologias populares:"
-            emptyMessage="Nenhuma tecnologia disponível encontrada"
-            className="bg-bg-1 border-bg-3 focus:border-primary-1"
-            showPopular={false}
-          /> */}
-        </Field>
+        {/* Sênioridade */}
+        <Controller
+          control={control}
+          name="seniorityId"
+          defaultValue={profile?.seniorityId}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                Sênioridade
+              </FieldLabel>
+              <Select
+                value={field.value ? String(field.value) : ""}
+                onValueChange={(value) => field.onChange(Number(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a sênioridade" />
+                </SelectTrigger>
+                <SelectContent>
+                  {quizOptions?.seniorities.map((seniority) => (
+                    <SelectItem key={seniority.id} value={String(seniority.id)}>
+                      {seniority.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
 
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-            Tamanho do quiz
-          </FieldLabel>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Longo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="short">Curto (10 questões)</SelectItem>
-              <SelectItem value="medium">Médio (20 questões)</SelectItem>
-              <SelectItem value="long">Longo (40 questões)</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
+        {/* Área de atuação */}
+        <Controller
+          control={control}
+          name="specialtyId"
+          defaultValue={profile?.specialtyId}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                Área de atuação
+              </FieldLabel>
+              <Select
+                value={field.value ? String(field.value) : ""}
+                onValueChange={(value) => field.onChange(Number(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a área" />
+                </SelectTrigger>
+                <SelectContent>
+                  {quizOptions?.specialties.map((specialty) => (
+                    <SelectItem key={specialty.id} value={String(specialty.id)}>
+                      {specialty.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
 
-        <label className="flex items-start gap-2 p-4 rounded-sm bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-2/15 transition-colors">
-          <Checkbox id="save-config" className="mt-1 cursor-pointer" />
-          <div className="space-y-1">
-            <p className="text-white-1 font-bold">
-              Salvar configuração no meu perfil
-            </p>
-            <p className="text-white-2 typ-caption">
-              Use estas configurações como padrão para próximos testes
-            </p>
-          </div>
-        </label>
+        {/* Assunto (multi-select) */}
+        <Controller
+          control={control}
+          name="quizSubjectIds"
+          render={({ field: subjectField }) => (
+            <Controller
+              control={control}
+              name="specialtyId"
+              render={({ field: specialtyField }) => (
+                <Field>
+                  <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                    Assunto
+                  </FieldLabel>
+
+                  <Select
+                    value=""
+                    onValueChange={(value) => {
+                      if (!value) return;
+                      const current = subjectField.value ?? [];
+                      subjectField.onChange([...current, Number(value)]);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o assunto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {quizOptions?.quizSubjects
+                        .filter(
+                          (subject) =>
+                            !subjectField.value?.includes(subject.id) &&
+                            subject.specialties.some(
+                              (s) => s.id === specialtyField.value,
+                            ),
+                        )
+                        .map((subject) => (
+                          <SelectItem
+                            key={subject.id}
+                            value={String(subject.id)}
+                          >
+                            {subject.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {quizOptions?.quizSubjects
+                      .filter((subject) =>
+                        subjectField.value?.includes(subject.id),
+                      )
+                      .map((subject) => (
+                        <Badge
+                          key={subject.id}
+                          hasIcon={true}
+                          onClick={() => {
+                            const current = subjectField.value ?? [];
+                            subjectField.onChange(
+                              current.filter((id: number) => id !== subject.id),
+                            );
+                          }}
+                        >
+                          {subject.name}
+                        </Badge>
+                      ))}
+                  </div>
+                </Field>
+              )}
+            />
+          )}
+        />
+
+        {/* Stacks */}
+        <Controller
+          control={control}
+          name="stacksId"
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                Quais stacks serão avaliadas
+              </FieldLabel>
+              <SearchSelectField
+                items={quizOptions?.stacks ?? []}
+                value={field.value ?? []}
+                onChange={field.onChange}
+                searchPlaceholder="Buscar tecnologia (ex: React, Java)..."
+                popularLabel="Tecnologias populares:"
+                emptyMessage="Nenhuma tecnologia disponível encontrada"
+                className="bg-bg-1 border-bg-3 focus:border-primary-1"
+                showPopular={false}
+              />
+            </Field>
+          )}
+        />
+
+        {/* Tamanho do quiz */}
+        <Controller
+          control={control}
+          name="quantity"
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
+                Tamanho do quiz
+              </FieldLabel>
+              <Select
+                value={
+                  Object.entries(QUANTITY_MAP).find(
+                    ([, v]) => v === field.value,
+                  )?.[0] ?? ""
+                }
+                onValueChange={(value) =>
+                  field.onChange(QUANTITY_MAP[value] ?? 10)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tamanho" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="short">Curto (10 questões)</SelectItem>
+                  <SelectItem value="medium">Médio (20 questões)</SelectItem>
+                  <SelectItem value="long">Longo (40 questões)</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
+
+        {/* Salvar configuração */}
+        <Controller
+          control={control}
+          name="saveInProfile"
+          render={({ field }) => (
+            <label className="flex items-start gap-2 p-4 rounded-sm bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-2/15 transition-colors">
+              <Checkbox
+                id="save-config"
+                className="mt-1 cursor-pointer"
+                checked={field.value ?? false}
+                onCheckedChange={field.onChange}
+              />
+              <div className="space-y-1">
+                <p className="text-white-1 font-bold">
+                  Salvar configuração no meu perfil
+                </p>
+                <p className="text-white-2 typ-caption">
+                  Use estas configurações como padrão para próximos testes
+                </p>
+              </div>
+            </label>
+          )}
+        />
 
         <div className="flex gap-4 mt-2">
           <Button

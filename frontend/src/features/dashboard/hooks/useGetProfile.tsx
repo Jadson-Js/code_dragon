@@ -4,13 +4,13 @@ import { api } from "@/lib/api-client";
 interface IProfile {
   id: string;
   userId: string;
-  linkedinUrl: string | null;
-  githubUrl: string | null;
-  portfolioUrl: string | null;
-  ageRangeId: number | null;
-  seniorityId: number | null;
-  specialtyId: number | null;
-  careerObjectiveId: number | null;
+  linkedinUrl: string | undefined;
+  githubUrl: string | undefined;
+  portfolioUrl: string | undefined;
+  ageRangeId: number | undefined;
+  seniorityId: number | undefined;
+  specialtyId: number | undefined;
+  careerObjectiveId: number | undefined;
   stackIds: number[];
 }
 
