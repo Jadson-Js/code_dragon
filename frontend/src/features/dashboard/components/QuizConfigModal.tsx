@@ -165,13 +165,14 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 </SelectContent>
               </Select>
 
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap space-y-1 mt-2">
                 {quizOptions?.quizSubjects
                   .filter((subject) => field.value?.includes(subject.id))
                   .map((subject) => (
                     <Badge
                       key={subject.id}
-                      variant="default"
+                      variant="secondary"
+                      size="sm"
                       hasIcon={true}
                       onClick={() => {
                         const current = field.value ?? [];

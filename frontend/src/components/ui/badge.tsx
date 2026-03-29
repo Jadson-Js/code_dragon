@@ -6,13 +6,13 @@ import { X } from "lucide-react";
 import { cn } from "@/shared/utils";
 
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-transparent px-4 py-2 text-sm font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-4 cursor-pointer group",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-transparent whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-4 cursor-pointer group font-medium",
   {
     variants: {
       variant: {
         default:
           "bg-primary-1 text-white-1 hover:bg-primary-1/90 border-transparent",
-        secondary: "bg-bg-2 text-white-1 hover:bg-bg-3 border-transparent",
+        secondary: "bg-bg-1 rounded-sm text-white-1 hover:bg-bg-2 border-bg-3 ",
         destructive:
           "bg-destructive text-white-1 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 hover:bg-destructive/90 border-transparent",
         outline:
@@ -21,9 +21,14 @@ const badgeVariants = cva(
           "hover:bg-bg-3 text-white-2 hover:text-white-1 border-transparent",
         link: "text-primary-1 underline-offset-4 hover:underline border-transparent",
       },
+      size: {
+        default: "px-4 py-2 text-sm",
+        sm: "px-2 py-1 text-sm font-normal",
+      },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   },
 );
@@ -31,6 +36,7 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
+  size = "default",
   asChild = false,
   hasIcon = false,
   children,
@@ -46,7 +52,7 @@ function Badge({
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      className={cn(badgeVariants({ variant, size }), className)}
       {...props}
     >
       {children}
