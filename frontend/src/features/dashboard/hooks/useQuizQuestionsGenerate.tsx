@@ -14,13 +14,21 @@ export function useQuizQuestionsGenerate() {
 
   const form = useForm<QuizQuestionsGenerateFormData>({
     resolver: zodResolver(quizQuestionsGenerateSchema),
+    defaultValues: {
+      saveInProfile: false,
+      quizSubjectIds: [],
+      stacksId: [],
+      quizObjectiveId: 0,
+      seniorityId: 0,
+      specialtyId: 0,
+      quantity: 10,
+    },
   });
 
   const mutation = useMutation({
     mutationFn: (data: QuizQuestionsGenerateFormData) =>
       api.post("/quiz/questions/generate", data),
     onSuccess: () => {
-      form.reset();
       navigate("/");
     },
     onError: async () => {

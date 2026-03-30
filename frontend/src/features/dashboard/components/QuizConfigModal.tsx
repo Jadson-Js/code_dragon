@@ -15,11 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
-import { Controller, useWatch } from "react-hook-form";
+import type { QuizQuestionsGenerateFormData } from "../schemas/useQuizQuestionsGenerate";
+import { Controller } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useEffect } from "react";
@@ -40,7 +41,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
   const { data: quizOptions } = useGetQuizOptions();
   const { form, mutation } = useQuizQuestionsGenerate();
 
-  const { control, handleSubmit, getValues, setValue } = form;
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = form;
 
   // Remove assuntos selecionados que não pertencem à nova especialidade
   function cleanSubjectsForSpecialty(newSpecialtyId: number) {
@@ -61,7 +68,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
       specialtyId: profile.specialtyId,
       stacksId: profile.stackIds ?? [],
     });
-  }, [profile]);
+  }, [profile, quizOptions]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,7 +93,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           control={control}
           name="quizObjectiveId"
           render={({ field }) => (
-            <Field>
+            <Field data-invalid={!!errors.quizObjectiveId}>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                 Objetivo do Quiz
               </FieldLabel>
@@ -105,6 +112,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError errors={[errors.quizObjectiveId]} />
             </Field>
           )}
         />
@@ -115,7 +123,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           name="seniorityId"
           defaultValue={profile?.seniorityId}
           render={({ field }) => (
-            <Field>
+            <Field data-invalid={!!errors.seniorityId}>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                 Sênioridade
               </FieldLabel>
@@ -134,6 +142,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError errors={[errors.seniorityId]} />
             </Field>
           )}
         />
@@ -144,7 +153,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           name="specialtyId"
           defaultValue={profile?.specialtyId}
           render={({ field }) => (
-            <Field>
+            <Field data-invalid={!!errors.specialtyId}>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                 Área de atuação
               </FieldLabel>
@@ -167,6 +176,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError errors={[errors.specialtyId]} />
             </Field>
           )}
         />
@@ -180,7 +190,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               control={control}
               name="specialtyId"
               render={({ field: specialtyField }) => (
-                <Field>
+                <Field data-invalid={!!errors.quizSubjectIds}>
                   <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                     Assunto
                   </FieldLabel>
@@ -242,6 +252,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         </Badge>
                       ))}
                   </div>
+                  <FieldError errors={[errors.quizSubjectIds]} />
                 </Field>
               )}
             />
@@ -253,7 +264,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           control={control}
           name="stacksId"
           render={({ field }) => (
-            <Field>
+            <Field data-invalid={!!errors.stacksId}>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                 Quais stacks serão avaliadas
               </FieldLabel>
@@ -267,6 +278,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 className="bg-bg-1 border-bg-3 focus:border-primary-1"
                 showPopular={false}
               />
+              <FieldError errors={[errors.stacksId]} />
             </Field>
           )}
         />
@@ -276,7 +288,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           control={control}
           name="quantity"
           render={({ field }) => (
-            <Field>
+            <Field data-invalid={!!errors.quantity}>
               <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
                 Tamanho do quiz
               </FieldLabel>
@@ -299,6 +311,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                   <SelectItem value="long">Longo (40 questões)</SelectItem>
                 </SelectContent>
               </Select>
+              <FieldError errors={[errors.quantity]} />
             </Field>
           )}
         />
@@ -341,7 +354,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             size="lg"
             className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20"
             disabled={mutation.isPending}
-            onClick={handleSubmit((data) => mutation.mutate(data))}
+            onClick={handleSubmit((data: QuizQuestionsGenerateFormData) =>
+              mutation.mutate(data),
+            )}
           >
             {mutation.isPending ? (
               <Loader2 size={18} className="animate-spin" />
