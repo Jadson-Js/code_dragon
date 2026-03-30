@@ -63,10 +63,25 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
   useEffect(() => {
     if (!profile) return;
+
+    let savedConfig: any = null;
+    try {
+      const saved = localStorage.getItem("@code_dragon:quiz_config");
+      if (saved) {
+        savedConfig = JSON.parse(saved);
+      }
+    } catch (e) {
+      // Ignorar erro de parse
+    }
+
     form.reset({
       seniorityId: profile.seniorityId,
       specialtyId: profile.specialtyId,
       stacksId: profile.stackIds ?? [],
+      saveInProfile: !!savedConfig,
+      quantity: savedConfig?.quantity ?? 10,
+      quizObjectiveId: savedConfig?.quizObjectiveId ?? 0,
+      quizSubjectIds: savedConfig?.quizSubjectIds ?? [],
     });
   }, [profile, quizOptions]);
 

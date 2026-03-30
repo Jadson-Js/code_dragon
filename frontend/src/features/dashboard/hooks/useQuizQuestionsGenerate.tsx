@@ -28,7 +28,19 @@ export function useQuizQuestionsGenerate() {
   const mutation = useMutation({
     mutationFn: (data: QuizQuestionsGenerateFormData) =>
       api.post("/quiz/questions/generate", data),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      if (variables.saveInProfile) {
+        localStorage.setItem(
+          "@code_dragon:quiz_config",
+          JSON.stringify({
+            quizObjectiveId: variables.quizObjectiveId,
+            quizSubjectIds: variables.quizSubjectIds,
+            quantity: variables.quantity,
+          }),
+        );
+      } else {
+        localStorage.removeItem("@code_dragon:quiz_config");
+      }
       navigate("/");
     },
     onError: async () => {
