@@ -1,19 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { Navigate, Outlet, useLocation } from "react-router"; // Importe useLocation
+import { Navigate, Outlet, useLocation } from "react-router";
 import { LoadingScreen } from "@/components/loading-screen";
-import { api } from "@/lib/api-client";
+import { useAuthUser } from "@/features/auth/hooks/useAuthUser";
 
 export function ProtectedRoute() {
   const location = useLocation();
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["auth-user"],
-    queryFn: async () => {
-      const { data } = await api.get("/auth/me");
-      return data;
-    },
-    retry: false,
-    staleTime: Infinity,
-  });
+  const { data, isPending, isError } = useAuthUser();
 
   // Se estiver carregando pela primeira vez, mostra Loading
   if (isPending) return <LoadingScreen />;

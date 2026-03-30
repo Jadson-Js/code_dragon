@@ -1,3 +1,4 @@
+import { useAuthUser } from "@/features/auth/hooks/useAuthUser";
 import { Sparkles } from "lucide-react";
 
 interface Props {
@@ -5,12 +6,14 @@ interface Props {
 }
 
 export default function DashboardHeader({ className }: Props) {
+  const { data } = useAuthUser();
+
   return (
     <div className={`flex justify-between items-start gap-16 ${className}`}>
       <div className="space-y-2 flex-1">
         <div className="flex items-center gap-2">
           <Sparkles size={30} className="text-primary-1" />
-          <h2 className="text-white-1 typ-h1 font-bold">Olá, Jhon!</h2>
+          <h2 className="text-white-1 typ-h1 font-bold">Olá, {data?.name}!</h2>
         </div>
 
         <p className="text-white-2 typ-h3">
