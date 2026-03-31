@@ -111,11 +111,16 @@ function makeUseCase() {
     createMany: jest.fn<(data: QuizQuestion[]) => Promise<QuizQuestion[]>>(),
   };
 
+  const updateProfileWithStacksRepository = {
+    execute: jest.fn<() => Promise<void>>(),
+  };
+
   const useCase = new QuizQuestionGenerateUseCase(
     getQuizContextRepository as never,
     generateQuizQuestionQueue as never,
     geminiProvider as never,
     quizQuestionRepository as never,
+    updateProfileWithStacksRepository as never,
   );
 
   return {
@@ -124,6 +129,7 @@ function makeUseCase() {
     generateQuizQuestionQueue,
     geminiProvider,
     quizQuestionRepository,
+    updateProfileWithStacksRepository,
   };
 }
 
@@ -260,9 +266,9 @@ describe("QuizQuestionGenerateUseCase", () => {
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
 
-    await useCase.execute(makeInput(5));
+    await useCase.execute(makeInput(25));
 
-    // 1 is handled synchronously, so 4 jobs go to the queue
+    // 5 are handled synchronously, 20 go to queue in 4 batches of 5
     expect(generateQuizQuestionQueue.addJob).toHaveBeenCalledTimes(4);
   });
 
@@ -279,7 +285,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
 
-    await useCase.execute(makeInput(3));
+    await useCase.execute(makeInput(15));
 
     const calls = generateQuizQuestionQueue.addJob.mock.calls;
     expect(calls).toHaveLength(2);
