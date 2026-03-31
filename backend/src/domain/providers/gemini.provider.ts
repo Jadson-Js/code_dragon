@@ -4,6 +4,7 @@ export interface IGenerateQuizQuestionByGeminiInputProvider {
   seniority: { id: number; name: string };
   specialty: { id: number; name: string };
   stacks: { id: number; name: string }[];
+  quantityPerBatch: number;
 }
 
 export interface IGenerateQuizQuestionByGeminiOutputProvider {

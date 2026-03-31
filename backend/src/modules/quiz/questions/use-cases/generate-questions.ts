@@ -33,9 +33,11 @@ export class QuizQuestionGenerateUseCase {
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     if (data.saveInProfile) this.saveInProfile(data);
+    const quantityPerBatch = 5;
+    const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
     const context = await this.getQuizContextRepository.execute(data);
-    const geminiInput = mapContextToGeminiInput(context);
+    const geminiInput = mapContextToGeminiInput(context, quantityPerBatch);
 
     const generateds =
       await this.geminiProvider.generateQuizQuestion(geminiInput);
@@ -55,7 +57,7 @@ export class QuizQuestionGenerateUseCase {
     const savedQuestions =
       await this.quizQuestionRepository.createMany(questions);
 
-    for (let i = 1; i < data.quantity; i++) {
+    for (let i = 1; i < batchQuestions; i++) {
       await this.generateQuizQuestionQueue.addJob(geminiInput);
     }
 

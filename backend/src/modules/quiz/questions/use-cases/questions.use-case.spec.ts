@@ -76,6 +76,7 @@ function makeInput(quantity = 1): IQuizQuestionGenerateInputDTO {
     stacksId: [20],
     quantity,
     saveInProfile: false,
+    userId: "user-123",
   };
 }
 
