@@ -1,4 +1,4 @@
-import { Activity, Sparkles, Loader2 } from "lucide-react";
+import { Activity, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -24,6 +24,7 @@ import { Controller } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const QUANTITY_MAP: Record<string, number> = {
   short: 10,
@@ -37,9 +38,10 @@ interface Props {
 }
 
 export default function QuizConfigModal({ open, onOpenChange }: Props) {
+  const navigate = useNavigate();
   const { data: profile } = useGetProfile();
   const { data: quizOptions } = useGetQuizOptions();
-  const { form, mutation } = useQuizQuestionsGenerate();
+  const { form } = useQuizQuestionsGenerate();
 
   const {
     control,
@@ -360,7 +362,6 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             size="lg"
             variant="outline"
             className="flex-1"
-            disabled={mutation.isPending}
             onClick={() => onOpenChange(false)}
           >
             CANCELAR
@@ -368,17 +369,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           <Button
             size="lg"
             className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20"
-            disabled={mutation.isPending}
-            onClick={handleSubmit((data: QuizQuestionsGenerateFormData) =>
-              mutation.mutate(data),
-            )}
+            onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
+              onOpenChange(false);
+              navigate("/quiz/generate", { state: { formData: data } });
+            })}
           >
-            {mutation.isPending ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              <Sparkles size={18} />
-            )}
-            {mutation.isPending ? "GERANDO..." : "INICIAR"}
+            <Sparkles size={18} />
+            INICIAR
           </Button>
         </div>
       </DialogContent>

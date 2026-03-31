@@ -14,7 +14,7 @@ export default function DashboardSidebar() {
 
   const navItems = [
     { label: "Home", to: "/", icon: House },
-    { label: "Diagnósticos", to: "/diagnostics", icon: Activity },
+    { label: "Diagnósticos", to: "/quiz", icon: Activity },
     { label: "Entrevista IA", to: "/interview", icon: Mic },
     { label: "Auditoria Perfil", to: "/audit", icon: UserSearch },
     { label: "Caixa de Sugestões", to: "/suggestions", icon: Lightbulb },
@@ -30,7 +30,8 @@ export default function DashboardSidebar() {
       <div className="flex flex-col gap-4">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.to;
+          const isActive =
+            item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
 
           return (
             <div

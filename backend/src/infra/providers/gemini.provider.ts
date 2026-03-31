@@ -19,7 +19,7 @@ export class GeminiProvider implements IGeminiProvider {
   ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]> {
     const prompt = `
 Você é um Tech Lead Sênior e especialista em criação de avaliações técnicas avançadas para desenvolvedores de software.
-Sua missão é gerar exatamente 3 (três) questões de múltipla escolha, rigorosas e precisas.
+Sua missão é gerar exatamente 5 (cinco) questões de múltipla escolha, rigorosas e precisas.
 
 === CONTEXTO DA AVALIAÇÃO ===
 - Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
