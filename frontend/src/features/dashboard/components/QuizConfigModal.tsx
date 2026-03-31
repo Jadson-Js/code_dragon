@@ -48,8 +48,11 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = form;
+
+  const watchedSpecialtyId = watch("specialtyId");
 
   // Remove assuntos selecionados que não pertencem à nova especialidade
   function cleanSubjectsForSpecialty(newSpecialtyId: number) {
@@ -89,179 +92,286 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar">
-        <DialogHeader className="items-center">
-          <div className="relative">
+      <DialogContent className="max-w-xl max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar p-0 border-white-1/10 bg-bg-2">
+        <DialogHeader className="items-center p-8">
+          <div className="relative mb-4">
             <div className="absolute inset-0 bg-primary-1/20 rounded-full blur-xl scale-150" />
-            <div className="relative w-14 h-14 rounded-full bg-primary-1/10 border border-primary-1/20 flex items-center justify-center">
-              <Activity className="text-primary-1" size={28} />
+            <div className="relative w-16 h-16 rounded-full bg-primary-1/10 border border-primary-1/20 flex items-center justify-center shadow-inner">
+              <Activity className="text-primary-1" size={32} />
             </div>
           </div>
 
-          <DialogTitle>Configurar Diagnóstico</DialogTitle>
-          <DialogDescription>
-            Defina os parâmetros do teste. As perguntas serão geradas pela IA
-            com base nas suas escolhas.
+          <DialogTitle className="text-2xl font-bold tracking-tight">
+            Configurar Diagnóstico
+          </DialogTitle>
+
+          <DialogDescription className="text-center max-w-md">
+            Personalize seu teste técnico. Nossa IA irá gerar um desafio sob
+            medida baseado nos seus critérios.
           </DialogDescription>
         </DialogHeader>
 
-        {/* Objetivo do Quiz */}
-        <Controller
-          control={control}
-          name="quizObjectiveId"
-          render={({ field }) => (
-            <Field data-invalid={!!errors.quizObjectiveId}>
-              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Objetivo do Quiz
-              </FieldLabel>
-              <Select
-                value={field.value ? String(field.value) : ""}
-                onValueChange={(value) => field.onChange(Number(value))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o objetivo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {quizOptions?.quizObjectives.map((objective) => (
-                    <SelectItem key={objective.id} value={String(objective.id)}>
-                      {objective.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FieldError errors={[errors.quizObjectiveId]} />
-            </Field>
-          )}
-        />
+        <div className="px-8 pb-8">
+          {/* Section: Carreira */}
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px flex-1 bg-white-1/10" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white-1/40">
+                Sua Carreira
+              </span>
+              <div className="h-px flex-1 bg-white-1/10" />
+            </div>
 
-        {/* Sênioridade */}
-        <Controller
-          control={control}
-          name="seniorityId"
-          defaultValue={profile?.seniorityId}
-          render={({ field }) => (
-            <Field data-invalid={!!errors.seniorityId}>
-              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Sênioridade
-              </FieldLabel>
-              <Select
-                value={field.value ? String(field.value) : ""}
-                onValueChange={(value) => field.onChange(Number(value))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a sênioridade" />
-                </SelectTrigger>
-                <SelectContent>
-                  {quizOptions?.seniorities.map((seniority) => (
-                    <SelectItem key={seniority.id} value={String(seniority.id)}>
-                      {seniority.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FieldError errors={[errors.seniorityId]} />
-            </Field>
-          )}
-        />
-
-        {/* Área de atuação */}
-        <Controller
-          control={control}
-          name="specialtyId"
-          defaultValue={profile?.specialtyId}
-          render={({ field }) => (
-            <Field data-invalid={!!errors.specialtyId}>
-              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Área de atuação
-              </FieldLabel>
-              <Select
-                value={field.value ? String(field.value) : ""}
-                onValueChange={(value) => {
-                  const newId = Number(value);
-                  cleanSubjectsForSpecialty(newId);
-                  field.onChange(newId);
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a área" />
-                </SelectTrigger>
-                <SelectContent>
-                  {quizOptions?.specialties.map((specialty) => (
-                    <SelectItem key={specialty.id} value={String(specialty.id)}>
-                      {specialty.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FieldError errors={[errors.specialtyId]} />
-            </Field>
-          )}
-        />
-
-        {/* Assunto (multi-select) */}
-        <Controller
-          control={control}
-          name="quizSubjectIds"
-          render={({ field: subjectField }) => (
-            <Controller
-              control={control}
-              name="specialtyId"
-              render={({ field: specialtyField }) => (
-                <Field data-invalid={!!errors.quizSubjectIds}>
-                  <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                    Assunto
-                  </FieldLabel>
-
-                  <Select
-                    value=""
-                    onValueChange={(value) => {
-                      if (!value) return;
-                      const current = subjectField.value ?? [];
-                      subjectField.onChange([...current, Number(value)]);
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o assunto" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {quizOptions?.quizSubjects
-                        .filter(
-                          (subject) =>
-                            !subjectField.value?.includes(subject.id) &&
-                            subject.specialties.some(
-                              (specialty) =>
-                                specialty.id === specialtyField.value,
-                            ),
-                        )
-                        .map((subject) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+              {/* Sênioridade */}
+              <Controller
+                control={control}
+                name="seniorityId"
+                defaultValue={profile?.seniorityId}
+                render={({ field }) => (
+                  <Field data-invalid={!!errors.seniorityId}>
+                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
+                      Sênioridade
+                    </FieldLabel>
+                    <Select
+                      value={field.value ? String(field.value) : ""}
+                      onValueChange={(value) => field.onChange(Number(value))}
+                    >
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {quizOptions?.seniorities.map((seniority) => (
                           <SelectItem
-                            key={subject.id}
-                            value={String(subject.id)}
+                            key={seniority.id}
+                            value={String(seniority.id)}
                           >
-                            {subject.name}
+                            {seniority.name}
                           </SelectItem>
                         ))}
-                    </SelectContent>
-                  </Select>
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[errors.seniorityId]} />
+                  </Field>
+                )}
+              />
 
-                  <div className="flex flex-wrap gap-2 mt-2">
+              {/* Área de atuação */}
+              <Controller
+                control={control}
+                name="specialtyId"
+                defaultValue={profile?.specialtyId}
+                render={({ field }) => (
+                  <Field data-invalid={!!errors.specialtyId}>
+                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
+                      Área de atuação
+                    </FieldLabel>
+                    <Select
+                      value={field.value ? String(field.value) : ""}
+                      onValueChange={(value) => {
+                        const newId = Number(value);
+                        cleanSubjectsForSpecialty(newId);
+                        field.onChange(newId);
+                      }}
+                    >
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {quizOptions?.specialties.map((specialty) => (
+                          <SelectItem
+                            key={specialty.id}
+                            value={String(specialty.id)}
+                          >
+                            {specialty.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[errors.specialtyId]} />
+                  </Field>
+                )}
+              />
+            </div>
+
+            {/* Stacks */}
+            <Controller
+              control={control}
+              name="stacksId"
+              render={({ field }) => (
+                <Field data-invalid={!!errors.stacksId}>
+                  <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
+                    Quais stacks serão avaliadas
+                  </FieldLabel>
+                  <SearchSelectField
+                    items={quizOptions?.stacks ?? []}
+                    value={field.value ?? []}
+                    onChange={field.onChange}
+                    searchPlaceholder="Ex: React, Java, AWS..."
+                    popularLabel="Populares"
+                    emptyMessage="Nenhuma encontrada"
+                    className="bg-bg-1/50 border-white-1/10 rounded-sm focus:border-primary-1/50"
+                    showPopular={false}
+                  />
+                  <FieldError errors={[errors.stacksId]} />
+                </Field>
+              )}
+            />
+          </div>
+
+          {/* Section: Configurações do Diagnóstico */}
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 bg-white-1/10" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white-1/40">
+                Definições do Quiz
+              </span>
+              <div className="h-px flex-1 bg-white-1/10" />
+            </div>
+
+            {/* Objetivo do Quiz */}
+            <div className="mb-6">
+              <Controller
+                control={control}
+                name="quizObjectiveId"
+                render={({ field }) => (
+                  <Field data-invalid={!!errors.quizObjectiveId}>
+                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
+                      Objetivo do Quiz
+                    </FieldLabel>
+                    <Select
+                      value={field.value ? String(field.value) : ""}
+                      onValueChange={(value) => field.onChange(Number(value))}
+                    >
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                        <SelectValue placeholder="Selecione o objetivo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {quizOptions?.quizObjectives.map((objective) => (
+                          <SelectItem
+                            key={objective.id}
+                            value={String(objective.id)}
+                          >
+                            {objective.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[errors.quizObjectiveId]} />
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+              {/* Assunto */}
+              <Controller
+                control={control}
+                name="quizSubjectIds"
+                render={({ field: subjectField }) => (
+                  <Field data-invalid={!!errors.quizSubjectIds}>
+                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2 leading-none">
+                      Tópicos Específicos
+                    </FieldLabel>
+
+                    <Select
+                      value=""
+                      onValueChange={(value) => {
+                        if (!value) return;
+                        const current = subjectField.value ?? [];
+                        subjectField.onChange([...current, Number(value)]);
+                      }}
+                    >
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {quizOptions?.quizSubjects
+                          .filter(
+                            (subject) =>
+                              !subjectField.value?.includes(subject.id) &&
+                              subject.specialties.some(
+                                (specialty) =>
+                                  specialty.id === watchedSpecialtyId,
+                              ),
+                          )
+                          .map((subject) => (
+                            <SelectItem
+                              key={subject.id}
+                              value={String(subject.id)}
+                            >
+                              {subject.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[errors.quizSubjectIds]} />
+                  </Field>
+                )}
+              />
+
+              {/* Tamanho do quiz */}
+              <Controller
+                control={control}
+                name="quantity"
+                render={({ field }) => (
+                  <Field data-invalid={!!errors.quantity}>
+                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2 leading-none">
+                      Quantidade
+                    </FieldLabel>
+                    <Select
+                      value={
+                        Object.entries(QUANTITY_MAP).find(
+                          ([, v]) => v === field.value,
+                        )?.[0] ?? ""
+                      }
+                      onValueChange={(value) =>
+                        field.onChange(QUANTITY_MAP[value] ?? 10)
+                      }
+                    >
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                        <SelectValue placeholder="Tamanho" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="short">Curto (10)</SelectItem>
+                        <SelectItem value="medium">Médio (20)</SelectItem>
+                        <SelectItem value="long">Longo (40)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FieldError errors={[errors.quantity]} />
+                  </Field>
+                )}
+              />
+            </div>
+
+            {/* Badges de assuntos */}
+            <div className="mb-8">
+              <Controller
+                control={control}
+                name="quizSubjectIds"
+                render={({ field: subjectField }) => (
+                  <div className="flex flex-wrap gap-2">
                     {quizOptions?.quizSubjects
                       .filter(
                         (subject) =>
                           subjectField.value?.includes(subject.id) &&
                           subject.specialties.some(
                             (specialty) =>
-                              specialty.id === specialtyField.value,
+                              specialty.id === watch("specialtyId"),
                           ),
                       )
                       .map((subject) => (
                         <Badge
                           key={subject.id}
+                          variant="secondary"
+                          className="bg-white-1/5 hover:bg-white-1/10 border-white-1/10 text-white-2 py-1 px-3"
                           hasIcon={true}
                           onClick={() => {
                             const current = subjectField.value ?? [];
                             subjectField.onChange(
-                              current.filter((id: number) => id !== subject.id),
+                              current.filter(
+                                (id: number) => id !== subject.id,
+                              ),
                             );
                           }}
                         >
@@ -269,114 +379,59 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         </Badge>
                       ))}
                   </div>
-                  <FieldError errors={[errors.quizSubjectIds]} />
-                </Field>
-              )}
-            />
-          )}
-        />
-
-        {/* Stacks */}
-        <Controller
-          control={control}
-          name="stacksId"
-          render={({ field }) => (
-            <Field data-invalid={!!errors.stacksId}>
-              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Quais stacks serão avaliadas
-              </FieldLabel>
-              <SearchSelectField
-                items={quizOptions?.stacks ?? []}
-                value={field.value ?? []}
-                onChange={field.onChange}
-                searchPlaceholder="Buscar tecnologia (ex: React, Java)..."
-                popularLabel="Tecnologias populares:"
-                emptyMessage="Nenhuma tecnologia disponível encontrada"
-                className="bg-bg-1 border-bg-3 focus:border-primary-1"
-                showPopular={false}
+                )}
               />
-              <FieldError errors={[errors.stacksId]} />
-            </Field>
-          )}
-        />
+            </div>
 
-        {/* Tamanho do quiz */}
-        <Controller
-          control={control}
-          name="quantity"
-          render={({ field }) => (
-            <Field data-invalid={!!errors.quantity}>
-              <FieldLabel className="text-sm font-semibold text-white-1 opacity-80 uppercase tracking-wider">
-                Tamanho do quiz
-              </FieldLabel>
-              <Select
-                value={
-                  Object.entries(QUANTITY_MAP).find(
-                    ([, v]) => v === field.value,
-                  )?.[0] ?? ""
-                }
-                onValueChange={(value) =>
-                  field.onChange(QUANTITY_MAP[value] ?? 10)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tamanho" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="short">Curto (10 questões)</SelectItem>
-                  <SelectItem value="medium">Médio (20 questões)</SelectItem>
-                  <SelectItem value="long">Longo (40 questões)</SelectItem>
-                </SelectContent>
-              </Select>
-              <FieldError errors={[errors.quantity]} />
-            </Field>
-          )}
-        />
-
-        {/* Salvar configuração */}
-        <Controller
-          control={control}
-          name="saveInProfile"
-          render={({ field }) => (
-            <label className="flex items-start gap-2 p-4 rounded-sm bg-white-1/5 border border-white-1/5 cursor-pointer hover:bg-white-2/15 transition-colors">
-              <Checkbox
-                id="save-config"
-                className="mt-1 cursor-pointer"
-                checked={field.value ?? false}
-                onCheckedChange={field.onChange}
+            {/* Salvar configuração */}
+            <div className="mb-10">
+              <Controller
+                control={control}
+                name="saveInProfile"
+                render={({ field }) => (
+                  <label className="group flex items-center gap-4 p-4 rounded-sm bg-white-1/5 border border-white-1/10 cursor-pointer hover:bg-white-2/10 transition-all">
+                    <Checkbox
+                      id="save-config"
+                      className="cursor-pointer border-white-1/20 data-[state=checked]:bg-primary-1 data-[state=checked]:border-primary-1"
+                      checked={field.value ?? false}
+                      onCheckedChange={field.onChange}
+                    />
+                    <div className="flex-1">
+                      <p className="text-white-1 font-bold text-sm">
+                        Lembrar minhas preferências
+                      </p>
+                      <p className="text-white-2 text-xs opacity-60">
+                        Sempre abrir este modal com estas escolhas
+                        pré-definidas.
+                      </p>
+                    </div>
+                  </label>
+                )}
               />
-              <div className="space-y-1">
-                <p className="text-white-1 font-bold">
-                  Salvar configuração no meu perfil
-                </p>
-                <p className="text-white-2 typ-caption">
-                  Use estas configurações como padrão para próximos testes
-                </p>
-              </div>
-            </label>
-          )}
-        />
+            </div>
+          </div>
 
-        <div className="flex gap-4 mt-2">
-          <Button
-            size="lg"
-            variant="outline"
-            className="flex-1"
-            onClick={() => onOpenChange(false)}
-          >
-            CANCELAR
-          </Button>
-          <Button
-            size="lg"
-            className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20"
-            onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
-              onOpenChange(false);
-              navigate("/quiz/generate", { state: { formData: data } });
-            })}
-          >
-            <Sparkles size={18} />
-            INICIAR
-          </Button>
+          <div className="flex gap-4">
+            <Button
+              size="lg"
+              variant="outline"
+              className="flex-1 rounded-sm border-white-1/10 text-white-2 hover:bg-white-1/5"
+              onClick={() => onOpenChange(false)}
+            >
+              CANCELAR
+            </Button>
+            <Button
+              size="lg"
+              className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20 rounded-sm"
+              onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
+                onOpenChange(false);
+                navigate("/quiz/generate", { state: { formData: data } });
+              })}
+            >
+              <Sparkles size={18} />
+              INICIAR DIAGNÓSTICO
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
