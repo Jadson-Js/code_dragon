@@ -86,6 +86,26 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
     });
   }, [profile, quizOptions]);
 
+  const handleSpecialtyChange = (
+    newId: number,
+    onChange: (val: number) => void,
+  ) => {
+    onChange(newId);
+
+    const newSpecialty = quizOptions?.specialties.find(
+      (spec) => spec.id === newId,
+    );
+
+    if (newSpecialty) {
+      const validSubjectIds = newSpecialty.subjects.map((s) => s.id);
+      const currentSubjects = getValues("quizSubjectIds") || [];
+      const filteredSubjects = currentSubjects.filter((id) =>
+        validSubjectIds.includes(id),
+      );
+      setValue("quizSubjectIds", filteredSubjects);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar p-0 border-white-1/10 bg-bg-2">
@@ -164,10 +184,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                     </FieldLabel>
                     <Select
                       value={field.value ? String(field.value) : ""}
-                      onValueChange={(value) => {
-                        const newId = Number(value);
-                        field.onChange(newId);
-                      }}
+                      onValueChange={(value) =>
+                        handleSpecialtyChange(Number(value), field.onChange)
+                      }
                     >
                       <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
                         <SelectValue placeholder="Selecione" />
