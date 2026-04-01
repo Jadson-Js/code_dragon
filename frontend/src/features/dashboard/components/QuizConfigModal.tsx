@@ -21,10 +21,11 @@ import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
 import type { QuizQuestionsGenerateFormData } from "../schemas/useQuizQuestionsGenerate";
 import { Controller } from "react-hook-form";
-import { Badge } from "@/components/ui/badge";
 import { SearchSelectField } from "@/components/ui/searchSelectField";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useWatch } from "react-hook-form";
+import { Badge } from "@/components/ui/badge";
 
 const QUANTITY_MAP: Record<string, number> = {
   short: 10,
@@ -48,25 +49,18 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
     handleSubmit,
     getValues,
     setValue,
-    watch,
     formState: { errors },
   } = form;
 
-  const watchedSpecialtyId = watch("specialtyId");
+  const watchedSpecialtyId = useWatch({
+    control,
+    name: "specialtyId",
+  });
 
-  // Remove assuntos selecionados que não pertencem à nova especialidade
-  function cleanSubjectsForSpecialty(newSpecialtyId: number) {
-    const currentSubjectIds = getValues("quizSubjectIds") ?? [];
-    const validSubjectIds = currentSubjectIds.filter((id: number) => {
-      const specialty = quizOptions?.specialties.find(
-        (s) => s.id === newSpecialtyId,
-      );
-      return (specialty?.subjects ?? []).some((s) => s.id === id);
-    });
-    if (validSubjectIds.length !== currentSubjectIds.length) {
-      setValue("quizSubjectIds", validSubjectIds);
-    }
-  }
+  const subjectsBySpecialty =
+    quizOptions?.specialties.find(
+      (specialty) => Number(specialty.id) === Number(watchedSpecialtyId),
+    )?.subjects || [];
 
   useEffect(() => {
     if (!profile) return;
@@ -172,7 +166,6 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                       value={field.value ? String(field.value) : ""}
                       onValueChange={(value) => {
                         const newId = Number(value);
-                        cleanSubjectsForSpecialty(newId);
                         field.onChange(newId);
                       }}
                     >
@@ -281,30 +274,28 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                       onValueChange={(value) => {
                         if (!value) return;
                         const current = subjectField.value ?? [];
-                        subjectField.onChange([...current, Number(value)]);
+                        if (!current.includes(Number(value))) {
+                          subjectField.onChange([...current, Number(value)]);
+                        }
                       }}
                     >
                       <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                       <SelectContent>
-                        {(
-                          quizOptions?.specialties.find(
-                            (s) => s.id === watchedSpecialtyId,
-                          )?.subjects ?? []
-                        )
-                          .filter(
-                            (subject) =>
-                              !subjectField.value?.includes(subject.id),
-                          )
-                          .map((subject) => (
+                        {subjectsBySpecialty?.map((subject) => {
+                          if (subjectField.value?.includes(subject.id))
+                            return null;
+
+                          return (
                             <SelectItem
                               key={subject.id}
                               value={String(subject.id)}
                             >
                               {subject.name}
                             </SelectItem>
-                          ))}
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                     <FieldError errors={[errors.quizSubjectIds]} />
@@ -345,7 +336,6 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 )}
               />
             </div>
-
             {/* Badges de assuntos */}
             <div className="mb-8">
               <Controller
@@ -353,37 +343,32 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 name="quizSubjectIds"
                 render={({ field: subjectField }) => (
                   <div className="flex flex-wrap gap-2">
-                    {(
-                      quizOptions?.specialties.find(
-                        (s) => s.id === watchedSpecialtyId,
-                      )?.subjects ?? []
-                    )
-                      .filter((subject) =>
-                        subjectField.value?.includes(subject.id),
-                      )
-                      .map((subject) => (
+                    {subjectField.value?.map((id) => {
+                      const subject = subjectsBySpecialty?.find(
+                        (s) => s.id === id,
+                      );
+                      if (!subject) return null;
+                      return (
                         <Badge
-                          key={subject.id}
+                          key={id}
                           variant="secondary"
                           className="bg-white-1/5 hover:bg-white-1/10 border-white-1/10 text-white-2 py-1 px-3"
                           hasIcon={true}
                           onClick={() => {
-                            const current = subjectField.value ?? [];
                             subjectField.onChange(
-                              current.filter(
-                                (id: number) => id !== subject.id,
-                              ),
+                              subjectField.value?.filter((sId) => sId !== id) ??
+                                [],
                             );
                           }}
                         >
                           {subject.name}
                         </Badge>
-                      ))}
+                      );
+                    })}
                   </div>
                 )}
               />
             </div>
-
             {/* Salvar configuração */}
             <div className="mb-10">
               <Controller
