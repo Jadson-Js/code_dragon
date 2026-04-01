@@ -16,22 +16,129 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { SearchSelectField } from "@/components/ui/searchSelectField";
+import { Badge } from "@/components/ui/badge";
+import { Controller, useWatch } from "react-hook-form";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
 import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
 import type { QuizQuestionsGenerateFormData } from "../schemas/useQuizQuestionsGenerate";
-import { Controller } from "react-hook-form";
-import { SearchSelectField } from "@/components/ui/searchSelectField";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { useWatch } from "react-hook-form";
-import { Badge } from "@/components/ui/badge";
 
+// --- Constantes ---
 const QUANTITY_MAP: Record<string, number> = {
   short: 10,
   medium: 20,
   long: 40,
 };
+
+// --- Componentes Auxiliares para Limpar o Boilerplate ---
+
+const SectionDivider = ({ title }: { title: string }) => (
+  <div className="flex items-center gap-4 mb-6">
+    <div className="h-px flex-1 bg-white-1/10" />
+    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white-1/40">
+      {title}
+    </span>
+    <div className="h-px flex-1 bg-white-1/10" />
+  </div>
+);
+
+// Wrapper genérico para Selects que lidam com IDs numéricos
+const SelectNumberField = ({
+  control,
+  name,
+  label,
+  options,
+  placeholder = "Selecione",
+  error,
+  onChangeExternal,
+}: any) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <Field data-invalid={!!error}>
+        <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2 leading-none">
+          {label}
+        </FieldLabel>
+        <Select
+          value={field.value ? String(field.value) : ""}
+          onValueChange={(val) => {
+            const numVal = Number(val);
+            if (onChangeExternal) {
+              onChangeExternal(numVal, field.onChange);
+            } else {
+              field.onChange(numVal);
+            }
+          }}
+        >
+          <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20 transition-all">
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {options?.map((opt: any) => (
+              <SelectItem key={opt.id} value={String(opt.id)}>
+                {opt.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <FieldError errors={error ? [error] : undefined} />
+      </Field>
+    )}
+  />
+);
+
+// Wrapper para Select que age como MultiSelect (para adicionar assuntos)
+const SelectMultiNumberField = ({
+  control,
+  name,
+  label,
+  options,
+  placeholder = "Selecione",
+  error,
+}: any) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <Field data-invalid={!!error}>
+        <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2 leading-none">
+          {label}
+        </FieldLabel>
+        <Select
+          value=""
+          onValueChange={(val) => {
+            if (!val) return;
+            const current = field.value ?? [];
+            const numVal = Number(val);
+            if (!current.includes(numVal)) {
+              field.onChange([...current, numVal]);
+            }
+          }}
+        >
+          <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20 transition-all">
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {options?.map((opt: any) => {
+              if (field.value?.includes(opt.id)) return null;
+              return (
+                <SelectItem key={opt.id} value={String(opt.id)}>
+                  {opt.name}
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+        <FieldError errors={error ? [error] : undefined} />
+      </Field>
+    )}
+  />
+);
 
 interface Props {
   open: boolean;
@@ -84,7 +191,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
       quizObjectiveId: savedConfig?.quizObjectiveId ?? 0,
       quizSubjectIds: savedConfig?.quizSubjectIds ?? [],
     });
-  }, [profile, quizOptions]);
+  }, [profile, quizOptions, form]);
 
   const handleSpecialtyChange = (
     newId: number,
@@ -130,85 +237,27 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
         <div className="px-8 pb-8">
           {/* Section: Carreira */}
           <div className="mb-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-px flex-1 bg-white-1/10" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white-1/40">
-                Sua Carreira
-              </span>
-              <div className="h-px flex-1 bg-white-1/10" />
-            </div>
+            <SectionDivider title="Sua Carreira" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
-              {/* Sênioridade */}
-              <Controller
+              <SelectNumberField
                 control={control}
                 name="seniorityId"
-                defaultValue={profile?.seniorityId}
-                render={({ field }) => (
-                  <Field data-invalid={!!errors.seniorityId}>
-                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
-                      Sênioridade
-                    </FieldLabel>
-                    <Select
-                      value={field.value ? String(field.value) : ""}
-                      onValueChange={(value) => field.onChange(Number(value))}
-                    >
-                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {quizOptions?.seniorities.map((seniority) => (
-                          <SelectItem
-                            key={seniority.id}
-                            value={String(seniority.id)}
-                          >
-                            {seniority.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FieldError errors={[errors.seniorityId]} />
-                  </Field>
-                )}
+                label="Sênioridade"
+                options={quizOptions?.seniorities}
+                error={errors.seniorityId}
               />
 
-              {/* Área de atuação */}
-              <Controller
+              <SelectNumberField
                 control={control}
                 name="specialtyId"
-                defaultValue={profile?.specialtyId}
-                render={({ field }) => (
-                  <Field data-invalid={!!errors.specialtyId}>
-                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
-                      Área de atuação
-                    </FieldLabel>
-                    <Select
-                      value={field.value ? String(field.value) : ""}
-                      onValueChange={(value) =>
-                        handleSpecialtyChange(Number(value), field.onChange)
-                      }
-                    >
-                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {quizOptions?.specialties.map((specialty) => (
-                          <SelectItem
-                            key={specialty.id}
-                            value={String(specialty.id)}
-                          >
-                            {specialty.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FieldError errors={[errors.specialtyId]} />
-                  </Field>
-                )}
+                label="Área de atuação"
+                options={quizOptions?.specialties}
+                error={errors.specialtyId}
+                onChangeExternal={handleSpecialtyChange}
               />
             </div>
 
-            {/* Stacks */}
             <Controller
               control={control}
               name="stacksId"
@@ -227,7 +276,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                     className="bg-bg-1/50 border-white-1/10 rounded-sm focus:border-primary-1/50"
                     showPopular={false}
                   />
-                  <FieldError errors={[errors.stacksId]} />
+                  <FieldError
+                    errors={errors.stacksId ? [errors.stacksId] : undefined}
+                  />
                 </Field>
               )}
             />
@@ -235,91 +286,26 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
           {/* Section: Configurações do Diagnóstico */}
           <div className="mb-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px flex-1 bg-white-1/10" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white-1/40">
-                Definições do Quiz
-              </span>
-              <div className="h-px flex-1 bg-white-1/10" />
-            </div>
+            <SectionDivider title="Definições do Quiz" />
 
-            {/* Objetivo do Quiz */}
             <div className="mb-6">
-              <Controller
+              <SelectNumberField
                 control={control}
                 name="quizObjectiveId"
-                render={({ field }) => (
-                  <Field data-invalid={!!errors.quizObjectiveId}>
-                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2">
-                      Objetivo do Quiz
-                    </FieldLabel>
-                    <Select
-                      value={field.value ? String(field.value) : ""}
-                      onValueChange={(value) => field.onChange(Number(value))}
-                    >
-                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
-                        <SelectValue placeholder="Selecione o objetivo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {quizOptions?.quizObjectives.map((objective) => (
-                          <SelectItem
-                            key={objective.id}
-                            value={String(objective.id)}
-                          >
-                            {objective.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FieldError errors={[errors.quizObjectiveId]} />
-                  </Field>
-                )}
+                label="Objetivo do Quiz"
+                options={quizOptions?.quizObjectives}
+                placeholder="Selecione o objetivo"
+                error={errors.quizObjectiveId}
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
-              {/* Assunto */}
-              <Controller
+              <SelectMultiNumberField
                 control={control}
                 name="quizSubjectIds"
-                render={({ field: subjectField }) => (
-                  <Field data-invalid={!!errors.quizSubjectIds}>
-                    <FieldLabel className="text-[11px] font-bold text-white-1/60 uppercase tracking-widest mb-2 leading-none">
-                      Tópicos Específicos
-                    </FieldLabel>
-
-                    <Select
-                      value=""
-                      onValueChange={(value) => {
-                        if (!value) return;
-                        const current = subjectField.value ?? [];
-                        if (!current.includes(Number(value))) {
-                          subjectField.onChange([...current, Number(value)]);
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {subjectsBySpecialty?.map((subject) => {
-                          if (subjectField.value?.includes(subject.id))
-                            return null;
-
-                          return (
-                            <SelectItem
-                              key={subject.id}
-                              value={String(subject.id)}
-                            >
-                              {subject.name}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                    <FieldError errors={[errors.quizSubjectIds]} />
-                  </Field>
-                )}
+                label="Tópicos Específicos"
+                options={subjectsBySpecialty}
+                error={errors.quizSubjectIds}
               />
 
               {/* Tamanho do quiz */}
@@ -337,11 +323,11 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                           ([, v]) => v === field.value,
                         )?.[0] ?? ""
                       }
-                      onValueChange={(value) =>
-                        field.onChange(QUANTITY_MAP[value] ?? 10)
+                      onValueChange={(val) =>
+                        field.onChange(QUANTITY_MAP[val] ?? 10)
                       }
                     >
-                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20">
+                      <SelectTrigger className="bg-bg-1/50 border-white-1/10 rounded-sm h-11 focus:ring-primary-1/20 transition-all">
                         <SelectValue placeholder="Tamanho" />
                       </SelectTrigger>
                       <SelectContent>
@@ -350,21 +336,24 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         <SelectItem value="long">Longo (40)</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FieldError errors={[errors.quantity]} />
+                    <FieldError
+                      errors={errors.quantity ? [errors.quantity] : undefined}
+                    />
                   </Field>
                 )}
               />
             </div>
-            {/* Badges de assuntos */}
+
+            {/* Badges de Assuntos Selecionados */}
             <div className="mb-8">
               <Controller
                 control={control}
                 name="quizSubjectIds"
-                render={({ field: subjectField }) => (
+                render={({ field }) => (
                   <div className="flex flex-wrap gap-2">
-                    {subjectField.value?.map((id) => {
+                    {field.value?.map((id: number) => {
                       const subject = subjectsBySpecialty?.find(
-                        (s) => s.id === id,
+                        (s: any) => s.id === id,
                       );
                       if (!subject) return null;
                       return (
@@ -374,9 +363,10 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                           className="bg-white-1/5 hover:bg-white-1/10 border-white-1/10 text-white-2 py-1 px-3"
                           hasIcon={true}
                           onClick={() => {
-                            subjectField.onChange(
-                              subjectField.value?.filter((sId) => sId !== id) ??
-                                [],
+                            field.onChange(
+                              field.value?.filter(
+                                (sId: number) => sId !== id,
+                              ) ?? [],
                             );
                           }}
                         >
@@ -388,6 +378,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 )}
               />
             </div>
+
             {/* Salvar configuração */}
             <div className="mb-10">
               <Controller
@@ -418,6 +409,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
           <div className="flex gap-4">
             <Button
+              type="button"
               size="lg"
               variant="outline"
               className="flex-1 rounded-sm border-white-1/10 text-white-2 hover:bg-white-1/5"
@@ -426,6 +418,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               CANCELAR
             </Button>
             <Button
+              type="button"
               size="lg"
               className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20 rounded-sm"
               onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
