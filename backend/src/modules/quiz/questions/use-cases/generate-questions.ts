@@ -32,7 +32,7 @@ export class QuizQuestionGenerateUseCase {
   ) {}
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
-    if (data.saveInProfile) this.saveInProfile(data);
+    if (data.saveInProfile) await this.saveInProfile(data);
     const quantityPerBatch = 5;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 

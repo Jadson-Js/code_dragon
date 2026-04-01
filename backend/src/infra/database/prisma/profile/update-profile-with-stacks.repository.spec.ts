@@ -71,4 +71,23 @@ describe("UpdateProfileWithStacksPrismaRepository", () => {
 
     await expect(repository.execute(input)).rejects.toThrow("Update failed");
   });
+
+  it("should throw NotFoundError if profile is not found", async () => {
+    const repository = new UpdateProfileWithStacksPrismaRepository();
+
+    prismaMockData.$transaction.mockImplementation(async (callback: any) => {
+      const tx = {
+        profile: {
+          update: jest.fn(async () => {
+            const error = new Error("Record not found");
+            (error as any).code = "P2025";
+            throw error;
+          }),
+        },
+      };
+      return await callback(tx);
+    });
+
+    await expect(repository.execute(input)).rejects.toThrow("Profile not found");
+  });
 });
