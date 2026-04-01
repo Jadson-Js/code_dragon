@@ -78,9 +78,9 @@ describe("GetQuizOptionsUseCase", () => {
 
     const mockResponse = {
       quizObjectives: [makeQuizObjective(1)],
-      quizSubjects: [{ ...makeQuizSubject(2), specialties: [] }],
+      quizSubjects: [makeQuizSubject(2)],
       seniorities: [makeSeniority(3)],
-      specialties: [makeSpecialty(4)],
+      specialties: [Object.assign(makeSpecialty(4), { subjects: [] })],
       stacks: [makeStack(5)],
     };
 
@@ -93,9 +93,9 @@ describe("GetQuizOptionsUseCase", () => {
     // Check if mapping is correct (returning only id and name)
     expect(result).toEqual({
       quizObjectives: [{ id: 1, name: "Objective 1" }],
-      quizSubjects: [{ id: 2, name: "Subject 2", specialties: [] }],
+      quizSubjects: [{ id: 2, name: "Subject 2" }],
       seniorities: [{ id: 3, name: "Seniority 3" }],
-      specialties: [{ id: 4, name: "Specialty 4" }],
+      specialties: [{ id: 4, name: "Specialty 4", subjects: [] }],
       stacks: [{ id: 5, name: "Stack 5" }],
     });
   });

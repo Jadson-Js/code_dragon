@@ -6,9 +6,9 @@ import type { Stack } from "../../../../entities/stack.entity";
 
 export interface IGetQuizOptionsRepositoryOutput {
   quizObjectives: QuizObjective[];
-  quizSubjects: (QuizSubject & { specialties: Specialty[] })[];
+  quizSubjects: QuizSubject[];
   seniorities: Seniority[];
-  specialties: Specialty[];
+  specialties: (Specialty & { subjects: QuizSubject[] })[];
   stacks: Stack[];
 }
 

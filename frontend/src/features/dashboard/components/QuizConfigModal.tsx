@@ -58,8 +58,10 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
   function cleanSubjectsForSpecialty(newSpecialtyId: number) {
     const currentSubjectIds = getValues("quizSubjectIds") ?? [];
     const validSubjectIds = currentSubjectIds.filter((id: number) => {
-      const subject = quizOptions?.quizSubjects.find((s) => s.id === id);
-      return subject?.specialties.some((s) => s.id === newSpecialtyId);
+      const specialty = quizOptions?.specialties.find(
+        (s) => s.id === newSpecialtyId,
+      );
+      return (specialty?.subjects ?? []).some((s) => s.id === id);
     });
     if (validSubjectIds.length !== currentSubjectIds.length) {
       setValue("quizSubjectIds", validSubjectIds);
@@ -286,14 +288,14 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                       <SelectContent>
-                        {quizOptions?.quizSubjects
+                        {(
+                          quizOptions?.specialties.find(
+                            (s) => s.id === watchedSpecialtyId,
+                          )?.subjects ?? []
+                        )
                           .filter(
                             (subject) =>
-                              !subjectField.value?.includes(subject.id) &&
-                              subject.specialties.some(
-                                (specialty) =>
-                                  specialty.id === watchedSpecialtyId,
-                              ),
+                              !subjectField.value?.includes(subject.id),
                           )
                           .map((subject) => (
                             <SelectItem
@@ -351,14 +353,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                 name="quizSubjectIds"
                 render={({ field: subjectField }) => (
                   <div className="flex flex-wrap gap-2">
-                    {quizOptions?.quizSubjects
-                      .filter(
-                        (subject) =>
-                          subjectField.value?.includes(subject.id) &&
-                          subject.specialties.some(
-                            (specialty) =>
-                              specialty.id === watch("specialtyId"),
-                          ),
+                    {(
+                      quizOptions?.specialties.find(
+                        (s) => s.id === watchedSpecialtyId,
+                      )?.subjects ?? []
+                    )
+                      .filter((subject) =>
+                        subjectField.value?.includes(subject.id),
                       )
                       .map((subject) => (
                         <Badge
