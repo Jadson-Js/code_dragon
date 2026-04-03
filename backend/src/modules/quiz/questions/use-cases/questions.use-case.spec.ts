@@ -268,8 +268,8 @@ describe("QuizQuestionGenerateUseCase", () => {
 
     await useCase.execute(makeInput(25));
 
-    // 5 are handled synchronously, 20 go to queue in 4 batches of 5
-    expect(generateQuizQuestionQueue.addJob).toHaveBeenCalledTimes(4);
+    // 1 is handled synchronously, 24 go to queue in 24 batches of 1
+    expect(generateQuizQuestionQueue.addJob).toHaveBeenCalledTimes(24);
   });
 
   it("should enqueue jobs with the same mapped gemini input", async () => {
@@ -288,7 +288,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     await useCase.execute(makeInput(15));
 
     const calls = generateQuizQuestionQueue.addJob.mock.calls;
-    expect(calls).toHaveLength(2);
+    expect(calls).toHaveLength(14);
 
     for (const [jobData] of calls) {
       expect(jobData).toMatchObject({

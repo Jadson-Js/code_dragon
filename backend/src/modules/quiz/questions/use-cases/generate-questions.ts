@@ -58,7 +58,6 @@ export class QuizQuestionGenerateUseCase {
       await this.quizQuestionRepository.createMany(questions);
 
     for (let i = 1; i < batchQuestions; i++) {
-      console.log("Adicionando job na fila");
       await this.generateQuizQuestionQueue.addJob(geminiInput);
     }
 

@@ -29,9 +29,9 @@ import type { QuizQuestionsGenerateFormData } from "../schemas/useQuizQuestionsG
 
 // --- Constantes ---
 const QUANTITY_MAP: Record<string, number> = {
-  short: 10,
-  medium: 20,
-  long: 40,
+  short: 1,
+  medium: 2,
+  long: 3,
 };
 
 // --- Componentes Auxiliares para Limpar o Boilerplate ---
@@ -331,9 +331,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         <SelectValue placeholder="Tamanho" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="short">Curto (10)</SelectItem>
-                        <SelectItem value="medium">Médio (20)</SelectItem>
-                        <SelectItem value="long">Longo (40)</SelectItem>
+                        <SelectItem value="short">Curto (1)</SelectItem>
+                        <SelectItem value="medium">Médio (2)</SelectItem>
+                        <SelectItem value="long">Longo (3)</SelectItem>
                       </SelectContent>
                     </Select>
                     <FieldError
