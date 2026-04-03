@@ -1,5 +1,11 @@
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
-import { Queue, Worker, Job, type ConnectionOptions } from "bullmq";
+import {
+  Queue,
+  Worker,
+  Job,
+  type ConnectionOptions,
+  type WorkerOptions,
+} from "bullmq";
 
 export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
   protected readonly queue: Queue;
@@ -13,10 +19,14 @@ export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
 
   abstract process(job: Job<T>): Promise<void>;
 
-  public start(concurrency = 1): void {
+  public start(
+    concurrency = 1,
+    limiter: WorkerOptions["limiter"] = { max: 15, duration: 60000 },
+  ): void {
     const worker = new Worker(this.queueName, (job) => this.process(job), {
       connection: this.connection,
       concurrency,
+      limiter,
     });
 
     worker.on("failed", (job, err) => {
@@ -36,7 +46,7 @@ export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
   public async addJob(data: T): Promise<void> {
     await this.queue.add(this.queueName, data, {
       attempts: 3,
-      backoff: { type: "exponential", delay: 1000 },
+      backoff: { type: "exponential", delay: 2000 },
     });
   }
 }

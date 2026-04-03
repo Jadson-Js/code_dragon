@@ -33,7 +33,7 @@ export class QuizQuestionGenerateUseCase {
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     if (data.saveInProfile) await this.saveInProfile(data);
-    const quantityPerBatch = 5;
+    const quantityPerBatch = 1;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
     const context = await this.getQuizContextRepository.execute(data);
@@ -58,6 +58,7 @@ export class QuizQuestionGenerateUseCase {
       await this.quizQuestionRepository.createMany(questions);
 
     for (let i = 1; i < batchQuestions; i++) {
+      console.log("Adicionando job na fila");
       await this.generateQuizQuestionQueue.addJob(geminiInput);
     }
 

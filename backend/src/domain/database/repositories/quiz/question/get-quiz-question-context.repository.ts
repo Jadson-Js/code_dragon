@@ -5,6 +5,14 @@ import type { Seniority } from "@/domain/entities/seniority.entity";
 import type { Specialty } from "@/domain/entities/specialty.entity";
 import type { Stack } from "@/domain/entities/stack.entity";
 
+export interface IGetQuizQuestionContextInputRepository {
+  quizObjectiveId: number;
+  quizSubjectId?: number[];
+  seniorityId: number;
+  specialtyId: number;
+  stacksId: number[];
+}
+
 export interface IGetQuizQuestionContextOutputRepository {
   quizObjective: QuizObjective;
   quizSubject: QuizSubject[];
@@ -15,6 +23,6 @@ export interface IGetQuizQuestionContextOutputRepository {
 
 export interface IGetQuizQuestionContextRepository {
   execute(
-    data: IQuizQuestionGenerateInputDTO,
+    data: IGetQuizQuestionContextInputRepository,
   ): Promise<IGetQuizQuestionContextOutputRepository>;
 }

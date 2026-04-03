@@ -2,15 +2,15 @@ import { prisma } from "../../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
 import type {
+  IGetQuizQuestionContextInputRepository,
   IGetQuizQuestionContextOutputRepository,
   IGetQuizQuestionContextRepository,
 } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
-import type { IQuizQuestionGenerateInputDTO } from "@/modules/quiz/questions/questions.dto";
 
 @injectable()
 export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRepository {
   async execute(
-    data: IQuizQuestionGenerateInputDTO,
+    data: IGetQuizQuestionContextInputRepository,
   ): Promise<IGetQuizQuestionContextOutputRepository> {
     return await prisma.$transaction(async (tx) => {
       const [quizObjective, quizSubjects, seniority, specialty, stacks] =

@@ -6,7 +6,7 @@ import type {
   IGenerateQuizQuestionByGeminiInputProvider,
   IGenerateQuizQuestionByGeminiOutputProvider,
 } from "@/domain/providers/gemini.provider";
-import { InternalServerError } from "@/shared/app.error";
+import { InternalServerError, TooManyRequestsError } from "@/shared/app.error";
 
 const ai = new GoogleGenAI({
   apiKey: env.geminiApiKey,
@@ -14,12 +14,43 @@ const ai = new GoogleGenAI({
 
 @injectable()
 export class GeminiProvider implements IGeminiProvider {
+  private async withRetry<T>(
+    fn: () => Promise<T>,
+    retries = 5,
+    delay = 2000,
+  ): Promise<T> {
+    try {
+      return await fn();
+    } catch (error: any) {
+      const is429 =
+        error?.status === 429 ||
+        error?.message?.includes("429") ||
+        error?.message?.includes("RESOURCE_EXHAUSTED");
+
+      if (is429 && retries > 0) {
+        console.warn(
+          `⚠️ Gemini API 429 detected. Retrying in ${delay}ms... (${retries} attempts left)`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        return this.withRetry(fn, retries - 1, delay * 2);
+      }
+
+      if (is429) {
+        throw new TooManyRequestsError(
+          "Rate limit exceeded. Please try again later.",
+        );
+      }
+
+      throw error;
+    }
+  }
+
   async generateQuizQuestion(
     data: IGenerateQuizQuestionByGeminiInputProvider,
   ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]> {
     const prompt = `
 Você é um Tech Lead Sênior e especialista em criação de avaliações técnicas avançadas para desenvolvedores de software.
-Sua missão é gerar exatamente ${data.quantityPerBatch} questões de múltipla escolha, rigorosas e precisas.
+Sua missão é gerar exatamente ${data.quantityPerBatch} questões de múltipla escolha, rigorosa e precisa.
 
 === CONTEXTO DA AVALIAÇÃO ===
 - Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
@@ -54,13 +85,14 @@ Exemplo da estrutura exata esperada:
     "correctAlternativeIndex": 1,
     "code": "function example() {\\n  return true;\\n}" // ou null se não houver código
   }
-]
-`.trim();
+]`.trim();
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-    });
+    const response = await this.withRetry(() =>
+      ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+      }),
+    );
 
     const raw = response.text?.trim();
     if (!raw)

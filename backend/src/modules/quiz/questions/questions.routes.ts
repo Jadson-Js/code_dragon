@@ -12,7 +12,7 @@ const router = Router();
 router.post(
   "/generate",
   simpleRateLimitMiddleware.handle({
-    max: 5,
+    max: 2,
     windowInMs: 60000,
   }),
   validate(quizQuestionGenerateSchema),
