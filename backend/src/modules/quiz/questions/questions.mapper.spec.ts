@@ -16,7 +16,7 @@ function makeContext(
       name: "Frontend Mastery",
       description: "Test frontend skills",
     } as unknown as QuizObjective,
-    quizSubject: [
+    quizSubjects: [
       {
         id: 10,
         name: "CSS",
@@ -40,7 +40,7 @@ function makeContext(
 
 describe("mapContextToGeminiInput", () => {
   it("should map quizObjective fields correctly", () => {
-    const result = mapContextToGeminiInput(makeContext());
+    const result = mapContextToGeminiInput(makeContext(), 1);
 
     expect(result.quizObjective).toEqual({
       id: 1,
@@ -50,28 +50,28 @@ describe("mapContextToGeminiInput", () => {
   });
 
   it("should map quizSubject array correctly", () => {
-    const result = mapContextToGeminiInput(makeContext());
+    const result = mapContextToGeminiInput(makeContext(), 1);
 
-    expect(result.quizSubject).toEqual([
+    expect(result.quizSubjects).toEqual([
       { id: 10, name: "CSS", description: "Styles and layouts" },
       { id: 11, name: "HTML", description: "Markup language" },
     ]);
   });
 
   it("should map seniority correctly", () => {
-    const result = mapContextToGeminiInput(makeContext());
+    const result = mapContextToGeminiInput(makeContext(), 1);
 
     expect(result.seniority).toEqual({ id: 2, name: "Senior" });
   });
 
   it("should map specialty correctly", () => {
-    const result = mapContextToGeminiInput(makeContext());
+    const result = mapContextToGeminiInput(makeContext(), 1);
 
     expect(result.specialty).toEqual({ id: 3, name: "Frontend" });
   });
 
   it("should map stacks array correctly", () => {
-    const result = mapContextToGeminiInput(makeContext());
+    const result = mapContextToGeminiInput(makeContext(), 1);
 
     expect(result.stacks).toEqual([
       { id: 20, name: "React" },
@@ -80,13 +80,16 @@ describe("mapContextToGeminiInput", () => {
   });
 
   it("should handle empty quizSubject array", () => {
-    const result = mapContextToGeminiInput(makeContext({ quizSubject: [] }));
+    const result = mapContextToGeminiInput(
+      makeContext({ quizSubjects: [] }),
+      1,
+    );
 
-    expect(result.quizSubject).toEqual([]);
+    expect(result.quizSubjects).toEqual([]);
   });
 
   it("should handle empty stacks array", () => {
-    const result = mapContextToGeminiInput(makeContext({ stacks: [] }));
+    const result = mapContextToGeminiInput(makeContext({ stacks: [] }), 1);
 
     expect(result.stacks).toEqual([]);
   });
@@ -98,7 +101,7 @@ describe("mapContextToGeminiInput", () => {
     (context.seniority as unknown as { id: number }).id = 88;
     (context.specialty as unknown as { id: number }).id = 77;
 
-    const result = mapContextToGeminiInput(context);
+    const result = mapContextToGeminiInput(context, 1);
 
     expect(result.quizObjective.id).toBe(99);
     expect(result.seniority.id).toBe(88);

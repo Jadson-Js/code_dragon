@@ -7,7 +7,7 @@ import type { Stack } from "@/domain/entities/stack.entity";
 
 export interface IGetQuizQuestionContextInputRepository {
   quizObjectiveId: number;
-  quizSubjectId?: number[];
+  quizSubjectsId?: number[];
   seniorityId: number;
   specialtyId: number;
   stacksId: number[];
@@ -15,7 +15,7 @@ export interface IGetQuizQuestionContextInputRepository {
 
 export interface IGetQuizQuestionContextOutputRepository {
   quizObjective: QuizObjective;
-  quizSubject: QuizSubject[];
+  quizSubjects: QuizSubject[];
   seniority: Seniority;
   specialty: Specialty;
   stacks: Stack[];

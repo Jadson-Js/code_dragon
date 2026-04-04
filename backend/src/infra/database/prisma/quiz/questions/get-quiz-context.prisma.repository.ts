@@ -19,7 +19,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
             where: { id: data.quizObjectiveId },
           }),
           tx.quizSubject.findMany({
-            where: { id: { in: data.quizSubjectId ?? [] } },
+            where: { id: { in: data.quizSubjectsId ?? [] } },
           }),
           tx.seniority.findUnique({
             where: { id: data.seniorityId },
@@ -39,7 +39,7 @@ export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRe
 
       return {
         quizObjective: quizObjective.toDomain,
-        quizSubject: quizSubjects.map((s) => s.toDomain),
+        quizSubjects: quizSubjects.map((s) => s.toDomain),
         seniority: seniority.toDomain,
         specialty: specialty.toDomain,
         stacks: stacks.map((s) => s.toDomain),

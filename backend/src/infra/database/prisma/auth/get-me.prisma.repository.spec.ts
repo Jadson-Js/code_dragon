@@ -101,4 +101,24 @@ describe("GetMePrismaRepository", () => {
     expect(output).not.toBeNull();
     expect(output?.profile).toBeNull();
   });
+
+  it("should return null when user does not exist", async () => {
+    const repository = new GetMePrismaRepository();
+
+    prismaMock.$transaction.mockImplementation(async (callback: any) => {
+      const tx = {
+        user: {
+          findUnique: jest.fn(async (_args: unknown) => null),
+        },
+        profile: {
+          findUnique: jest.fn(async (_args: unknown) => null),
+        },
+      };
+      return callback(tx);
+    });
+
+    const output = await repository.execute("missing-user");
+
+    expect(output).toBeNull();
+  });
 });

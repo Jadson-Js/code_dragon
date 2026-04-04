@@ -8,6 +8,7 @@ interface ICreateQuizQuestionProps {
   correctAlternativeIndex: number;
   code?: string | null;
   reports?: number;
+  sessionQuizId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -23,6 +24,7 @@ export class QuizQuestion {
     public readonly correctAlternativeIndex: number,
     public readonly code: string | null,
     public readonly reports: number,
+    public readonly sessionQuizId: string,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}
@@ -38,6 +40,7 @@ export class QuizQuestion {
       props.correctAlternativeIndex,
       props.code ?? null,
       props.reports ?? 0,
+      props.sessionQuizId,
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );

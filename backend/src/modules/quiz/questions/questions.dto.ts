@@ -1,7 +1,7 @@
 export interface IQuizQuestionGenerateInputDTO {
   userId: string;
   quizObjectiveId: number;
-  quizSubjectId?: number[];
+  quizSubjectsId?: number[];
   seniorityId: number;
   specialtyId: number;
   stacksId: number[];

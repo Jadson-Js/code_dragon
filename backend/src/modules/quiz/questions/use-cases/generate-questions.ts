@@ -7,10 +7,14 @@ import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { IGetQuizQuestionContextRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
+import type { ICreateSessionWithQuizRepository } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
 import { Profile } from "@/domain/entities/profile.entity";
 import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
+import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
+import { Session } from "@/domain/entities/session.entity";
+import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
@@ -29,10 +33,44 @@ export class QuizQuestionGenerateUseCase {
 
     @inject("IUpdateProfileWithStacksRepository")
     private readonly updateProfileWithStacksRepository: IUpdateProfileWithStacksRepository,
+
+    @inject("ICreateSessionWithQuizRepository")
+    private readonly createSessionWithQuizRepository: ICreateSessionWithQuizRepository,
+
+    @inject("IFeatureRepository")
+    private readonly featureRepository: IFeatureRepository,
   ) {}
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     if (data.saveInProfile) await this.saveInProfile(data);
+
+    const feature = await this.featureRepository.findBySlug("quiz");
+    if (!feature || !feature.id) {
+      throw new Error("Quiz feature not found in the database");
+    }
+
+    const session = Session.create({
+      userId: data.userId,
+      featureId: feature.id,
+    });
+
+    const sessionQuiz = SessionQuiz.create({
+      sessionId: session.id as string,
+      userId: data.userId,
+      seniorityId: data.seniorityId,
+      specialtyId: data.specialtyId,
+      quizObjectiveId: data.quizObjectiveId,
+      quantityQuestions: data.quantity,
+    });
+
+    const { sessionQuizId } =
+      await this.createSessionWithQuizRepository.execute({
+        session,
+        sessionQuiz,
+        stacksId: data.stacksId,
+        ...(data.quizSubjectsId ? { quizSubjectsId: data.quizSubjectsId } : {}),
+      });
+
     const quantityPerBatch = 1;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
@@ -51,15 +89,16 @@ export class QuizQuestionGenerateUseCase {
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
+        sessionQuizId,
       }),
     );
-
-    const savedQuestions =
-      await this.quizQuestionRepository.createMany(questions);
 
     for (let i = 1; i < batchQuestions; i++) {
       await this.generateQuizQuestionQueue.addJob(geminiInput);
     }
+
+    const savedQuestions =
+      await this.quizQuestionRepository.createMany(questions);
 
     return savedQuestions;
   }

@@ -23,6 +23,7 @@ import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider"
 import type { ISendEmailProps } from "@/domain/providers/email/email.provider";
 import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
 import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import { FeaturePrismaRepository } from "../database/prisma/feature.prisma.repository";
 
 container.registerSingleton("IHashProvider", HashProvider);
 container.registerSingleton("IEmailProvider", EmailProvider);
@@ -72,7 +73,7 @@ container.registerSingleton(
   "IQuizQuestionRepository",
   QuizQuestionPrismaRepository,
 );
-
+container.registerSingleton("IFeatureRepository", FeaturePrismaRepository);
 export const emailQueueProvider = container.resolve<
   IBaseQueueProvider<ISendEmailProps>
 >("IEmailQueueProvider");

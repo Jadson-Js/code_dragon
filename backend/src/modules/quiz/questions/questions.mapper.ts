@@ -11,7 +11,7 @@ export function mapContextToGeminiInput(
       name: context.quizObjective.name,
       description: context.quizObjective.description,
     },
-    quizSubject: context.quizSubject.map((s) => ({
+    quizSubjects: context.quizSubjects.map((s) => ({
       id: s.id as number,
       name: s.name,
       description: s.description,

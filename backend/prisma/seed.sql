@@ -3,6 +3,11 @@ INSERT INTO "users" ("created_at", "deleted_at", "email", "id", "name", "passwor
 (NOW(), NULL, 'admin@admin.com', '8f9e610e-ae40-4bd4-9438-959a256f2719', 'admin', '$2b$10$sJLoQq.iVpBdGAZCALVZCejyytZQ9jA2l4Js7rdrTbMVMEgGyncQG', NOW(), NOW())
 ON CONFLICT ("email") DO NOTHING;
 
+-- Features
+INSERT INTO "features" ("name", "description", "slug", "created_at", "updated_at") VALUES
+('Quiz', 'Gerador de questões para estudo e prática.', 'quiz', NOW(), NOW())
+ON CONFLICT ("slug") DO NOTHING;
+
 -- Seniorities
 INSERT INTO "seniorities" ("name", "description", "slug", "order", "created_at", "updated_at") VALUES
 ('Sem Experiência', 'Iniciando estudos na área de tecnologia e ainda sem vivência profissional.', 'no-experience', 1, NOW(), NOW()),

@@ -12,6 +12,7 @@ import { AgeRange } from "@/domain/entities/age-range.entity";
 import { Stack } from "@/domain/entities/stack.entity";
 import { QuizObjective } from "@/domain/entities/quiz-objective.entity";
 import { QuizSubject } from "@/domain/entities/quiz-subject.entity";
+import { Feature } from "@/domain/entities/feature.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -216,6 +217,21 @@ export const prisma = prismaClient.$extends({
           return QuizSubject.create(
             quizSubject as Parameters<typeof QuizSubject.create>[0],
           );
+        },
+      },
+    },
+    feature: {
+      toDomain: {
+        needs: {
+          id: true,
+          name: true,
+          description: true,
+          slug: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        compute(feature) {
+          return Feature.create(feature as Parameters<typeof Feature.create>[0]);
         },
       },
     },

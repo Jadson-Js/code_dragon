@@ -29,8 +29,10 @@ model User {
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  tokens  Token[]
-  profile Profile?
+  tokens         Token[]
+  profile        Profile?
+  sessions       Session[]
+  sessionQuizzes SessionQuiz[]
 
   @@map("users")
 }
@@ -96,8 +98,9 @@ model Seniority {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  profiles      Profile[]
-  quizQuestions QuizQuestion[]
+  profiles       Profile[]
+  quizQuestions  QuizQuestion[]
+  sessionQuizzes SessionQuiz[]
 
   @@map("seniorities")
 }
@@ -125,9 +128,10 @@ model Specialty {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  profiles      Profile[]
-  quizQuestions QuizQuestion[]
-  quizSubjects  QuizSpecialtySubject[]
+  profiles       Profile[]
+  quizQuestions  QuizQuestion[]
+  quizSubjects   QuizSpecialtySubject[]
+  sessionQuizzes SessionQuiz[]
 
   @@map("specialties")
 }
@@ -153,7 +157,8 @@ model Stack {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
-  profileStacks ProfileStack[]
+  profileStacks     ProfileStack[]
+  quizSessionStacks QuizSessionStack[]
 
   @@map("stacks")
 }
@@ -166,7 +171,8 @@ model QuizObjective {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  quizQuestions QuizQuestion[]
+  quizQuestions  QuizQuestion[]
+  sessionQuizzes SessionQuiz[]
 
   @@map("quiz_objectives")
 }
@@ -179,8 +185,9 @@ model QuizSubject {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  specialties   QuizSpecialtySubject[]
-  quizQuestions QuizQuestion[]
+  specialties         QuizSpecialtySubject[]
+  quizQuestions       QuizQuestion[]
+  quizSessionSubjects QuizSessionSubjects[]
 
   @@map("quiz_subjects")
 }
@@ -190,6 +197,7 @@ model QuizSpecialtySubject {
   specialtyId   Int      @map("specialty_id")
   quizSubjectId Int      @map("quiz_subject_id")
   createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
   specialty   Specialty   @relation(fields: [specialtyId], references: [id])
   quizSubject QuizSubject @relation(fields: [quizSubjectId], references: [id])
@@ -200,9 +208,9 @@ model QuizSpecialtySubject {
 
 model QuizQuestion {
   id                      Int      @id @default(autoincrement())
-  quizObjectiveId         Int      @map("quiz_objective_id")
   seniorityId             Int      @map("seniority_id")
   specialtyId             Int      @map("specialty_id")
+  quizObjectiveId         Int      @map("quiz_objective_id")
   statement               String
   alternatives            String[]
   correctAlternativeIndex Int      @map("correct_alternative_index")
@@ -215,7 +223,88 @@ model QuizQuestion {
   seniority     Seniority     @relation(fields: [seniorityId], references: [id])
   specialty     Specialty     @relation(fields: [specialtyId], references: [id])
   quizSubject   QuizSubject?  @relation(fields: [quizSubjectId], references: [id])
-  quizSubjectId Int?
+  quizSubjectId Int?          @map("quiz_subject_id")
+  sessionQuiz   SessionQuiz?  @relation(fields: [sessionQuizId], references: [id])
+  sessionQuizId String?       @map("session_quiz_id")
 
   @@map("quiz_questions")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  featureId Int      @map("feature_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user           User          @relation(fields: [userId], references: [id])
+  feature        Feature       @relation(fields: [featureId], references: [id])
+  sessionQuizzes SessionQuiz[]
+
+  @@map("sessions")
+}
+
+model SessionQuiz {
+  id                String   @id @default(uuid())
+  sessionId         String   @map("session_id")
+  userId            String   @map("user_id")
+  seniorityId       Int      @map("seniority_id")
+  specialtyId       Int      @map("specialty_id")
+  quizObjectiveId   Int      @map("quiz_objective_id")
+  quantityQuestions Int      @map("quantity_questions")
+  score             Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
+
+  session       Session               @relation(fields: [sessionId], references: [id])
+  user          User                  @relation(fields: [userId], references: [id])
+  seniority     Seniority             @relation(fields: [seniorityId], references: [id])
+  specialty     Specialty             @relation(fields: [specialtyId], references: [id])
+  quizObjective QuizObjective         @relation(fields: [quizObjectiveId], references: [id])
+  questions     QuizQuestion[]
+  stacks        QuizSessionStack[]
+  subjects      QuizSessionSubjects[]
+
+  @@map("session_quizzes")
+}
+
+model QuizSessionStack {
+  id            Int      @id @default(autoincrement())
+  quizSessionId String   @map("quiz_session_id")
+  stackId       Int      @map("stack_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sessionQuiz SessionQuiz @relation(fields: [quizSessionId], references: [id])
+  stack       Stack       @relation(fields: [stackId], references: [id])
+
+  @@unique([quizSessionId, stackId])
+  @@map("quiz_session_stacks")
+}
+
+model QuizSessionSubjects {
+  id            String   @id @default(uuid())
+  quizSessionId String   @map("quiz_session_id")
+  subjectId     Int      @map("subject_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sessionQuiz SessionQuiz @relation(fields: [quizSessionId], references: [id])
+  subject     QuizSubject @relation(fields: [subjectId], references: [id])
+
+  @@unique([quizSessionId, subjectId])
+  @@map("quiz_session_subjects")
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  slug        String   @unique
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sessions Session[]
+
+  @@map("features")
 }

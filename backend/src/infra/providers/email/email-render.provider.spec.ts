@@ -37,4 +37,15 @@ describe("emailRenderProvider", () => {
 
     expect(html).toBe("<h1>admin</h1><p>abc</p>");
   });
+
+  it("should skip undefined variables", () => {
+    fsMock.readFileSync.mockReturnValue("<h1>{{name}}</h1><p>{{token}}</p>");
+
+    const html = emailRenderProvider("VERIFY_EMAIL", {
+      name: "admin",
+      token: undefined as any,
+    });
+
+    expect(html).toBe("<h1>admin</h1><p>{{token}}</p>");
+  });
 });

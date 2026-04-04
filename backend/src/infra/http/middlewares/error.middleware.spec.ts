@@ -91,6 +91,24 @@ describe("errorHandler middleware", () => {
     consoleSpy.mockRestore();
   });
 
+  it("should map other prisma errors to 500", () => {
+    const response = makeResponse();
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const prismaError = { code: "P9999" } as unknown as Error;
+
+    errorHandler(
+      prismaError,
+      {} as Request,
+      response as unknown as Response,
+      jest.fn() as NextFunction,
+    );
+
+    expect(response.status).toHaveBeenCalledWith(500);
+    consoleSpy.mockRestore();
+  });
+
   it("should map unknown errors to 500", () => {
     const response = makeResponse();
     const consoleSpy = jest

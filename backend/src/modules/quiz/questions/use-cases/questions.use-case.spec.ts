@@ -5,14 +5,22 @@ import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
+import type { ICreateSessionWithQuizInput } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
 
 import type { QuizObjective } from "@/domain/entities/quiz-objective.entity";
 import type { QuizSubject } from "@/domain/entities/quiz-subject.entity";
 import type { Seniority } from "@/domain/entities/seniority.entity";
+import { Profile } from "@/domain/entities/profile.entity";
+import { Session } from "@/domain/entities/session.entity";
+import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
 import type { Specialty } from "@/domain/entities/specialty.entity";
 import type { Stack } from "@/domain/entities/stack.entity";
+import type { Feature } from "@/domain/entities/feature.entity";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
+
+const SESSION_QUIZ_ID = "session-quiz-uuid-123";
+const FEATURE_ID = 1;
 
 function makeContext(): IGetQuizQuestionContextOutputRepository {
   return {
@@ -21,7 +29,7 @@ function makeContext(): IGetQuizQuestionContextOutputRepository {
       name: "Frontend Mastery",
       description: "Test frontend",
     } as unknown as QuizObjective,
-    quizSubject: [
+    quizSubjects: [
       { id: 10, name: "CSS", description: "Styling" } as unknown as QuizSubject,
     ],
     seniority: { id: 2, name: "Senior" } as unknown as Seniority,
@@ -64,6 +72,7 @@ function makeSavedQuestions(): QuizQuestion[] {
       alternatives: q.alternatives,
       correctAlternativeIndex: q.correctAlternativeIndex,
       code: q.code,
+      sessionQuizId: SESSION_QUIZ_ID,
     }),
   );
 }
@@ -74,6 +83,7 @@ function makeInput(quantity = 1): IQuizQuestionGenerateInputDTO {
     seniorityId: 2,
     specialtyId: 3,
     stacksId: [20],
+    quizSubjectsId: [10],
     quantity,
     saveInProfile: false,
     userId: "user-123",
@@ -112,7 +122,18 @@ function makeUseCase() {
   };
 
   const updateProfileWithStacksRepository = {
-    execute: jest.fn<() => Promise<void>>(),
+    execute: jest.fn<(params: { profile: Profile; stacksId: number[] }) => Promise<Profile>>(),
+  };
+
+  const createSessionWithQuizRepository = {
+    execute:
+      jest.fn<
+        (data: ICreateSessionWithQuizInput) => Promise<{ sessionQuizId: string }>
+      >(),
+  };
+
+  const featureRepository = {
+    findBySlug: jest.fn<(slug: string) => Promise<Feature | null>>().mockResolvedValue({ id: FEATURE_ID } as unknown as Feature),
   };
 
   const useCase = new QuizQuestionGenerateUseCase(
@@ -121,6 +142,8 @@ function makeUseCase() {
     geminiProvider as never,
     quizQuestionRepository as never,
     updateProfileWithStacksRepository as never,
+    createSessionWithQuizRepository as never,
+    featureRepository as never,
   );
 
   return {
@@ -130,6 +153,8 @@ function makeUseCase() {
     geminiProvider,
     quizQuestionRepository,
     updateProfileWithStacksRepository,
+    createSessionWithQuizRepository,
+    featureRepository,
   };
 }
 
@@ -140,14 +165,125 @@ describe("QuizQuestionGenerateUseCase", () => {
     jest.clearAllMocks();
   });
 
-  it("should fetch context from repository with the given DTO", async () => {
+  // ── Session creation ─────────────────────────────────────────────────────
+
+  it("should call createSessionWithQuizRepository before generating questions", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
+    featureRepository.findBySlug.mockResolvedValue({ id: FEATURE_ID } as unknown as Feature);
+    getQuizContextRepository.execute.mockResolvedValue(makeContext());
+    geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
+    quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
+
+    const input = makeInput(1);
+    await useCase.execute(input);
+
+    const sessionCallOrder =
+      createSessionWithQuizRepository.execute.mock.invocationCallOrder[0]!;
+    const geminiCallOrder =
+      geminiProvider.generateQuizQuestion.mock.invocationCallOrder[0]!;
+
+    expect(sessionCallOrder).toBeLessThan(geminiCallOrder);
+  });
+
+  it("should call createSessionWithQuizRepository with correct data from the DTO", async () => {
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+      quizQuestionRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
+    getQuizContextRepository.execute.mockResolvedValue(makeContext());
+    geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
+    quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
+
+    const input = makeInput(5);
+    await useCase.execute(input);
+
+    expect(createSessionWithQuizRepository.execute).toHaveBeenCalledTimes(1);
+    expect(createSessionWithQuizRepository.execute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        session: expect.any(Object),
+        sessionQuiz: expect.any(Object),
+        stacksId: input.stacksId,
+        quizSubjectsId: input.quizSubjectsId,
+      }),
+    );
+  });
+
+  it("should pass sessionQuizId to quizQuestionRepository.createMany", async () => {
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+      quizQuestionRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
+    getQuizContextRepository.execute.mockResolvedValue(makeContext());
+    geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
+    quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
+
+    await useCase.execute(makeInput(1));
+
+    expect(quizQuestionRepository.createMany).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ sessionQuizId: SESSION_QUIZ_ID }),
+      ]),
+    );
+  });
+
+  it("should propagate errors thrown by createSessionWithQuizRepository", async () => {
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockRejectedValue(
+      new Error("Session creation failed"),
+    );
+
+    await expect(useCase.execute(makeInput(1))).rejects.toThrow(
+      "Session creation failed",
+    );
+  });
+
+  // ── Existing behaviour ───────────────────────────────────────────────────
+
+  it("should fetch context from repository with the given DTO", async () => {
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+      quizQuestionRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -162,11 +298,16 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should pass the mapped gemini input to the Gemini provider", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -183,7 +324,7 @@ describe("QuizQuestionGenerateUseCase", () => {
         seniority: expect.objectContaining({ id: 2, name: "Senior" }),
         specialty: expect.objectContaining({ id: 3, name: "Frontend" }),
         stacks: [expect.objectContaining({ id: 20, name: "React" })],
-        quizSubject: [expect.objectContaining({ id: 10, name: "CSS" })],
+        quizSubjects: [expect.objectContaining({ id: 10, name: "CSS" })],
       }),
     );
   });
@@ -191,12 +332,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should persist the generated questions using the repository", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
     } = makeUseCase();
 
     const output = makeGeminiOutput();
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(output);
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -220,12 +366,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should return the saved questions from the repository", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
     } = makeUseCase();
 
     const saved = makeSavedQuestions();
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(saved);
@@ -238,12 +389,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should NOT enqueue any job when quantity is 1", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
       generateQuizQuestionQueue,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -256,12 +412,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should enqueue (quantity - 1) jobs for the remaining batches", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
       generateQuizQuestionQueue,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -275,12 +436,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should enqueue jobs with the same mapped gemini input", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
       generateQuizQuestionQueue,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -300,8 +466,17 @@ describe("QuizQuestionGenerateUseCase", () => {
   });
 
   it("should propagate errors thrown by the gemini provider", async () => {
-    const { useCase, getQuizContextRepository, geminiProvider } = makeUseCase();
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+    } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockRejectedValue(
       new Error("Gemini API unavailable"),
@@ -313,8 +488,16 @@ describe("QuizQuestionGenerateUseCase", () => {
   });
 
   it("should propagate errors thrown by the context repository", async () => {
-    const { useCase, getQuizContextRepository } = makeUseCase();
+    const {
+      useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+    } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockRejectedValue(
       new Error("Context not found"),
     );
@@ -327,15 +510,88 @@ describe("QuizQuestionGenerateUseCase", () => {
   it("should propagate errors thrown by createMany", async () => {
     const {
       useCase,
+      featureRepository,
+      createSessionWithQuizRepository,
       getQuizContextRepository,
       geminiProvider,
       quizQuestionRepository,
     } = makeUseCase();
 
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockRejectedValue(new Error("DB error"));
 
     await expect(useCase.execute(makeInput(1))).rejects.toThrow("DB error");
+  });
+
+  // ── Edge cases ──────────────────────────────────────────────────────────
+
+  it("should call updateProfileWithStacksRepository if saveInProfile is true", async () => {
+    const {
+      useCase,
+      updateProfileWithStacksRepository,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+      quizQuestionRepository,
+      featureRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
+    getQuizContextRepository.execute.mockResolvedValue(makeContext());
+    geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
+    quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
+
+    const input = { ...makeInput(1), saveInProfile: true };
+    await useCase.execute(input);
+
+    expect(updateProfileWithStacksRepository.execute).toHaveBeenCalledTimes(1);
+    expect(updateProfileWithStacksRepository.execute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        profile: expect.any(Object),
+        stacksId: input.stacksId,
+      }),
+    );
+  });
+
+  it("should throw error if quiz feature is not found", async () => {
+    const { useCase, featureRepository } = makeUseCase();
+
+    featureRepository.findBySlug.mockResolvedValue(null);
+
+    await expect(useCase.execute(makeInput(1))).rejects.toThrow(
+      "Quiz feature not found in the database",
+    );
+  });
+
+  it("should handle missing quizSubjectsId in input", async () => {
+    const {
+      useCase,
+      createSessionWithQuizRepository,
+      getQuizContextRepository,
+      geminiProvider,
+      quizQuestionRepository,
+    } = makeUseCase();
+
+    createSessionWithQuizRepository.execute.mockResolvedValue({
+      sessionQuizId: SESSION_QUIZ_ID,
+    });
+    getQuizContextRepository.execute.mockResolvedValue(makeContext());
+    geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
+    quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
+
+    const input = makeInput(1);
+    delete input.quizSubjectsId;
+
+    await useCase.execute(input);
+
+    expect(createSessionWithQuizRepository.execute).toHaveBeenCalledWith(
+      expect.not.objectContaining({ quizSubjectsId: expect.anything() }),
+    );
   });
 });

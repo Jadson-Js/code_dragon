@@ -1,6 +1,6 @@
 export interface IGenerateQuizQuestionByGeminiInputProvider {
   quizObjective: { id: number; name: string; description: string };
-  quizSubject: { id: number; name: string; description: string }[] | null;
+  quizSubjects: { id: number; name: string; description: string }[] | null;
   seniority: { id: number; name: string };
   specialty: { id: number; name: string };
   stacks: { id: number; name: string }[];

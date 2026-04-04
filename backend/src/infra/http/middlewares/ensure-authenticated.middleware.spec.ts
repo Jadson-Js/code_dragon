@@ -22,7 +22,29 @@ describe("EnsureAuthenticated middleware", () => {
         {} as Response,
         jest.fn() as unknown as NextFunction,
       ),
-    ).rejects.toBeInstanceOf(UnauthorizedError);
+    ).rejects.toThrow("Missing access token in cookies");
+  });
+
+  it("authAccess should throw when access token is invalid", async () => {
+    const middleware = new EnsureAuthenticated(
+      {
+        verifyAccessToken: jest.fn(async (_token: string) => false),
+        decodeToken: jest.fn<(token: string) => Promise<{ sub: string }>>(),
+      } as never,
+      { exists: jest.fn<(key: string) => Promise<boolean>>() } as never,
+    );
+
+    const request = {
+      cookies: { accessToken: "invalid-token" },
+    } as unknown as Request;
+
+    await expect(
+      middleware.authAccess(
+        request,
+        {} as Response,
+        jest.fn() as unknown as NextFunction,
+      ),
+    ).rejects.toThrow("Invalid access token");
   });
 
   it("authAccess should set request.user and call next on valid token", async () => {
@@ -43,6 +65,48 @@ describe("EnsureAuthenticated middleware", () => {
 
     expect(request.user.id).toBe("user-1");
     expect(next).toHaveBeenCalledWith();
+  });
+
+  it("authRefresh should throw when refresh token is missing", async () => {
+    const middleware = new EnsureAuthenticated(
+      {
+        verifyRefreshToken: jest.fn<(token: string) => Promise<boolean>>(),
+        decodeToken: jest.fn<(token: string) => Promise<{ sub: string }>>(),
+      } as never,
+      { exists: jest.fn<(key: string) => Promise<boolean>>() } as never,
+    );
+
+    const request = { cookies: {} } as unknown as Request;
+
+    await expect(
+      middleware.authRefresh(
+        request,
+        {} as Response,
+        jest.fn() as unknown as NextFunction,
+      ),
+    ).rejects.toThrow("Missing refresh token in cookies");
+  });
+
+  it("authRefresh should throw when refresh token is invalid", async () => {
+    const middleware = new EnsureAuthenticated(
+      {
+        verifyRefreshToken: jest.fn(async (_token: string) => false),
+        decodeToken: jest.fn<(token: string) => Promise<{ sub: string }>>(),
+      } as never,
+      { exists: jest.fn<(key: string) => Promise<boolean>>() } as never,
+    );
+
+    const request = {
+      cookies: { refreshToken: "invalid-token" },
+    } as unknown as Request;
+
+    await expect(
+      middleware.authRefresh(
+        request,
+        {} as Response,
+        jest.fn() as unknown as NextFunction,
+      ),
+    ).rejects.toThrow("Invalid refresh token");
   });
 
   it("authRefresh should throw when session does not exist in redis", async () => {

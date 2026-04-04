@@ -92,6 +92,63 @@ describe("UserPrismaRepository", () => {
     await expect(repository.create(user)).rejects.toBeInstanceOf(ConflictError);
   });
 
+  it("create should rethrow unknown errors", async () => {
+    const repository = new UserPrismaRepository();
+    const user = User.create({
+      name: "admin",
+      email: "admin@admin.com",
+      passwordHash: "hash",
+    });
+
+    prismaMock.user.create.mockRejectedValue(new Error("Generic DB error"));
+
+    await expect(repository.create(user)).rejects.toThrow("Generic DB error");
+  });
+
+  it("update should persist and return mapped user", async () => {
+    const repository = new UserPrismaRepository();
+    const now = new Date();
+    const user = User.create({
+      id: "user-1",
+      name: "updated",
+      email: "admin@admin.com",
+      passwordHash: "hash",
+    });
+
+    prismaMock.user.update.mockResolvedValue({
+      id: "user-1",
+      name: "updated",
+      email: "admin@admin.com",
+      passwordHash: "hash",
+      verifiedAt: now,
+      createdAt: now,
+      updatedAt: now,
+      deletedAt: null,
+      get toDomain() {
+        return User.create(this as any);
+      },
+    });
+
+    const result = await repository.update(user);
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: { id: "user-1" },
+      data: user,
+    });
+    expect(result.name).toBe("updated");
+  });
+
+  it("delete should remove user from database", async () => {
+    const repository = new UserPrismaRepository();
+    prismaMock.user.delete.mockResolvedValue({ id: "user-1" });
+
+    await repository.delete("user-1");
+
+    expect(prismaMock.user.delete).toHaveBeenCalledWith({
+      where: { id: "user-1" },
+    });
+  });
+
   it("findByEmail should return mapped user", async () => {
     const repository = new UserPrismaRepository();
     const now = new Date();

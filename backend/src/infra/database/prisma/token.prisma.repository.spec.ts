@@ -64,6 +64,42 @@ describe("TokenPrismaRepository", () => {
     expect(result.id).toBe("token-1");
   });
 
+  it("update should persist changes and return mapped entity", async () => {
+    const repository = new TokenPrismaRepository();
+    const token = Token.create({
+      id: "token-1",
+      userId: "user-1",
+      tokenHash: "new-hash",
+      type: "EMAIL_VERIFICATION",
+      expiresAt: new Date(Date.now() + 60_000),
+    });
+    prismaMock.token.update.mockResolvedValue({
+      ...token,
+      get toDomain() {
+        return Token.create(this as any);
+      },
+    });
+
+    const result = await repository.update(token);
+
+    expect(prismaMock.token.update).toHaveBeenCalledWith({
+      where: { id: "token-1" },
+      data: token,
+    });
+    expect(result.tokenHash).toBe("new-hash");
+  });
+
+  it("delete should remove token from database", async () => {
+    const repository = new TokenPrismaRepository();
+    prismaMock.token.delete.mockResolvedValue({ id: "token-1" });
+
+    await repository.delete("token-1");
+
+    expect(prismaMock.token.delete).toHaveBeenCalledWith({
+      where: { id: "token-1" },
+    });
+  });
+
   it("findById should return null when token does not exist", async () => {
     const repository = new TokenPrismaRepository();
     prismaMock.token.findUnique.mockResolvedValue(null);
@@ -137,5 +173,27 @@ describe("TokenPrismaRepository", () => {
     await expect(
       repository.deleteByUserIdAndCreateNewToken("user-1", token),
     ).rejects.toBeInstanceOf(InternalServerError);
+  });
+
+  it("findAll should return all tokens mapped to domain", async () => {
+    const repository = new TokenPrismaRepository();
+    const now = new Date();
+    prismaMock.token.findMany.mockResolvedValue([
+      {
+        id: "token-1",
+        userId: "user-1",
+        tokenHash: "hash-1",
+        type: "EMAIL_VERIFICATION",
+        expiresAt: new Date(now.getTime() + 60_000),
+        get toDomain() {
+          return Token.create(this as any);
+        },
+      },
+    ]);
+
+    const result = await repository.findAll();
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBeInstanceOf(Token);
   });
 });

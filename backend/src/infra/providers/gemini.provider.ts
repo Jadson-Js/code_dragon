@@ -22,22 +22,25 @@ export class GeminiProvider implements IGeminiProvider {
     try {
       return await fn();
     } catch (error: any) {
-      const is429 =
+      const isRetryable =
         error?.status === 429 ||
+        error?.status === 503 ||
         error?.message?.includes("429") ||
-        error?.message?.includes("RESOURCE_EXHAUSTED");
+        error?.message?.includes("503") ||
+        error?.message?.includes("RESOURCE_EXHAUSTED") ||
+        error?.message?.includes("UNAVAILABLE");
 
-      if (is429 && retries > 0) {
+      if (isRetryable && retries > 0) {
         console.warn(
-          `⚠️ Gemini API 429 detected. Retrying in ${delay}ms... (${retries} attempts left)`,
+          `⚠️ Gemini API error detected (${error?.status || "unknown"}). Retrying in ${delay}ms... (${retries} attempts left)`,
         );
         await new Promise((resolve) => setTimeout(resolve, delay));
         return this.withRetry(fn, retries - 1, delay * 2);
       }
 
-      if (is429) {
+      if (isRetryable) {
         throw new TooManyRequestsError(
-          "Rate limit exceeded. Please try again later.",
+          "Gemini API is currently busy or rate limited. Please try again later.",
         );
       }
 
@@ -54,7 +57,7 @@ Sua missão é gerar exatamente ${data.quantityPerBatch} questões de múltipla 
 
 === CONTEXTO DA AVALIAÇÃO ===
 - Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
-- Assunto(s): ${data.quizSubject?.map((s) => `${s.name} - ${s.description}`).join(" | ") ?? "Nenhum assunto específico"}
+- Assunto(s): ${data.quizSubjects?.map((s) => `${s.name} - ${s.description}`).join(" | ") ?? "Nenhum assunto específico"}
 - Nível de senioridade: ${data.seniority.name}
 - Especialidade(s): ${data.specialty.name}
 - Tecnologias/Stacks: ${data.stacks.map((s) => s.name).join(", ")}
