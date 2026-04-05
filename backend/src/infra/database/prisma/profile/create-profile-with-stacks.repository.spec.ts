@@ -83,7 +83,16 @@ describe("CreateProfileWithStacksPrismaRepository", () => {
     await expect(repository.execute(input)).rejects.toBeInstanceOf(ConflictError);
   });
 
-  it("should throw InternalServerError for other errors", async () => {
+  it("should throw InternalServerError for other Prisma errors", async () => {
+    const repository = new CreateProfileWithStacksPrismaRepository();
+    prismaMockData.$transaction.mockRejectedValue(
+      new MockPrismaError("Generic error", "P9999"),
+    );
+
+    await expect(repository.execute(input)).rejects.toBeInstanceOf(InternalServerError);
+  });
+
+  it("should throw InternalServerError for unknown errors", async () => {
     const repository = new CreateProfileWithStacksPrismaRepository();
     prismaMockData.$transaction.mockRejectedValue(new Error("Unknown"));
 

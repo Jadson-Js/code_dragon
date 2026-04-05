@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { Profile } from "@/domain/entities/profile.entity";
+import { NotFoundError } from "@/shared/app.error";
 
 const prismaMockData = {
   $transaction: jest.fn<any>(),
@@ -72,7 +73,7 @@ describe("UpdateProfileWithStacksPrismaRepository", () => {
     await expect(repository.execute(input)).rejects.toThrow("Update failed");
   });
 
-  it("should throw NotFoundError if profile is not found", async () => {
+  it("should throw NotFoundError if profile is not found (P2025)", async () => {
     const repository = new UpdateProfileWithStacksPrismaRepository();
 
     prismaMockData.$transaction.mockImplementation(async (callback: any) => {
@@ -88,6 +89,25 @@ describe("UpdateProfileWithStacksPrismaRepository", () => {
       return await callback(tx);
     });
 
-    await expect(repository.execute(input)).rejects.toThrow("Profile not found");
+    await expect(repository.execute(input)).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it("should re-throw generic Prisma errors", async () => {
+    const repository = new UpdateProfileWithStacksPrismaRepository();
+
+    prismaMockData.$transaction.mockImplementation(async (callback: any) => {
+      const tx = {
+        profile: {
+          update: jest.fn(async () => {
+            const error = new Error("Generic error");
+            (error as any).code = "P9999";
+            throw error;
+          }),
+        },
+      };
+      return await callback(tx);
+    });
+
+    await expect(repository.execute(input)).rejects.toThrow("Generic error");
   });
 });

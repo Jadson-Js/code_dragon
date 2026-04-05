@@ -122,6 +122,53 @@ describe("GetQuizOptionsUseCase", () => {
     });
   });
 
+  it("should map specialties with subjects correctly", async () => {
+    const { sut, getQuizOptionsRepository } = makeUseCase();
+
+    const mockResponse = {
+      quizObjectives: [],
+      quizSubjects: [],
+      seniorities: [],
+      specialties: [
+        Object.assign(makeSpecialty(4), {
+          subjects: [makeQuizSubject(2)],
+        }),
+      ],
+      stacks: [],
+    };
+
+    getQuizOptionsRepository.execute.mockResolvedValue(mockResponse);
+
+    const result = await sut.execute();
+
+    expect(result.specialties[0].subjects).toHaveLength(1);
+    expect(result.specialties[0].subjects[0]).toEqual({
+      id: 2,
+      name: "Subject 2",
+    });
+  });
+
+  it("should handle specialties with missing subjects property", async () => {
+    const { sut, getQuizOptionsRepository } = makeUseCase();
+
+    const specialty = makeSpecialty(4);
+    (specialty as any).subjects = undefined;
+
+    const mockResponse = {
+      quizObjectives: [],
+      quizSubjects: [],
+      seniorities: [],
+      specialties: [specialty],
+      stacks: [],
+    };
+
+    getQuizOptionsRepository.execute.mockResolvedValue(mockResponse);
+
+    const result = await sut.execute();
+
+    expect(result.specialties[0].subjects).toEqual([]);
+  });
+
   it("should propagate errors thrown by the repository", async () => {
     const { sut, getQuizOptionsRepository } = makeUseCase();
 

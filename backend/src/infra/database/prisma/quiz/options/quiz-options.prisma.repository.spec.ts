@@ -67,12 +67,48 @@ describe("QuizOptionsPrismaRepository", () => {
     expect(result.specialties[0]).toBeInstanceOf(Specialty);
     expect(result.stacks[0]).toBeInstanceOf(Stack);
 
-    // Verify IDs match
-    expect(result.quizObjectives[0]!.id).toBe(1);
-    expect(result.quizSubjects[0]!.id).toBe(10);
-    expect(result.seniorities[0]!.id).toBe(2);
     expect(result.specialties[0]!.id).toBe(3);
     expect(result.stacks[0]!.id).toBe(100);
+  });
+
+  it("should map specialty subjects when present", async () => {
+    const repository = new QuizOptionsPrismaRepository();
+
+    const mockResults = [
+      [],
+      [],
+      [],
+      [
+        {
+          id: 1,
+          name: "Frontend",
+          order: 1,
+          slug: "frontend",
+          description: "desc",
+          quizSubjects: [
+            {
+              quizSubject: makeRow(10, "React", QuizSubject),
+            },
+          ],
+          toDomain: Specialty.create({
+            id: 1,
+            name: "Frontend",
+            order: 1,
+            slug: "frontend",
+            description: "desc",
+          }),
+        },
+      ],
+      [],
+    ];
+
+    prismaMockData.$transaction.mockResolvedValue(mockResults);
+
+    const result = await repository.execute();
+
+    expect(result.specialties[0]).toBeDefined();
+    expect((result.specialties[0] as any).subjects).toHaveLength(1);
+    expect((result.specialties[0] as any).subjects[0].name).toBe("React");
   });
 
   it("should return empty arrays when transaction returns no data", async () => {

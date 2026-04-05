@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1775343416450" clover="3.2.0">
-  <project timestamp="1775343416450" name="All files">
-    <metrics statements="672" coveredstatements="669" conditionals="306" coveredconditionals="277" methods="197" coveredmethods="195" elements="1175" coveredelements="1141" complexity="0" loc="672" ncloc="672" packages="19" files="62" classes="62"/>
+<coverage generated="1775352937186" clover="3.2.0">
+  <project timestamp="1775352937186" name="All files">
+    <metrics statements="672" coveredstatements="672" conditionals="306" coveredconditionals="280" methods="197" coveredmethods="197" elements="1175" coveredelements="1149" complexity="0" loc="672" ncloc="672" packages="19" files="62" classes="62"/>
     <package name="domain.entities">
       <metrics statements="124" coveredstatements="124" conditionals="100" coveredconditionals="100" methods="31" coveredmethods="31"/>
       <file name="age-range.entity.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/domain/entities/age-range.entity.ts">
@@ -77,13 +77,13 @@
       </file>
       <file name="quiz-subject.entity.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/domain/entities/quiz-subject.entity.ts">
         <metrics statements="7" coveredstatements="7" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="12" count="6" type="stmt"/>
-        <line num="13" count="6" type="stmt"/>
-        <line num="14" count="6" type="stmt"/>
-        <line num="15" count="6" type="stmt"/>
-        <line num="16" count="6" type="stmt"/>
-        <line num="17" count="6" type="stmt"/>
-        <line num="21" count="6" type="stmt"/>
+        <line num="12" count="8" type="stmt"/>
+        <line num="13" count="8" type="stmt"/>
+        <line num="14" count="8" type="stmt"/>
+        <line num="15" count="8" type="stmt"/>
+        <line num="16" count="8" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="21" count="8" type="stmt"/>
       </file>
       <file name="seniority.entity.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/domain/entities/seniority.entity.ts">
         <metrics statements="8" coveredstatements="8" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
@@ -121,14 +121,14 @@
       </file>
       <file name="specialty.entity.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/domain/entities/specialty.entity.ts">
         <metrics statements="8" coveredstatements="8" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="13" count="7" type="stmt"/>
-        <line num="14" count="7" type="stmt"/>
-        <line num="15" count="7" type="stmt"/>
-        <line num="16" count="7" type="stmt"/>
-        <line num="17" count="7" type="stmt"/>
-        <line num="18" count="7" type="stmt"/>
-        <line num="19" count="7" type="stmt"/>
-        <line num="23" count="7" type="stmt"/>
+        <line num="13" count="10" type="stmt"/>
+        <line num="14" count="10" type="stmt"/>
+        <line num="15" count="10" type="stmt"/>
+        <line num="16" count="10" type="stmt"/>
+        <line num="17" count="10" type="stmt"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="19" count="10" type="stmt"/>
+        <line num="23" count="10" type="stmt"/>
       </file>
       <file name="stack.entity.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/domain/entities/stack.entity.ts">
         <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
@@ -255,22 +255,22 @@
       </file>
     </package>
     <package name="infra.database.prisma.profile">
-      <metrics statements="41" coveredstatements="40" conditionals="8" coveredconditionals="6" methods="14" coveredmethods="14"/>
+      <metrics statements="41" coveredstatements="41" conditionals="8" coveredconditionals="8" methods="14" coveredmethods="14"/>
       <file name="create-profile-with-stacks.repository.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/infra/database/prisma/profile/create-profile-with-stacks.repository.ts">
-        <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
-        <line num="13" count="3" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="19" count="1" type="stmt"/>
         <line num="20" count="2" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
-        <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="43" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="42" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="44" count="1" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
       </file>
       <file name="get-onboarding-options.repository.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/infra/database/prisma/profile/get-onboarding-options.repository.ts">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
@@ -294,34 +294,34 @@
         <line num="39" count="2" type="stmt"/>
       </file>
       <file name="update-profile-with-stacks.repository.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/infra/database/prisma/profile/update-profile-with-stacks.repository.ts">
-        <metrics statements="13" coveredstatements="12" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
+        <metrics statements="13" coveredstatements="13" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="8" count="1" type="stmt"/>
-        <line num="13" count="3" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="30" count="2" type="stmt"/>
         <line num="37" count="1" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
-        <line num="52" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="52" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="53" count="1" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
       </file>
     </package>
     <package name="infra.database.prisma.quiz.options">
-      <metrics statements="9" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="6"/>
+      <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="7"/>
       <file name="quiz-options.prisma.repository.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/infra/database/prisma/quiz/options/quiz-options.prisma.repository.ts">
-        <metrics statements="9" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="6"/>
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="7"/>
         <line num="9" count="1" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
-        <line num="28" count="2" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
       </file>
     </package>
@@ -810,18 +810,18 @@
       </file>
     </package>
     <package name="modules.quiz.options.use-cases">
-      <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="8" coveredmethods="7"/>
+      <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
       <file name="get-quiz-options.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/modules/quiz/options/use-cases/get-quiz-options.ts">
-        <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="8" coveredmethods="7"/>
+        <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
         <line num="6" count="1" type="stmt"/>
-        <line num="9" count="3" type="stmt"/>
-        <line num="13" count="3" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="32" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="37" count="1" type="stmt"/>
       </file>
     </package>
@@ -884,15 +884,15 @@
       <metrics statements="25" coveredstatements="25" conditionals="54" coveredconditionals="33" methods="15" coveredmethods="15"/>
       <file name="app.error.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/shared/app.error.ts">
         <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
-        <line num="3" count="52" type="stmt"/>
-        <line num="6" count="52" type="stmt"/>
+        <line num="3" count="53" type="stmt"/>
+        <line num="6" count="53" type="stmt"/>
         <line num="12" count="11" type="stmt"/>
         <line num="18" count="8" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
         <line num="30" count="13" type="stmt"/>
         <line num="36" count="4" type="stmt"/>
         <line num="42" count="5" type="stmt"/>
-        <line num="48" count="8" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
       </file>
       <file name="env.ts" path="/home/magnus/developments/projects/code_dragon/backend/src/shared/env.ts">
         <metrics statements="2" coveredstatements="2" conditionals="42" coveredconditionals="21" methods="0" coveredmethods="0"/>
