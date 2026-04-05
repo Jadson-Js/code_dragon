@@ -44,47 +44,23 @@ export class QuizQuestionGenerateUseCase {
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     if (data.saveInProfile) await this.saveInProfile(data);
 
-    const feature = await this.featureRepository.findBySlug("quiz");
-    if (!feature || !feature.id) {
-      throw new Error("Quiz feature not found in the database");
-    }
-
-    const session = Session.create({
-      userId: data.userId,
-      featureId: feature.id,
-    });
-
-    const sessionQuiz = SessionQuiz.create({
-      sessionId: session.id as string,
-      userId: data.userId,
-      seniorityId: data.seniorityId,
-      specialtyId: data.specialtyId,
-      quizObjectiveId: data.quizObjectiveId,
-      quantityQuestions: data.quantity,
-    });
-
-    const { sessionQuizId } =
-      await this.createSessionWithQuizRepository.execute({
-        session,
-        sessionQuiz,
-        stacksId: data.stacksId,
-        ...(data.quizSubjectsId ? { quizSubjectsId: data.quizSubjectsId } : {}),
-      });
+    const { sessionQuizId } = await this.createSession(data);
 
     const quantityPerBatch = 1;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
     const context = await this.getQuizContextRepository.execute(data);
-    const geminiInput = mapContextToGeminiInput(context, quantityPerBatch);
+    const geminiInput = mapContextToGeminiInput(
+      context,
+      quantityPerBatch,
+      sessionQuizId,
+    );
 
-    const generateds =
+    const questionsGenerated =
       await this.geminiProvider.generateQuizQuestion(geminiInput);
 
-    const questions = generateds.map((generated) =>
+    const questions = questionsGenerated.map((generated) =>
       QuizQuestion.create({
-        quizObjectiveId: geminiInput.quizObjective.id,
-        seniorityId: geminiInput.seniority.id,
-        specialtyId: geminiInput.specialty.id,
         statement: generated.statement,
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
@@ -114,5 +90,37 @@ export class QuizQuestionGenerateUseCase {
       profile: profileUpdated,
       stacksId: data.stacksId,
     });
+  }
+
+  private async createSession(
+    data: IQuizQuestionGenerateInputDTO,
+  ): Promise<{ sessionQuizId: string }> {
+    const feature = await this.featureRepository.findBySlug("quiz");
+    if (!feature || !feature.id)
+      throw new Error("Quiz feature not found in the database");
+
+    const session = Session.create({
+      userId: data.userId,
+      featureId: feature.id,
+    });
+
+    const sessionQuiz = SessionQuiz.create({
+      sessionId: session.id as string,
+      userId: data.userId,
+      seniorityId: data.seniorityId,
+      specialtyId: data.specialtyId,
+      quizObjectiveId: data.quizObjectiveId,
+      quantityQuestions: data.quantity,
+    });
+
+    const { sessionQuizId } =
+      await this.createSessionWithQuizRepository.execute({
+        session,
+        sessionQuiz,
+        stacksId: data.stacksId,
+        ...(data.quizSubjectsId ? { quizSubjectsId: data.quizSubjectsId } : {}),
+      });
+
+    return { sessionQuizId };
   }
 }

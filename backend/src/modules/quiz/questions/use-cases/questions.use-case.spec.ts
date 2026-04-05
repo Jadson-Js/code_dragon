@@ -65,9 +65,6 @@ function makeSavedQuestions(): QuizQuestion[] {
   return makeGeminiOutput().map((q, i) =>
     QuizQuestion.create({
       id: i + 1,
-      quizObjectiveId: 1,
-      seniorityId: 2,
-      specialtyId: 3,
       statement: q.statement,
       alternatives: q.alternatives,
       correctAlternativeIndex: q.correctAlternativeIndex,
@@ -325,6 +322,7 @@ describe("QuizQuestionGenerateUseCase", () => {
         specialty: expect.objectContaining({ id: 3, name: "Frontend" }),
         stacks: [expect.objectContaining({ id: 20, name: "React" })],
         quizSubjects: [expect.objectContaining({ id: 10, name: "CSS" })],
+        sessionQuizId: SESSION_QUIZ_ID,
       }),
     );
   });
@@ -353,11 +351,9 @@ describe("QuizQuestionGenerateUseCase", () => {
     expect(quizQuestionRepository.createMany).toHaveBeenCalledWith(
       expect.arrayContaining([
         expect.objectContaining({
-          quizObjectiveId: 1,
-          seniorityId: 2,
-          specialtyId: 3,
           statement: output[0]?.statement,
           correctAlternativeIndex: output[0]?.correctAlternativeIndex,
+          sessionQuizId: SESSION_QUIZ_ID,
         }),
       ]),
     );
@@ -461,6 +457,7 @@ describe("QuizQuestionGenerateUseCase", () => {
         quizObjective: expect.objectContaining({ id: 1 }),
         seniority: expect.objectContaining({ id: 2 }),
         specialty: expect.objectContaining({ id: 3 }),
+        sessionQuizId: SESSION_QUIZ_ID,
       });
     }
   });

@@ -5,6 +5,7 @@ export interface IGenerateQuizQuestionByGeminiInputProvider {
   specialty: { id: number; name: string };
   stacks: { id: number; name: string }[];
   quantityPerBatch: number;
+  sessionQuizId: string;
 }
 
 export interface IGenerateQuizQuestionByGeminiOutputProvider {

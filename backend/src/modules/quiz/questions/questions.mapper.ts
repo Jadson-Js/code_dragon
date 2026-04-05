@@ -4,6 +4,7 @@ import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/provid
 export function mapContextToGeminiInput(
   context: IGetQuizQuestionContextOutputRepository,
   quantityPerBatch: number,
+  sessionQuizId: string,
 ): IGenerateQuizQuestionByGeminiInputProvider {
   return {
     quizObjective: {
@@ -29,5 +30,6 @@ export function mapContextToGeminiInput(
       name: s.name,
     })),
     quantityPerBatch,
+    sessionQuizId,
   };
 }

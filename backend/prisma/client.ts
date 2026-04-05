@@ -80,14 +80,12 @@ export const prisma = prismaClient.$extends({
       toDomain: {
         needs: {
           id: true,
-          quizObjectiveId: true,
-          seniorityId: true,
-          specialtyId: true,
           statement: true,
           alternatives: true,
           correctAlternativeIndex: true,
           code: true,
           reports: true,
+          sessionQuizId: true,
           createdAt: true,
           updatedAt: true,
         },

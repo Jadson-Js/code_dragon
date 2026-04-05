@@ -99,7 +99,6 @@ model Seniority {
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   profiles       Profile[]
-  quizQuestions  QuizQuestion[]
   sessionQuizzes SessionQuiz[]
 
   @@map("seniorities")
@@ -129,7 +128,6 @@ model Specialty {
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   profiles       Profile[]
-  quizQuestions  QuizQuestion[]
   quizSubjects   QuizSpecialtySubject[]
   sessionQuizzes SessionQuiz[]
 
@@ -171,7 +169,6 @@ model QuizObjective {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  quizQuestions  QuizQuestion[]
   sessionQuizzes SessionQuiz[]
 
   @@map("quiz_objectives")
@@ -186,7 +183,6 @@ model QuizSubject {
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   specialties         QuizSpecialtySubject[]
-  quizQuestions       QuizQuestion[]
   quizSessionSubjects QuizSessionSubjects[]
 
   @@map("quiz_subjects")
@@ -208,9 +204,7 @@ model QuizSpecialtySubject {
 
 model QuizQuestion {
   id                      Int      @id @default(autoincrement())
-  seniorityId             Int      @map("seniority_id")
-  specialtyId             Int      @map("specialty_id")
-  quizObjectiveId         Int      @map("quiz_objective_id")
+  sessionQuizId           String?  @map("session_quiz_id")
   statement               String
   alternatives            String[]
   correctAlternativeIndex Int      @map("correct_alternative_index")
@@ -219,13 +213,7 @@ model QuizQuestion {
   createdAt               DateTime @default(now()) @map("created_at")
   updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
 
-  quizObjective QuizObjective @relation(fields: [quizObjectiveId], references: [id])
-  seniority     Seniority     @relation(fields: [seniorityId], references: [id])
-  specialty     Specialty     @relation(fields: [specialtyId], references: [id])
-  quizSubject   QuizSubject?  @relation(fields: [quizSubjectId], references: [id])
-  quizSubjectId Int?          @map("quiz_subject_id")
-  sessionQuiz   SessionQuiz?  @relation(fields: [sessionQuizId], references: [id])
-  sessionQuizId String?       @map("session_quiz_id")
+  sessionQuiz SessionQuiz? @relation(fields: [sessionQuizId], references: [id])
 
   @@map("quiz_questions")
 }

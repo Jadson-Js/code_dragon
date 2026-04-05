@@ -22,13 +22,11 @@ function makeResponse(): ResponseMock {
 function makeSavedQuestion(id: number): QuizQuestion {
   return QuizQuestion.create({
     id,
-    quizObjectiveId: 1,
-    seniorityId: 2,
-    specialtyId: 3,
     statement: `Question ${id}`,
     alternatives: ["A", "B", "C", "D"],
     correctAlternativeIndex: 0,
     code: null,
+    sessionQuizId: "session-1",
   });
 }
 

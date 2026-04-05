@@ -24,14 +24,12 @@ describe("QuizQuestionPrismaRepository", () => {
 
   const makeRaw = (id: number) => ({
     id,
-    quizObjectiveId: 1,
-    seniorityId: 2,
-    specialtyId: 3,
     statement: "Q",
     alternatives: ["A"],
     correctAlternativeIndex: 0,
     code: null,
     reports: 0,
+    sessionQuizId: "session-1",
     get toDomain() {
       return QuizQuestion.create(this as any);
     },
@@ -40,12 +38,10 @@ describe("QuizQuestionPrismaRepository", () => {
   it("should create a single question and return mapped entity", async () => {
     const repository = new QuizQuestionPrismaRepository();
     const entity = QuizQuestion.create({
-      quizObjectiveId: 1,
-      seniorityId: 2,
-      specialtyId: 3,
       statement: "Q",
       alternatives: ["A"],
       correctAlternativeIndex: 0,
+      sessionQuizId: "session-1",
     });
 
     prismaMockData.quizQuestion.create.mockResolvedValue(makeRaw(1));
@@ -60,12 +56,10 @@ describe("QuizQuestionPrismaRepository", () => {
   it("should create multiple questions and return mapped entities", async () => {
     const repository = new QuizQuestionPrismaRepository();
     const entity = QuizQuestion.create({
-      quizObjectiveId: 1,
-      seniorityId: 2,
-      specialtyId: 3,
       statement: "Q",
       alternatives: ["A"],
       correctAlternativeIndex: 0,
+      sessionQuizId: "session-1",
     });
 
     prismaMockData.quizQuestion.createManyAndReturn.mockResolvedValue([

@@ -29,13 +29,11 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
 
     const questions = generateds.map((generated) => {
       return QuizQuestion.create({
-        quizObjectiveId: job.data.quizObjective.id,
-        seniorityId: job.data.seniority.id,
-        specialtyId: job.data.specialty.id,
         statement: generated.statement,
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
+        sessionQuizId: job.data.sessionQuizId,
       });
     });
 

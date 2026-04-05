@@ -4,7 +4,7 @@
     "editor.formatOnSave": true
   },
   "files.exclude": {
-    //"**/.env": true,
+    "**/.env": true,
     "**/dbdiagram.txt": true,
     "**/generated": true,
     "**/package.json": true,
@@ -34,6 +34,7 @@
     "**/@types": true,
     "**/seed.ts": true,
     "**/public": true,
-    "**/jest.config.cjs": true
+    "**/jest.config.cjs": true,
+    "**/coverage": true
   }
 }
