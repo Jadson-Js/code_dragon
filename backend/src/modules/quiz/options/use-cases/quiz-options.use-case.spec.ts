@@ -141,8 +141,8 @@ describe("GetQuizOptionsUseCase", () => {
 
     const result = await sut.execute();
 
-    expect(result.specialties[0].subjects).toHaveLength(1);
-    expect(result.specialties[0].subjects[0]).toEqual({
+    expect(result.specialties[0]!.subjects).toHaveLength(1);
+    expect(result.specialties[0]!.subjects[0]!).toEqual({
       id: 2,
       name: "Subject 2",
     });
@@ -166,7 +166,7 @@ describe("GetQuizOptionsUseCase", () => {
 
     const result = await sut.execute();
 
-    expect(result.specialties[0].subjects).toEqual([]);
+    expect(result.specialties[0]!.subjects).toEqual([]);
   });
 
   it("should propagate errors thrown by the repository", async () => {

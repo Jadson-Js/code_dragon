@@ -108,8 +108,7 @@ describe("GeminiProvider", () => {
     });
 
     afterEach(() => {
-      (console.warn as jest.Mock).mockRestore();
-      (global.setTimeout as jest.Mock).mockRestore();
+      jest.restoreAllMocks();
     });
 
     it("should retry up to 5 times on 429 error and then throw TooManyRequestsError", async () => {
