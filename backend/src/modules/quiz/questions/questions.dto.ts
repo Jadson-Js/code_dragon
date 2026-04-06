@@ -8,3 +8,7 @@ export interface IQuizQuestionGenerateInputDTO {
   quantity: number;
   saveInProfile: boolean;
 }
+
+export interface IQuizQuestionStreamInputDTO {
+  sessionQuizId: string;
+}

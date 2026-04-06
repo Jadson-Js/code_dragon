@@ -30,6 +30,7 @@ export class CreateSessionWithQuizPrismaRepository implements ICreateSessionWith
           quizObjectiveId: data.sessionQuiz.quizObjectiveId,
           quantityQuestions: data.sessionQuiz.quantityQuestions,
           score: data.sessionQuiz.score,
+          status: data.sessionQuiz.status,
         },
       });
 
@@ -49,7 +50,7 @@ export class CreateSessionWithQuizPrismaRepository implements ICreateSessionWith
         });
       }
 
-      return { sessionQuizId: createdSessionQuiz.id };
+      return { sessionQuiz: (createdSessionQuiz as any).toDomain };
     });
   }
 }

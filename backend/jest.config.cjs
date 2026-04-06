@@ -7,6 +7,7 @@ module.exports = {
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^generated/(.*)$": "<rootDir>/generated/$1",
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {

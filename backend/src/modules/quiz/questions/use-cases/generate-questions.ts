@@ -13,6 +13,7 @@ import { mapContextToGeminiInput } from "../questions.mapper";
 import { Profile } from "@/domain/entities/profile.entity";
 import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
 import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
+import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
 import { Session } from "@/domain/entities/session.entity";
 import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
 
@@ -39,12 +40,15 @@ export class QuizQuestionGenerateUseCase {
 
     @inject("IFeatureRepository")
     private readonly featureRepository: IFeatureRepository,
+
+    @inject("ISessionQuizRepository")
+    private readonly sessionQuizRepository: ISessionQuizRepository,
   ) {}
 
   async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
     if (data.saveInProfile) await this.saveInProfile(data);
 
-    const { sessionQuizId } = await this.createSession(data);
+    const { sessionQuiz } = await this.createSession(data);
 
     const quantityPerBatch = 1;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
@@ -53,7 +57,7 @@ export class QuizQuestionGenerateUseCase {
     const geminiInput = mapContextToGeminiInput(
       context,
       quantityPerBatch,
-      sessionQuizId,
+      sessionQuiz,
     );
 
     const questionsGenerated =
@@ -65,7 +69,7 @@ export class QuizQuestionGenerateUseCase {
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
-        sessionQuizId,
+        sessionQuizId: sessionQuiz.id,
       }),
     );
 
@@ -75,6 +79,13 @@ export class QuizQuestionGenerateUseCase {
 
     const savedQuestions =
       await this.quizQuestionRepository.createMany(questions);
+
+    if (savedQuestions.length >= data.quantity) {
+      await this.sessionQuizRepository.updateStatus(
+        sessionQuiz.id,
+        "IN_PROGRESS",
+      );
+    }
 
     return savedQuestions;
   }
@@ -94,7 +105,7 @@ export class QuizQuestionGenerateUseCase {
 
   private async createSession(
     data: IQuizQuestionGenerateInputDTO,
-  ): Promise<{ sessionQuizId: string }> {
+  ): Promise<{ sessionQuiz: SessionQuiz }> {
     const feature = await this.featureRepository.findBySlug("quiz");
     if (!feature || !feature.id)
       throw new Error("Quiz feature not found in the database");
@@ -113,7 +124,7 @@ export class QuizQuestionGenerateUseCase {
       quantityQuestions: data.quantity,
     });
 
-    const { sessionQuizId } =
+    const { sessionQuiz: sessionQuizCreated } =
       await this.createSessionWithQuizRepository.execute({
         session,
         sessionQuiz,
@@ -121,6 +132,6 @@ export class QuizQuestionGenerateUseCase {
         ...(data.quizSubjectsId ? { quizSubjectsId: data.quizSubjectsId } : {}),
       });
 
-    return { sessionQuizId };
+    return { sessionQuiz: sessionQuizCreated };
   }
 }

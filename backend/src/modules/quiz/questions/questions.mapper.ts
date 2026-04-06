@@ -1,10 +1,11 @@
 import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
+import type { SessionQuiz } from "@/domain/entities/session-quiz.entity";
 
 export function mapContextToGeminiInput(
   context: IGetQuizQuestionContextOutputRepository,
   quantityPerBatch: number,
-  sessionQuizId: string,
+  sessionQuiz: SessionQuiz,
 ): IGenerateQuizQuestionByGeminiInputProvider {
   return {
     quizObjective: {
@@ -30,6 +31,6 @@ export function mapContextToGeminiInput(
       name: s.name,
     })),
     quantityPerBatch,
-    sessionQuizId,
+    sessionQuiz,
   };
 }

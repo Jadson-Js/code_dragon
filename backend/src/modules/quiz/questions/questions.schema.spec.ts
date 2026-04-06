@@ -1,6 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import { ZodError } from "zod";
-import { quizQuestionGenerateSchema } from "./questions.schema";
+import { quizQuestionGenerateSchema, quizQuestionStreamSchema } from "./questions.schema";
 
 describe("quizQuestionGenerateSchema", () => {
   const validBody = {
@@ -61,6 +61,24 @@ describe("quizQuestionGenerateSchema", () => {
     await expect(
       quizQuestionGenerateSchema.parseAsync({
         body: { ...validBody, saveInProfile: "yes" },
+      }),
+    ).rejects.toBeInstanceOf(ZodError);
+  });
+});
+
+describe("quizQuestionStreamSchema", () => {
+  it("should accept valid params", async () => {
+    await expect(
+      quizQuestionStreamSchema.parseAsync({
+        params: { session_quiz_id: "uuid-123" },
+      }),
+    ).resolves.toBeDefined();
+  });
+
+  it("should reject when session_quiz_id is missing", async () => {
+    await expect(
+      quizQuestionStreamSchema.parseAsync({
+        params: {},
       }),
     ).rejects.toBeInstanceOf(ZodError);
   });

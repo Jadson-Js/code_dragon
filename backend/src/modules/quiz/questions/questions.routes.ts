@@ -4,7 +4,10 @@ import {
   ensureAuthenticated,
   simpleRateLimitMiddleware,
 } from "@/infra/container/providers";
-import { quizQuestionGenerateSchema } from "./questions.schema";
+import {
+  quizQuestionGenerateSchema,
+  quizQuestionStreamSchema,
+} from "./questions.schema";
 import { validate } from "@/infra/http/middlewares/validate.middleware";
 
 const router = Router();
@@ -18,6 +21,17 @@ router.post(
   validate(quizQuestionGenerateSchema),
   ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   quizQuestionsController.generateQuestions.bind(quizQuestionsController),
+);
+
+router.get(
+  "/stream/:session_quiz_id",
+  simpleRateLimitMiddleware.handle({
+    max: 60,
+    windowInMs: 60000,
+  }),
+  validate(quizQuestionStreamSchema),
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  quizQuestionsController.streamQuestions.bind(quizQuestionsController),
 );
 
 export default router;

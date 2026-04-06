@@ -11,3 +11,9 @@ export const quizQuestionGenerateSchema = z.object({
     saveInProfile: z.boolean(),
   }),
 });
+
+export const quizQuestionStreamSchema = z.object({
+  params: z.object({
+    session_quiz_id: z.string(),
+  }),
+});

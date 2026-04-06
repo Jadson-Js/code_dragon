@@ -10,12 +10,14 @@ import type { IQuizQuestionGenerateInputDTO } from "./questions.dto";
 type ResponseMock = {
   status: jest.MockedFunction<(code: number) => ResponseMock>;
   json: jest.MockedFunction<(body?: unknown) => ResponseMock>;
+  setHeader: jest.MockedFunction<(name: string, value: string) => ResponseMock>;
 };
 
 function makeResponse(): ResponseMock {
   const res = {} as ResponseMock;
   res.status = jest.fn<(code: number) => ResponseMock>().mockReturnValue(res);
   res.json = jest.fn<(body?: unknown) => ResponseMock>().mockReturnValue(res);
+  res.setHeader = jest.fn<(name: string, value: string) => ResponseMock>().mockReturnValue(res);
   return res;
 }
 
@@ -32,17 +34,23 @@ function makeSavedQuestion(id: number): QuizQuestion {
 
 function makeController() {
   const quizQuestionGenerateUseCase = {
-    execute:
-      jest.fn<
-        (data: IQuizQuestionGenerateInputDTO) => Promise<QuizQuestion[]>
-      >(),
+    execute: jest.fn<any>(),
+  };
+
+  const quizQuestionStreamUseCase = {
+    execute: jest.fn<any>(),
   };
 
   const controller = new QuizQuestionsController(
-    quizQuestionGenerateUseCase as never,
+    quizQuestionGenerateUseCase as any,
+    quizQuestionStreamUseCase as any,
   );
 
-  return { controller, quizQuestionGenerateUseCase };
+  return {
+    controller,
+    quizQuestionGenerateUseCase,
+    quizQuestionStreamUseCase,
+  };
 }
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -134,5 +142,42 @@ describe("QuizQuestionsController", () => {
     await expect(
       controller.generateQuestions(request, response as unknown as Response),
     ).rejects.toThrow("Use case failed");
+  });
+
+  describe("streamQuestions", () => {
+    it("should set SSE headers and call stream use case", async () => {
+      const { controller, quizQuestionStreamUseCase } = makeController();
+      const request = {
+        params: { session_quiz_id: "session-1" },
+      } as unknown as Request;
+      const response = makeResponse();
+
+      await controller.streamQuestions(
+        request,
+        response as unknown as Response,
+      );
+
+      expect(response.setHeader).toHaveBeenCalledWith("Content-Type", "text/event-stream");
+      expect(response.setHeader).toHaveBeenCalledWith("Cache-Control", "no-cache");
+      expect(response.setHeader).toHaveBeenCalledWith("Connection", "keep-alive");
+      expect(quizQuestionStreamUseCase.execute).toHaveBeenCalledWith(
+        { sessionQuizId: "session-1" },
+        response,
+      );
+    });
+
+    it("should propagate errors from stream use case", async () => {
+      const { controller, quizQuestionStreamUseCase } = makeController();
+      const request = {
+        params: { session_quiz_id: "session-1" },
+      } as unknown as Request;
+      const response = makeResponse();
+
+      quizQuestionStreamUseCase.execute.mockRejectedValue(new Error("Stream failed"));
+
+      await expect(
+        controller.streamQuestions(request, response as unknown as Response),
+      ).rejects.toThrow("Stream failed");
+    });
   });
 });

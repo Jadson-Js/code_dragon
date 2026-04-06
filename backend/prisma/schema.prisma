@@ -19,6 +19,13 @@ enum TokenType {
   PASSWORD_RESET
 }
 
+enum SessionQuizStatus {
+  GENERATING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
 model User {
   id           String    @id @default(uuid())
   name         String
@@ -233,16 +240,17 @@ model Session {
 }
 
 model SessionQuiz {
-  id                String   @id @default(uuid())
-  sessionId         String   @map("session_id")
-  userId            String   @map("user_id")
-  seniorityId       Int      @map("seniority_id")
-  specialtyId       Int      @map("specialty_id")
-  quizObjectiveId   Int      @map("quiz_objective_id")
-  quantityQuestions Int      @map("quantity_questions")
-  score             Int      @default(0)
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
+  id                String            @id @default(uuid())
+  sessionId         String            @map("session_id")
+  userId            String            @map("user_id")
+  seniorityId       Int               @map("seniority_id")
+  specialtyId       Int               @map("specialty_id")
+  quizObjectiveId   Int               @map("quiz_objective_id")
+  quantityQuestions Int               @map("quantity_questions")
+  score             Int               @default(0)
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @default(now()) @updatedAt @map("updated_at")
+  status            SessionQuizStatus @default(GENERATING)
 
   session       Session               @relation(fields: [sessionId], references: [id])
   user          User                  @relation(fields: [userId], references: [id])

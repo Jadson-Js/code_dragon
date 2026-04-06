@@ -38,4 +38,18 @@ export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {
 
     return response.map((item) => item.toDomain);
   }
+
+  async findBySessionQuizId(sessionQuizId: string): Promise<QuizQuestion[]> {
+    const questions = await prisma.quizQuestion.findMany({
+      where: { sessionQuizId },
+    });
+
+    return questions.map((item) => item.toDomain);
+  }
+
+  async countBySessionQuizId(sessionQuizId: string): Promise<number> {
+    return await prisma.quizQuestion.count({
+      where: { sessionQuizId },
+    });
+  }
 }

@@ -6,6 +6,8 @@ const prismaMockData = {
   quizQuestion: {
     create: jest.fn<any>(),
     createManyAndReturn: jest.fn<any>(),
+    findMany: jest.fn<any>(),
+    count: jest.fn<any>(),
   },
 };
 
@@ -73,5 +75,37 @@ describe("QuizQuestionPrismaRepository", () => {
     expect(result[0]!.id).toBe(10);
     expect(result[1]!.id).toBe(11);
     expect(prismaMockData.quizQuestion.createManyAndReturn).toHaveBeenCalled();
+  });
+
+  it("should find questions by session quiz id", async () => {
+    const repository = new QuizQuestionPrismaRepository();
+    const sessionQuizId = "session-1";
+
+    prismaMockData.quizQuestion.findMany.mockResolvedValue([
+      makeRaw(1),
+      makeRaw(2),
+    ]);
+
+    const result = await repository.findBySessionQuizId(sessionQuizId);
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toBeInstanceOf(QuizQuestion);
+    expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
+      where: { sessionQuizId },
+    });
+  });
+
+  it("should count questions by session quiz id", async () => {
+    const repository = new QuizQuestionPrismaRepository();
+    const sessionQuizId = "session-1";
+
+    prismaMockData.quizQuestion.count.mockResolvedValue(5);
+
+    const result = await repository.countBySessionQuizId(sessionQuizId);
+
+    expect(result).toBe(5);
+    expect(prismaMockData.quizQuestion.count).toHaveBeenCalledWith({
+      where: { sessionQuizId },
+    });
   });
 });

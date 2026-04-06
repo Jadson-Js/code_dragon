@@ -91,56 +91,53 @@ function makeInput(quantity = 1): IQuizQuestionGenerateInputDTO {
 
 function makeUseCase() {
   const getQuizContextRepository = {
-    execute:
-      jest.fn<
-        (
-          data: IQuizQuestionGenerateInputDTO,
-        ) => Promise<IGetQuizQuestionContextOutputRepository>
-      >(),
+    execute: jest.fn<any>(),
   };
   const generateQuizQuestionQueue = {
-    addJob:
-      jest.fn<
-        (data: IGenerateQuizQuestionByGeminiInputProvider) => Promise<void>
-      >(),
+    addJob: jest.fn<any>(),
     start: jest.fn<() => void>(),
   };
   const geminiProvider = {
-    generateQuizQuestion:
-      jest.fn<
-        (
-          data: IGenerateQuizQuestionByGeminiInputProvider,
-        ) => Promise<ReturnType<typeof makeGeminiOutput>>
-      >(),
+    generateQuizQuestion: jest.fn<any>(),
   };
   const quizQuestionRepository = {
-    create: jest.fn<(data: QuizQuestion) => Promise<QuizQuestion>>(),
-    createMany: jest.fn<(data: QuizQuestion[]) => Promise<QuizQuestion[]>>(),
+    create: jest.fn<any>(),
+    createMany: jest.fn<any>(),
   };
 
   const updateProfileWithStacksRepository = {
-    execute: jest.fn<(params: { profile: Profile; stacksId: number[] }) => Promise<Profile>>(),
+    execute: jest.fn<any>(),
   };
 
   const createSessionWithQuizRepository = {
-    execute:
-      jest.fn<
-        (data: ICreateSessionWithQuizInput) => Promise<{ sessionQuizId: string }>
-      >(),
+    execute: jest.fn<any>(),
   };
 
   const featureRepository = {
-    findBySlug: jest.fn<(slug: string) => Promise<Feature | null>>().mockResolvedValue({ id: FEATURE_ID } as unknown as Feature),
+    findBySlug: jest
+      .fn<any>()
+      .mockResolvedValue({ id: FEATURE_ID } as unknown as Feature),
+  };
+
+  const quizQuestionEventEmitter = {
+    emitNewQuestions: jest.fn(),
+    emitFinished: jest.fn(),
+  };
+
+  const sessionQuizRepository = {
+    findById: jest.fn(),
+    updateStatus: jest.fn(),
   };
 
   const useCase = new QuizQuestionGenerateUseCase(
-    getQuizContextRepository as never,
-    generateQuizQuestionQueue as never,
-    geminiProvider as never,
-    quizQuestionRepository as never,
-    updateProfileWithStacksRepository as never,
-    createSessionWithQuizRepository as never,
-    featureRepository as never,
+    getQuizContextRepository as any,
+    generateQuizQuestionQueue as any,
+    geminiProvider as any,
+    quizQuestionRepository as any,
+    updateProfileWithStacksRepository as any,
+    createSessionWithQuizRepository as any,
+    featureRepository as any,
+    sessionQuizRepository as any,
   );
 
   return {
@@ -152,6 +149,8 @@ function makeUseCase() {
     updateProfileWithStacksRepository,
     createSessionWithQuizRepository,
     featureRepository,
+    quizQuestionEventEmitter,
+    sessionQuizRepository,
   };
 }
 
@@ -175,9 +174,11 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
-    featureRepository.findBySlug.mockResolvedValue({ id: FEATURE_ID } as unknown as Feature);
+    featureRepository.findBySlug.mockResolvedValue({
+      id: FEATURE_ID,
+    } as unknown as Feature);
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());
@@ -204,7 +205,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -235,7 +236,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -251,11 +252,8 @@ describe("QuizQuestionGenerateUseCase", () => {
   });
 
   it("should propagate errors thrown by createSessionWithQuizRepository", async () => {
-    const {
-      useCase,
-      featureRepository,
-      createSessionWithQuizRepository,
-    } = makeUseCase();
+    const { useCase, featureRepository, createSessionWithQuizRepository } =
+      makeUseCase();
 
     createSessionWithQuizRepository.execute.mockRejectedValue(
       new Error("Session creation failed"),
@@ -279,7 +277,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -303,7 +301,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -322,7 +320,8 @@ describe("QuizQuestionGenerateUseCase", () => {
         specialty: expect.objectContaining({ id: 3, name: "Frontend" }),
         stacks: [expect.objectContaining({ id: 20, name: "React" })],
         quizSubjects: [expect.objectContaining({ id: 10, name: "CSS" })],
-        sessionQuizId: SESSION_QUIZ_ID,
+        sessionQuiz: expect.objectContaining({ id: SESSION_QUIZ_ID }),
+        quantityPerBatch: 1,
       }),
     );
   });
@@ -339,7 +338,7 @@ describe("QuizQuestionGenerateUseCase", () => {
 
     const output = makeGeminiOutput();
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(output);
@@ -371,7 +370,7 @@ describe("QuizQuestionGenerateUseCase", () => {
 
     const saved = makeSavedQuestions();
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -394,7 +393,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -417,7 +416,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -441,7 +440,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -457,7 +456,7 @@ describe("QuizQuestionGenerateUseCase", () => {
         quizObjective: expect.objectContaining({ id: 1 }),
         seniority: expect.objectContaining({ id: 2 }),
         specialty: expect.objectContaining({ id: 3 }),
-        sessionQuizId: SESSION_QUIZ_ID,
+        sessionQuiz: expect.objectContaining({ id: SESSION_QUIZ_ID }),
       });
     }
   });
@@ -472,7 +471,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockRejectedValue(
@@ -493,7 +492,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockRejectedValue(
       new Error("Context not found"),
@@ -515,7 +514,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -538,7 +537,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
@@ -576,7 +575,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     } = makeUseCase();
 
     createSessionWithQuizRepository.execute.mockResolvedValue({
-      sessionQuizId: SESSION_QUIZ_ID,
+      sessionQuiz: { id: SESSION_QUIZ_ID, quantityQuestions: 1 } as any,
     });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());

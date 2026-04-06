@@ -13,6 +13,7 @@ import { Stack } from "@/domain/entities/stack.entity";
 import { QuizObjective } from "@/domain/entities/quiz-objective.entity";
 import { QuizSubject } from "@/domain/entities/quiz-subject.entity";
 import { Feature } from "@/domain/entities/feature.entity";
+import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -230,6 +231,28 @@ export const prisma = prismaClient.$extends({
         },
         compute(feature) {
           return Feature.create(feature as Parameters<typeof Feature.create>[0]);
+        },
+      },
+    },
+    sessionQuiz: {
+      toDomain: {
+        needs: {
+          id: true,
+          sessionId: true,
+          userId: true,
+          seniorityId: true,
+          specialtyId: true,
+          quizObjectiveId: true,
+          quantityQuestions: true,
+          score: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        compute(sessionQuiz) {
+          return SessionQuiz.create(
+            sessionQuiz as Parameters<typeof SessionQuiz.create>[0],
+          );
         },
       },
     },

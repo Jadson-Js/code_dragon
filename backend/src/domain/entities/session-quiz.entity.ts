@@ -1,3 +1,5 @@
+import { SessionQuizStatus } from "generated/prisma/enums";
+
 interface ICreateSessionQuizProps {
   id?: string;
   sessionId: string;
@@ -6,6 +8,7 @@ interface ICreateSessionQuizProps {
   specialtyId: number;
   quizObjectiveId: number;
   quantityQuestions: number;
+  status?: SessionQuizStatus;
   score?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -21,8 +24,9 @@ export class SessionQuiz {
     public readonly quizObjectiveId: number,
     public readonly quantityQuestions: number,
     public readonly score: number,
+    public status: SessionQuizStatus,
     public readonly createdAt: Date,
-    public readonly updatedAt: Date,
+    public updatedAt: Date,
   ) {}
 
   static create(props: ICreateSessionQuizProps): SessionQuiz {
@@ -35,8 +39,14 @@ export class SessionQuiz {
       props.quizObjectiveId,
       props.quantityQuestions,
       props.score ?? 0,
+      props.status ?? SessionQuizStatus.GENERATING,
       props.createdAt ?? new Date(),
       props.updatedAt ?? new Date(),
     );
+  }
+
+  updateStatus(status: SessionQuizStatus): void {
+    this.status = status;
+    this.updatedAt = new Date();
   }
 }

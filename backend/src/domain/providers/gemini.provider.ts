@@ -1,3 +1,5 @@
+import type { SessionQuiz } from "../entities/session-quiz.entity";
+
 export interface IGenerateQuizQuestionByGeminiInputProvider {
   quizObjective: { id: number; name: string; description: string };
   quizSubjects: { id: number; name: string; description: string }[] | null;
@@ -5,7 +7,7 @@ export interface IGenerateQuizQuestionByGeminiInputProvider {
   specialty: { id: number; name: string };
   stacks: { id: number; name: string }[];
   quantityPerBatch: number;
-  sessionQuizId: string;
+  sessionQuiz: SessionQuiz;
 }
 
 export interface IGenerateQuizQuestionByGeminiOutputProvider {

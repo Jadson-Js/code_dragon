@@ -9,7 +9,7 @@ export interface ICreateSessionWithQuizInput {
 }
 
 export interface ICreateSessionWithQuizOutput {
-  sessionQuizId: string;
+  sessionQuiz: SessionQuiz;
 }
 
 export interface ICreateSessionWithQuizRepository {

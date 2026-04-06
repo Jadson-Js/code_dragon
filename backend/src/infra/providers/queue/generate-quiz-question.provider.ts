@@ -8,6 +8,8 @@ import type {
 } from "@/domain/providers/gemini.provider";
 import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
+import type { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
+import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
 
 @injectable()
 export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionByGeminiInputProvider> {
@@ -17,6 +19,12 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
 
     @inject("IQuizQuestionRepository")
     private readonly quizQuestionRepository: IQuizQuestionRepository,
+
+    @inject("QuizQuestionEventEmitter")
+    private readonly quizQuestionEventEmitter: QuizQuestionEventEmitter,
+
+    @inject("ISessionQuizRepository")
+    private readonly sessionQuizRepository: ISessionQuizRepository,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     super("generateQuizQuestion", redisConnection as any);
@@ -25,6 +33,7 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
   async process(
     job: Job<IGenerateQuizQuestionByGeminiInputProvider>,
   ): Promise<void> {
+    const sessionQuizId = job.data.sessionQuiz.id;
     const generateds = await this.geminiProvider.generateQuizQuestion(job.data);
 
     const questions = generateds.map((generated) => {
@@ -33,10 +42,28 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
-        sessionQuizId: job.data.sessionQuizId,
+        sessionQuizId,
       });
     });
 
     await this.quizQuestionRepository.createMany(questions);
+
+    this.quizQuestionEventEmitter.emitNewQuestions({
+      sessionQuizId,
+      questions,
+    });
+
+    const count =
+      await this.quizQuestionRepository.countBySessionQuizId(sessionQuizId);
+
+    if (count >= job.data.sessionQuiz.quantityQuestions) {
+      await this.sessionQuizRepository.updateStatus(
+        sessionQuizId,
+        "IN_PROGRESS",
+      );
+      this.quizQuestionEventEmitter.emitFinished({
+        sessionQuizId,
+      });
+    }
   }
 }
