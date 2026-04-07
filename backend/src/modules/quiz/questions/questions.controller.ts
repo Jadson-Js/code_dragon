@@ -19,12 +19,12 @@ export class QuizQuestionsController {
   ): Promise<Response> {
     const userId = request.user.id;
 
-    const questions = await this.quizQuestionGenerateUseCase.execute({
+    const sessionQuizId = await this.quizQuestionGenerateUseCase.execute({
       ...request.body,
       userId,
     });
 
-    return response.status(201).json(questions);
+    return response.status(201).json(sessionQuizId);
   }
 
   async streamQuestions(request: Request, response: Response): Promise<void> {

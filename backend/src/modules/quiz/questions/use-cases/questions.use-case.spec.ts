@@ -358,7 +358,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     );
   });
 
-  it("should return the saved questions from the repository", async () => {
+  it("should return the session quiz id", async () => {
     const {
       useCase,
       featureRepository,
@@ -378,7 +378,7 @@ describe("QuizQuestionGenerateUseCase", () => {
 
     const result = await useCase.execute(makeInput(1));
 
-    expect(result).toBe(saved);
+    expect(result).toEqual({ sessionQuizId: SESSION_QUIZ_ID });
   });
 
   it("should NOT enqueue any job when quantity is 1", async () => {

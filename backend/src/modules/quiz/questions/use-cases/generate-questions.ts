@@ -45,7 +45,9 @@ export class QuizQuestionGenerateUseCase {
     private readonly sessionQuizRepository: ISessionQuizRepository,
   ) {}
 
-  async execute(data: IQuizQuestionGenerateInputDTO): Promise<QuizQuestion[]> {
+  async execute(
+    data: IQuizQuestionGenerateInputDTO,
+  ): Promise<{ sessionQuizId: string }> {
     if (data.saveInProfile) await this.saveInProfile(data);
 
     const { sessionQuiz } = await this.createSession(data);
@@ -87,7 +89,7 @@ export class QuizQuestionGenerateUseCase {
       );
     }
 
-    return savedQuestions;
+    return { sessionQuizId: sessionQuiz.id };
   }
 
   private async saveInProfile(data: IQuizQuestionGenerateInputDTO) {
