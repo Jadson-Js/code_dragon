@@ -21,14 +21,14 @@ export function useQuizQuestionsGenerate() {
       quizObjectiveId: 0,
       seniorityId: 0,
       specialtyId: 0,
-      quantity: 10,
+      quantity: 1,
     },
   });
 
   const mutation = useMutation({
     mutationFn: (data: QuizQuestionsGenerateFormData) =>
       api.post("/quiz/questions/generate", data),
-    onSuccess: (_, variables) => {
+    onSuccess: (data, variables) => {
       if (variables.saveInProfile) {
         localStorage.setItem(
           "@code_dragon:quiz_config",
@@ -41,7 +41,9 @@ export function useQuizQuestionsGenerate() {
       } else {
         localStorage.removeItem("@code_dragon:quiz_config");
       }
-      navigate("/");
+      console.log(data);
+
+      navigate("/quiz/session/123");
     },
     onError: async () => {
       toast.error("Erro ao gerar questões");

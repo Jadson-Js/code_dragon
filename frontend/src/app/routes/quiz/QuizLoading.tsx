@@ -1,15 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useQuizQuestionsGenerate } from "@/features/dashboard/hooks/useQuizQuestionsGenerate";
-import {
-  Loader2,
-  Activity,
-  Zap,
-  FileText,
-  Mic,
-  CheckCircle2,
-  ChevronRight,
-} from "lucide-react";
+import { Activity, Zap, FileText, Mic } from "lucide-react";
 import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 
@@ -70,19 +62,9 @@ export default function QuizLoading() {
     return () => clearInterval(interval);
   }, []);
 
-  // Redirect on Success logic
-  useEffect(() => {
-    if (mutation.isSuccess) {
-      navigate("/");
-    }
-  }, [mutation.isSuccess, navigate]);
-
   // API Call Logic
   useEffect(() => {
-    const formData = location.state?.formData as
-      | QuizQuestionsGenerateFormData
-      | undefined;
-
+    const formData = location.state?.formData as QuizQuestionsGenerateFormData;
     if (!formData) return;
 
     if (!hasCalled.current && !mutation.isPending && !mutation.isSuccess) {

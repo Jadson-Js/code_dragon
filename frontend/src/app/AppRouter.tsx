@@ -26,7 +26,7 @@ export default function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/quiz/generating" element={<QuizLoading />} />
-          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/quiz/session/:quiz_session_id" element={<Quiz />} />
         </Route>
       </Routes>
     </BrowserRouter>

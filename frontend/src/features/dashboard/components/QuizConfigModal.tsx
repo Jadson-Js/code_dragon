@@ -423,7 +423,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20 rounded-sm"
               onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
                 onOpenChange(false);
-                navigate("/quiz/generate", { state: { formData: data } });
+                navigate("/quiz/generating", { state: { formData: data } });
               })}
             >
               <Sparkles size={18} />
