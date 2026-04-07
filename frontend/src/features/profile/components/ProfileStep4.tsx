@@ -1,5 +1,5 @@
 import PageHeader from "@/components/PageHeader";
-import ListItem from "./ListItem";
+import ListItem from "../../../components/ui/ListItem";
 import { useFormContext, Controller } from "react-hook-form";
 import type { ProfileSetupFormData } from "../schemas/profileSetupSchema";
 
@@ -9,8 +9,6 @@ interface ProfileStep4Props {
 
 export default function ProfileStep4({ ageRanges = [] }: ProfileStep4Props) {
   const { control } = useFormContext<ProfileSetupFormData>();
-
-
 
   return (
     <>

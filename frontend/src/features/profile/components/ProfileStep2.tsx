@@ -1,5 +1,5 @@
 import PageHeader from "@/components/PageHeader";
-import GridItem from "./GridItem";
+import GridItem from "../../../components/ui/GridItem";
 import { useFormContext, Controller } from "react-hook-form";
 import type { ProfileSetupFormData } from "../schemas/profileSetupSchema";
 import {
