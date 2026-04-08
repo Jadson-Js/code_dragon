@@ -24,8 +24,8 @@ import { useNavigate } from "react-router";
 
 import { useGetProfile } from "../hooks/useGetProfile";
 import { useGetQuizOptions } from "../hooks/useGetQuizOptions";
-import { useQuizQuestionsGenerate } from "../hooks/useQuizQuestionsGenerate";
 import type { QuizQuestionsGenerateFormData } from "../schemas/useQuizQuestionsGenerate";
+import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestionsGenerate";
 
 // --- Constantes ---
 const QUANTITY_MAP: Record<string, number> = {
@@ -206,7 +206,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
     if (newSpecialty) {
       const validSubjectIds = newSpecialty.subjects.map((s) => s.id);
       const currentSubjects = getValues("quizSubjectIds") || [];
-      const filteredSubjects = currentSubjects.filter((id) =>
+      const filteredSubjects = currentSubjects.filter((id: number) =>
         validSubjectIds.includes(id),
       );
       setValue("quizSubjectIds", filteredSubjects);

@@ -7,7 +7,7 @@ import { api } from "@/lib/api-client";
 import {
   quizQuestionsGenerateSchema,
   type QuizQuestionsGenerateFormData,
-} from "../schemas/useQuizQuestionsGenerate";
+} from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
 
 export function useQuizQuestionsGenerate() {
   const navigate = useNavigate();
