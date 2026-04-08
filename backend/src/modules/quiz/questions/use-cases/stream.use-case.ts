@@ -41,7 +41,7 @@ export class QuizQuestionStreamUseCase {
         sessionQuiz.status === "COMPLETED")
     ) {
       response.write(
-        `event: finished\ndata: ${JSON.stringify({ status: sessionQuiz.status })}\n\n`,
+        `event: finished\ndata: ${JSON.stringify({ status: sessionQuiz.status, data: existingQuestions })}\n\n`,
       );
       response.end();
       return;
