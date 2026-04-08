@@ -26,8 +26,12 @@ export function useQuizQuestionsGenerate() {
   });
 
   const mutation = useMutation({
-    mutationFn: (data: QuizQuestionsGenerateFormData) =>
-      api.post("/quiz/questions/generate", data),
+    mutationFn: async (_data: QuizQuestionsGenerateFormData) => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return {
+        data: { sessionQuizId: "08b706cc-bc7d-4616-8711-aad81b900411" },
+      };
+    },
     onSuccess: (data, variables) => {
       if (variables.saveInProfile) {
         localStorage.setItem(
@@ -41,9 +45,8 @@ export function useQuizQuestionsGenerate() {
       } else {
         localStorage.removeItem("@code_dragon:quiz_config");
       }
-      console.log(data);
 
-      navigate("/quiz/session/123");
+      navigate(`/quiz/session/${data.data.sessionQuizId}`);
     },
     onError: async () => {
       toast.error("Erro ao gerar questões");

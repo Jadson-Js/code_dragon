@@ -2,11 +2,40 @@ import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { AlertCircle, ArrowLeft, X, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
+import { useLocation, useParams } from "react-router";
+import { useQuizQuestionsGenerate } from "@/features/dashboard/hooks/useQuizQuestionsGenerate";
+import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
+import { QuizLoader } from "@/features/quiz/components/QuizLoader";
 
 export default function Quiz() {
+  const { quiz_session_id } = useParams();
+  const location = useLocation();
+  const { mutation } = useQuizQuestionsGenerate();
+  const hasCalled = useRef(false);
+
+  useEffect(() => {
+    if (quiz_session_id === "generating") {
+      const formData = location.state
+        ?.formData as QuizQuestionsGenerateFormData;
+      if (formData && !hasCalled.current) {
+        hasCalled.current = true;
+        mutation.mutate(formData);
+      }
+    }
+  }, [quiz_session_id, location.state, mutation]);
+
   const currentQuestion = 5;
   const totalQuestions = 20;
   const progress = (currentQuestion / totalQuestions) * 100;
+
+  if (quiz_session_id === "generating") {
+    return (
+      <DashboardLayout>
+        <QuizLoader />
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
