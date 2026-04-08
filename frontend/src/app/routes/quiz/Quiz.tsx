@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
-import { AlertCircle, ArrowLeft, Copy, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
-import { useLocation, useParams } from "react-router";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
+
 import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
 import { QuizLoader } from "@/features/quiz/components/QuizLoader";
 import { useQuizQuestionsStream } from "@/features/quiz/hooks/useQuizQuestionsStream";
@@ -15,7 +15,11 @@ export default function Quiz() {
   const { quiz_session_id } = useParams();
   const { state } = useLocation();
   const { mutation } = useQuizQuestionsGenerate();
+  const navigate = useNavigate();
   const hasCalled = useRef(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+
+  const { questions, isLoading } = useQuizQuestionsStream(quiz_session_id);
 
   useEffect(() => {
     if (quiz_session_id === "generating") {
@@ -35,22 +39,63 @@ export default function Quiz() {
     );
   }
 
-  const { questions } = useQuizQuestionsStream(quiz_session_id);
+  if (isLoading && questions.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-white-2 animate-pulse font-medium">
+            Carregando questões do quiz...
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  console.log(questions[currentQuestionIndex]);
 
   return (
     <DashboardLayout>
       <div className="max-w-3xl mx-auto py-8 lg:py-12">
         {/* Header with Progress & Stats */}
-        <QuizQuestionsHeader />
+        <QuizQuestionsHeader
+          currentQuestion={currentQuestionIndex + 1}
+          totalQuestions={questions.length}
+        />
 
         {/* Question Area */}
-        <QuizQuestion className="mb-8" />
+        <div className="min-h-[400px]">
+          {questions.length > 0 ? (
+            <QuizQuestion
+              key={questions[currentQuestionIndex]?.id}
+              statement={questions[currentQuestionIndex]?.statement || ""}
+              code={questions[currentQuestionIndex]?.code}
+              alternatives={questions[currentQuestionIndex]?.alternatives || []}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full gap-4 py-20 bg-bg-2/50 rounded-2xl border border-bg-3/50">
+              <span className="text-white-2 text-lg">
+                Nenhuma questão disponível no momento.
+              </span>
+              <Button
+                onClick={() => navigate("/dashboard")}
+                variant="ghost"
+                className="border border-bg-3"
+              >
+                Voltar ao Dashboard
+              </Button>
+            </div>
+          )}
+        </div>
 
-        <div className="flex justify-end  items-center gap-4 w-full sm:w-auto order-1 sm:order-2">
+        <div className="flex justify-end items-center gap-4 w-full sm:w-auto order-1 sm:order-2 mt-12">
           <Button
             variant="ghost"
             size="lg"
             className="flex-1 sm:flex-none border border-bg-3 text-white-1 hover:bg-bg-2 w-30"
+            onClick={() =>
+              setCurrentQuestionIndex((prev: number) => Math.max(0, prev - 1))
+            }
+            disabled={currentQuestionIndex === 0}
           >
             <ArrowLeft />
             Anterior
@@ -60,8 +105,18 @@ export default function Quiz() {
             className="flex-1 sm:flex-none transition-all w-30"
             variant="default"
             size="lg"
+            onClick={() => {
+              if (currentQuestionIndex < questions.length - 1) {
+                setCurrentQuestionIndex((prev: number) => prev + 1);
+              } else {
+                // Handle finish quiz
+                navigate("/dashboard");
+              }
+            }}
           >
-            Próximo
+            {currentQuestionIndex === questions.length - 1
+              ? "Finalizar"
+              : "Próximo"}
           </Button>
         </div>
       </div>

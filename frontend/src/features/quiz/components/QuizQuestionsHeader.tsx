@@ -1,8 +1,14 @@
 import { X } from "lucide-react";
 
-export default function QuizQuestionsHeader() {
-  const currentQuestion = 5;
-  const totalQuestions = 20;
+interface Props {
+  currentQuestion: number;
+  totalQuestions: number;
+}
+
+export default function QuizQuestionsHeader({
+  currentQuestion,
+  totalQuestions,
+}: Props) {
   const progress = (currentQuestion / totalQuestions) * 100;
 
   return (
@@ -29,3 +35,4 @@ export default function QuizQuestionsHeader() {
     </header>
   );
 }
+

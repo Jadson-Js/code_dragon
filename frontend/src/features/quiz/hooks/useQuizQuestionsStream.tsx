@@ -3,10 +3,10 @@ import { env } from "@/shared/environments";
 
 interface Question {
   id: number;
-  question: string;
-  options: string[];
+  statement: string;
+  code?: string;
+  alternatives: string[];
   answer: string;
-  explanation: string;
 }
 
 export function useQuizQuestionsStream(quizSessionId: string | undefined) {
