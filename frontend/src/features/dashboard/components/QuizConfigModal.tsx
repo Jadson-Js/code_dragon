@@ -213,6 +213,13 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
     }
   };
 
+  const onSubmit = (data: QuizQuestionsGenerateFormData) => {
+    onOpenChange(false);
+    navigate("/quiz/session/generating", {
+      state: { formData: data },
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar p-0 border-white-1/10 bg-bg-2">
@@ -421,12 +428,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               type="button"
               size="lg"
               className="flex-1 gap-2 text-base font-bold shadow-lg shadow-primary-1/20 rounded-sm"
-              onClick={handleSubmit((data: QuizQuestionsGenerateFormData) => {
-                onOpenChange(false);
-                navigate("/quiz/session/generating", {
-                  state: { formData: data },
-                });
-              })}
+              onClick={handleSubmit(onSubmit)}
             >
               <Sparkles size={18} />
               INICIAR DIAGNÓSTICO

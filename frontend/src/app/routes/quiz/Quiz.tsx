@@ -7,6 +7,7 @@ import { useLocation, useParams } from "react-router";
 import { useQuizQuestionsGenerate } from "@/features/dashboard/hooks/useQuizQuestionsGenerate";
 import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
 import { QuizLoader } from "@/features/quiz/components/QuizLoader";
+import { useQuizQuestionsStream } from "@/features/dashboard/hooks/useQuizQuestionsStream";
 
 export default function Quiz() {
   const { quiz_session_id } = useParams();
@@ -25,6 +26,7 @@ export default function Quiz() {
     }
   }, [quiz_session_id, location.state, mutation]);
 
+  const { questions } = useQuizQuestionsStream(quiz_session_id);
   const currentQuestion = 5;
   const totalQuestions = 20;
   const progress = (currentQuestion / totalQuestions) * 100;
