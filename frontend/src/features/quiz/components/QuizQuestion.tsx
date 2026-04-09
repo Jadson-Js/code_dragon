@@ -1,6 +1,8 @@
 import { cn } from "@/shared/utils";
-import { AlertCircle, Check, Copy } from "lucide-react";
+import { AlertCircle, Check, Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+
 import React, { useState } from "react";
+import QuizQuestionFeedback from "./QuizQuestionFeedback";
 
 interface Props {
   className?: string;
@@ -39,9 +41,6 @@ export default function QuizQuestion({
               <span className="text-[10px] font-bold text-white-2 uppercase tracking-widest">
                 TypeScript
               </span>
-              <button className="text-white-2 hover:text-white-1 transition-colors">
-                <Copy size={14} />
-              </button>
             </div>
             <div className="p-6 font-mono text-sm leading-relaxed overflow-x-auto text-white-1/90">
               <pre>
@@ -97,12 +96,7 @@ export default function QuizQuestion({
           );
         })}
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <button className="flex items-center gap-2 text-sm text-white-2 hover:text-red transition-colors group order-2 sm:order-1">
-            <AlertCircle size={16} />
-            <span>Reportar erro nesta questão</span>
-          </button>
-        </div>
+        <QuizQuestionFeedback />
       </section>
     </div>
   );
