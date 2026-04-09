@@ -28,8 +28,8 @@ export default function QuizQuestion({
       : [];
 
   return (
-    <div className={cn("space-y-10", className)}>
-      <section className="space-y-6">
+    <div className={cn(className)}>
+      <section className="space-y-6 mb-4">
         <h1 className="text-xl sm:text-2xl font-medium text-white-1 leading-relaxed">
           {statement}
         </h1>
@@ -89,9 +89,13 @@ export default function QuizQuestion({
                 {text}
               </span>
 
-              {isSelected && (
-                <Check size={18} className="text-primary-1 mr-2" />
-              )}
+              <Check
+                size={18}
+                className={cn(
+                  "text-primary-1 mr-2",
+                  isSelected ? "block" : "invisible",
+                )}
+              />
             </button>
           );
         })}
