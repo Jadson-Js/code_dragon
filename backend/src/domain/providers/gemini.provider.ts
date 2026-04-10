@@ -15,6 +15,8 @@ export interface IGenerateQuizQuestionByGeminiOutputProvider {
   alternatives: string[];
   correctAlternativeIndex: number;
   code: string | null;
+  stackId: number | null;
+  subjectId: number | null;
 }
 
 export interface IGeminiProvider {

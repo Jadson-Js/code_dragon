@@ -29,6 +29,11 @@ function makeSavedQuestion(id: number): QuizQuestion {
     correctAlternativeIndex: 0,
     code: null,
     sessionQuizId: "session-1",
+    stackId: 1,
+    subjectId: 2,
+    seniorityId: 3,
+    specialtyId: 4,
+    objectiveId: 5,
   });
 }
 

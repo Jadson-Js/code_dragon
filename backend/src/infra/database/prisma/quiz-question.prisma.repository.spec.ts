@@ -32,6 +32,11 @@ describe("QuizQuestionPrismaRepository", () => {
     code: null,
     reports: 0,
     sessionQuizId: "session-1",
+    stackId: 1,
+    subjectId: 2,
+    seniorityId: 3,
+    specialtyId: 4,
+    objectiveId: 5,
     get toDomain() {
       return QuizQuestion.create(this as any);
     },
@@ -44,6 +49,11 @@ describe("QuizQuestionPrismaRepository", () => {
       alternatives: ["A"],
       correctAlternativeIndex: 0,
       sessionQuizId: "session-1",
+      stackId: 1,
+      subjectId: 2,
+      seniorityId: 3,
+      specialtyId: 4,
+      objectiveId: 5,
     });
 
     prismaMockData.quizQuestion.create.mockResolvedValue(makeRaw(1));
@@ -62,6 +72,11 @@ describe("QuizQuestionPrismaRepository", () => {
       alternatives: ["A"],
       correctAlternativeIndex: 0,
       sessionQuizId: "session-1",
+      stackId: 1,
+      subjectId: 2,
+      seniorityId: 3,
+      specialtyId: 4,
+      objectiveId: 5,
     });
 
     prismaMockData.quizQuestion.createManyAndReturn.mockResolvedValue([

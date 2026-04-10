@@ -72,6 +72,11 @@ export class QuizQuestionGenerateUseCase {
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
         sessionQuizId: sessionQuiz.id,
+        stackId: generated.stackId,
+        subjectId: generated.subjectId,
+        seniorityId: data.seniorityId,
+        specialtyId: data.specialtyId,
+        objectiveId: data.quizObjectiveId,
       }),
     );
 

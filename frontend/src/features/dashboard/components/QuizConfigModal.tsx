@@ -189,7 +189,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
       saveInProfile: !!savedConfig,
       quantity: savedConfig?.quantity ?? 10,
       quizObjectiveId: savedConfig?.quizObjectiveId ?? 0,
-      quizSubjectIds: savedConfig?.quizSubjectIds ?? [],
+      quizSubjectsId: savedConfig?.quizSubjectsId ?? [],
     });
   }, [profile, quizOptions, form]);
 
@@ -205,11 +205,11 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
 
     if (newSpecialty) {
       const validSubjectIds = newSpecialty.subjects.map((s) => s.id);
-      const currentSubjects = getValues("quizSubjectIds") || [];
+      const currentSubjects = getValues("quizSubjectsId") || [];
       const filteredSubjects = currentSubjects.filter((id: number) =>
         validSubjectIds.includes(id),
       );
-      setValue("quizSubjectIds", filteredSubjects);
+      setValue("quizSubjectsId", filteredSubjects);
     }
   };
 
@@ -309,10 +309,10 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
               <SelectMultiNumberField
                 control={control}
-                name="quizSubjectIds"
+                name="quizSubjectsId"
                 label="Tópicos Específicos"
                 options={subjectsBySpecialty}
-                error={errors.quizSubjectIds}
+                error={errors.quizSubjectsId}
               />
 
               {/* Tamanho do quiz */}
@@ -355,7 +355,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
             <div className="mb-8">
               <Controller
                 control={control}
-                name="quizSubjectIds"
+                name="quizSubjectsId"
                 render={({ field }) => (
                   <div className="flex flex-wrap gap-2">
                     {field.value?.map((id: number) => {

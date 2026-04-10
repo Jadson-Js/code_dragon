@@ -51,16 +51,48 @@ export class GeminiProvider implements IGeminiProvider {
   async generateQuizQuestion(
     data: IGenerateQuizQuestionByGeminiInputProvider,
   ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]> {
+    const stacksList = data.stacks
+      .map((s) => `  - id: ${s.id}, nome: "${s.name}"`)
+      .join("\n");
+
+    const hasSubjects = data.quizSubjects && data.quizSubjects.length > 0;
+
+    const subjectsList = hasSubjects
+      ? data
+          .quizSubjects!.map(
+            (s) =>
+              `  - id: ${s.id}, nome: "${s.name}", descrição: "${s.description}"`,
+          )
+          .join("\n")
+      : "Nenhum assunto específico";
+
+    const validSubjectIds = hasSubjects
+      ? data.quizSubjects!.map((s) => s.id)
+      : [];
+
     const prompt = `
 Você é um Tech Lead Sênior e especialista em criação de avaliações técnicas avançadas para desenvolvedores de software.
 Sua missão é gerar exatamente ${data.quantityPerBatch} questões de múltipla escolha, rigorosa e precisa.
 
 === CONTEXTO DA AVALIAÇÃO ===
 - Objetivo: ${data.quizObjective.name} (${data.quizObjective.description})
-- Assunto(s): ${data.quizSubjects?.map((s) => `${s.name} - ${s.description}`).join(" | ") ?? "Nenhum assunto específico"}
 - Nível de senioridade: ${data.seniority.name}
-- Especialidade(s): ${data.specialty.name}
-- Tecnologias/Stacks: ${data.stacks.map((s) => s.name).join(", ")}
+- Especialidade: ${data.specialty.name}
+
+=== STACKS DISPONÍVEIS ===
+O payload contém as seguintes stacks (tecnologias):
+${stacksList}
+
+IMPORTANTE: Cada questão deve ser sobre APENAS UMA stack. Você deve escolher a stack mais adequada para a questão gerada.
+Você deve retornar o "stackId" (inteiro) correspondente à stack selecionada. Use EXCLUSIVAMENTE um dos IDs listados acima. Caso a questão não se aplique a nenhuma stack específica, retorne null.
+
+=== ASSUNTOS DISPONÍVEIS ===
+${subjectsList}
+
+IMPORTANTE: Cada questão deve ser sobre APENAS UM assunto. Você deve escolher o assunto mais adequado para a questão gerada.
+Você deve retornar o "subjectId" (inteiro) correspondente ao assunto selecionado.
+Os ÚNICOS valores válidos para "subjectId" são: [${validSubjectIds.join(", ")}].
+Caso a questão não se aplique a nenhum assunto específico da lista, ou se a lista estiver vazia, retorne null.
 
 === REGRAS DE QUALIDADE DAS QUESTÕES ===
 1. Adequação ao Nível: As questões DEVEM refletir exatamente o nível de senioridade (${data.seniority.name}).
@@ -68,7 +100,8 @@ Sua missão é gerar exatamente ${data.quantityPerBatch} questões de múltipla 
    - Se Pleno/Sênior: Foco em cenários reais, arquitetura, trade-offs, performance e edge-cases (evite perguntas de "o que é X?").
 2. Distratores Plausíveis: As 3 alternativas incorretas devem ser erros comuns, pegadinhas lógicas ou ferramentas similares que confundam quem não tem domínio prático do assunto. Não crie alternativas obviamente falsas.
 3. Randomização: Varie a posição da alternativa correta. O 'correctAlternativeIndex' deve ter uma distribuição imprevisível entre 0, 1, 2 e 3.
-4. Código: Se a questão envolver leitura de código, coloque-o em "code". O código deve ser limpo e estar devidamente escapado para JSON (use \\n para quebras de linha).
+4. Código: Se a questão envolver leitura de código, coloque-o em "code". O código deve ser limpo e estar devidamente escapado para JSON (use \\\\n para quebras de linha).
+5. Uma stack por questão: A questão gerada pode ser sobre APENAS UMA das stacks fornecidas. Você decide qual é a mais relevante para o contexto do assunto e objetivo.
 
 === FORMATO DE SAÍDA EXIGIDO ===
 Retorne a resposta EXCLUSIVAMENTE em um ARRAY de objetos JSON.
@@ -86,9 +119,16 @@ Exemplo da estrutura exata esperada:
       "Distrator que faz sentido apenas em uma versão antiga da tecnologia."
     ],
     "correctAlternativeIndex": 1,
-    "code": "function example() {\\n  return true;\\n}" // ou null se não houver código
+    "code": "function example() {\\\\n  return true;\\\\n}" ,
+    "stackId": 3,
+    "subjectId": 7
   }
-]`.trim();
+]
+
+LEMBRE-SE:
+- "stackId" DEVE ser um dos seguintes IDs: [${data.stacks.map((s) => s.id).join(", ")}] ou null
+- "subjectId" DEVE ser um dos seguintes IDs: [${validSubjectIds.join(", ")}] ou null
+- NÃO invente IDs. Use SOMENTE os IDs fornecidos acima ou null.`.trim();
 
     const response = await this.withRetry(() =>
       ai.models.generateContent({
@@ -104,13 +144,27 @@ Exemplo da estrutura exata esperada:
     try {
       const parsed = JSON.parse(raw);
 
+      const validStackIds = new Set(data.stacks.map((s) => s.id));
+      const validSubjectIdsSet = new Set(validSubjectIds);
+
       return (parsed as IGenerateQuizQuestionByGeminiOutputProvider[]).map(
-        (p) => ({
-          statement: p.statement,
-          alternatives: p.alternatives,
-          correctAlternativeIndex: p.correctAlternativeIndex,
-          code: p.code ?? null,
-        }),
+        (p) => {
+          const stackId =
+            p.stackId && validStackIds.has(p.stackId) ? p.stackId : null;
+          const subjectId =
+            p.subjectId && validSubjectIdsSet.has(p.subjectId)
+              ? p.subjectId
+              : null;
+
+          return {
+            statement: p.statement,
+            alternatives: p.alternatives,
+            correctAlternativeIndex: p.correctAlternativeIndex,
+            code: p.code ?? null,
+            stackId,
+            subjectId,
+          };
+        },
       );
     } catch {
       throw new InternalServerError();

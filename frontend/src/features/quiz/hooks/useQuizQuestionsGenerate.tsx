@@ -16,7 +16,7 @@ export function useQuizQuestionsGenerate() {
     resolver: zodResolver(quizQuestionsGenerateSchema),
     defaultValues: {
       saveInProfile: false,
-      quizSubjectIds: [],
+      quizSubjectsId: [],
       stacksId: [],
       quizObjectiveId: 0,
       seniorityId: 0,
@@ -29,7 +29,7 @@ export function useQuizQuestionsGenerate() {
     mutationFn: async (_data: QuizQuestionsGenerateFormData) => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return {
-        data: { sessionQuizId: "81c0cf86-db6d-40de-a25a-e54f2dad679e" },
+        data: { sessionQuizId: "632af220-fe5c-4199-963a-30b3d649b3f8" },
       };
     },
     onSuccess: (data, variables) => {
@@ -38,7 +38,7 @@ export function useQuizQuestionsGenerate() {
           "@code_dragon:quiz_config",
           JSON.stringify({
             quizObjectiveId: variables.quizObjectiveId,
-            quizSubjectIds: variables.quizSubjectIds,
+            quizSubjectsId: variables.quizSubjectsId,
             quantity: variables.quantity,
           }),
         );

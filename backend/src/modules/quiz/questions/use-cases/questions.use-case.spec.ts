@@ -45,18 +45,24 @@ function makeGeminiOutput() {
       alternatives: ["A", "B", "C", "D"],
       correctAlternativeIndex: 0,
       code: null,
+      stackId: 20,
+      subjectId: 10,
     },
     {
       statement: "Explain flexbox.",
       alternatives: ["W", "X", "Y", "Z"],
       correctAlternativeIndex: 2,
       code: "display: flex;",
+      stackId: 20,
+      subjectId: 10,
     },
     {
       statement: "What is CSS specificity?",
       alternatives: ["P", "Q", "R", "S"],
       correctAlternativeIndex: 3,
       code: null,
+      stackId: 20,
+      subjectId: 10,
     },
   ];
 }
@@ -70,6 +76,11 @@ function makeSavedQuestions(): QuizQuestion[] {
       correctAlternativeIndex: q.correctAlternativeIndex,
       code: q.code,
       sessionQuizId: SESSION_QUIZ_ID,
+      stackId: q.stackId,
+      subjectId: q.subjectId,
+      seniorityId: 2,
+      specialtyId: 3,
+      objectiveId: 1,
     }),
   );
 }

@@ -43,6 +43,11 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
         correctAlternativeIndex: generated.correctAlternativeIndex,
         code: generated.code,
         sessionQuizId,
+        stackId: generated.stackId,
+        subjectId: generated.subjectId,
+        seniorityId: job.data.seniority.id,
+        specialtyId: job.data.specialty.id,
+        objectiveId: job.data.quizObjective.id,
       });
     });
 

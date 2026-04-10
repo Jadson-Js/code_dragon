@@ -217,6 +217,11 @@ model QuizQuestion {
   correctAlternativeIndex Int      @map("correct_alternative_index")
   code                    String?
   reports                 Int      @default(0)
+  stackId                 Int?     @map("stack_id")
+  subjectId               Int?     @map("subject_id")
+  seniorityId             Int      @map("seniority_id")
+  specialtyId             Int      @map("specialty_id")
+  objectiveId             Int      @map("objective_id")
   createdAt               DateTime @default(now()) @map("created_at")
   updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
 
