@@ -29,7 +29,7 @@ export function useQuizQuestionsGenerate() {
     mutationFn: async (_data: QuizQuestionsGenerateFormData) => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return {
-        data: { sessionQuizId: "632af220-fe5c-4199-963a-30b3d649b3f8" },
+        data: { sessionQuizId: "4fd2b5f9-b8c9-4bb4-8700-de997116b58c" },
       };
     },
     onSuccess: (data, variables) => {

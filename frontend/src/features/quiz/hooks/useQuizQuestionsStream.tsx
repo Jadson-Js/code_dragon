@@ -7,6 +7,7 @@ interface Question {
   code?: string;
   alternatives: string[];
   answer: string;
+  stackId: number;
 }
 
 export function useQuizQuestionsStream(quizSessionId: string | undefined) {

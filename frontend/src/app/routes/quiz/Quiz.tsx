@@ -8,6 +8,7 @@ import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas
 import { QuizLoader } from "@/features/quiz/components/QuizLoader";
 import { useQuizQuestionsStream } from "@/features/quiz/hooks/useQuizQuestionsStream";
 import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestionsGenerate";
+import { useGetQuizOptions } from "@/features/dashboard/hooks/useGetQuizOptions";
 import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader";
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
 
@@ -18,8 +19,17 @@ export default function Quiz() {
   const navigate = useNavigate();
   const hasCalled = useRef(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const [selectedAlternatives, setSelectedAlternatives] = useState<
+    Record<number, number>
+  >({});
 
   const { questions, isLoading } = useQuizQuestionsStream(quiz_session_id);
+  const { data: quizOptions } = useGetQuizOptions();
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const stackName =
+    quizOptions?.stacks.find((s) => s.id === currentQuestion?.stackId)?.name ||
+    "";
 
   useEffect(() => {
     if (quiz_session_id === "generating") {
@@ -66,10 +76,18 @@ export default function Quiz() {
         <div className="min-h-[400px]">
           {questions.length > 0 ? (
             <QuizQuestion
-              key={questions[currentQuestionIndex]?.id}
-              statement={questions[currentQuestionIndex]?.statement || ""}
-              code={questions[currentQuestionIndex]?.code}
-              alternatives={questions[currentQuestionIndex]?.alternatives || []}
+              key={currentQuestion?.id}
+              statement={currentQuestion?.statement || ""}
+              code={currentQuestion?.code}
+              alternatives={currentQuestion?.alternatives || []}
+              stack={stackName}
+              selectedAlternative={selectedAlternatives[currentQuestionIndex]}
+              onSelectAlternative={(idx) =>
+                setSelectedAlternatives((prev) => ({
+                  ...prev,
+                  [currentQuestionIndex]: idx,
+                }))
+              }
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full gap-4 py-20 bg-bg-2/50 rounded-2xl border border-bg-3/50">
@@ -113,6 +131,10 @@ export default function Quiz() {
                 navigate("/dashboard");
               }
             }}
+            disabled={
+              selectedAlternatives[currentQuestionIndex] === undefined ||
+              selectedAlternatives[currentQuestionIndex] === null
+            }
           >
             {currentQuestionIndex === questions.length - 1
               ? "Finalizar"

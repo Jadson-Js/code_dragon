@@ -34,24 +34,24 @@ export default function DashboardSidebar() {
             item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
 
           return (
-            <div
+            <Link
               key={item.to}
+              to={item.to}
               className={cn(
-                "p-2 rounded-sm transition-colors duration-200",
-                isActive && "bg-primary-1",
+                "text-white-2  hover:text-white-1  transition-colors duration-200",
+                isActive && "text-white-1",
               )}
             >
-              <Link
-                to={item.to}
+              <div
                 className={cn(
-                  "text-white-2 gap-2 hover:text-white-1 flex w-fit transition-colors duration-200",
-                  isActive && "text-white-1",
+                  "flex gap-2 p-2 rounded-sm transition-colors duration-200 w-full",
+                  isActive && "bg-primary-1",
                 )}
               >
                 <Icon size={20} />
                 <span>{item.label}</span>
-              </Link>
-            </div>
+              </div>
+            </Link>
           );
         })}
       </div>
