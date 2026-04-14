@@ -32,6 +32,12 @@ export function useQuizQuestionsGenerate() {
         data: { sessionQuizId: "4fd2b5f9-b8c9-4bb4-8700-de997116b58c" },
       };
     },
+    // mutationFn: async (data: QuizQuestionsGenerateFormData) => {
+    //   return api.post<{ sessionQuizId: string }>(
+    //     "/quiz/questions/generate",
+    //     data,
+    //   );
+    // },
     onSuccess: (data, variables) => {
       if (variables.saveInProfile) {
         localStorage.setItem(

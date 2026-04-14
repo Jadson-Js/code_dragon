@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
@@ -23,7 +23,8 @@ export default function Quiz() {
     Record<number, number>
   >({});
 
-  const { questions, isLoading } = useQuizQuestionsStream(quiz_session_id);
+  const { questions, isLoading, isFinished } =
+    useQuizQuestionsStream(quiz_session_id);
   const { data: quizOptions } = useGetQuizOptions();
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -61,7 +62,8 @@ export default function Quiz() {
     );
   }
 
-  console.log(questions[currentQuestionIndex]);
+  const isOnLastLoadedQuestion = currentQuestionIndex >= questions.length - 1;
+  const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
 
   return (
     <DashboardLayout>
@@ -70,6 +72,7 @@ export default function Quiz() {
         <QuizQuestionsHeader
           currentQuestion={currentQuestionIndex + 1}
           totalQuestions={questions.length}
+          isFinished={isFinished}
         />
 
         {/* Question Area */}
@@ -120,25 +123,33 @@ export default function Quiz() {
           </Button>
 
           <Button
-            className="flex-1 sm:flex-none transition-all w-30"
+            className="flex-1 sm:flex-none transition-all min-w-[180px]"
             variant="default"
             size="lg"
             onClick={() => {
               if (currentQuestionIndex < questions.length - 1) {
                 setCurrentQuestionIndex((prev: number) => prev + 1);
-              } else {
+              } else if (isFinished) {
                 // Handle finish quiz
                 navigate("/dashboard");
               }
             }}
             disabled={
               selectedAlternatives[currentQuestionIndex] === undefined ||
-              selectedAlternatives[currentQuestionIndex] === null
+              selectedAlternatives[currentQuestionIndex] === null ||
+              isWaitingForMore
             }
           >
-            {currentQuestionIndex === questions.length - 1
-              ? "Finalizar"
-              : "Próximo"}
+            {isWaitingForMore ? (
+              <>
+                <Loader2 className="animate-spin" size={18} />
+                Gerando próximas questões...
+              </>
+            ) : isFinished && isOnLastLoadedQuestion ? (
+              "Finalizar"
+            ) : (
+              "Próximo"
+            )}
           </Button>
         </div>
       </div>

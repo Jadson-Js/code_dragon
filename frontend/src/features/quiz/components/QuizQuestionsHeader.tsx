@@ -3,13 +3,17 @@ import { X } from "lucide-react";
 interface Props {
   currentQuestion: number;
   totalQuestions: number;
+  isFinished: boolean;
 }
 
 export default function QuizQuestionsHeader({
   currentQuestion,
   totalQuestions,
+  isFinished,
 }: Props) {
-  const progress = (currentQuestion / totalQuestions) * 100;
+  const progress = isFinished
+    ? (currentQuestion / totalQuestions) * 100
+    : Math.min((currentQuestion / Math.max(totalQuestions, 1)) * 100, 95);
 
   return (
     <header className="mb-12">
@@ -21,7 +25,7 @@ export default function QuizQuestionsHeader({
         <div className="text-sm font-medium text-white-2 uppercase tracking-wider">
           Questão{" "}
           <span className="text-white-1">
-            {currentQuestion}/{totalQuestions}
+            {currentQuestion}/{isFinished ? totalQuestions : "?"}
           </span>
         </div>
       </div>
@@ -35,4 +39,3 @@ export default function QuizQuestionsHeader({
     </header>
   );
 }
-
