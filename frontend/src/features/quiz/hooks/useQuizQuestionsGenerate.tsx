@@ -8,9 +8,11 @@ import {
   quizQuestionsGenerateSchema,
   type QuizQuestionsGenerateFormData,
 } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
+import { useQuizSession } from "./useQuizSession";
 
 export function useQuizQuestionsGenerate() {
   const navigate = useNavigate();
+  const { setGenerating, setActive, clearSession } = useQuizSession();
 
   const form = useForm<QuizQuestionsGenerateFormData>({
     resolver: zodResolver(quizQuestionsGenerateSchema),
@@ -26,13 +28,17 @@ export function useQuizQuestionsGenerate() {
   });
 
   const mutation = useMutation({
-    mutationFn: async (_data: QuizQuestionsGenerateFormData) => {
+    mutationFn: async (data: QuizQuestionsGenerateFormData) => {
+      // Persist "generating" state right before the API call so the dashboard
+      // knows a quiz is in progress even if the user navigates away.
+      setGenerating(data);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return {
         data: { sessionQuizId: "4fd2b5f9-b8c9-4bb4-8700-de997116b58c" },
       };
     },
     // mutationFn: async (data: QuizQuestionsGenerateFormData) => {
+    //   setGenerating(data);
     //   return api.post<{ sessionQuizId: string }>(
     //     "/quiz/questions/generate",
     //     data,
@@ -52,9 +58,13 @@ export function useQuizQuestionsGenerate() {
         localStorage.removeItem("@code_dragon:quiz_config");
       }
 
+      // Upgrade session to "active" with the real session ID.
+      setActive(data.data.sessionQuizId);
       navigate(`/quiz/session/${data.data.sessionQuizId}`);
     },
     onError: async () => {
+      // Clear the pending session if generation fails.
+      clearSession();
       toast.error("Erro ao gerar questões");
     },
   });

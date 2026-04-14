@@ -11,6 +11,7 @@ import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestions
 import { useGetQuizOptions } from "@/features/dashboard/hooks/useGetQuizOptions";
 import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader";
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
+import { useQuizSession } from "@/features/quiz/hooks/useQuizSession";
 
 export default function Quiz() {
   const { quiz_session_id } = useParams();
@@ -32,15 +33,27 @@ export default function Quiz() {
     quizOptions?.stacks.find((s) => s.id === currentQuestion?.stackId)?.name ||
     "";
 
+  const { getSession, clearSession } = useQuizSession();
+
   useEffect(() => {
     if (quiz_session_id === "generating") {
-      const formData = state?.formData as QuizQuestionsGenerateFormData;
+      // Prefer state passed via navigate(), fall back to localStorage (user
+      // returned to /generating from another page).
+      let formData = state?.formData as QuizQuestionsGenerateFormData | undefined;
+      if (!formData) {
+        const session = getSession();
+        if (session?.status === "generating") {
+          formData = session.formData;
+        }
+      }
       if (formData && !hasCalled.current) {
         hasCalled.current = true;
         mutation.mutate(formData);
       }
     }
-  }, [quiz_session_id, state, mutation]);
+    // REMOVED: clearSession() here was stopping the session persistence 
+    // as soon as the quiz started.
+  }, [quiz_session_id, state, mutation, getSession]);
 
   if (quiz_session_id === "generating") {
     return (
@@ -131,6 +144,7 @@ export default function Quiz() {
                 setCurrentQuestionIndex((prev: number) => prev + 1);
               } else if (isFinished) {
                 // Handle finish quiz
+                clearSession();
                 navigate("/dashboard");
               }
             }}
