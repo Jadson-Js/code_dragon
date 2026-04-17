@@ -3,7 +3,7 @@ import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionGenerateUseCase } from "./generate-questions";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
 import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
+import type { IGenerateQuizQuestionInput } from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { ICreateSessionWithQuizInput } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
 

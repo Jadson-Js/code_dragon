@@ -21,7 +21,7 @@ import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-quest
 import { GenerateQuizQuestionBullMQProvider } from "../providers/queue/generate-quiz-question.provider";
 import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";
 import type { ISendEmailProps } from "@/infra/providers/email/email.provider";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
+import type { IGenerateQuizQuestionInput } from "@/infra/providers/gemini.provider";
 import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 import { FeaturePrismaRepository } from "../database/prisma/feature.prisma.repository";
 import { QuizQuestionEventEmitter } from "../providers/quiz-question-event-emitter";
@@ -89,7 +89,7 @@ export const emailQueueProvider = container.resolve<
 >("IEmailQueueProvider");
 
 export const generateQuizQuestionQueueProvider = container.resolve<
-  IBaseQueueProvider<IGenerateQuizQuestionByGeminiInputProvider>
+  IBaseQueueProvider<IGenerateQuizQuestionInput>
 >("IGenerateQuizQuestionQueueProvider");
 
 export const geminiProvider = container.resolve("IGeminiProvider");

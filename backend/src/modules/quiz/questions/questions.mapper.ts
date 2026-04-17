@@ -1,12 +1,12 @@
-import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
+import type { IGetQuizQuestionContextOutput } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { IGenerateQuizQuestionInput } from "@/infra/providers/gemini.provider";
 import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 export function mapContextToGeminiInput(
-  context: IGetQuizQuestionContextOutputRepository,
+  context: IGetQuizQuestionContextOutput,
   quantityPerBatch: number,
   sessionQuiz: SessionQuiz,
-): IGenerateQuizQuestionByGeminiInputProvider {
+): IGenerateQuizQuestionInput {
   return {
     quizObjective: {
       id: context.quizObjective.id as number,

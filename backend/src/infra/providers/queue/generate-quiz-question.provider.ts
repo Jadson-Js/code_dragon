@@ -4,7 +4,7 @@ import type { Job } from "bullmq";
 import { inject, injectable } from "tsyringe";
 import type {
   IGeminiProvider,
-  IGenerateQuizQuestionByGeminiInputProvider,
+  IGenerateQuizQuestionInput,
 } from "@/infra/providers/gemini.provider";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
 import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
@@ -12,7 +12,7 @@ import type { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
 import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 
 @injectable()
-export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionByGeminiInputProvider> {
+export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionInput> {
   constructor(
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
@@ -30,9 +30,7 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
     super("generateQuizQuestion", redisConnection as any);
   }
 
-  async process(
-    job: Job<IGenerateQuizQuestionByGeminiInputProvider>,
-  ): Promise<void> {
+  async process(job: Job<IGenerateQuizQuestionInput>): Promise<void> {
     const sessionQuizId = job.data.sessionQuiz.id;
     const generateds = await this.geminiProvider.generateQuizQuestion(job.data);
 

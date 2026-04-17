@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type {
   IGeminiProvider,
-  IGenerateQuizQuestionByGeminiInputProvider,
+  IGenerateQuizQuestionInput,
 } from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { IGetQuizQuestionContextRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
@@ -24,7 +24,7 @@ export class QuizQuestionGenerateUseCase {
     private readonly getQuizContextRepository: IGetQuizQuestionContextRepository,
 
     @inject("IGenerateQuizQuestionQueueProvider")
-    private readonly generateQuizQuestionQueue: IBaseQueueProvider<IGenerateQuizQuestionByGeminiInputProvider>,
+    private readonly generateQuizQuestionQueue: IBaseQueueProvider<IGenerateQuizQuestionInput>,
 
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
