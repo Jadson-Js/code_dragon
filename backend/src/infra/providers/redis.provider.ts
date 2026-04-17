@@ -1,6 +1,14 @@
 import { injectable } from "tsyringe";
-import type { IRedisProvider } from "@/domain/providers/redis.provider";
 import { redisConnection } from "../database/redis/connection";
+
+export interface IRedisProvider {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, ttlSeconds: number): Promise<void>;
+  delete(key: string): Promise<void>;
+  exists(key: string): Promise<boolean>;
+  incr(key: string): Promise<number>;
+  expire(key: string, ttlSeconds: number): Promise<void>;
+}
 
 @injectable()
 export class RedisProvider implements IRedisProvider {

@@ -1,4 +1,4 @@
-import type { IGetProfileByUserIdRepository } from "@/domain/database/repositories/profile/get-profile-by-user-id.repository";
+import type { IGetProfileByUserIdRepository } from "@/infra/database/prisma/profile/get-profile-by-user-id.repository";
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
 

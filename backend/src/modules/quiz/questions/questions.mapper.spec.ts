@@ -1,6 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import { mapContextToGeminiInput } from "./questions.mapper";
-import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
+import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 import type { QuizObjective } from "@/entities/quiz-objective.entity";
 import type { QuizSubject } from "@/entities/quiz-subject.entity";
 import type { Seniority } from "@/entities/seniority.entity";

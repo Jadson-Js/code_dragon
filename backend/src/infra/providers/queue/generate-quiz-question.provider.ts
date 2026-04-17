@@ -5,11 +5,11 @@ import { inject, injectable } from "tsyringe";
 import type {
   IGeminiProvider,
   IGenerateQuizQuestionByGeminiInputProvider,
-} from "@/domain/providers/gemini.provider";
+} from "@/infra/providers/gemini.provider";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
+import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import type { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
-import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
+import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 
 @injectable()
 export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionByGeminiInputProvider> {

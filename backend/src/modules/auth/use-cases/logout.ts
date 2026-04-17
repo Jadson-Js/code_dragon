@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisProvider } from "@/domain/providers/redis.provider";
+import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { generateHash } from "@/shared/utils";
 import type { ILogoutInputDTO } from "../auth.dto";
 

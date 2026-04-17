@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IRedisProvider } from "@/domain/providers/redis.provider";
+import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { NotFoundError, TooManyRequestsError } from "@/shared/app.error";
 import type { Request, Response, NextFunction } from "express";
 

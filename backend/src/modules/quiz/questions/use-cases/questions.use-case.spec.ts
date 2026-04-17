@@ -2,10 +2,10 @@ import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionGenerateUseCase } from "./generate-questions";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
+import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
-import type { ICreateSessionWithQuizInput } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
+import type { ICreateSessionWithQuizInput } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
 
 import type { QuizObjective } from "@/entities/quiz-objective.entity";
 import type { QuizSubject } from "@/entities/quiz-subject.entity";

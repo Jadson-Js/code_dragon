@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
-import type { IGetMeRepository } from "@/domain/database/repositories/auth/get-me.repository";
+import type { IGetMeRepository } from "@/infra/database/prisma/auth/get-me.prisma.repository";
 
 @injectable()
 export class GetMeUseCase {

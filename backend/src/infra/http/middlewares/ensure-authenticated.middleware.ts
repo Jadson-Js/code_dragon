@@ -1,8 +1,8 @@
-import type { IJWTProvider } from "@/domain/providers/jwt.provider";
+import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import { UnauthorizedError } from "@/shared/app.error";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { IRedisProvider } from "@/domain/providers/redis.provider";
+import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { generateHash } from "@/shared/utils";
 
 export interface IEnsureAuthenticated {

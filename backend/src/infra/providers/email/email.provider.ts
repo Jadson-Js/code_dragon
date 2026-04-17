@@ -2,11 +2,20 @@ import { Resend } from "resend";
 import { env } from "@/shared/env";
 import { BadRequestError } from "@/shared/app.error";
 import { injectable } from "tsyringe";
-import type {
-  IEmailProvider,
-  ISendEmailProps,
-} from "@/domain/providers/email/email.provider";
+import type { IEMAIL_TEMPLATES } from "@/shared/environments";
 import { emailRenderProvider } from "./email-render.provider";
+
+export interface ISendEmailProps {
+  to: string;
+  subject: string;
+  template: IEMAIL_TEMPLATES;
+  variables: Record<string, string>;
+}
+
+export interface IEmailProvider {
+  send(props: ISendEmailProps): Promise<void>;
+}
+
 const resend = new Resend(env.resendApiKey);
 
 @injectable()

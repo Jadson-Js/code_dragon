@@ -1,10 +1,24 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../../../../../../prisma/client";
-import type {
-  ICreateSessionWithQuizInput,
-  ICreateSessionWithQuizOutput,
-  ICreateSessionWithQuizRepository,
-} from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
+import type { Session } from "@/entities/session.entity";
+import type { SessionQuiz } from "@/entities/session-quiz.entity";
+
+export interface ICreateSessionWithQuizInput {
+  session: Session;
+  sessionQuiz: SessionQuiz;
+  stacksId: number[];
+  quizSubjectsId?: number[];
+}
+
+export interface ICreateSessionWithQuizOutput {
+  sessionQuiz: SessionQuiz;
+}
+
+export interface ICreateSessionWithQuizRepository {
+  execute(
+    data: ICreateSessionWithQuizInput,
+  ): Promise<ICreateSessionWithQuizOutput>;
+}
 
 @injectable()
 export class CreateSessionWithQuizPrismaRepository implements ICreateSessionWithQuizRepository {

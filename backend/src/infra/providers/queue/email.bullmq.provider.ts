@@ -1,11 +1,13 @@
+import { inject, injectable } from "tsyringe";
+import type { Job } from "bullmq";
 import type {
   IEmailProvider,
   ISendEmailProps,
-} from "@/domain/providers/email/email.provider";
-import { BaseBullMQProvider } from "./base.bullmq.provider";
+} from "@/infra/providers/email/email.provider";
+import { BaseBullMQProvider, type IBaseQueueProvider } from "./base.bullmq.provider";
 import { redisConnection } from "@/infra/database/redis/connection";
-import type { Job } from "bullmq";
-import { inject, injectable } from "tsyringe";
+
+export type IEmailQueueProvider = IBaseQueueProvider<ISendEmailProps>;
 
 @injectable()
 export class EmailBullMQProvider extends BaseBullMQProvider<ISendEmailProps> {

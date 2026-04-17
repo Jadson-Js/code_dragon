@@ -2,18 +2,18 @@ import { inject, injectable } from "tsyringe";
 import type {
   IGeminiProvider,
   IGenerateQuizQuestionByGeminiInputProvider,
-} from "@/domain/providers/gemini.provider";
+} from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
-import type { IGetQuizQuestionContextRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
-import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
-import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
-import type { ICreateSessionWithQuizRepository } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
+import type { IGetQuizQuestionContextRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";
+import type { ICreateSessionWithQuizRepository } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
 import { Profile } from "@/entities/profile.entity";
-import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
-import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
-import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
+import type { IUpdateProfileWithStacksRepository } from "@/infra/database/prisma/profile/update-profile-with-stacks.repository";
+import type { IFeatureRepository } from "@/infra/database/prisma/feature.prisma.repository";
+import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 import { Session } from "@/entities/session.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
 

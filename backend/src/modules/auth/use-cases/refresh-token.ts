@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IRedisProvider } from "@/domain/providers/redis.provider";
+import type { IJWTProvider } from "@/infra/providers/jwt.provider";
+import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { generateHash, msToSeconds } from "@/shared/utils";
 import { env } from "@/shared/env";
 import type { IRefreshTokenInputDTO } from "../auth.dto";

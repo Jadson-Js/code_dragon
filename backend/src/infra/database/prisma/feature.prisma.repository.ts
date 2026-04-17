@@ -1,7 +1,10 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../../../../prisma/client";
 import { Feature } from "@/entities/feature.entity";
-import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
+
+export interface IFeatureRepository {
+  findBySlug(slug: string): Promise<Feature | null>;
+}
 
 @injectable()
 export class FeaturePrismaRepository implements IFeatureRepository {

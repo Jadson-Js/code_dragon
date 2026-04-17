@@ -1,5 +1,5 @@
-import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
+import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
 import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 export function mapContextToGeminiInput(

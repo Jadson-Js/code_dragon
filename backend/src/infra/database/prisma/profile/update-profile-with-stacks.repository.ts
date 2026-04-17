@@ -1,8 +1,11 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import type { Profile } from "@/entities/profile.entity";
-import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
 import { NotFoundError } from "@/shared/app.error";
+
+export interface IUpdateProfileWithStacksRepository {
+  execute(params: { profile: Profile; stacksId: number[] }): Promise<Profile>;
+}
 
 @injectable()
 export class UpdateProfileWithStacksPrismaRepository implements IUpdateProfileWithStacksRepository {

@@ -2,13 +2,13 @@ import { inject, injectable } from "tsyringe";
 import type { ISignupInputDTO } from "../auth.dto";
 import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
-import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IHashProvider } from "@/domain/providers/hash.provider";
-import type { ICreateUserWithEmailTokenRepository } from "@/domain/database/repositories/auth/auth-transaction.repository";
-import type { IUserRepository } from "@/domain/database/repositories/user.repository";
+import type { IJWTProvider } from "@/infra/providers/jwt.provider";
+import type { IHashProvider } from "@/infra/providers/hash.provider";
+import type { ICreateUserWithEmailTokenRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
+import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
-import type { IEmailQueueProvider } from "@/domain/providers/email/email-queue.provider";
+import type { IEmailQueueProvider } from "@/infra/providers/queue/email.bullmq.provider";
 
 @injectable()
 export class SignupUseCase {

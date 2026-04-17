@@ -2,7 +2,10 @@ import type { User } from "@/entities/user.entity";
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { InternalServerError } from "@/shared/app.error";
-import type { IResetPasswordRepository } from "@/domain/database/repositories/auth/reset-password.repository";
+
+export interface IResetPasswordRepository {
+  execute(user: User, tokenId: string): Promise<void>;
+}
 
 @injectable()
 export class ResetPasswordPrismaRepository implements IResetPasswordRepository {

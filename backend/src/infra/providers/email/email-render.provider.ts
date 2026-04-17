@@ -2,7 +2,11 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { IEMAIL_TEMPLATES } from "@/shared/environments";
-import type { IEmailRenderProvider } from "@/domain/providers/email/email-render.provider";
+
+export type IEmailRenderProvider = (
+  template: IEMAIL_TEMPLATES,
+  variables: Record<string, string>,
+) => string;
 
 export const emailRenderProvider: IEmailRenderProvider = (
   template: IEMAIL_TEMPLATES,

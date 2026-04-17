@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import type { IVerifyEmailInputDTO } from "../auth.dto";
-import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IUserRepository } from "@/domain/database/repositories/user.repository";
-import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
-import type { IHashProvider } from "@/domain/providers/hash.provider";
+import type { IJWTProvider } from "@/infra/providers/jwt.provider";
+import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
+import type { ITokenRepository } from "@/infra/database/prisma/token.prisma.repository";
+import type { IHashProvider } from "@/infra/providers/hash.provider";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
 @injectable()

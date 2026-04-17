@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IQuizQuestionStreamInputDTO } from "../questions.dto";
-import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
-import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
+import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 import type { QuizQuestionEventEmitter } from "@/infra/providers/quiz-question-event-emitter";
 import type { Response } from "express";
 

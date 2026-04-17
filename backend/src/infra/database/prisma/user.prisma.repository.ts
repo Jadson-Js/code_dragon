@@ -1,8 +1,16 @@
 import { User } from "@/entities/user.entity";
-import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError } from "@/shared/app.error";
+
+export interface IUserRepository {
+  create(data: User): Promise<User>;
+  update(data: User): Promise<User>;
+  delete(id: string): Promise<void>;
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  findAll(): Promise<User[]>;
+}
 
 @injectable()
 export class UserPrismaRepository implements IUserRepository {

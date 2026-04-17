@@ -6,7 +6,7 @@ import {
   it,
   jest,
 } from "@jest/globals";
-import type { IEmailRenderProvider } from "@/domain/providers/email/email-render.provider";
+import type { IEmailRenderProvider } from "@/infra/providers/email/email-render.provider";
 
 const fsMock = {
   readFileSync: jest.fn<(path: string, encoding: string) => string>(),

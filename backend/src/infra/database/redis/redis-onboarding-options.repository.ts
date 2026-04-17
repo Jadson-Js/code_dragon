@@ -1,7 +1,12 @@
 import { injectable } from "tsyringe";
-import type { IRedisOnboardingOptionsRepository } from "@/domain/database/redis/onboarding-options.repository";
 import { redisConnection } from "./connection";
-import type { IOnboardingOptions } from "@/domain/database/repositories/profile/get-onboarding-options.repository";
+import type { IOnboardingOptions } from "../prisma/profile/get-onboarding-options.repository";
+
+export interface IRedisOnboardingOptionsRepository {
+  get(): Promise<IOnboardingOptions | null>;
+  set(value: IOnboardingOptions, ttlSeconds: number): Promise<void>;
+  exists(): Promise<boolean>;
+}
 
 @injectable()
 export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptionsRepository {

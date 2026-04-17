@@ -1,4 +1,3 @@
-import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import {
   Queue,
   Worker,
@@ -6,6 +5,11 @@ import {
   type ConnectionOptions,
   type WorkerOptions,
 } from "bullmq";
+
+export interface IBaseQueueProvider<T> {
+  addJob(data: T): Promise<void>;
+  start(): void;
+}
 
 export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
   protected readonly queue: Queue;

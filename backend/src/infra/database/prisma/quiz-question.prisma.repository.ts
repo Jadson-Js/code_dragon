@@ -1,7 +1,13 @@
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { QuizQuestion } from "@/entities/quiz-question.entity";
+
+export interface IQuizQuestionRepository {
+  create(data: QuizQuestion): Promise<QuizQuestion>;
+  createMany(data: QuizQuestion[]): Promise<QuizQuestion[]>;
+  findBySessionQuizId(sessionQuizId: string): Promise<QuizQuestion[]>;
+  countBySessionQuizId(sessionQuizId: string): Promise<number>;
+}
 
 @injectable()
 export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {

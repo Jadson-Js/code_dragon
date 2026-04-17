@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IGetQuizOptionsRepository } from "@/domain/database/repositories/quiz/options/get-quiz-options.repository";
+import type { IGetQuizOptionsRepository } from "@/infra/database/prisma/quiz/options/quiz-options.prisma.repository";
 import type { IGetQuizOptionsOutputDTO } from "../quiz-options.dto";
 
 @injectable()

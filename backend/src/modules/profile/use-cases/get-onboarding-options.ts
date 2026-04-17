@@ -1,5 +1,5 @@
-import type { IGetOnboardingOptionsRepository } from "@/domain/database/repositories/profile/get-onboarding-options.repository";
-import type { IRedisOnboardingOptionsRepository } from "@/domain/database/redis/onboarding-options.repository";
+import type { IGetOnboardingOptionsRepository } from "@/infra/database/prisma/profile/get-onboarding-options.repository";
+import type { IRedisOnboardingOptionsRepository } from "@/infra/database/redis/redis-onboarding-options.repository";
 import { inject, injectable } from "tsyringe";
 
 @injectable()

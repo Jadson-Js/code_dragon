@@ -1,17 +1,39 @@
 import { prisma } from "../../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
-import type {
-  IGetQuizQuestionContextInputRepository,
-  IGetQuizQuestionContextOutputRepository,
-  IGetQuizQuestionContextRepository,
-} from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
+import type { QuizObjective } from "@/entities/quiz-objective.entity";
+import type { QuizSubject } from "@/entities/quiz-subject.entity";
+import type { Seniority } from "@/entities/seniority.entity";
+import type { Specialty } from "@/entities/specialty.entity";
+import type { Stack } from "@/entities/stack.entity";
+
+export interface IGetQuizQuestionContextInput {
+  quizObjectiveId: number;
+  quizSubjectsId?: number[];
+  seniorityId: number;
+  specialtyId: number;
+  stacksId: number[];
+}
+
+export interface IGetQuizQuestionContextOutput {
+  quizObjective: QuizObjective;
+  quizSubjects: QuizSubject[];
+  seniority: Seniority;
+  specialty: Specialty;
+  stacks: Stack[];
+}
+
+export interface IGetQuizQuestionContextRepository {
+  execute(
+    data: IGetQuizQuestionContextInput,
+  ): Promise<IGetQuizQuestionContextOutput>;
+}
 
 @injectable()
 export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRepository {
   async execute(
-    data: IGetQuizQuestionContextInputRepository,
-  ): Promise<IGetQuizQuestionContextOutputRepository> {
+    data: IGetQuizQuestionContextInput,
+  ): Promise<IGetQuizQuestionContextOutput> {
     return await prisma.$transaction(async (tx) => {
       const [quizObjective, quizSubjects, seniority, specialty, stacks] =
         await Promise.all([

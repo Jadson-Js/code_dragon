@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import type { IResetPasswordInputDTO } from "../auth.dto";
-import type { IJWTProvider } from "@/domain/providers/jwt.provider";
-import type { IHashProvider } from "@/domain/providers/hash.provider";
-import type { IUserRepository } from "@/domain/database/repositories/user.repository";
-import type { ITokenRepository } from "@/domain/database/repositories/token.repository";
-import type { IResetPasswordRepository } from "@/domain/database/repositories/auth/reset-password.repository";
+import type { IJWTProvider } from "@/infra/providers/jwt.provider";
+import type { IHashProvider } from "@/infra/providers/hash.provider";
+import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
+import type { ITokenRepository } from "@/infra/database/prisma/token.prisma.repository";
+import type { IResetPasswordRepository } from "@/infra/database/prisma/auth/reset-password.prisma.repository";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
 @injectable()

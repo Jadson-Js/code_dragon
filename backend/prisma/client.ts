@@ -1,19 +1,19 @@
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
-import { User } from "@/domain/entities/user.entity";
-import { Token } from "@/domain/entities/token.entity";
-import { Profile } from "@/domain/entities/profile.entity";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
-import { Seniority } from "@/domain/entities/seniority.entity";
-import { Specialty } from "@/domain/entities/specialty.entity";
-import { CareerObjective } from "@/domain/entities/career-objective.entity";
-import { AgeRange } from "@/domain/entities/age-range.entity";
-import { Stack } from "@/domain/entities/stack.entity";
-import { QuizObjective } from "@/domain/entities/quiz-objective.entity";
-import { QuizSubject } from "@/domain/entities/quiz-subject.entity";
-import { Feature } from "@/domain/entities/feature.entity";
-import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
+import { User } from "@/entities/user.entity";
+import { Token } from "@/entities/token.entity";
+import { Profile } from "@/entities/profile.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
+import { Seniority } from "@/entities/seniority.entity";
+import { Specialty } from "@/entities/specialty.entity";
+import { CareerObjective } from "@/entities/career-objective.entity";
+import { AgeRange } from "@/entities/age-range.entity";
+import { Stack } from "@/entities/stack.entity";
+import { QuizObjective } from "@/entities/quiz-objective.entity";
+import { QuizSubject } from "@/entities/quiz-subject.entity";
+import { Feature } from "@/entities/feature.entity";
+import { SessionQuiz } from "@/entities/session-quiz.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 

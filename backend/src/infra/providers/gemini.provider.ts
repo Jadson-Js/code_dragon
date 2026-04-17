@@ -1,12 +1,33 @@
 import { GoogleGenAI } from "@google/genai";
 import { env } from "@/shared/env";
 import { injectable } from "tsyringe";
-import type {
-  IGeminiProvider,
-  IGenerateQuizQuestionByGeminiInputProvider,
-  IGenerateQuizQuestionByGeminiOutputProvider,
-} from "@/domain/providers/gemini.provider";
 import { InternalServerError, TooManyRequestsError } from "@/shared/app.error";
+import type { SessionQuiz } from "@/entities/session-quiz.entity";
+
+export interface IGenerateQuizQuestionInput {
+  quizObjective: { id: number; name: string; description: string };
+  quizSubjects: { id: number; name: string; description: string }[] | null;
+  seniority: { id: number; name: string };
+  specialty: { id: number; name: string };
+  stacks: { id: number; name: string }[];
+  quantityPerBatch: number;
+  sessionQuiz: SessionQuiz;
+}
+
+export interface IGenerateQuizQuestionOutput {
+  statement: string;
+  alternatives: string[];
+  correctAlternativeIndex: number;
+  code: string | null;
+  stackId: number | null;
+  subjectId: number | null;
+}
+
+export interface IGeminiProvider {
+  generateQuizQuestion(
+    data: IGenerateQuizQuestionInput,
+  ): Promise<IGenerateQuizQuestionOutput[]>;
+}
 
 const ai = new GoogleGenAI({
   apiKey: env.geminiApiKey,
@@ -49,8 +70,8 @@ export class GeminiProvider implements IGeminiProvider {
   }
 
   async generateQuizQuestion(
-    data: IGenerateQuizQuestionByGeminiInputProvider,
-  ): Promise<IGenerateQuizQuestionByGeminiOutputProvider[]> {
+    data: IGenerateQuizQuestionInput,
+  ): Promise<IGenerateQuizQuestionOutput[]> {
     const stacksList = data.stacks
       .map((s) => `  - id: ${s.id}, nome: "${s.name}"`)
       .join("\n");
@@ -147,25 +168,23 @@ LEMBRE-SE:
       const validStackIds = new Set(data.stacks.map((s) => s.id));
       const validSubjectIdsSet = new Set(validSubjectIds);
 
-      return (parsed as IGenerateQuizQuestionByGeminiOutputProvider[]).map(
-        (p) => {
-          const stackId =
-            p.stackId && validStackIds.has(p.stackId) ? p.stackId : null;
-          const subjectId =
-            p.subjectId && validSubjectIdsSet.has(p.subjectId)
-              ? p.subjectId
-              : null;
+      return (parsed as IGenerateQuizQuestionOutput[]).map((p) => {
+        const stackId =
+          p.stackId && validStackIds.has(p.stackId) ? p.stackId : null;
+        const subjectId =
+          p.subjectId && validSubjectIdsSet.has(p.subjectId)
+            ? p.subjectId
+            : null;
 
-          return {
-            statement: p.statement,
-            alternatives: p.alternatives,
-            correctAlternativeIndex: p.correctAlternativeIndex,
-            code: p.code ?? null,
-            stackId,
-            subjectId,
-          };
-        },
-      );
+        return {
+          statement: p.statement,
+          alternatives: p.alternatives,
+          correctAlternativeIndex: p.correctAlternativeIndex,
+          code: p.code ?? null,
+          stackId,
+          subjectId,
+        };
+      });
     } catch {
       throw new InternalServerError();
     }

@@ -19,9 +19,9 @@ import { SimpleRateLimitMiddleware } from "../http/middlewares/simple-rate-limit
 import { GeminiProvider } from "../providers/gemini.provider";
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import { GenerateQuizQuestionBullMQProvider } from "../providers/queue/generate-quiz-question.provider";
-import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
-import type { ISendEmailProps } from "@/domain/providers/email/email.provider";
-import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
+import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";
+import type { ISendEmailProps } from "@/infra/providers/email/email.provider";
+import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/infra/providers/gemini.provider";
 import { GetQuizContextPrismaRepository } from "../database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 import { FeaturePrismaRepository } from "../database/prisma/feature.prisma.repository";
 import { QuizQuestionEventEmitter } from "../providers/quiz-question-event-emitter";

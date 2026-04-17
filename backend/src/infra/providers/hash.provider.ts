@@ -1,6 +1,10 @@
-import type { IHashProvider } from "@/domain/providers/hash.provider";
 import bcrypt from "bcrypt";
 import { injectable } from "tsyringe";
+
+export interface IHashProvider {
+  hash(payload: string): Promise<string>;
+  compare(payload: string, hash: string): Promise<boolean>;
+}
 
 @injectable()
 export class HashProvider implements IHashProvider {
