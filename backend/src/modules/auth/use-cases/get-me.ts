@@ -1,12 +1,11 @@
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
-import type { IGetMeRepository } from "@/infra/database/prisma/auth/get-me.prisma.repository";
+import { GetMePrismaRepository } from "@/infra/database/prisma/auth/get-me.prisma.repository";
 
 @injectable()
 export class GetMeUseCase {
   constructor(
-    @inject("IGetMeRepository")
-    private readonly getMeRepository: IGetMeRepository,
+    private readonly getMeRepository: GetMePrismaRepository,
   ) {}
 
   async execute(userId: string) {

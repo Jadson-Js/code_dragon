@@ -3,15 +3,10 @@ import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import type { Profile } from "@/entities/profile.entity";
 
-export interface IGetMeRepository {
-  execute(userId: string): Promise<{
-    user: User;
-    profile: Profile | null;
-  } | null>;
-}
+
 
 @injectable()
-export class GetMePrismaRepository implements IGetMeRepository {
+export class GetMePrismaRepository {
   async execute(userId: string): Promise<{
     user: User;
     profile: Profile | null;

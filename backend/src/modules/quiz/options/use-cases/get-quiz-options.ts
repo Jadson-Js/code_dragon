@@ -1,12 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import type { IGetQuizOptionsRepository } from "@/infra/database/prisma/quiz/options/quiz-options.prisma.repository";
+import { QuizOptionsPrismaRepository } from "@/infra/database/prisma/quiz/options/quiz-options.prisma.repository";
 import type { IGetQuizOptionsOutputDTO } from "../quiz-options.dto";
 
 @injectable()
 export class GetQuizOptionsUseCase {
   constructor(
-    @inject("IGetQuizOptionsRepository")
-    private readonly getQuizOptionsRepository: IGetQuizOptionsRepository,
+    private readonly getQuizOptionsRepository: QuizOptionsPrismaRepository,
   ) {}
 
   async execute(): Promise<IGetQuizOptionsOutputDTO> {

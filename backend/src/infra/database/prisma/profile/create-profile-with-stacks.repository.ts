@@ -5,12 +5,10 @@ import type { Profile } from "@/entities/profile.entity";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
-export interface ICreateProfileWithStacksRepository {
-  execute(params: ICreateProfileInputDTO): Promise<Profile>;
-}
+
 
 @injectable()
-export class CreateProfileWithStacksPrismaRepository implements ICreateProfileWithStacksRepository {
+export class CreateProfileWithStacksPrismaRepository {
   async execute(params: ICreateProfileInputDTO): Promise<Profile> {
     try {
       return await prisma.$transaction(async (tx) => {

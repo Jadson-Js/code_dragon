@@ -2,9 +2,9 @@ import { inject, injectable } from "tsyringe";
 import type { IResetPasswordInputDTO } from "../auth.dto";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
-import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
-import type { ITokenRepository } from "@/infra/database/prisma/token.prisma.repository";
-import type { IResetPasswordRepository } from "@/infra/database/prisma/auth/reset-password.prisma.repository";
+import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
+import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
+import { ResetPasswordPrismaRepository } from "@/infra/database/prisma/auth/reset-password.prisma.repository";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
 @injectable()
@@ -16,14 +16,11 @@ export class ResetPasswordUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
-    @inject("IUserRepository")
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: UserPrismaRepository,
 
-    @inject("ITokenRepository")
-    private readonly tokenRepository: ITokenRepository,
+    private readonly tokenRepository: TokenPrismaRepository,
 
-    @inject("IResetPasswordRepository")
-    private readonly resetPasswordRepository: IResetPasswordRepository,
+    private readonly resetPasswordRepository: ResetPasswordPrismaRepository,
   ) {}
 
   async execute(params: IResetPasswordInputDTO): Promise<void> {

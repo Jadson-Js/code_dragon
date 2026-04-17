@@ -1,12 +1,11 @@
-import type { IGetProfileByUserIdRepository } from "@/infra/database/prisma/profile/get-profile-by-user-id.repository";
+import { GetProfileByUserIdPrismaRepository } from "@/infra/database/prisma/profile/get-profile-by-user-id.repository";
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
 
 @injectable()
 export class GetProfileByUserIdUseCase {
   constructor(
-    @inject("IGetProfileByUserIdRepository")
-    private readonly getProfileByUserIdRepository: IGetProfileByUserIdRepository,
+    private readonly getProfileByUserIdRepository: GetProfileByUserIdPrismaRepository,
   ) {}
 
   async execute(userId: string) {

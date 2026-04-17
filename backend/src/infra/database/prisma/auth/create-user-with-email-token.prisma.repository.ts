@@ -5,12 +5,10 @@ import { injectable } from "tsyringe";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
-export interface ICreateUserWithEmailTokenRepository {
-  execute(user: User, token: Token): Promise<User>;
-}
+
 
 @injectable()
-export class CreateUserWithEmailTokenPrismaRepository implements ICreateUserWithEmailTokenRepository {
+export class CreateUserWithEmailTokenPrismaRepository {
   async execute(user: User, token: Token): Promise<User> {
     try {
       return await prisma.$transaction(async (tx) => {

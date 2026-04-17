@@ -1,5 +1,5 @@
-import type { IGetOnboardingOptionsRepository } from "@/infra/database/prisma/profile/get-onboarding-options.repository";
-import type { IRedisOnboardingOptionsRepository } from "@/infra/database/redis/redis-onboarding-options.repository";
+import { GetOnboardingOptionsPrismaRepository } from "@/infra/database/prisma/profile/get-onboarding-options.repository";
+import { RedisOnboardingOptionsRepository } from "@/infra/database/redis/redis-onboarding-options.repository";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -7,11 +7,9 @@ export class GetOnboardingOptionsUseCase {
   private readonly ttlSeconds = 24 * 60 * 60;
 
   constructor(
-    @inject("getOnboardingOptionsRepository")
-    private readonly getOnboardingOptionsRepository: IGetOnboardingOptionsRepository,
+    private readonly getOnboardingOptionsRepository: GetOnboardingOptionsPrismaRepository,
 
-    @inject("redisOnboardingOptionsRepository")
-    private readonly redisOnboardingOptionsRepository: IRedisOnboardingOptionsRepository,
+    private readonly redisOnboardingOptionsRepository: RedisOnboardingOptionsRepository,
   ) {}
 
   async execute() {

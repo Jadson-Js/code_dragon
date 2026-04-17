@@ -1,21 +1,18 @@
 import { inject, injectable } from "tsyringe";
 import type { IQuizQuestionStreamInputDTO } from "../questions.dto";
-import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
-import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
-import type { QuizQuestionEventEmitter } from "@/infra/providers/quiz-question-event-emitter";
+import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
+import { QuizQuestionEventEmitter } from "@/infra/providers/quiz-question-event-emitter";
 import type { Response } from "express";
 
 @injectable()
 export class QuizQuestionStreamUseCase {
   constructor(
-    @inject("IQuizQuestionRepository")
-    private readonly quizQuestionRepository: IQuizQuestionRepository,
+    private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
-    @inject("QuizQuestionEventEmitter")
     private readonly quizQuestionEventEmitter: QuizQuestionEventEmitter,
 
-    @inject("ISessionQuizRepository")
-    private readonly sessionQuizRepository: ISessionQuizRepository,
+    private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {}
 
   async execute(

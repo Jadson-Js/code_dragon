@@ -23,14 +23,10 @@ export interface IGetQuizQuestionContextOutput {
   stacks: Stack[];
 }
 
-export interface IGetQuizQuestionContextRepository {
-  execute(
-    data: IGetQuizQuestionContextInput,
-  ): Promise<IGetQuizQuestionContextOutput>;
-}
+
 
 @injectable()
-export class GetQuizContextPrismaRepository implements IGetQuizQuestionContextRepository {
+export class GetQuizContextPrismaRepository {
   async execute(
     data: IGetQuizQuestionContextInput,
   ): Promise<IGetQuizQuestionContextOutput> {

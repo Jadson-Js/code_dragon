@@ -4,8 +4,8 @@ import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
-import type { ICreateUserWithEmailTokenRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
-import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
+import { CreateUserWithEmailTokenPrismaRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
+import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { env } from "@/shared/env";
 import { formatMs } from "@/shared/utils";
 import type { IEmailQueueProvider } from "@/infra/providers/queue/email.bullmq.provider";
@@ -16,11 +16,9 @@ export class SignupUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
-    @inject("ICreateUserWithEmailTokenRepository")
-    private readonly createUserWithEmailTokenRepository: ICreateUserWithEmailTokenRepository,
+    private readonly createUserWithEmailTokenRepository: CreateUserWithEmailTokenPrismaRepository,
 
-    @inject("IUserRepository")
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: UserPrismaRepository,
 
     @inject("IJWTProvider")
     private readonly jwtProvider: IJWTProvider,

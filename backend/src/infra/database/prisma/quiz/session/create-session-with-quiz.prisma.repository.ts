@@ -14,14 +14,10 @@ export interface ICreateSessionWithQuizOutput {
   sessionQuiz: SessionQuiz;
 }
 
-export interface ICreateSessionWithQuizRepository {
-  execute(
-    data: ICreateSessionWithQuizInput,
-  ): Promise<ICreateSessionWithQuizOutput>;
-}
+
 
 @injectable()
-export class CreateSessionWithQuizPrismaRepository implements ICreateSessionWithQuizRepository {
+export class CreateSessionWithQuizPrismaRepository {
   async execute(
     data: ICreateSessionWithQuizInput,
   ): Promise<ICreateSessionWithQuizOutput> {

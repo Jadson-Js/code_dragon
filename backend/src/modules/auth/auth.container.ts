@@ -4,18 +4,10 @@ import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.reposi
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import { GetMePrismaRepository } from "@/infra/database/prisma/auth/get-me.prisma.repository";
 
-// Registra o repositório
-container.register("IUserRepository", {
-  useClass: UserPrismaRepository,
-});
-
-container.register("ITokenRepository", {
-  useClass: TokenPrismaRepository,
-});
-
-container.register("IGetMeRepository", {
-  useClass: GetMePrismaRepository,
-});
+// Registra o repositório como singleton usando a própria classe como token
+container.registerSingleton(UserPrismaRepository);
+container.registerSingleton(TokenPrismaRepository);
+container.registerSingleton(GetMePrismaRepository);
 
 // Os UseCases não precisam de registro explícito se forem usados como tokens de classe
 // e não requerem ciclo de vida específico (como singleton).

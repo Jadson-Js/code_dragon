@@ -4,24 +4,23 @@ import type {
   IGenerateQuizQuestionInput,
 } from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
-import type { IGetQuizQuestionContextRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
-import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import { GetQuizContextPrismaRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";
-import type { ICreateSessionWithQuizRepository } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
+import { CreateSessionWithQuizPrismaRepository } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
 import { Profile } from "@/entities/profile.entity";
-import type { IUpdateProfileWithStacksRepository } from "@/infra/database/prisma/profile/update-profile-with-stacks.repository";
-import type { IFeatureRepository } from "@/infra/database/prisma/feature.prisma.repository";
-import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
+import { UpdateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/update-profile-with-stacks.repository";
+import { FeaturePrismaRepository } from "@/infra/database/prisma/feature.prisma.repository";
+import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 import { Session } from "@/entities/session.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
   constructor(
-    @inject("IGetQuizQuestionContextRepository")
-    private readonly getQuizContextRepository: IGetQuizQuestionContextRepository,
+    private readonly getQuizContextRepository: GetQuizContextPrismaRepository,
 
     @inject("IGenerateQuizQuestionQueueProvider")
     private readonly generateQuizQuestionQueue: IBaseQueueProvider<IGenerateQuizQuestionInput>,
@@ -29,20 +28,15 @@ export class QuizQuestionGenerateUseCase {
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
 
-    @inject("IQuizQuestionRepository")
-    private readonly quizQuestionRepository: IQuizQuestionRepository,
+    private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
-    @inject("IUpdateProfileWithStacksRepository")
-    private readonly updateProfileWithStacksRepository: IUpdateProfileWithStacksRepository,
+    private readonly updateProfileWithStacksRepository: UpdateProfileWithStacksPrismaRepository,
 
-    @inject("ICreateSessionWithQuizRepository")
-    private readonly createSessionWithQuizRepository: ICreateSessionWithQuizRepository,
+    private readonly createSessionWithQuizRepository: CreateSessionWithQuizPrismaRepository,
 
-    @inject("IFeatureRepository")
-    private readonly featureRepository: IFeatureRepository,
+    private readonly featureRepository: FeaturePrismaRepository,
 
-    @inject("ISessionQuizRepository")
-    private readonly sessionQuizRepository: ISessionQuizRepository,
+    private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {}
 
   async execute(

@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import type { ILoginInputDTO } from "../auth.dto";
 import { NotFoundError, UnauthorizedError } from "@/shared/app.error";
 import type { User } from "@/entities/user.entity";
-import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
+import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IRedisProvider } from "@/infra/providers/redis.provider";
@@ -12,8 +12,7 @@ import { msToSeconds, generateHash } from "@/shared/utils";
 @injectable()
 export class LoginUseCase {
   constructor(
-    @inject("IUserRepository")
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: UserPrismaRepository,
 
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,

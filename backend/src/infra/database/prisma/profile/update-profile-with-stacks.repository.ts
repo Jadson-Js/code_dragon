@@ -3,12 +3,10 @@ import { injectable } from "tsyringe";
 import type { Profile } from "@/entities/profile.entity";
 import { NotFoundError } from "@/shared/app.error";
 
-export interface IUpdateProfileWithStacksRepository {
-  execute(params: { profile: Profile; stacksId: number[] }): Promise<Profile>;
-}
+
 
 @injectable()
-export class UpdateProfileWithStacksPrismaRepository implements IUpdateProfileWithStacksRepository {
+export class UpdateProfileWithStacksPrismaRepository {
   async execute(params: {
     profile: Profile;
     stacksId: number[];

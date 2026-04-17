@@ -14,12 +14,10 @@ export interface IGetQuizOptionsRepositoryOutput {
   stacks: Stack[];
 }
 
-export interface IGetQuizOptionsRepository {
-  execute(): Promise<IGetQuizOptionsRepositoryOutput>;
-}
+
 
 @injectable()
-export class QuizOptionsPrismaRepository implements IGetQuizOptionsRepository {
+export class QuizOptionsPrismaRepository {
   async execute(): Promise<IGetQuizOptionsRepositoryOutput> {
     const [quizObjectives, quizSubjects, seniorities, specialties, stacks] =
       await prisma.$transaction([

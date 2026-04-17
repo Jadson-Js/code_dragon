@@ -1,12 +1,11 @@
-import type { ICreateProfileWithStacksRepository } from "@/infra/database/prisma/profile/create-profile-with-stacks.repository";
+import { CreateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/create-profile-with-stacks.repository";
 import type { ICreateProfileInputDTO } from "@/modules/profile/profile.dto";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
 export class CreateProfileUseCase {
   constructor(
-    @inject("ICreateProfileWithStacksRepository")
-    private readonly createProfileWithStacksRepository: ICreateProfileWithStacksRepository,
+    private readonly createProfileWithStacksRepository: CreateProfileWithStacksPrismaRepository,
   ) {}
 
   async execute(params: ICreateProfileInputDTO) {

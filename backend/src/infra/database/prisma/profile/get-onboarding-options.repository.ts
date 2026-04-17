@@ -14,12 +14,10 @@ export interface IOnboardingOptions {
   stacks: Stack[];
 }
 
-export interface IGetOnboardingOptionsRepository {
-  execute(): Promise<IOnboardingOptions>;
-}
+
 
 @injectable()
-export class GetOnboardingOptionsPrismaRepository implements IGetOnboardingOptionsRepository {
+export class GetOnboardingOptionsPrismaRepository {
   async execute(): Promise<IOnboardingOptions> {
     const [seniorities, specialties, careerObjectives, ageRanges, stacks] =
       await prisma.$transaction([

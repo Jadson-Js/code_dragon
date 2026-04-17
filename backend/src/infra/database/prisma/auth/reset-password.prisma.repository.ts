@@ -3,12 +3,10 @@ import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { InternalServerError } from "@/shared/app.error";
 
-export interface IResetPasswordRepository {
-  execute(user: User, tokenId: string): Promise<void>;
-}
+
 
 @injectable()
-export class ResetPasswordPrismaRepository implements IResetPasswordRepository {
+export class ResetPasswordPrismaRepository {
   async execute(user: User, tokenId: string): Promise<void> {
     try {
       await prisma.$transaction(async (tx) => {

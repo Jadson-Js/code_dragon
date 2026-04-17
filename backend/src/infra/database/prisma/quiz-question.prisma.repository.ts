@@ -2,15 +2,10 @@ import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import type { QuizQuestion } from "@/entities/quiz-question.entity";
 
-export interface IQuizQuestionRepository {
-  create(data: QuizQuestion): Promise<QuizQuestion>;
-  createMany(data: QuizQuestion[]): Promise<QuizQuestion[]>;
-  findBySessionQuizId(sessionQuizId: string): Promise<QuizQuestion[]>;
-  countBySessionQuizId(sessionQuizId: string): Promise<number>;
-}
+
 
 @injectable()
-export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {
+export class QuizQuestionPrismaRepository {
   async create(data: QuizQuestion): Promise<QuizQuestion> {
     const response = await prisma.quizQuestion.create({
       data: {

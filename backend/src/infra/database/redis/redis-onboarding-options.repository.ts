@@ -2,14 +2,10 @@ import { injectable } from "tsyringe";
 import { redisConnection } from "./connection";
 import type { IOnboardingOptions } from "../prisma/profile/get-onboarding-options.repository";
 
-export interface IRedisOnboardingOptionsRepository {
-  get(): Promise<IOnboardingOptions | null>;
-  set(value: IOnboardingOptions, ttlSeconds: number): Promise<void>;
-  exists(): Promise<boolean>;
-}
+
 
 @injectable()
-export class RedisOnboardingOptionsRepository implements IRedisOnboardingOptionsRepository {
+export class RedisOnboardingOptionsRepository {
   async get(): Promise<IOnboardingOptions | null> {
     const value = await redisConnection.get("onboarding-options");
     return value ? JSON.parse(value) : null;

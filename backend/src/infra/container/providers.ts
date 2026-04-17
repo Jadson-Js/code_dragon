@@ -37,11 +37,9 @@ container.registerSingleton(
   SimpleRateLimitMiddleware,
 );
 container.registerSingleton(
-  "ICreateUserWithEmailTokenRepository",
   CreateUserWithEmailTokenPrismaRepository,
 );
 container.registerSingleton(
-  "IResetPasswordRepository",
   ResetPasswordPrismaRepository,
 );
 container.registerSingleton("IEmailQueueProvider", EmailBullMQProvider);
@@ -50,38 +48,30 @@ container.registerSingleton(
   GenerateQuizQuestionBullMQProvider,
 );
 container.registerSingleton(
-  "ICreateProfileWithStacksRepository",
   CreateProfileWithStacksPrismaRepository,
 );
 container.registerSingleton(
-  "IUpdateProfileWithStacksRepository",
   UpdateProfileWithStacksPrismaRepository,
 );
 container.registerSingleton(
-  "IGetProfileByUserIdRepository",
   GetProfileByUserIdPrismaRepository,
 );
 container.registerSingleton(
-  "getOnboardingOptionsRepository",
   GetOnboardingOptionsPrismaRepository,
 );
 container.registerSingleton("IEnsureAuthenticated", EnsureAuthenticated);
 container.registerSingleton("IGeminiProvider", GeminiProvider);
 container.registerSingleton(
-  "IGetQuizQuestionContextRepository",
   GetQuizContextPrismaRepository,
 );
 container.registerSingleton(
-  "IQuizQuestionRepository",
   QuizQuestionPrismaRepository,
 );
-container.registerSingleton("IFeatureRepository", FeaturePrismaRepository);
+container.registerSingleton(FeaturePrismaRepository);
 container.registerSingleton(
-  "QuizQuestionEventEmitter",
   QuizQuestionEventEmitter,
 );
 container.registerSingleton(
-  "ISessionQuizRepository",
   SessionQuizPrismaRepository,
 );
 export const emailQueueProvider = container.resolve<

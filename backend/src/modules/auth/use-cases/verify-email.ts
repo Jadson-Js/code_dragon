@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import type { IVerifyEmailInputDTO } from "../auth.dto";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
-import type { IUserRepository } from "@/infra/database/prisma/user.prisma.repository";
-import type { ITokenRepository } from "@/infra/database/prisma/token.prisma.repository";
+import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
+import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
 
@@ -15,11 +15,9 @@ export class VerifyEmailUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
-    @inject("IUserRepository")
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: UserPrismaRepository,
 
-    @inject("ITokenRepository")
-    private readonly tokenRepository: ITokenRepository,
+    private readonly tokenRepository: TokenPrismaRepository,
   ) {}
 
   async execute(params: IVerifyEmailInputDTO): Promise<void> {

@@ -4,12 +4,9 @@ import { GetQuizOptionsUseCase } from "./use-cases/get-quiz-options";
 import { QuizOptionsPrismaRepository } from "@/infra/database/prisma/quiz/options/quiz-options.prisma.repository";
 
 // Specific repositories for the sub-module
-container.register("IGetQuizOptionsRepository", {
-  useClass: QuizOptionsPrismaRepository,
-});
+container.registerSingleton(QuizOptionsPrismaRepository);
 
-// Use Cases
-container.register("GetQuizOptionsUseCase", { useClass: GetQuizOptionsUseCase });
+// Use Cases are resolved automatically by class token
 
 // Controller instance
 export const quizOptionsController = container.resolve(QuizOptionsController);

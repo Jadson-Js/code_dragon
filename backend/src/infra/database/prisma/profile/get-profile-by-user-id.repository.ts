@@ -14,12 +14,10 @@ export interface IProfileByUserId {
   stackIds: number[];
 }
 
-export interface IGetProfileByUserIdRepository {
-  execute(userId: string): Promise<IProfileByUserId | null>;
-}
+
 
 @injectable()
-export class GetProfileByUserIdPrismaRepository implements IGetProfileByUserIdRepository {
+export class GetProfileByUserIdPrismaRepository {
   async execute(userId: string): Promise<IProfileByUserId | null> {
     const profile = await prisma.profile.findUnique({
       where: { userId },
