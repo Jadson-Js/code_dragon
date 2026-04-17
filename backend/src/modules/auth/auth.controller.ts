@@ -1,45 +1,28 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { SignupUseCase } from "./use-cases/signup";
-import type { ResendVerificationUseCase } from "./use-cases/resend-verification";
-import type { VerifyEmailUseCase } from "./use-cases/verify-email";
-import type { ForgotPasswordUseCase } from "./use-cases/forgot-password";
-import type { ResetPasswordUseCase } from "./use-cases/reset-password";
+import { SignupUseCase } from "./use-cases/signup";
+import { ResendVerificationUseCase } from "./use-cases/resend-verification";
+import { VerifyEmailUseCase } from "./use-cases/verify-email";
+import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
+import { ResetPasswordUseCase } from "./use-cases/reset-password";
 import type { IGetMeOutputDTO, ILoginOutputDTO } from "./auth.dto";
-import type { LoginUseCase } from "./use-cases/login";
-import type { LogoutUseCase } from "./use-cases/logout";
-import type { RefreshTokenUseCase } from "./use-cases/refresh-token";
+import { LoginUseCase } from "./use-cases/login";
+import { LogoutUseCase } from "./use-cases/logout";
+import { RefreshTokenUseCase } from "./use-cases/refresh-token";
 import { env } from "@/shared/env";
-import type { GetMeUseCase } from "./use-cases/get-me";
+import { GetMeUseCase } from "./use-cases/get-me";
 
 @injectable()
 export class AuthController {
   constructor(
-    @inject("SignupUseCase")
     private readonly signupUseCase: SignupUseCase,
-
-    @inject("ResendVerificationUseCase")
     private readonly resendVerificationUseCase: ResendVerificationUseCase,
-
-    @inject("VerifyEmailUseCase")
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
-
-    @inject("ForgotPasswordUseCase")
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
-
-    @inject("ResetPasswordUseCase")
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
-
-    @inject("LoginUseCase")
     private readonly loginUseCase: LoginUseCase,
-
-    @inject("LogoutUseCase")
     private readonly logoutUseCase: LogoutUseCase,
-
-    @inject("RefreshTokenUseCase")
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
-
-    @inject("GetMeUseCase")
     private readonly getMeUseCase: GetMeUseCase,
   ) {}
 

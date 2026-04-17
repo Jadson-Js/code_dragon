@@ -4,16 +4,6 @@ import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.reposi
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import { GetMePrismaRepository } from "@/infra/database/prisma/auth/get-me.prisma.repository";
 
-import { SignupUseCase } from "./use-cases/signup";
-import { ResendVerificationUseCase } from "./use-cases/resend-verification";
-import { VerifyEmailUseCase } from "./use-cases/verify-email";
-import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
-import { ResetPasswordUseCase } from "./use-cases/reset-password";
-import { LoginUseCase } from "./use-cases/login";
-import { LogoutUseCase } from "./use-cases/logout";
-import { RefreshTokenUseCase } from "./use-cases/refresh-token";
-import { GetMeUseCase } from "./use-cases/get-me";
-
 // Registra o repositório
 container.register("IUserRepository", {
   useClass: UserPrismaRepository,
@@ -27,41 +17,8 @@ container.register("IGetMeRepository", {
   useClass: GetMePrismaRepository,
 });
 
-// Registra os use cases
-container.register("SignupUseCase", {
-  useClass: SignupUseCase,
-});
-
-container.register("ResendVerificationUseCase", {
-  useClass: ResendVerificationUseCase,
-});
-
-container.register("VerifyEmailUseCase", {
-  useClass: VerifyEmailUseCase,
-});
-
-container.register("ForgotPasswordUseCase", {
-  useClass: ForgotPasswordUseCase,
-});
-
-container.register("ResetPasswordUseCase", {
-  useClass: ResetPasswordUseCase,
-});
-
-container.register("LoginUseCase", {
-  useClass: LoginUseCase,
-});
-
-container.register("LogoutUseCase", {
-  useClass: LogoutUseCase,
-});
-
-container.register("RefreshTokenUseCase", {
-  useClass: RefreshTokenUseCase,
-});
-
-container.register("GetMeUseCase", {
-  useClass: GetMeUseCase,
-});
+// Os UseCases não precisam de registro explícito se forem usados como tokens de classe
+// e não requerem ciclo de vida específico (como singleton).
+// O tsyring os resolverá automaticamente.
 
 export const authController = container.resolve(AuthController);

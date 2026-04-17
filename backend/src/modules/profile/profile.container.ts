@@ -1,8 +1,5 @@
 import { container } from "tsyringe";
 import { ProfileController } from "@/modules/profile/profile.controller";
-import { CreateProfileUseCase } from "@/modules/profile/use-cases/create-profile";
-import { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
-import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
 import { RedisOnboardingOptionsRepository } from "@/infra/database/redis/redis-onboarding-options.repository";
 
 // Repositórios compartilhados e específicos já são registrados em infra/container/providers.ts
@@ -12,17 +9,8 @@ container.register("redisOnboardingOptionsRepository", {
   useClass: RedisOnboardingOptionsRepository,
 });
 
-// Registra os use cases
-container.register("CreateProfileUseCase", {
-  useClass: CreateProfileUseCase,
-});
-
-container.register("GetOnboardingOptionsUseCase", {
-  useClass: GetOnboardingOptionsUseCase,
-});
-
-container.register("GetProfileByUserIdUseCase", {
-  useClass: GetProfileByUserIdUseCase,
-});
+// Os UseCases não precisam de registro explícito se forem usados como tokens de classe
+// e não requerem ciclo de vida específico (como singleton).
+// O tsyring os resolverá automaticamente.
 
 export const profileController = container.resolve(ProfileController);

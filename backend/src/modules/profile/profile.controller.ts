@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { inject, injectable } from "tsyringe";
-import type { CreateProfileUseCase } from "./use-cases/create-profile";
-import type { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
-import type { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
+import { injectable } from "tsyringe";
+import { CreateProfileUseCase } from "./use-cases/create-profile";
+import { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
+import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
 import type {
   IGetOnboardingOptionsOutputDTO,
   ICreateProfileOutputDTO,
@@ -12,13 +12,8 @@ import type {
 @injectable()
 export class ProfileController {
   constructor(
-    @inject("CreateProfileUseCase")
     private readonly createProfileUseCase: CreateProfileUseCase,
-
-    @inject("GetOnboardingOptionsUseCase")
     private readonly getOnboardingOptionsUseCase: GetOnboardingOptionsUseCase,
-
-    @inject("GetProfileByUserIdUseCase")
     private readonly getProfileByUserIdUseCase: GetProfileByUserIdUseCase,
   ) {}
 
