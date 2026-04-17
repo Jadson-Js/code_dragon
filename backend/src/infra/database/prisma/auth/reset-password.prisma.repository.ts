@@ -1,4 +1,4 @@
-import type { User } from "@/domain/entities/user.entity";
+import type { User } from "@/entities/user.entity";
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { InternalServerError } from "@/shared/app.error";

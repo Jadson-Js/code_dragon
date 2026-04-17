@@ -1,21 +1,21 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionGenerateUseCase } from "./generate-questions";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
 import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
 import type { IGenerateQuizQuestionByGeminiInputProvider } from "@/domain/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
 import type { ICreateSessionWithQuizInput } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
 
-import type { QuizObjective } from "@/domain/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/domain/entities/quiz-subject.entity";
-import type { Seniority } from "@/domain/entities/seniority.entity";
-import { Profile } from "@/domain/entities/profile.entity";
-import { Session } from "@/domain/entities/session.entity";
-import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
-import type { Specialty } from "@/domain/entities/specialty.entity";
-import type { Stack } from "@/domain/entities/stack.entity";
-import type { Feature } from "@/domain/entities/feature.entity";
+import type { QuizObjective } from "@/entities/quiz-objective.entity";
+import type { QuizSubject } from "@/entities/quiz-subject.entity";
+import type { Seniority } from "@/entities/seniority.entity";
+import { Profile } from "@/entities/profile.entity";
+import { Session } from "@/entities/session.entity";
+import { SessionQuiz } from "@/entities/session-quiz.entity";
+import type { Specialty } from "@/entities/specialty.entity";
+import type { Stack } from "@/entities/stack.entity";
+import type { Feature } from "@/entities/feature.entity";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 

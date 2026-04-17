@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { Profile } from "@/domain/entities/profile.entity";
+import { Profile } from "@/entities/profile.entity";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 
 const prismaMockData = {
@@ -25,9 +25,8 @@ jest.unstable_mockModule("@prisma/client/runtime/client", () => ({
   PrismaClientKnownRequestError: MockPrismaError,
 }));
 
-const { CreateProfileWithStacksPrismaRepository } = await import(
-  "./create-profile-with-stacks.repository"
-);
+const { CreateProfileWithStacksPrismaRepository } =
+  await import("./create-profile-with-stacks.repository");
 
 describe("CreateProfileWithStacksPrismaRepository", () => {
   beforeEach(() => {
@@ -80,7 +79,9 @@ describe("CreateProfileWithStacksPrismaRepository", () => {
       new MockPrismaError("Unique constraint failed", "P2002"),
     );
 
-    await expect(repository.execute(input)).rejects.toBeInstanceOf(ConflictError);
+    await expect(repository.execute(input)).rejects.toBeInstanceOf(
+      ConflictError,
+    );
   });
 
   it("should throw InternalServerError for other Prisma errors", async () => {
@@ -89,7 +90,9 @@ describe("CreateProfileWithStacksPrismaRepository", () => {
       new MockPrismaError("Generic error", "P9999"),
     );
 
-    await expect(repository.execute(input)).rejects.toBeInstanceOf(InternalServerError);
+    await expect(repository.execute(input)).rejects.toBeInstanceOf(
+      InternalServerError,
+    );
   });
 
   it("should throw InternalServerError for unknown errors", async () => {

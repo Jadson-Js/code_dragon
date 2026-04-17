@@ -1,7 +1,7 @@
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
-import type { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import type { QuizQuestion } from "@/entities/quiz-question.entity";
 
 @injectable()
 export class QuizQuestionPrismaRepository implements IQuizQuestionRepository {

@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../../../../prisma/client";
-import { Feature } from "@/domain/entities/feature.entity";
+import { Feature } from "@/entities/feature.entity";
 import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
 
 @injectable()

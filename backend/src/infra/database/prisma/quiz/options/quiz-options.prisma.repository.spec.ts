@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizObjective } from "@/domain/entities/quiz-objective.entity";
-import { QuizSubject } from "@/domain/entities/quiz-subject.entity";
-import { Seniority } from "@/domain/entities/seniority.entity";
-import { Specialty } from "@/domain/entities/specialty.entity";
-import { Stack } from "@/domain/entities/stack.entity";
+import { QuizObjective } from "@/entities/quiz-objective.entity";
+import { QuizSubject } from "@/entities/quiz-subject.entity";
+import { Seniority } from "@/entities/seniority.entity";
+import { Specialty } from "@/entities/specialty.entity";
+import { Stack } from "@/entities/stack.entity";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -22,16 +22,20 @@ jest.unstable_mockModule("../../../../../../prisma/client", () => ({
   prisma: prismaMockData,
 }));
 
-const { QuizOptionsPrismaRepository } = await import(
-  "./quiz-options.prisma.repository"
-);
+const { QuizOptionsPrismaRepository } =
+  await import("./quiz-options.prisma.repository");
 
 describe("QuizOptionsPrismaRepository", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  const makeRow = (id: number, name: string, entity: any, extras: any = {}) => ({
+  const makeRow = (
+    id: number,
+    name: string,
+    entity: any,
+    extras: any = {},
+  ) => ({
     id,
     name,
     slug: name.toLowerCase().replace(/\s+/g, "-"),
@@ -46,11 +50,11 @@ describe("QuizOptionsPrismaRepository", () => {
     const repository = new QuizOptionsPrismaRepository();
 
     const mockResults = [
-        [makeRow(1, "Pre-Onboarding", QuizObjective)],
-        [makeRow(10, "React", QuizSubject, { specialties: [] })],
-        [makeRow(2, "Junior", Seniority)],
-        [makeRow(3, "Frontend", Specialty)],
-        [makeRow(100, "TypeScript", Stack)],
+      [makeRow(1, "Pre-Onboarding", QuizObjective)],
+      [makeRow(10, "React", QuizSubject, { specialties: [] })],
+      [makeRow(2, "Junior", Seniority)],
+      [makeRow(3, "Frontend", Specialty)],
+      [makeRow(100, "TypeScript", Stack)],
     ];
 
     prismaMockData.$transaction.mockResolvedValue(mockResults);
@@ -59,7 +63,7 @@ describe("QuizOptionsPrismaRepository", () => {
 
     // Verify transaction was called
     expect(prismaMockData.$transaction).toHaveBeenCalledTimes(1);
-    
+
     // Verify results are domain entities
     expect(result.quizObjectives[0]).toBeInstanceOf(QuizObjective);
     expect(result.quizSubjects[0]).toBeInstanceOf(QuizSubject);

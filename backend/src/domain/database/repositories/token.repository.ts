@@ -1,4 +1,4 @@
-import type { Token } from "@/domain/entities/token.entity";
+import type { Token } from "@/entities/token.entity";
 
 export interface ITokenRepository {
   create(data: Token): Promise<Token>;

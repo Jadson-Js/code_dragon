@@ -1,11 +1,8 @@
 import "reflect-metadata";
 import { describe, expect, it, jest } from "@jest/globals";
-import { User } from "@/domain/entities/user.entity";
-import { Token } from "@/domain/entities/token.entity";
-import {
-  BadRequestError,
-  NotFoundError,
-} from "@/shared/app.error";
+import { User } from "@/entities/user.entity";
+import { Token } from "@/entities/token.entity";
+import { BadRequestError, NotFoundError } from "@/shared/app.error";
 import { SignupUseCase } from "./signup";
 import { ResendVerificationUseCase } from "./resend-verification";
 import { VerifyEmailUseCase } from "./verify-email";
@@ -75,7 +72,9 @@ describe("Auth use-cases", () => {
       hashProvider.hash
         .mockResolvedValueOnce("hashed-password")
         .mockResolvedValueOnce("hashed-email-token");
-      jwtProvider.generateEmailVerificationToken.mockResolvedValue("email-token");
+      jwtProvider.generateEmailVerificationToken.mockResolvedValue(
+        "email-token",
+      );
 
       const useCase = new SignupUseCase(
         hashProvider as never,
@@ -91,14 +90,18 @@ describe("Auth use-cases", () => {
         password: "12345678",
       });
 
-      expect(createUserWithEmailTokenRepository.execute).toHaveBeenCalledTimes(1);
+      expect(createUserWithEmailTokenRepository.execute).toHaveBeenCalledTimes(
+        1,
+      );
       expect(emailQueueProvider.addJob).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("ResendVerificationUseCase", () => {
     it("should skip when user is missing", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn<any>() };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn<any>(),
+      };
       const useCase = new ResendVerificationUseCase(
         { hash: jest.fn<any>() } as never,
         { findByEmail: jest.fn(async () => null) } as never,
@@ -108,11 +111,15 @@ describe("Auth use-cases", () => {
       );
 
       await useCase.execute({ email: "missing@admin.com" });
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).not.toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).not.toHaveBeenCalled();
     });
 
     it("should skip when user is already verified", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn<any>() };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn<any>(),
+      };
       const useCase = new ResendVerificationUseCase(
         {} as never,
         { findByEmail: jest.fn(async () => makeUser(true)) } as never,
@@ -122,13 +129,19 @@ describe("Auth use-cases", () => {
       );
 
       await useCase.execute({ email: "admin@admin.com" });
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).not.toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).not.toHaveBeenCalled();
     });
 
     it("should successfully generate new token and enqueue email", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn(async () => undefined) };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn(async () => undefined),
+      };
       const emailQueueProvider = { addJob: jest.fn(async () => undefined) };
-      const jwtProvider = { generateEmailVerificationToken: jest.fn(async () => "new-token") };
+      const jwtProvider = {
+        generateEmailVerificationToken: jest.fn(async () => "new-token"),
+      };
 
       const useCase = new ResendVerificationUseCase(
         { hash: jest.fn(async () => "new-hash") } as never,
@@ -140,7 +153,9 @@ describe("Auth use-cases", () => {
 
       await useCase.execute({ email: "admin@admin.com" });
 
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).toHaveBeenCalled();
       expect(emailQueueProvider.addJob).toHaveBeenCalled();
     });
   });
@@ -154,7 +169,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "invalid" })).rejects.toBeInstanceOf(BadRequestError);
+      await expect(
+        useCase.execute({ token: "invalid" }),
+      ).rejects.toBeInstanceOf(BadRequestError);
     });
 
     it("should throw NotFoundError when user is missing", async () => {
@@ -168,7 +185,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid" })).rejects.toBeInstanceOf(NotFoundError);
+      await expect(useCase.execute({ token: "valid" })).rejects.toBeInstanceOf(
+        NotFoundError,
+      );
     });
 
     it("should throw BadRequestError and correct message when token is missing in repository", async () => {
@@ -182,7 +201,9 @@ describe("Auth use-cases", () => {
         { findByUserId: jest.fn(async () => []) } as never,
       );
 
-      await expect(useCase.execute({ token: "valid" })).rejects.toThrow("Token not found or invalid");
+      await expect(useCase.execute({ token: "valid" })).rejects.toThrow(
+        "Token not found or invalid",
+      );
     });
 
     it("should throw BadRequestError when token hash does not match", async () => {
@@ -193,10 +214,14 @@ describe("Auth use-cases", () => {
         } as never,
         { compare: jest.fn(async () => false) } as never,
         { findById: jest.fn(async () => makeUser(false)) } as never,
-        { findByUserId: jest.fn(async () => [makeToken("EMAIL_VERIFICATION")]) } as never,
+        {
+          findByUserId: jest.fn(async () => [makeToken("EMAIL_VERIFICATION")]),
+        } as never,
       );
 
-      await expect(useCase.execute({ token: "wrong-content" })).rejects.toThrow("Token not found or invalid");
+      await expect(useCase.execute({ token: "wrong-content" })).rejects.toThrow(
+        "Token not found or invalid",
+      );
     });
 
     it("should throw BadRequestError when email is already verified", async () => {
@@ -210,7 +235,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid" })).rejects.toThrow("Email already verified");
+      await expect(useCase.execute({ token: "valid" })).rejects.toThrow(
+        "Email already verified",
+      );
     });
 
     it("should throw BadRequestError when token has expired", async () => {
@@ -227,7 +254,9 @@ describe("Auth use-cases", () => {
         { findByUserId: jest.fn(async () => [expiredToken]) } as never,
       );
 
-      await expect(useCase.execute({ token: "valid" })).rejects.toThrow("Token has expired");
+      await expect(useCase.execute({ token: "valid" })).rejects.toThrow(
+        "Token has expired",
+      );
     });
 
     it("should verify user and delete token", async () => {
@@ -241,7 +270,9 @@ describe("Auth use-cases", () => {
       };
 
       userRepository.findById.mockResolvedValue(makeUser(false));
-      tokenRepository.findByUserId.mockResolvedValue([makeToken("EMAIL_VERIFICATION")]);
+      tokenRepository.findByUserId.mockResolvedValue([
+        makeToken("EMAIL_VERIFICATION"),
+      ]);
 
       const useCase = new VerifyEmailUseCase(
         {
@@ -262,7 +293,9 @@ describe("Auth use-cases", () => {
 
   describe("ForgotPasswordUseCase", () => {
     it("should skip when user is unverified", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn<any>() };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn<any>(),
+      };
       const useCase = new ForgotPasswordUseCase(
         {} as never,
         { findByEmail: jest.fn(async () => makeUser(false)) } as never,
@@ -272,11 +305,15 @@ describe("Auth use-cases", () => {
       );
 
       await useCase.execute({ email: "admin@admin.com" });
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).not.toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).not.toHaveBeenCalled();
     });
 
     it("should skip when user is missing", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn<any>() };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn<any>(),
+      };
       const useCase = new ForgotPasswordUseCase(
         {} as never,
         { findByEmail: jest.fn(async () => null) } as never,
@@ -286,11 +323,15 @@ describe("Auth use-cases", () => {
       );
 
       await useCase.execute({ email: "missing@admin.com" });
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).not.toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).not.toHaveBeenCalled();
     });
 
     it("should successfully generate token and enqueue email", async () => {
-      const tokenRepository = { deleteByUserIdAndCreateNewToken: jest.fn(async () => undefined) };
+      const tokenRepository = {
+        deleteByUserIdAndCreateNewToken: jest.fn(async () => undefined),
+      };
       const emailQueueProvider = { addJob: jest.fn(async () => undefined) };
 
       const useCase = new ForgotPasswordUseCase(
@@ -303,7 +344,9 @@ describe("Auth use-cases", () => {
 
       await useCase.execute({ email: "admin@admin.com" });
 
-      expect(tokenRepository.deleteByUserIdAndCreateNewToken).toHaveBeenCalled();
+      expect(
+        tokenRepository.deleteByUserIdAndCreateNewToken,
+      ).toHaveBeenCalled();
       expect(emailQueueProvider.addJob).toHaveBeenCalled();
     });
   });
@@ -318,7 +361,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "bad", password: "123" })).rejects.toBeInstanceOf(BadRequestError);
+      await expect(
+        useCase.execute({ token: "bad", password: "123" }),
+      ).rejects.toBeInstanceOf(BadRequestError);
     });
 
     it("should throw NotFoundError when user is missing", async () => {
@@ -333,7 +378,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid", password: "123" })).rejects.toBeInstanceOf(NotFoundError);
+      await expect(
+        useCase.execute({ token: "valid", password: "123" }),
+      ).rejects.toBeInstanceOf(NotFoundError);
     });
 
     it("should throw BadRequestError and correct message when token is missing in repository", async () => {
@@ -348,7 +395,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid", password: "123" })).rejects.toThrow("Token not found or invalid");
+      await expect(
+        useCase.execute({ token: "valid", password: "123" }),
+      ).rejects.toThrow("Token not found or invalid");
     });
 
     it("should throw BadRequestError when user is not verified", async () => {
@@ -363,7 +412,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid", password: "123" })).rejects.toThrow("User is not verified");
+      await expect(
+        useCase.execute({ token: "valid", password: "123" }),
+      ).rejects.toThrow("User is not verified");
     });
 
     it("should throw BadRequestError when token has expired", async () => {
@@ -381,7 +432,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ token: "valid", password: "123" })).rejects.toThrow("Token has expired");
+      await expect(
+        useCase.execute({ token: "valid", password: "123" }),
+      ).rejects.toThrow("Token has expired");
     });
 
     it("should update password and consume token", async () => {
@@ -422,7 +475,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ email: "missing@admin.com", password: "123" })).rejects.toBeInstanceOf(NotFoundError);
+      await expect(
+        useCase.execute({ email: "missing@admin.com", password: "123" }),
+      ).rejects.toBeInstanceOf(NotFoundError);
     });
 
     it("should throw NotFoundError and incorrect message for security when password invalid", async () => {
@@ -433,7 +488,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ email: "admin@admin.com", password: "wrong" })).rejects.toThrow("User not found");
+      await expect(
+        useCase.execute({ email: "admin@admin.com", password: "wrong" }),
+      ).rejects.toThrow("User not found");
     });
 
     it("should throw UnauthorizedError when user is not verified", async () => {
@@ -444,7 +501,9 @@ describe("Auth use-cases", () => {
         {} as never,
       );
 
-      await expect(useCase.execute({ email: "admin@admin.com", password: "password" })).rejects.toThrow("User not verified");
+      await expect(
+        useCase.execute({ email: "admin@admin.com", password: "password" }),
+      ).rejects.toThrow("User not verified");
     });
 
     it("should return tokens and persist session", async () => {
@@ -461,7 +520,10 @@ describe("Auth use-cases", () => {
         redisProvider as never,
       );
 
-      const output = await useCase.execute({ email: "admin@admin.com", password: "123" });
+      const output = await useCase.execute({
+        email: "admin@admin.com",
+        password: "123",
+      });
 
       expect(output.accessToken).toBe("access-token");
       expect(output.refreshToken).toBe("refresh-token");
@@ -474,7 +536,10 @@ describe("Auth use-cases", () => {
       const redisProvider = { delete: jest.fn<any>() };
       const useCase = new LogoutUseCase(redisProvider as never);
 
-      await useCase.execute({ userId: "user-1", refreshToken: "refresh-token" });
+      await useCase.execute({
+        userId: "user-1",
+        refreshToken: "refresh-token",
+      });
 
       expect(redisProvider.delete).toHaveBeenCalledTimes(1);
     });
@@ -491,7 +556,10 @@ describe("Auth use-cases", () => {
         redisProvider as never,
       );
 
-      const result = await useCase.execute({ userId: "user-1", refreshToken: "old" });
+      const result = await useCase.execute({
+        userId: "user-1",
+        refreshToken: "old",
+      });
 
       expect(result.accessToken).toBe("new-access");
       expect(result.newRefreshToken).toBe("new-refresh");
@@ -502,13 +570,22 @@ describe("Auth use-cases", () => {
 
   describe("GetMeUseCase", () => {
     it("should throw NotFoundError when repository returns null", async () => {
-      const useCase = new GetMeUseCase({ execute: jest.fn(async () => null) } as never);
-      await expect(useCase.execute("user-1")).rejects.toBeInstanceOf(NotFoundError);
+      const useCase = new GetMeUseCase({
+        execute: jest.fn(async () => null),
+      } as never);
+      await expect(useCase.execute("user-1")).rejects.toBeInstanceOf(
+        NotFoundError,
+      );
     });
 
     it("should return repository data", async () => {
-      const data = { user: { id: "user-1", isVerified: () => true }, profile: null };
-      const useCase = new GetMeUseCase({ execute: jest.fn(async () => data) } as never);
+      const data = {
+        user: { id: "user-1", isVerified: () => true },
+        profile: null,
+      };
+      const useCase = new GetMeUseCase({
+        execute: jest.fn(async () => data),
+      } as never);
       const result = await useCase.execute("user-1");
       expect(result).toEqual(data);
     });

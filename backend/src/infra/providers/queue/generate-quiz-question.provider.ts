@@ -6,7 +6,7 @@ import type {
   IGeminiProvider,
   IGenerateQuizQuestionByGeminiInputProvider,
 } from "@/domain/providers/gemini.provider";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
 import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";

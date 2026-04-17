@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { Seniority } from "@/domain/entities/seniority.entity";
-import { Specialty } from "@/domain/entities/specialty.entity";
-import { CareerObjective } from "@/domain/entities/career-objective.entity";
-import { AgeRange } from "@/domain/entities/age-range.entity";
-import { Stack } from "@/domain/entities/stack.entity";
+import { Seniority } from "@/entities/seniority.entity";
+import { Specialty } from "@/entities/specialty.entity";
+import { CareerObjective } from "@/entities/career-objective.entity";
+import { AgeRange } from "@/entities/age-range.entity";
+import { Stack } from "@/entities/stack.entity";
 
 const prismaMockData = {
   $transaction: jest.fn<any>(),
@@ -19,9 +19,8 @@ jest.unstable_mockModule("../../../../../prisma/client", () => ({
   prisma: prismaMockData,
 }));
 
-const { GetOnboardingOptionsPrismaRepository } = await import(
-  "./get-onboarding-options.repository"
-);
+const { GetOnboardingOptionsPrismaRepository } =
+  await import("./get-onboarding-options.repository");
 
 describe("GetOnboardingOptionsPrismaRepository", () => {
   beforeEach(() => {
@@ -62,7 +61,9 @@ describe("GetOnboardingOptionsPrismaRepository", () => {
 
   it("should propagate transaction errors", async () => {
     const repository = new GetOnboardingOptionsPrismaRepository();
-    prismaMockData.$transaction.mockRejectedValue(new Error("Transaction failed"));
+    prismaMockData.$transaction.mockRejectedValue(
+      new Error("Transaction failed"),
+    );
 
     await expect(repository.execute()).rejects.toThrow("Transaction failed");
   });

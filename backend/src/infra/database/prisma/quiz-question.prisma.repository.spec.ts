@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
 
 const prismaMockData = {
   quizQuestion: {
@@ -15,9 +15,8 @@ jest.unstable_mockModule("../../../../prisma/client", () => ({
   prisma: prismaMockData,
 }));
 
-const { QuizQuestionPrismaRepository } = await import(
-  "./quiz-question.prisma.repository"
-);
+const { QuizQuestionPrismaRepository } =
+  await import("./quiz-question.prisma.repository");
 
 describe("QuizQuestionPrismaRepository", () => {
   beforeEach(() => {

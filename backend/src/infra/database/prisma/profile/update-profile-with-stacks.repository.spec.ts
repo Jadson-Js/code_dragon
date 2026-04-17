@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { Profile } from "@/domain/entities/profile.entity";
+import { Profile } from "@/entities/profile.entity";
 import { NotFoundError } from "@/shared/app.error";
 
 const prismaMockData = {
@@ -11,9 +11,8 @@ jest.unstable_mockModule("../../../../../prisma/client", () => ({
   prisma: prismaMockData,
 }));
 
-const { UpdateProfileWithStacksPrismaRepository } = await import(
-  "./update-profile-with-stacks.repository"
-);
+const { UpdateProfileWithStacksPrismaRepository } =
+  await import("./update-profile-with-stacks.repository");
 
 describe("UpdateProfileWithStacksPrismaRepository", () => {
   beforeEach(() => {
@@ -89,7 +88,9 @@ describe("UpdateProfileWithStacksPrismaRepository", () => {
       return await callback(tx);
     });
 
-    await expect(repository.execute(input)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(repository.execute(input)).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 
   it("should re-throw generic Prisma errors", async () => {

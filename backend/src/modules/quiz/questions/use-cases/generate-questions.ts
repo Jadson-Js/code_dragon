@@ -8,14 +8,14 @@ import type { IGetQuizQuestionContextRepository } from "@/domain/database/reposi
 import type { IQuizQuestionRepository } from "@/domain/database/repositories/quiz-question.repository";
 import type { IBaseQueueProvider } from "@/domain/providers/queue/base.provider";
 import type { ICreateSessionWithQuizRepository } from "@/domain/database/repositories/quiz/session/create-session-with-quiz.repository";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
-import { Profile } from "@/domain/entities/profile.entity";
+import { Profile } from "@/entities/profile.entity";
 import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
 import type { IFeatureRepository } from "@/domain/database/repositories/feature.repository";
 import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
-import { Session } from "@/domain/entities/session.entity";
-import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
+import { Session } from "@/entities/session.entity";
+import { SessionQuiz } from "@/entities/session-quiz.entity";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {

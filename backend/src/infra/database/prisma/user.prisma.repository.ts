@@ -1,4 +1,4 @@
-import { User } from "@/domain/entities/user.entity";
+import { User } from "@/entities/user.entity";
 import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "@jest/globals";
 import { mapContextToGeminiInput } from "./questions.mapper";
 import type { IGetQuizQuestionContextOutputRepository } from "@/domain/database/repositories/quiz/question/get-quiz-question-context.repository";
-import type { QuizObjective } from "@/domain/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/domain/entities/quiz-subject.entity";
-import type { Seniority } from "@/domain/entities/seniority.entity";
-import type { Specialty } from "@/domain/entities/specialty.entity";
-import type { Stack } from "@/domain/entities/stack.entity";
+import type { QuizObjective } from "@/entities/quiz-objective.entity";
+import type { QuizSubject } from "@/entities/quiz-subject.entity";
+import type { Seniority } from "@/entities/seniority.entity";
+import type { Specialty } from "@/entities/specialty.entity";
+import type { Stack } from "@/entities/stack.entity";
 
 function makeContext(
   overrides: Partial<IGetQuizQuestionContextOutputRepository> = {},

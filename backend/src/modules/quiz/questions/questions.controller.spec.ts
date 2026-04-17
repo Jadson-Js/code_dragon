@@ -2,7 +2,7 @@ import "reflect-metadata";
 import type { Request, Response } from "express";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { QuizQuestionsController } from "./questions.controller";
-import { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import { QuizQuestion } from "@/entities/quiz-question.entity";
 import type { IQuizQuestionGenerateInputDTO } from "./questions.dto";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -17,7 +17,9 @@ function makeResponse(): ResponseMock {
   const res = {} as ResponseMock;
   res.status = jest.fn<(code: number) => ResponseMock>().mockReturnValue(res);
   res.json = jest.fn<(body?: unknown) => ResponseMock>().mockReturnValue(res);
-  res.setHeader = jest.fn<(name: string, value: string) => ResponseMock>().mockReturnValue(res);
+  res.setHeader = jest
+    .fn<(name: string, value: string) => ResponseMock>()
+    .mockReturnValue(res);
   return res;
 }
 
@@ -162,9 +164,18 @@ describe("QuizQuestionsController", () => {
         response as unknown as Response,
       );
 
-      expect(response.setHeader).toHaveBeenCalledWith("Content-Type", "text/event-stream");
-      expect(response.setHeader).toHaveBeenCalledWith("Cache-Control", "no-cache");
-      expect(response.setHeader).toHaveBeenCalledWith("Connection", "keep-alive");
+      expect(response.setHeader).toHaveBeenCalledWith(
+        "Content-Type",
+        "text/event-stream",
+      );
+      expect(response.setHeader).toHaveBeenCalledWith(
+        "Cache-Control",
+        "no-cache",
+      );
+      expect(response.setHeader).toHaveBeenCalledWith(
+        "Connection",
+        "keep-alive",
+      );
       expect(quizQuestionStreamUseCase.execute).toHaveBeenCalledWith(
         { sessionQuizId: "session-1" },
         response,
@@ -178,7 +189,9 @@ describe("QuizQuestionsController", () => {
       } as unknown as Request;
       const response = makeResponse();
 
-      quizQuestionStreamUseCase.execute.mockRejectedValue(new Error("Stream failed"));
+      quizQuestionStreamUseCase.execute.mockRejectedValue(
+        new Error("Stream failed"),
+      );
 
       await expect(
         controller.streamQuestions(request, response as unknown as Response),

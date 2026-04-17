@@ -1,8 +1,8 @@
-import type { QuizObjective } from "../../../../entities/quiz-objective.entity";
-import type { QuizSubject } from "../../../../entities/quiz-subject.entity";
-import type { Seniority } from "../../../../entities/seniority.entity";
-import type { Specialty } from "../../../../entities/specialty.entity";
-import type { Stack } from "../../../../entities/stack.entity";
+import type { QuizObjective } from "../../../../../entities/quiz-objective.entity";
+import type { QuizSubject } from "../../../../../entities/quiz-subject.entity";
+import type { Seniority } from "../../../../../entities/seniority.entity";
+import type { Specialty } from "../../../../../entities/specialty.entity";
+import type { Stack } from "../../../../../entities/stack.entity";
 
 export interface IGetQuizOptionsRepositoryOutput {
   quizObjectives: QuizObjective[];

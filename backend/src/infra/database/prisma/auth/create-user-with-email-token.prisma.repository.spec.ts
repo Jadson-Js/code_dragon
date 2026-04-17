@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { User } from "@/domain/entities/user.entity";
-import { Token } from "@/domain/entities/token.entity";
+import { User } from "@/entities/user.entity";
+import { Token } from "@/entities/token.entity";
 import { ConflictError, InternalServerError } from "@/shared/app.error";
 
 const prismaMock = {

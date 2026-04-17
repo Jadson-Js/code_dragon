@@ -1,4 +1,4 @@
-import type { SessionQuiz } from "@/domain/entities/session-quiz.entity";
+import type { SessionQuiz } from "@/entities/session-quiz.entity";
 import type { SessionQuizStatus } from "generated/prisma/enums";
 
 export interface ISessionQuizRepository {

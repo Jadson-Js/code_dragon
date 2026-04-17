@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { ISignupInputDTO } from "../auth.dto";
-import { User } from "@/domain/entities/user.entity";
-import { Token } from "@/domain/entities/token.entity";
+import { User } from "@/entities/user.entity";
+import { Token } from "@/entities/token.entity";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { ICreateUserWithEmailTokenRepository } from "@/domain/database/repositories/auth/auth-transaction.repository";

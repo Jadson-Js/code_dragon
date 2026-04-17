@@ -1,6 +1,13 @@
 import "reflect-metadata";
-import { beforeAll, beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { Token } from "@/domain/entities/token.entity";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
+import { Token } from "@/entities/token.entity";
 import { InternalServerError } from "@/shared/app.error";
 
 const prismaMock = {
@@ -11,9 +18,10 @@ const prismaMock = {
     findUnique: jest.fn<(args: unknown) => Promise<unknown | null>>(),
     findMany: jest.fn<(args?: unknown) => Promise<unknown[]>>(),
   },
-  $transaction: jest.fn<
-    (callback: (tx: unknown) => Promise<unknown>) => Promise<unknown>
-  >(),
+  $transaction:
+    jest.fn<
+      (callback: (tx: unknown) => Promise<unknown>) => Promise<unknown>
+    >(),
 };
 
 jest.unstable_mockModule("../../../../prisma/client", () => ({
@@ -28,7 +36,10 @@ let TokenPrismaRepository: {
     findById(id: string): Promise<Token | null>;
     findByUserId(userId: string): Promise<Token[]>;
     findAll(): Promise<Token[]>;
-    deleteByUserIdAndCreateNewToken(userId: string, token: Token): Promise<void>;
+    deleteByUserIdAndCreateNewToken(
+      userId: string,
+      token: Token,
+    ): Promise<void>;
   };
 };
 

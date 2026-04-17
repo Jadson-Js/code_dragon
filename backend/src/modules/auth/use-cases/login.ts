@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { ILoginInputDTO } from "../auth.dto";
 import { NotFoundError, UnauthorizedError } from "@/shared/app.error";
-import type { User } from "@/domain/entities/user.entity";
+import type { User } from "@/entities/user.entity";
 import type { IUserRepository } from "@/domain/database/repositories/user.repository";
 import type { IHashProvider } from "@/domain/providers/hash.provider";
 import type { IJWTProvider } from "@/domain/providers/jwt.provider";

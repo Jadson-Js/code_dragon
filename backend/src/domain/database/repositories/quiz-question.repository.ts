@@ -1,4 +1,4 @@
-import type { QuizQuestion } from "@/domain/entities/quiz-question.entity";
+import type { QuizQuestion } from "@/entities/quiz-question.entity";
 
 export interface IQuizQuestionRepository {
   create(data: QuizQuestion): Promise<QuizQuestion>;

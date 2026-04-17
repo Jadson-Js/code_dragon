@@ -1,5 +1,5 @@
-import { User } from "@/domain/entities/user.entity";
-import { Token } from "@/domain/entities/token.entity";
+import { User } from "@/entities/user.entity";
+import { Token } from "@/entities/token.entity";
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { ConflictError, InternalServerError } from "@/shared/app.error";

@@ -1,4 +1,4 @@
-import type { SessionQuiz } from "../entities/session-quiz.entity";
+import type { SessionQuiz } from "../../entities/session-quiz.entity";
 
 export interface IGenerateQuizQuestionByGeminiInputProvider {
   quizObjective: { id: number; name: string; description: string };

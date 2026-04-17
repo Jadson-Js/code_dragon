@@ -1,6 +1,6 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { Profile } from "@/domain/entities/profile.entity";
+import type { Profile } from "@/entities/profile.entity";
 import type { IUpdateProfileWithStacksRepository } from "@/domain/database/repositories/profile/update-profile-with-stacks.repository";
 import { NotFoundError } from "@/shared/app.error";
 

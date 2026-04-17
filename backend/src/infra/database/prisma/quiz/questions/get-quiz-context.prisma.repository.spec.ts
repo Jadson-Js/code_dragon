@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizObjective } from "@/domain/entities/quiz-objective.entity";
-import { QuizSubject } from "@/domain/entities/quiz-subject.entity";
-import { Seniority } from "@/domain/entities/seniority.entity";
-import { Specialty } from "@/domain/entities/specialty.entity";
-import { Stack } from "@/domain/entities/stack.entity";
+import { QuizObjective } from "@/entities/quiz-objective.entity";
+import { QuizSubject } from "@/entities/quiz-subject.entity";
+import { Seniority } from "@/entities/seniority.entity";
+import { Specialty } from "@/entities/specialty.entity";
+import { Stack } from "@/entities/stack.entity";
 import { NotFoundError } from "@/shared/app.error";
 
 const prismaMockData = {

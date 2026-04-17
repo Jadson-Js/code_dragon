@@ -7,7 +7,7 @@ import {
   it,
   jest,
 } from "@jest/globals";
-import { User } from "@/domain/entities/user.entity";
+import { User } from "@/entities/user.entity";
 import { ConflictError } from "@/shared/app.error";
 
 const prismaMock = {

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { User } from "@/domain/entities/user.entity";
-import { Profile } from "@/domain/entities/profile.entity";
+import { User } from "@/entities/user.entity";
+import { Profile } from "@/entities/profile.entity";
 
 const prismaMock = {
   $transaction: jest.fn<any>(),

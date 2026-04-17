@@ -1,4 +1,4 @@
-import type { Profile } from "@/domain/entities/profile.entity";
+import type { Profile } from "@/entities/profile.entity";
 
 export interface IProfileRepository {
   findAll(): Promise<Profile[]>;

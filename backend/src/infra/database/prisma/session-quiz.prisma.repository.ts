@@ -1,7 +1,7 @@
 import { prisma } from "@/../prisma/client";
 import { injectable } from "tsyringe";
 import type { ISessionQuizRepository } from "@/domain/database/repositories/session-quiz.repository";
-import { SessionQuiz } from "@/domain/entities/session-quiz.entity";
+import { SessionQuiz } from "@/entities/session-quiz.entity";
 import type { SessionQuizStatus } from "generated/prisma/enums";
 
 @injectable()
