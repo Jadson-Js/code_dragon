@@ -1,6 +1,6 @@
+import type { QuizQuestion } from "generated/prisma/client";
 import { EventEmitter } from "node:events";
 import { injectable } from "tsyringe";
-import type { QuizQuestion } from "@/entities/quiz-question.entity";
 
 export interface IQuizQuestionEvent {
   sessionQuizId: string;

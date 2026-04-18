@@ -8,7 +8,6 @@ import { GetQuizContextPrismaRepository } from "@/infra/database/prisma/quiz/que
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";
 import { CreateSessionWithQuizPrismaRepository } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
 import { mapContextToGeminiInput } from "../questions.mapper";
 import { Profile } from "@/entities/profile.entity";
 import { UpdateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/update-profile-with-stacks.repository";
@@ -16,6 +15,7 @@ import { FeaturePrismaRepository } from "@/infra/database/prisma/feature.prisma.
 import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 import { Session } from "@/entities/session.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
+import type { Prisma } from "generated/prisma/client";
 
 @injectable()
 export class QuizQuestionGenerateUseCase {
@@ -59,8 +59,8 @@ export class QuizQuestionGenerateUseCase {
     const questionsGenerated =
       await this.geminiProvider.generateQuizQuestion(geminiInput);
 
-    const questions = questionsGenerated.map((generated) =>
-      QuizQuestion.create({
+    const questions: Prisma.QuizQuestionCreateManyInput[] =
+      questionsGenerated.map((generated) => ({
         statement: generated.statement,
         alternatives: generated.alternatives,
         correctAlternativeIndex: generated.correctAlternativeIndex,
@@ -71,8 +71,7 @@ export class QuizQuestionGenerateUseCase {
         seniorityId: data.seniorityId,
         specialtyId: data.specialtyId,
         objectiveId: data.quizObjectiveId,
-      }),
-    );
+      }));
 
     for (let i = 1; i < batchQuestions; i++) {
       await this.generateQuizQuestionQueue.addJob(geminiInput);

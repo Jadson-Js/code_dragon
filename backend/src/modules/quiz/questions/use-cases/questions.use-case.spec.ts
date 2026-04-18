@@ -1,13 +1,8 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionGenerateUseCase } from "./generate-questions";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IGetQuizQuestionContextOutput } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
-import type { IGenerateQuizQuestionInput } from "@/infra/providers/gemini.provider";
+import type { QuizQuestion } from "generated/prisma/client";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.schema";
-import type { ICreateSessionWithQuizInput } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
-
-import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -58,21 +53,22 @@ function makeGeminiOutput() {
 }
 
 function makeSavedQuestions(): QuizQuestion[] {
-  return makeGeminiOutput().map((q, i) =>
-    QuizQuestion.create({
-      id: i + 1,
-      statement: q.statement,
-      alternatives: q.alternatives,
-      correctAlternativeIndex: q.correctAlternativeIndex,
-      code: q.code,
-      sessionQuizId: SESSION_QUIZ_ID,
-      stackId: q.stackId,
-      subjectId: q.subjectId,
-      seniorityId: 2,
-      specialtyId: 3,
-      objectiveId: 1,
-    }),
-  );
+  return makeGeminiOutput().map((q, i) => ({
+    id: i + 1,
+    statement: q.statement,
+    alternatives: q.alternatives,
+    correctAlternativeIndex: q.correctAlternativeIndex,
+    code: q.code,
+    reports: 0,
+    sessionQuizId: SESSION_QUIZ_ID,
+    stackId: q.stackId,
+    subjectId: q.subjectId,
+    seniorityId: 2,
+    specialtyId: 3,
+    objectiveId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }));
 }
 
 function makeInput(quantity = 1): IQuizQuestionGenerateInputDTO {

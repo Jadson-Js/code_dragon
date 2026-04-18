@@ -4,8 +4,8 @@ import "dotenv/config";
 import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
 import { Profile } from "@/entities/profile.entity";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
+
 import { Session } from "@/entities/session.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
@@ -38,11 +38,8 @@ export const prisma = prismaClient.$extends({
     user: toDomainExtension(User, Prisma.UserScalarFieldEnum),
     token: toDomainExtension(Token, Prisma.TokenScalarFieldEnum),
     profile: toDomainExtension(Profile, Prisma.ProfileScalarFieldEnum),
-    quizQuestion: toDomainExtension(
-      QuizQuestion,
-      Prisma.QuizQuestionScalarFieldEnum,
-    ),
     session: toDomainExtension(Session, Prisma.SessionScalarFieldEnum),
+
     sessionQuiz: toDomainExtension(
       SessionQuiz,
       Prisma.SessionQuizScalarFieldEnum,

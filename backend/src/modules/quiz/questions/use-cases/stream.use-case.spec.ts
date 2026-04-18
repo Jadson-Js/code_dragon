@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionStreamUseCase } from "./stream.use-case";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
+import type { QuizQuestion } from "generated/prisma/client";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -9,19 +9,22 @@ const SESSION_QUIZ_ID = "session-quiz-uuid-123";
 
 function makeSavedQuestions(): QuizQuestion[] {
   return [
-    QuizQuestion.create({
+    {
       id: 1,
       statement: "Question 1",
       alternatives: ["A", "B", "C", "D"],
       correctAlternativeIndex: 0,
       code: null,
+      reports: 0,
       sessionQuizId: SESSION_QUIZ_ID,
       stackId: 1,
       subjectId: 2,
       seniorityId: 3,
       specialtyId: 4,
       objectiveId: 5,
-    }),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ];
 }
 

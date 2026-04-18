@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
+import type { QuizQuestion } from "generated/prisma/client";
 
 const prismaMockData = {
   quizQuestion: {
@@ -36,14 +36,13 @@ describe("QuizQuestionPrismaRepository", () => {
     seniorityId: 3,
     specialtyId: 4,
     objectiveId: 5,
-    get toDomain() {
-      return QuizQuestion.create(this as any);
-    },
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
-  it("should create a single question and return mapped entity", async () => {
+  it("should create a single question and return entity", async () => {
     const repository = new QuizQuestionPrismaRepository();
-    const entity = QuizQuestion.create({
+    const data = {
       statement: "Q",
       alternatives: ["A"],
       correctAlternativeIndex: 0,
@@ -53,20 +52,19 @@ describe("QuizQuestionPrismaRepository", () => {
       seniorityId: 3,
       specialtyId: 4,
       objectiveId: 5,
-    });
+    };
 
     prismaMockData.quizQuestion.create.mockResolvedValue(makeRaw(1));
 
-    const result = await repository.create(entity);
+    const result = await repository.create(data as any);
 
-    expect(result).toBeInstanceOf(QuizQuestion);
     expect(result.id).toBe(1);
     expect(prismaMockData.quizQuestion.create).toHaveBeenCalled();
   });
 
-  it("should create multiple questions and return mapped entities", async () => {
+  it("should create multiple questions and return entities", async () => {
     const repository = new QuizQuestionPrismaRepository();
-    const entity = QuizQuestion.create({
+    const data = {
       statement: "Q",
       alternatives: ["A"],
       correctAlternativeIndex: 0,
@@ -76,14 +74,14 @@ describe("QuizQuestionPrismaRepository", () => {
       seniorityId: 3,
       specialtyId: 4,
       objectiveId: 5,
-    });
+    };
 
     prismaMockData.quizQuestion.createManyAndReturn.mockResolvedValue([
       makeRaw(10),
       makeRaw(11),
     ]);
 
-    const result = await repository.createMany([entity, entity]);
+    const result = await repository.createMany([data as any, data as any]);
 
     expect(result).toHaveLength(2);
     expect(result[0]!.id).toBe(10);
@@ -103,7 +101,7 @@ describe("QuizQuestionPrismaRepository", () => {
     const result = await repository.findBySessionQuizId(sessionQuizId);
 
     expect(result).toHaveLength(2);
-    expect(result[0]).toBeInstanceOf(QuizQuestion);
+    expect(result[0].id).toBe(1);
     expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
       where: { sessionQuizId },
     });

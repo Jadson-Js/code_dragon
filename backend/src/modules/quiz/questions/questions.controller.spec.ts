@@ -2,8 +2,7 @@ import "reflect-metadata";
 import type { Request, Response } from "express";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { QuizQuestionsController } from "./questions.controller";
-import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IQuizQuestionGenerateInputDTO } from "./questions.schema";
+import type { QuizQuestion } from "generated/prisma/client";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -24,19 +23,22 @@ function makeResponse(): ResponseMock {
 }
 
 function makeSavedQuestion(id: number): QuizQuestion {
-  return QuizQuestion.create({
+  return {
     id,
     statement: `Question ${id}`,
     alternatives: ["A", "B", "C", "D"],
     correctAlternativeIndex: 0,
     code: null,
+    reports: 0,
     sessionQuizId: "session-1",
     stackId: 1,
     subjectId: 2,
     seniorityId: 3,
     specialtyId: 4,
     objectiveId: 5,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 function makeController() {
