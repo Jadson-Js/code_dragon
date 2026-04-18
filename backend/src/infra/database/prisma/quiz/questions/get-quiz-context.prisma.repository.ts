@@ -1,11 +1,13 @@
 import { prisma } from "../../../../../../prisma/client";
 import { injectable } from "tsyringe";
 import { NotFoundError } from "@/shared/app.error";
-import type { QuizObjective } from "@/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/entities/quiz-subject.entity";
-import type { Seniority } from "@/entities/seniority.entity";
-import type { Specialty } from "@/entities/specialty.entity";
-import type { Stack } from "@/entities/stack.entity";
+import type {
+  QuizObjective,
+  QuizSubject,
+  Seniority,
+  Specialty,
+  Stack,
+} from "generated/prisma/client";
 
 export interface IGetQuizQuestionContextInput {
   quizObjectiveId: number;
@@ -56,11 +58,11 @@ export class GetQuizContextPrismaRepository {
       if (stacks.length === 0) throw new NotFoundError("Stacks not found.");
 
       return {
-        quizObjective: quizObjective.toDomain,
-        quizSubjects: quizSubjects.map((s) => s.toDomain),
-        seniority: seniority.toDomain,
-        specialty: specialty.toDomain,
-        stacks: stacks.map((s) => s.toDomain),
+        quizObjective,
+        quizSubjects,
+        seniority,
+        specialty,
+        stacks,
       };
     });
   }

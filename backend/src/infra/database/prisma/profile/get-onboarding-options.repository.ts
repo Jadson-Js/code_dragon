@@ -1,10 +1,12 @@
 import { prisma } from "../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { Seniority } from "@/entities/seniority.entity";
-import type { Specialty } from "@/entities/specialty.entity";
-import type { CareerObjective } from "@/entities/career-objective.entity";
-import type { AgeRange } from "@/entities/age-range.entity";
-import type { Stack } from "@/entities/stack.entity";
+import type {
+  Seniority,
+  Specialty,
+  CareerObjective,
+  AgeRange,
+  Stack,
+} from "generated/prisma/client";
 
 export interface IOnboardingOptions {
   seniorities: Seniority[];
@@ -13,8 +15,6 @@ export interface IOnboardingOptions {
   ageRanges: AgeRange[];
   stacks: Stack[];
 }
-
-
 
 @injectable()
 export class GetOnboardingOptionsPrismaRepository {
@@ -29,11 +29,11 @@ export class GetOnboardingOptionsPrismaRepository {
       ]);
 
     return {
-      seniorities: seniorities.map((s) => s.toDomain),
-      specialties: specialties.map((s) => s.toDomain),
-      careerObjectives: careerObjectives.map((o) => o.toDomain),
-      ageRanges: ageRanges.map((a) => a.toDomain),
-      stacks: stacks.map((s) => s.toDomain),
+      seniorities,
+      specialties,
+      careerObjectives,
+      ageRanges,
+      stacks,
     };
   }
 }

@@ -1,10 +1,12 @@
 import { prisma } from "../../../../../../prisma/client";
 import { injectable } from "tsyringe";
-import type { QuizObjective } from "@/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/entities/quiz-subject.entity";
-import type { Seniority } from "@/entities/seniority.entity";
-import type { Specialty } from "@/entities/specialty.entity";
-import type { Stack } from "@/entities/stack.entity";
+import type {
+  QuizObjective,
+  QuizSubject,
+  Seniority,
+  Specialty,
+  Stack,
+} from "generated/prisma/client";
 
 export interface IGetQuizOptionsRepositoryOutput {
   quizObjectives: QuizObjective[];
@@ -37,17 +39,14 @@ export class QuizOptionsPrismaRepository {
       ]);
 
     return {
-      quizObjectives: quizObjectives.map((o) => o.toDomain),
-      quizSubjects: quizSubjects.map((s) => s.toDomain),
-      seniorities: seniorities.map((s) => s.toDomain),
-      specialties: specialties.map((s) =>
-        Object.assign(s.toDomain, {
-          subjects: (s.quizSubjects ?? []).map(
-            (qs: any) => qs.quizSubject.toDomain,
-          ),
-        }),
-      ),
-      stacks: stacks.map((s) => s.toDomain),
+      quizObjectives,
+      quizSubjects,
+      seniorities,
+      specialties: specialties.map((s) => ({
+        ...s,
+        subjects: (s.quizSubjects ?? []).map((qs) => qs.quizSubject),
+      })),
+      stacks,
     };
   }
 }

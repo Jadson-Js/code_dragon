@@ -1,10 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizObjective } from "@/entities/quiz-objective.entity";
-import { QuizSubject } from "@/entities/quiz-subject.entity";
-import { Seniority } from "@/entities/seniority.entity";
-import { Specialty } from "@/entities/specialty.entity";
-import { Stack } from "@/entities/stack.entity";
+// Entity imports removed for simple vocabulary items
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -30,31 +26,25 @@ describe("QuizOptionsPrismaRepository", () => {
     jest.clearAllMocks();
   });
 
-  const makeRow = (
-    id: number,
-    name: string,
-    entity: any,
-    extras: any = {},
-  ) => ({
+  const makeRow = (id: number, name: string, extras: any = {}) => ({
     id,
     name,
     slug: name.toLowerCase().replace(/\s+/g, "-"),
     description: "Description",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     ...extras,
-    get toDomain() {
-      return entity.create(this as any);
-    },
   });
 
   it("should call prisma.$transaction with the expected queries and return mapped domain entities", async () => {
     const repository = new QuizOptionsPrismaRepository();
 
     const mockResults = [
-      [makeRow(1, "Pre-Onboarding", QuizObjective)],
-      [makeRow(10, "React", QuizSubject, { specialties: [] })],
-      [makeRow(2, "Junior", Seniority)],
-      [makeRow(3, "Frontend", Specialty)],
-      [makeRow(100, "TypeScript", Stack)],
+      [makeRow(1, "Pre-Onboarding")],
+      [makeRow(10, "React", { specialties: [] })],
+      [makeRow(2, "Junior")],
+      [makeRow(3, "Frontend")],
+      [makeRow(100, "TypeScript")],
     ];
 
     prismaMockData.$transaction.mockResolvedValue(mockResults);
@@ -64,12 +54,12 @@ describe("QuizOptionsPrismaRepository", () => {
     // Verify transaction was called
     expect(prismaMockData.$transaction).toHaveBeenCalledTimes(1);
 
-    // Verify results are domain entities
-    expect(result.quizObjectives[0]).toBeInstanceOf(QuizObjective);
-    expect(result.quizSubjects[0]).toBeInstanceOf(QuizSubject);
-    expect(result.seniorities[0]).toBeInstanceOf(Seniority);
-    expect(result.specialties[0]).toBeInstanceOf(Specialty);
-    expect(result.stacks[0]).toBeInstanceOf(Stack);
+    // Verify results have correct IDs
+    expect(result.quizObjectives[0]!.id).toBe(1);
+    expect(result.quizSubjects[0]!.id).toBe(10);
+    expect(result.seniorities[0]!.id).toBe(2);
+    expect(result.specialties[0]!.id).toBe(3);
+    expect(result.stacks[0]!.id).toBe(100);
 
     expect(result.specialties[0]!.id).toBe(3);
     expect(result.stacks[0]!.id).toBe(100);
@@ -89,18 +79,13 @@ describe("QuizOptionsPrismaRepository", () => {
           order: 1,
           slug: "frontend",
           description: "desc",
+          createdAt: new Date(),
+          updatedAt: new Date(),
           quizSubjects: [
             {
-              quizSubject: makeRow(10, "React", QuizSubject),
+              quizSubject: makeRow(10, "React"),
             },
           ],
-          toDomain: Specialty.create({
-            id: 1,
-            name: "Frontend",
-            order: 1,
-            slug: "frontend",
-            description: "desc",
-          }),
         },
       ],
       [],

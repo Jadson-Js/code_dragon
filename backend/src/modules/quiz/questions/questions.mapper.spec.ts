@@ -1,46 +1,83 @@
 import { describe, expect, it } from "@jest/globals";
 import { mapContextToGeminiInput } from "./questions.mapper";
-import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
-import type { QuizObjective } from "@/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/entities/quiz-subject.entity";
-import type { Seniority } from "@/entities/seniority.entity";
-import type { Specialty } from "@/entities/specialty.entity";
-import type { Stack } from "@/entities/stack.entity";
+import type { IGetQuizQuestionContextOutput } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 function makeContext(
-  overrides: Partial<IGetQuizQuestionContextOutputRepository> = {},
-): IGetQuizQuestionContextOutputRepository {
+  overrides: Partial<IGetQuizQuestionContextOutput> = {},
+): IGetQuizQuestionContextOutput {
   return {
     quizObjective: {
       id: 1,
       name: "Frontend Mastery",
       description: "Test frontend skills",
-    } as unknown as QuizObjective,
+      slug: "frontend-mastery",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
     quizSubjects: [
       {
         id: 10,
         name: "CSS",
         description: "Styles and layouts",
-      } as unknown as QuizSubject,
+        slug: "css",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       {
         id: 11,
         name: "HTML",
         description: "Markup language",
-      } as unknown as QuizSubject,
+        slug: "html",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ],
-    seniority: { id: 2, name: "Senior" } as unknown as Seniority,
-    specialty: { id: 3, name: "Frontend" } as unknown as Specialty,
+    seniority: {
+      id: 2,
+      name: "Senior",
+      slug: "senior",
+      description: "Senior level",
+      order: 2,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    specialty: {
+      id: 3,
+      name: "Frontend",
+      slug: "frontend",
+      description: "Frontend specialty",
+      order: 3,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
     stacks: [
-      { id: 20, name: "React" } as unknown as Stack,
-      { id: 21, name: "TypeScript" } as unknown as Stack,
+      {
+        id: 20,
+        name: "React",
+        slug: "react",
+        usageCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 21,
+        name: "TypeScript",
+        slug: "typescript",
+        usageCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ],
     ...overrides,
-  };
+  } as IGetQuizQuestionContextOutput;
 }
+
+const mockSessionQuiz = { id: "session-quiz-id" } as SessionQuiz;
 
 describe("mapContextToGeminiInput", () => {
   it("should map quizObjective fields correctly", () => {
-    const result = mapContextToGeminiInput(makeContext(), 1);
+    const result = mapContextToGeminiInput(makeContext(), 1, mockSessionQuiz);
 
     expect(result.quizObjective).toEqual({
       id: 1,
@@ -50,7 +87,7 @@ describe("mapContextToGeminiInput", () => {
   });
 
   it("should map quizSubject array correctly", () => {
-    const result = mapContextToGeminiInput(makeContext(), 1);
+    const result = mapContextToGeminiInput(makeContext(), 1, mockSessionQuiz);
 
     expect(result.quizSubjects).toEqual([
       { id: 10, name: "CSS", description: "Styles and layouts" },
@@ -59,19 +96,19 @@ describe("mapContextToGeminiInput", () => {
   });
 
   it("should map seniority correctly", () => {
-    const result = mapContextToGeminiInput(makeContext(), 1);
+    const result = mapContextToGeminiInput(makeContext(), 1, mockSessionQuiz);
 
     expect(result.seniority).toEqual({ id: 2, name: "Senior" });
   });
 
   it("should map specialty correctly", () => {
-    const result = mapContextToGeminiInput(makeContext(), 1);
+    const result = mapContextToGeminiInput(makeContext(), 1, mockSessionQuiz);
 
     expect(result.specialty).toEqual({ id: 3, name: "Frontend" });
   });
 
   it("should map stacks array correctly", () => {
-    const result = mapContextToGeminiInput(makeContext(), 1);
+    const result = mapContextToGeminiInput(makeContext(), 1, mockSessionQuiz);
 
     expect(result.stacks).toEqual([
       { id: 20, name: "React" },
@@ -83,13 +120,14 @@ describe("mapContextToGeminiInput", () => {
     const result = mapContextToGeminiInput(
       makeContext({ quizSubjects: [] }),
       1,
+      mockSessionQuiz,
     );
 
     expect(result.quizSubjects).toEqual([]);
   });
 
   it("should handle empty stacks array", () => {
-    const result = mapContextToGeminiInput(makeContext({ stacks: [] }), 1);
+    const result = mapContextToGeminiInput(makeContext({ stacks: [] }), 1, mockSessionQuiz);
 
     expect(result.stacks).toEqual([]);
   });
@@ -101,7 +139,7 @@ describe("mapContextToGeminiInput", () => {
     (context.seniority as unknown as { id: number }).id = 88;
     (context.specialty as unknown as { id: number }).id = 77;
 
-    const result = mapContextToGeminiInput(context, 1);
+    const result = mapContextToGeminiInput(context, 1, mockSessionQuiz);
 
     expect(result.quizObjective.id).toBe(99);
     expect(result.seniority.id).toBe(88);

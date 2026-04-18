@@ -2,39 +2,29 @@ import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizQuestionGenerateUseCase } from "./generate-questions";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IGetQuizQuestionContextOutputRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
+import type { IGetQuizQuestionContextOutput } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 import type { IGenerateQuizQuestionInput } from "@/infra/providers/gemini.provider";
 import type { IQuizQuestionGenerateInputDTO } from "../questions.schema";
 import type { ICreateSessionWithQuizInput } from "@/infra/database/prisma/quiz/session/create-session-with-quiz.prisma.repository";
 
-import type { QuizObjective } from "@/entities/quiz-objective.entity";
-import type { QuizSubject } from "@/entities/quiz-subject.entity";
-import type { Seniority } from "@/entities/seniority.entity";
-import { Profile } from "@/entities/profile.entity";
-import { Session } from "@/entities/session.entity";
-import { SessionQuiz } from "@/entities/session-quiz.entity";
-import type { Specialty } from "@/entities/specialty.entity";
-import type { Stack } from "@/entities/stack.entity";
-import type { Feature } from "@/entities/feature.entity";
+import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
 const SESSION_QUIZ_ID = "session-quiz-uuid-123";
 const FEATURE_ID = 1;
 
-function makeContext(): IGetQuizQuestionContextOutputRepository {
+function makeContext() {
   return {
     quizObjective: {
       id: 1,
       name: "Frontend Mastery",
       description: "Test frontend",
-    } as unknown as QuizObjective,
-    quizSubjects: [
-      { id: 10, name: "CSS", description: "Styling" } as unknown as QuizSubject,
-    ],
-    seniority: { id: 2, name: "Senior" } as unknown as Seniority,
-    specialty: { id: 3, name: "Frontend" } as unknown as Specialty,
-    stacks: [{ id: 20, name: "React" } as unknown as Stack],
+    },
+    quizSubjects: [{ id: 10, name: "CSS", description: "Styling" }],
+    seniority: { id: 2, name: "Senior" },
+    specialty: { id: 3, name: "Frontend" },
+    stacks: [{ id: 20, name: "React" }],
   };
 }
 
@@ -127,7 +117,7 @@ function makeUseCase() {
   const featureRepository = {
     findBySlug: jest
       .fn<any>()
-      .mockResolvedValue({ id: FEATURE_ID } as unknown as Feature),
+      .mockResolvedValue({ id: FEATURE_ID }),
   };
 
   const quizQuestionEventEmitter = {
@@ -189,7 +179,7 @@ describe("QuizQuestionGenerateUseCase", () => {
     });
     featureRepository.findBySlug.mockResolvedValue({
       id: FEATURE_ID,
-    } as unknown as Feature);
+    });
     getQuizContextRepository.execute.mockResolvedValue(makeContext());
     geminiProvider.generateQuizQuestion.mockResolvedValue(makeGeminiOutput());
     quizQuestionRepository.createMany.mockResolvedValue(makeSavedQuestions());

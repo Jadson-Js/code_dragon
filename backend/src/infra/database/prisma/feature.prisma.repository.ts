@@ -1,8 +1,6 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../../../../prisma/client";
-import { Feature } from "@/entities/feature.entity";
-
-
+import type { Feature } from "generated/prisma/client";
 
 @injectable()
 export class FeaturePrismaRepository {
@@ -15,6 +13,6 @@ export class FeaturePrismaRepository {
       return null;
     }
 
-    return feature.toDomain;
+    return feature;
   }
 }

@@ -1,11 +1,7 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { GetQuizOptionsUseCase } from "./get-quiz-options";
-import { QuizObjective } from "@/entities/quiz-objective.entity";
-import { QuizSubject } from "@/entities/quiz-subject.entity";
-import { Seniority } from "@/entities/seniority.entity";
-import { Specialty } from "@/entities/specialty.entity";
-import { Stack } from "@/entities/stack.entity";
+// No entity imports needed for simple vocabulary items
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -20,50 +16,60 @@ function makeUseCase() {
 }
 
 function makeQuizObjective(id: number) {
-  return QuizObjective.create({
+  return {
     id,
     name: `Objective ${id}`,
     description: "Description",
     slug: `objective-${id}`,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 function makeQuizSubject(id: number) {
-  return QuizSubject.create({
+  return {
     id,
     name: `Subject ${id}`,
     description: "Description",
     slug: `subject-${id}`,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 function makeSeniority(id: number) {
-  return Seniority.create({
+  return {
     id,
     name: `Seniority ${id}`,
     description: "Description",
     slug: `seniority-${id}`,
     order: id,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 function makeSpecialty(id: number) {
-  return Specialty.create({
+  return {
     id,
     name: `Specialty ${id}`,
     description: "Description",
     slug: `specialty-${id}`,
     order: id,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 function makeStack(id: number) {
-  return Stack.create({
+  return {
     id,
     name: `Stack ${id}`,
     slug: `stack-${id}`,
     usageCount: 0,
-  });
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 }
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -80,7 +86,7 @@ describe("GetQuizOptionsUseCase", () => {
       quizObjectives: [makeQuizObjective(1)],
       quizSubjects: [makeQuizSubject(2)],
       seniorities: [makeSeniority(3)],
-      specialties: [Object.assign(makeSpecialty(4), { subjects: [] })],
+      specialties: [{ ...makeSpecialty(4), subjects: [] }],
       stacks: [makeStack(5)],
     };
 
@@ -130,9 +136,10 @@ describe("GetQuizOptionsUseCase", () => {
       quizSubjects: [],
       seniorities: [],
       specialties: [
-        Object.assign(makeSpecialty(4), {
+        {
+          ...makeSpecialty(4),
           subjects: [makeQuizSubject(2)],
-        }),
+        },
       ],
       stacks: [],
     };

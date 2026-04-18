@@ -1,10 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { Seniority } from "@/entities/seniority.entity";
-import { Specialty } from "@/entities/specialty.entity";
-import { CareerObjective } from "@/entities/career-objective.entity";
-import { AgeRange } from "@/entities/age-range.entity";
-import { Stack } from "@/entities/stack.entity";
+// Entity imports removed for simple vocabulary items
 
 const prismaMockData = {
   $transaction: jest.fn<any>(),
@@ -27,36 +23,35 @@ describe("GetOnboardingOptionsPrismaRepository", () => {
     jest.clearAllMocks();
   });
 
-  const makeRow = (id: number, entity: any) => ({
+  const makeRow = (id: number) => ({
     id,
     name: `X-${id}`,
     slug: `x-${id}`,
     order: 1,
-    get toDomain() {
-      return entity.create(this as any);
-    },
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
   it("should return onboarding options correctly mapped to domain", async () => {
     const repository = new GetOnboardingOptionsPrismaRepository();
 
     prismaMockData.$transaction.mockResolvedValue([
-      [makeRow(1, Seniority)],
-      [makeRow(2, Specialty)],
-      [makeRow(3, CareerObjective)],
-      [makeRow(4, AgeRange)],
-      [makeRow(5, Stack)],
+      [makeRow(1)],
+      [makeRow(2)],
+      [makeRow(3)],
+      [makeRow(4)],
+      [makeRow(5)],
     ]);
 
     const result = await repository.execute();
 
     expect(prismaMockData.$transaction).toHaveBeenCalledTimes(1);
     expect(result.seniorities).toHaveLength(1);
-    expect(result.seniorities[0]).toBeInstanceOf(Seniority);
-    expect(result.specialties[0]).toBeInstanceOf(Specialty);
-    expect(result.careerObjectives[0]).toBeInstanceOf(CareerObjective);
-    expect(result.ageRanges[0]).toBeInstanceOf(AgeRange);
-    expect(result.stacks[0]).toBeInstanceOf(Stack);
+    expect(result.seniorities[0]!.id).toBe(1);
+    expect(result.specialties[0]!.id).toBe(2);
+    expect(result.careerObjectives[0]!.id).toBe(3);
+    expect(result.ageRanges[0]!.id).toBe(4);
+    expect(result.stacks[0]!.id).toBe(5);
   });
 
   it("should propagate transaction errors", async () => {

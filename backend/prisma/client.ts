@@ -5,14 +5,6 @@ import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
 import { Profile } from "@/entities/profile.entity";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import { Seniority } from "@/entities/seniority.entity";
-import { Specialty } from "@/entities/specialty.entity";
-import { CareerObjective } from "@/entities/career-objective.entity";
-import { AgeRange } from "@/entities/age-range.entity";
-import { Stack } from "@/entities/stack.entity";
-import { QuizObjective } from "@/entities/quiz-objective.entity";
-import { QuizSubject } from "@/entities/quiz-subject.entity";
-import { Feature } from "@/entities/feature.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
 import { Session } from "@/entities/session.entity";
 
@@ -50,23 +42,6 @@ export const prisma = prismaClient.$extends({
       QuizQuestion,
       Prisma.QuizQuestionScalarFieldEnum,
     ),
-    seniority: toDomainExtension(Seniority, Prisma.SeniorityScalarFieldEnum),
-    specialty: toDomainExtension(Specialty, Prisma.SpecialtyScalarFieldEnum),
-    careerObjective: toDomainExtension(
-      CareerObjective,
-      Prisma.CareerObjectiveScalarFieldEnum,
-    ),
-    ageRange: toDomainExtension(AgeRange, Prisma.AgeRangeScalarFieldEnum),
-    stack: toDomainExtension(Stack, Prisma.StackScalarFieldEnum),
-    quizObjective: toDomainExtension(
-      QuizObjective,
-      Prisma.QuizObjectiveScalarFieldEnum,
-    ),
-    quizSubject: toDomainExtension(
-      QuizSubject,
-      Prisma.QuizSubjectScalarFieldEnum,
-    ),
-    feature: toDomainExtension(Feature, Prisma.FeatureScalarFieldEnum),
     session: toDomainExtension(Session, Prisma.SessionScalarFieldEnum),
     sessionQuiz: toDomainExtension(
       SessionQuiz,

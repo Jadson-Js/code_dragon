@@ -1,10 +1,6 @@
 import "reflect-metadata";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
-import { QuizObjective } from "@/entities/quiz-objective.entity";
-import { QuizSubject } from "@/entities/quiz-subject.entity";
-import { Seniority } from "@/entities/seniority.entity";
-import { Specialty } from "@/entities/specialty.entity";
-import { Stack } from "@/entities/stack.entity";
+// Entity imports removed for simple vocabulary items
 import { NotFoundError } from "@/shared/app.error";
 
 const prismaMockData = {
@@ -23,14 +19,13 @@ describe("GetQuizContextPrismaRepository", () => {
     jest.clearAllMocks();
   });
 
-  const makeRow = (id: number, entity: any) => ({
+  const makeRow = (id: number) => ({
     id,
     name: "X",
     slug: "x",
     description: "desc",
-    get toDomain() {
-      return entity.create(this as any);
-    },
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
   const validData = {
@@ -47,25 +42,25 @@ describe("GetQuizContextPrismaRepository", () => {
     prismaMockData.$transaction.mockImplementation(async (callback: any) => {
       const tx = {
         quizObjective: {
-          findUnique: jest.fn(async () => makeRow(1, QuizObjective)),
+          findUnique: jest.fn(async () => makeRow(1)),
         },
         quizSubject: {
-          findMany: jest.fn(async () => [makeRow(2, QuizSubject)]),
+          findMany: jest.fn(async () => [makeRow(2)]),
         },
-        seniority: { findUnique: jest.fn(async () => makeRow(3, Seniority)) },
-        specialty: { findUnique: jest.fn(async () => makeRow(4, Specialty)) },
-        stack: { findMany: jest.fn(async () => [makeRow(5, Stack)]) },
+        seniority: { findUnique: jest.fn(async () => makeRow(3)) },
+        specialty: { findUnique: jest.fn(async () => makeRow(4)) },
+        stack: { findMany: jest.fn(async () => [makeRow(5)]) },
       };
       return callback(tx);
     });
 
     const result = await repository.execute(validData);
 
-    expect(result.quizObjective).toBeInstanceOf(QuizObjective);
-    expect(result.quizSubjects[0]).toBeInstanceOf(QuizSubject);
-    expect(result.seniority).toBeInstanceOf(Seniority);
-    expect(result.specialty).toBeInstanceOf(Specialty);
-    expect(result.stacks[0]).toBeInstanceOf(Stack);
+    expect(result.quizObjective.id).toBe(1);
+    expect(result.quizSubjects[0]!.id).toBe(2);
+    expect(result.seniority.id).toBe(3);
+    expect(result.specialty.id).toBe(4);
+    expect(result.stacks[0]!.id).toBe(5);
   });
 
   it("should throw NotFoundError if quizObjective is missing", async () => {
@@ -74,11 +69,11 @@ describe("GetQuizContextPrismaRepository", () => {
       const tx = {
         quizObjective: { findUnique: jest.fn(async () => null) },
         quizSubject: {
-          findMany: jest.fn(async () => [makeRow(2, QuizSubject)]),
+          findMany: jest.fn(async () => [makeRow(2)]),
         },
-        seniority: { findUnique: jest.fn(async () => makeRow(3, Seniority)) },
-        specialty: { findUnique: jest.fn(async () => makeRow(4, Specialty)) },
-        stack: { findMany: jest.fn(async () => [makeRow(5, Stack)]) },
+        seniority: { findUnique: jest.fn(async () => makeRow(3)) },
+        specialty: { findUnique: jest.fn(async () => makeRow(4)) },
+        stack: { findMany: jest.fn(async () => [makeRow(5)]) },
       };
       return callback(tx);
     });
@@ -93,14 +88,14 @@ describe("GetQuizContextPrismaRepository", () => {
     prismaMockData.$transaction.mockImplementation(async (callback: any) => {
       const tx = {
         quizObjective: {
-          findUnique: jest.fn(async () => makeRow(1, QuizObjective)),
+          findUnique: jest.fn(async () => makeRow(1)),
         },
         quizSubject: {
-          findMany: jest.fn(async () => [makeRow(2, QuizSubject)]),
+          findMany: jest.fn(async () => [makeRow(2)]),
         },
         seniority: { findUnique: jest.fn(async () => null) },
-        specialty: { findUnique: jest.fn(async () => makeRow(4, Specialty)) },
-        stack: { findMany: jest.fn(async () => [makeRow(5, Stack)]) },
+        specialty: { findUnique: jest.fn(async () => makeRow(4)) },
+        stack: { findMany: jest.fn(async () => [makeRow(5)]) },
       };
       return callback(tx);
     });
@@ -115,14 +110,14 @@ describe("GetQuizContextPrismaRepository", () => {
     prismaMockData.$transaction.mockImplementation(async (callback: any) => {
       const tx = {
         quizObjective: {
-          findUnique: jest.fn(async () => makeRow(1, QuizObjective)),
+          findUnique: jest.fn(async () => makeRow(1)),
         },
         quizSubject: {
-          findMany: jest.fn(async () => [makeRow(2, QuizSubject)]),
+          findMany: jest.fn(async () => [makeRow(2)]),
         },
-        seniority: { findUnique: jest.fn(async () => makeRow(3, Seniority)) },
+        seniority: { findUnique: jest.fn(async () => makeRow(3)) },
         specialty: { findUnique: jest.fn(async () => null) },
-        stack: { findMany: jest.fn(async () => [makeRow(5, Stack)]) },
+        stack: { findMany: jest.fn(async () => [makeRow(5)]) },
       };
       return callback(tx);
     });
@@ -137,13 +132,13 @@ describe("GetQuizContextPrismaRepository", () => {
     prismaMockData.$transaction.mockImplementation(async (callback: any) => {
       const tx = {
         quizObjective: {
-          findUnique: jest.fn(async () => makeRow(1, QuizObjective)),
+          findUnique: jest.fn(async () => makeRow(1)),
         },
         quizSubject: {
-          findMany: jest.fn(async () => [makeRow(2, QuizSubject)]),
+          findMany: jest.fn(async () => [makeRow(2)]),
         },
-        seniority: { findUnique: jest.fn(async () => makeRow(3, Seniority)) },
-        specialty: { findUnique: jest.fn(async () => makeRow(4, Specialty)) },
+        seniority: { findUnique: jest.fn(async () => makeRow(3)) },
+        specialty: { findUnique: jest.fn(async () => makeRow(4)) },
         stack: { findMany: jest.fn(async () => []) },
       };
       return callback(tx);
