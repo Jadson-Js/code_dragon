@@ -16,8 +16,10 @@ export class SignupUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
+    @inject(CreateUserWithEmailTokenPrismaRepository)
     private readonly createUserWithEmailTokenRepository: CreateUserWithEmailTokenPrismaRepository,
 
+    @inject(UserPrismaRepository)
     private readonly userRepository: UserPrismaRepository,
 
     @inject("IJWTProvider")

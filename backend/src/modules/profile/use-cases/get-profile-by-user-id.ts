@@ -5,6 +5,7 @@ import { NotFoundError } from "@/shared/app.error";
 @injectable()
 export class GetProfileByUserIdUseCase {
   constructor(
+    @inject(GetProfileByUserIdPrismaRepository)
     private readonly getProfileByUserIdRepository: GetProfileByUserIdPrismaRepository,
   ) {}
 

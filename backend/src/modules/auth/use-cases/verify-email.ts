@@ -15,8 +15,10 @@ export class VerifyEmailUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
+    @inject(UserPrismaRepository)
     private readonly userRepository: UserPrismaRepository,
 
+    @inject(TokenPrismaRepository)
     private readonly tokenRepository: TokenPrismaRepository,
   ) {}
 

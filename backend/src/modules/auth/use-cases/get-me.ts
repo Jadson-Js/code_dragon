@@ -5,6 +5,7 @@ import { GetMePrismaRepository } from "@/infra/database/prisma/auth/get-me.prism
 @injectable()
 export class GetMeUseCase {
   constructor(
+    @inject(GetMePrismaRepository)
     private readonly getMeRepository: GetMePrismaRepository,
   ) {}
 

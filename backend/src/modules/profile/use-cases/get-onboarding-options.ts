@@ -7,8 +7,10 @@ export class GetOnboardingOptionsUseCase {
   private readonly ttlSeconds = 24 * 60 * 60;
 
   constructor(
+    @inject(GetOnboardingOptionsPrismaRepository)
     private readonly getOnboardingOptionsRepository: GetOnboardingOptionsPrismaRepository,
 
+    @inject(RedisOnboardingOptionsRepository)
     private readonly redisOnboardingOptionsRepository: RedisOnboardingOptionsRepository,
   ) {}
 

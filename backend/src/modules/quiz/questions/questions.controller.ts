@@ -1,15 +1,15 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { QuizQuestionGenerateUseCase } from "./use-cases/generate-questions";
-import type { QuizQuestionStreamUseCase } from "./use-cases/stream.use-case";
+import { QuizQuestionGenerateUseCase } from "./use-cases/generate-questions";
+import { QuizQuestionStreamUseCase } from "./use-cases/stream.use-case";
 
 @injectable()
 export class QuizQuestionsController {
   constructor(
-    @inject("QuizQuestionGenerateUseCase")
+    @inject(QuizQuestionGenerateUseCase)
     private readonly quizQuestionGenerateUseCase: QuizQuestionGenerateUseCase,
 
-    @inject("QuizQuestionStreamUseCase")
+    @inject(QuizQuestionStreamUseCase)
     private readonly quizQuestionStreamUseCase: QuizQuestionStreamUseCase,
   ) {}
 

@@ -1,11 +1,11 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import type { GetQuizOptionsUseCase } from "./use-cases/get-quiz-options";
+import { GetQuizOptionsUseCase } from "./use-cases/get-quiz-options";
 
 @injectable()
 export class QuizOptionsController {
   constructor(
-    @inject("GetQuizOptionsUseCase")
+    @inject(GetQuizOptionsUseCase)
     private readonly getQuizOptionsUseCase: GetQuizOptionsUseCase,
   ) {}
 

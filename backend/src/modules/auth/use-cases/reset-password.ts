@@ -16,10 +16,13 @@ export class ResetPasswordUseCase {
     @inject("IHashProvider")
     private readonly hashProvider: IHashProvider,
 
+    @inject(UserPrismaRepository)
     private readonly userRepository: UserPrismaRepository,
 
+    @inject(TokenPrismaRepository)
     private readonly tokenRepository: TokenPrismaRepository,
 
+    @inject(ResetPasswordPrismaRepository)
     private readonly resetPasswordRepository: ResetPasswordPrismaRepository,
   ) {}
 

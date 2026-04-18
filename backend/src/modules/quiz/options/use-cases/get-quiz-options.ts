@@ -4,6 +4,7 @@ import { QuizOptionsPrismaRepository } from "@/infra/database/prisma/quiz/option
 @injectable()
 export class GetQuizOptionsUseCase {
   constructor(
+    @inject(QuizOptionsPrismaRepository)
     private readonly getQuizOptionsRepository: QuizOptionsPrismaRepository,
   ) {}
 

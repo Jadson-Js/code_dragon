@@ -9,10 +9,13 @@ import type { Response } from "express";
 @injectable()
 export class QuizQuestionStreamUseCase {
   constructor(
+    @inject(QuizQuestionPrismaRepository)
     private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
+    @inject(QuizQuestionEventEmitter)
     private readonly quizQuestionEventEmitter: QuizQuestionEventEmitter,
 
+    @inject(SessionQuizPrismaRepository)
     private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {}
 

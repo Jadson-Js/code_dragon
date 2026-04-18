@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { CreateProfileUseCase } from "./use-cases/create-profile";
 import { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
 import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
@@ -7,8 +7,11 @@ import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
 @injectable()
 export class ProfileController {
   constructor(
+    @inject(CreateProfileUseCase)
     private readonly createProfileUseCase: CreateProfileUseCase,
+    @inject(GetOnboardingOptionsUseCase)
     private readonly getOnboardingOptionsUseCase: GetOnboardingOptionsUseCase,
+    @inject(GetProfileByUserIdUseCase)
     private readonly getProfileByUserIdUseCase: GetProfileByUserIdUseCase,
   ) {}
 

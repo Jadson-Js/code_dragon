@@ -19,6 +19,7 @@ import type { Prisma } from "generated/prisma/client";
 @injectable()
 export class QuizQuestionGenerateUseCase {
   constructor(
+    @inject(GetQuizContextPrismaRepository)
     private readonly getQuizContextRepository: GetQuizContextPrismaRepository,
 
     @inject("IGenerateQuizQuestionQueueProvider")
@@ -27,14 +28,19 @@ export class QuizQuestionGenerateUseCase {
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
 
+    @inject(QuizQuestionPrismaRepository)
     private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
+    @inject(UpdateProfileWithStacksPrismaRepository)
     private readonly updateProfileWithStacksRepository: UpdateProfileWithStacksPrismaRepository,
 
+    @inject(CreateSessionWithQuizPrismaRepository)
     private readonly createSessionWithQuizRepository: CreateSessionWithQuizPrismaRepository,
 
+    @inject(FeaturePrismaRepository)
     private readonly featureRepository: FeaturePrismaRepository,
 
+    @inject(SessionQuizPrismaRepository)
     private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {}
 

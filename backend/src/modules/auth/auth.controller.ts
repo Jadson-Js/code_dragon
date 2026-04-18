@@ -15,14 +15,23 @@ import { GetMeUseCase } from "./use-cases/get-me";
 @injectable()
 export class AuthController {
   constructor(
+    @inject(SignupUseCase)
     private readonly signupUseCase: SignupUseCase,
+    @inject(ResendVerificationUseCase)
     private readonly resendVerificationUseCase: ResendVerificationUseCase,
+    @inject(VerifyEmailUseCase)
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
+    @inject(ForgotPasswordUseCase)
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+    @inject(ResetPasswordUseCase)
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
+    @inject(LoginUseCase)
     private readonly loginUseCase: LoginUseCase,
+    @inject(LogoutUseCase)
     private readonly logoutUseCase: LogoutUseCase,
+    @inject(RefreshTokenUseCase)
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
+    @inject(GetMeUseCase)
     private readonly getMeUseCase: GetMeUseCase,
   ) {}
 

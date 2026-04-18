@@ -12,6 +12,7 @@ import { msToSeconds, generateHash } from "@/shared/utils";
 @injectable()
 export class LoginUseCase {
   constructor(
+    @inject(UserPrismaRepository)
     private readonly userRepository: UserPrismaRepository,
 
     @inject("IHashProvider")
