@@ -7,24 +7,20 @@ import type {
   IGenerateQuizQuestionInput,
 } from "@/infra/providers/gemini.provider";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IQuizQuestionRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import type { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
-import type { ISessionQuizRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
+import type { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
+import type { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 
 @injectable()
 export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionInput> {
   constructor(
-    @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
 
-    @inject("IQuizQuestionRepository")
-    private readonly quizQuestionRepository: IQuizQuestionRepository,
+    private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
-    @inject("QuizQuestionEventEmitter")
     private readonly quizQuestionEventEmitter: QuizQuestionEventEmitter,
 
-    @inject("ISessionQuizRepository")
-    private readonly sessionQuizRepository: ISessionQuizRepository,
+    private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     super("generateQuizQuestion", redisConnection as any);
