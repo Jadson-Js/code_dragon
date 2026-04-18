@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IForgotPasswordInputDTO } from "../auth.dto";
+import type { IForgotPasswordInputDTO } from "../auth.schema";
 import { Token } from "@/entities/token.entity";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";

@@ -1,5 +1,5 @@
 import { CreateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/create-profile-with-stacks.repository";
-import type { ICreateProfileInputDTO } from "@/modules/profile/profile.dto";
+import type { ICreateProfileInputDTO } from "@/modules/profile/profile.schema";
 import { inject, injectable } from "tsyringe";
 
 @injectable()

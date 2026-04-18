@@ -3,7 +3,7 @@ import type {
   IGeminiProvider,
   IGenerateQuizQuestionInput,
 } from "@/infra/providers/gemini.provider";
-import type { IQuizQuestionGenerateInputDTO } from "../questions.dto";
+import type { IQuizQuestionGenerateInputDTO } from "../questions.schema";
 import { GetQuizContextPrismaRepository } from "@/infra/database/prisma/quiz/questions/get-quiz-context.prisma.repository";
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import type { IBaseQueueProvider } from "@/infra/providers/queue/base.bullmq.provider";

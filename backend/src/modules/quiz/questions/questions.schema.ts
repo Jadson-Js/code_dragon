@@ -12,8 +12,16 @@ export const quizQuestionGenerateSchema = z.object({
   }),
 });
 
+export type IQuizQuestionGenerateInputDTO = z.infer<
+  typeof quizQuestionGenerateSchema
+>["body"] & {
+  userId: string;
+};
+
 export const quizQuestionStreamSchema = z.object({
   params: z.object({
     session_quiz_id: z.string(),
   }),
 });
+
+// No IQuizQuestionStreamInputDTO here

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IVerifyEmailInputDTO } from "../auth.dto";
+import type { IVerifyEmailInputDTO } from "../auth.schema";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";

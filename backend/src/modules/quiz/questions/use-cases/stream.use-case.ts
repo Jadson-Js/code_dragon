@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import type { IQuizQuestionStreamInputDTO } from "../questions.dto";
+// No IQuizQuestionStreamInputDTO import
+
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
 import { QuizQuestionEventEmitter } from "@/infra/providers/quiz-question-event-emitter";
@@ -16,7 +17,7 @@ export class QuizQuestionStreamUseCase {
   ) {}
 
   async execute(
-    data: IQuizQuestionStreamInputDTO,
+    data: { sessionQuizId: string },
     response: Response,
   ): Promise<void> {
     const { sessionQuizId } = data;

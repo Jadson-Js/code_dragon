@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ISignupInputDTO } from "../auth.dto";
+import type { ISignupInputDTO } from "../auth.schema";
 import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";

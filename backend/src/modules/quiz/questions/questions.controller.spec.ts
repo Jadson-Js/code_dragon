@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { QuizQuestionsController } from "./questions.controller";
 import { QuizQuestion } from "@/entities/quiz-question.entity";
-import type { IQuizQuestionGenerateInputDTO } from "./questions.dto";
+import type { IQuizQuestionGenerateInputDTO } from "./questions.schema";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

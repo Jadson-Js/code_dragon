@@ -2,7 +2,6 @@ import "reflect-metadata";
 import type { Request, Response } from "express";
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import { QuizOptionsController } from "./quiz-options.controller";
-import type { IGetQuizOptionsOutputDTO } from "./quiz-options.dto";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -20,7 +19,7 @@ function makeResponse(): ResponseMock {
 
 function makeController() {
   const getQuizOptionsUseCase = {
-    execute: jest.fn<() => Promise<IGetQuizOptionsOutputDTO>>(),
+    execute: jest.fn<() => Promise<any>>(),
   };
 
   const controller = new QuizOptionsController(getQuizOptionsUseCase as never);
@@ -38,7 +37,7 @@ describe("QuizOptionsController", () => {
   it("should call the use case and return 200 with the options", async () => {
     const { controller, getQuizOptionsUseCase } = makeController();
 
-    const options: IGetQuizOptionsOutputDTO = {
+    const options: any = {
       quizObjectives: [{ id: 1, name: "Objetivo 1" }],
       quizSubjects: [{ id: 2, name: "Assunto 1" }],
       seniorities: [{ id: 3, name: "Sênior" }],

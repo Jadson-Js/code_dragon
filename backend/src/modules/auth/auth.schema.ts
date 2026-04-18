@@ -8,11 +8,17 @@ export const signupSchema = z.object({
   }),
 });
 
+export type ISignupInputDTO = z.infer<typeof signupSchema>["body"];
+
 export const resendVerificationSchema = z.object({
   body: z.object({
     email: z.email(),
   }),
 });
+
+export type IResendVerificationInputDTO = z.infer<
+  typeof resendVerificationSchema
+>["body"];
 
 export const verifyEmailSchema = z.object({
   body: z.object({
@@ -20,11 +26,17 @@ export const verifyEmailSchema = z.object({
   }),
 });
 
+export type IVerifyEmailInputDTO = z.infer<typeof verifyEmailSchema>["body"];
+
 export const forgotPasswordSchema = z.object({
   body: z.object({
     email: z.email(),
   }),
 });
+
+export type IForgotPasswordInputDTO = z.infer<
+  typeof forgotPasswordSchema
+>["body"];
 
 export const resetPasswordSchema = z.object({
   body: z.object({
@@ -33,9 +45,13 @@ export const resetPasswordSchema = z.object({
   }),
 });
 
+export type IResetPasswordInputDTO = z.infer<typeof resetPasswordSchema>["body"];
+
 export const loginSchema = z.object({
   body: z.object({
     email: z.email(),
     password: z.string().min(8),
   }),
 });
+
+export type ILoginInputDTO = z.infer<typeof loginSchema>["body"];

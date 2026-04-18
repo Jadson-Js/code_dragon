@@ -3,11 +3,6 @@ import { injectable } from "tsyringe";
 import { CreateProfileUseCase } from "./use-cases/create-profile";
 import { GetOnboardingOptionsUseCase } from "./use-cases/get-onboarding-options";
 import { GetProfileByUserIdUseCase } from "./use-cases/get-profile-by-user-id";
-import type {
-  IGetOnboardingOptionsOutputDTO,
-  ICreateProfileOutputDTO,
-  IGetProfileByUserIdOutputDTO,
-} from "./profile.dto";
 
 @injectable()
 export class ProfileController {
@@ -20,7 +15,7 @@ export class ProfileController {
   async create(
     request: Request,
     response: Response,
-  ): Promise<Response<ICreateProfileOutputDTO>> {
+  ): Promise<Response> {
     const body = request.body;
     const userId = request.user.id;
 
@@ -29,14 +24,14 @@ export class ProfileController {
       userId,
     });
 
-    const httpResponse: ICreateProfileOutputDTO = { id: result.id };
+    const httpResponse = { id: result.id };
     return response.status(201).json(httpResponse);
   }
 
   async getOnboardingOptions(
     request: Request,
     response: Response,
-  ): Promise<Response<IGetOnboardingOptionsOutputDTO>> {
+  ): Promise<Response> {
     const result = await this.getOnboardingOptionsUseCase.execute();
 
     return response.status(200).json(result);
@@ -45,7 +40,7 @@ export class ProfileController {
   async getMe(
     request: Request,
     response: Response,
-  ): Promise<Response<IGetProfileByUserIdOutputDTO>> {
+  ): Promise<Response> {
     const userId = request.user.id;
 
     const result = await this.getProfileByUserIdUseCase.execute(userId);

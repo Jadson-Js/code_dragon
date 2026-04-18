@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { generateHash } from "@/shared/utils";
-import type { ILogoutInputDTO } from "../auth.dto";
+// No import for ILogoutInputDTO as it's defined inline
 
 @injectable()
 export class LogoutUseCase {
@@ -10,7 +10,13 @@ export class LogoutUseCase {
     private readonly redisProvider: IRedisProvider,
   ) {}
 
-  async execute({ userId, refreshToken }: ILogoutInputDTO): Promise<void> {
+  async execute({
+    userId,
+    refreshToken,
+  }: {
+    userId: string;
+    refreshToken: string;
+  }): Promise<void> {
     const tokenId = generateHash(refreshToken);
     await this.redisProvider.delete(`session:${userId}:${tokenId}`);
   }

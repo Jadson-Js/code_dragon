@@ -5,7 +5,7 @@ import { ResendVerificationUseCase } from "./use-cases/resend-verification";
 import { VerifyEmailUseCase } from "./use-cases/verify-email";
 import { ForgotPasswordUseCase } from "./use-cases/forgot-password";
 import { ResetPasswordUseCase } from "./use-cases/reset-password";
-import type { IGetMeOutputDTO, ILoginOutputDTO } from "./auth.dto";
+// No imports for OutputDTOs as they are removed
 import { LoginUseCase } from "./use-cases/login";
 import { LogoutUseCase } from "./use-cases/logout";
 import { RefreshTokenUseCase } from "./use-cases/refresh-token";
@@ -29,11 +29,11 @@ export class AuthController {
   async me(
     request: Request,
     response: Response,
-  ): Promise<Response<IGetMeOutputDTO>> {
+  ): Promise<Response> {
     const userId = request.user.id;
     const result = await this.getMeUseCase.execute(userId);
 
-    const httpResponse: IGetMeOutputDTO = {
+    const httpResponse = {
       id: result.user.id,
       name: result.user.name,
       email: result.user.email,
@@ -47,7 +47,7 @@ export class AuthController {
   async signup(
     request: Request,
     response: Response,
-  ): Promise<Response<string>> {
+  ): Promise<Response> {
     await this.signupUseCase.execute(request.body);
     return response
       .status(200)
@@ -59,7 +59,7 @@ export class AuthController {
   async resendVerification(
     request: Request,
     response: Response,
-  ): Promise<Response<string>> {
+  ): Promise<Response> {
     await this.resendVerificationUseCase.execute(request.body);
     return response
       .status(200)
@@ -71,7 +71,7 @@ export class AuthController {
   async verifyEmail(
     request: Request,
     response: Response,
-  ): Promise<Response<string>> {
+  ): Promise<Response> {
     await this.verifyEmailUseCase.execute(request.body);
     return response
       .status(200)
@@ -81,7 +81,7 @@ export class AuthController {
   async forgotPassword(
     request: Request,
     response: Response,
-  ): Promise<Response<string>> {
+  ): Promise<Response> {
     await this.forgotPasswordUseCase.execute(request.body);
     return response
       .status(200)
@@ -93,7 +93,7 @@ export class AuthController {
   async resetPassword(
     request: Request,
     response: Response,
-  ): Promise<Response<string>> {
+  ): Promise<Response> {
     await this.resetPasswordUseCase.execute(request.body);
     return response.status(200).json("Password reset successfully.");
   }
@@ -101,7 +101,7 @@ export class AuthController {
   async login(
     request: Request,
     response: Response,
-  ): Promise<Response<ILoginOutputDTO>> {
+  ): Promise<Response> {
     const { user, accessToken, refreshToken } = await this.loginUseCase.execute(
       request.body,
     );
@@ -120,7 +120,7 @@ export class AuthController {
       maxAge: env.jwtAccessExpiresInMs,
     });
 
-    const httpResponse: ILoginOutputDTO = {
+    const httpResponse = {
       id: user.id,
     };
 

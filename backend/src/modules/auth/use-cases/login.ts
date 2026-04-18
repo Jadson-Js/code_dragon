@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { ILoginInputDTO } from "../auth.dto";
+import type { ILoginInputDTO } from "../auth.schema";
 import { NotFoundError, UnauthorizedError } from "@/shared/app.error";
 import type { User } from "@/entities/user.entity";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IResetPasswordInputDTO } from "../auth.dto";
+import type { IResetPasswordInputDTO } from "../auth.schema";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { IResendVerificationInputDTO } from "../auth.dto";
+import type { IResendVerificationInputDTO } from "../auth.schema";
 import { Token } from "@/entities/token.entity";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";

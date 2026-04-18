@@ -1,6 +1,5 @@
 import { inject, injectable } from "tsyringe";
 import { QuizOptionsPrismaRepository } from "@/infra/database/prisma/quiz/options/quiz-options.prisma.repository";
-import type { IGetQuizOptionsOutputDTO } from "../quiz-options.dto";
 
 @injectable()
 export class GetQuizOptionsUseCase {
@@ -8,7 +7,7 @@ export class GetQuizOptionsUseCase {
     private readonly getQuizOptionsRepository: QuizOptionsPrismaRepository,
   ) {}
 
-  async execute(): Promise<IGetQuizOptionsOutputDTO> {
+  async execute() {
     const rawData = await this.getQuizOptionsRepository.execute();
 
     // Mapping raw domain entities to DTO (only id and name as requested)

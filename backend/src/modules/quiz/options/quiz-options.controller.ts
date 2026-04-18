@@ -9,10 +9,7 @@ export class QuizOptionsController {
     private readonly getQuizOptionsUseCase: GetQuizOptionsUseCase,
   ) {}
 
-  async handle(
-    _request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async handle(_request: Request, response: Response): Promise<Response> {
     const result = await this.getQuizOptionsUseCase.execute();
     return response.status(200).json(result);
   }
