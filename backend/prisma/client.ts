@@ -6,7 +6,6 @@ import { Token } from "@/entities/token.entity";
 import { Profile } from "@/entities/profile.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
 
-import { Session } from "@/entities/session.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -38,7 +37,6 @@ export const prisma = prismaClient.$extends({
     user: toDomainExtension(User, Prisma.UserScalarFieldEnum),
     token: toDomainExtension(Token, Prisma.TokenScalarFieldEnum),
     profile: toDomainExtension(Profile, Prisma.ProfileScalarFieldEnum),
-    session: toDomainExtension(Session, Prisma.SessionScalarFieldEnum),
 
     sessionQuiz: toDomainExtension(
       SessionQuiz,

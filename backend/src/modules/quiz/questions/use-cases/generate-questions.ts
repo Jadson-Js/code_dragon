@@ -13,7 +13,6 @@ import { Profile } from "@/entities/profile.entity";
 import { UpdateProfileWithStacksPrismaRepository } from "@/infra/database/prisma/profile/update-profile-with-stacks.repository";
 import { FeaturePrismaRepository } from "@/infra/database/prisma/feature.prisma.repository";
 import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
-import { Session } from "@/entities/session.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
 import type { Prisma } from "generated/prisma/client";
 
@@ -50,6 +49,7 @@ export class QuizQuestionGenerateUseCase {
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
     const context = await this.getQuizContextRepository.execute(data);
+
     const geminiInput = mapContextToGeminiInput(
       context,
       quantityPerBatch,
@@ -110,13 +110,10 @@ export class QuizQuestionGenerateUseCase {
     if (!feature || !feature.id)
       throw new Error("Quiz feature not found in the database");
 
-    const session = Session.create({
-      userId: data.userId,
-      featureId: feature.id,
-    });
+    const sessionId = crypto.randomUUID();
 
     const sessionQuiz = SessionQuiz.create({
-      sessionId: session.id as string,
+      sessionId: sessionId,
       userId: data.userId,
       seniorityId: data.seniorityId,
       specialtyId: data.specialtyId,
@@ -126,7 +123,11 @@ export class QuizQuestionGenerateUseCase {
 
     const { sessionQuiz: sessionQuizCreated } =
       await this.createSessionWithQuizRepository.execute({
-        session,
+        session: {
+          id: sessionId,
+          userId: data.userId,
+          featureId: feature.id,
+        },
         sessionQuiz,
         stacksId: data.stacksId,
         ...(data.quizSubjectsId ? { quizSubjectsId: data.quizSubjectsId } : {}),

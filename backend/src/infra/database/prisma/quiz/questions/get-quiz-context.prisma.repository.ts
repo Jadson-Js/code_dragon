@@ -11,7 +11,7 @@ import type {
 
 export interface IGetQuizQuestionContextInput {
   quizObjectiveId: number;
-  quizSubjectsId?: number[];
+  quizSubjectsId?: number[] | undefined;
   seniorityId: number;
   specialtyId: number;
   stacksId: number[];

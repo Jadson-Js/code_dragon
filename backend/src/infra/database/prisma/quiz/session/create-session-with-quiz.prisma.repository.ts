@@ -1,10 +1,13 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../../../../../../prisma/client";
-import type { Session } from "@/entities/session.entity";
 import type { SessionQuiz } from "@/entities/session-quiz.entity";
 
 export interface ICreateSessionWithQuizInput {
-  session: Session;
+  session: {
+    id?: string;
+    userId: string;
+    featureId: number;
+  };
   sessionQuiz: SessionQuiz;
   stacksId: number[];
   quizSubjectsId?: number[];
@@ -14,8 +17,6 @@ export interface ICreateSessionWithQuizOutput {
   sessionQuiz: SessionQuiz;
 }
 
-
-
 @injectable()
 export class CreateSessionWithQuizPrismaRepository {
   async execute(
@@ -24,7 +25,7 @@ export class CreateSessionWithQuizPrismaRepository {
     return await prisma.$transaction(async (tx) => {
       const createdSession = await tx.session.create({
         data: {
-          id: data.session.id,
+          ...(data.session.id ? { id: data.session.id } : {}),
           userId: data.session.userId,
           featureId: data.session.featureId,
         },
