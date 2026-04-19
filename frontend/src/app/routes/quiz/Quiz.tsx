@@ -39,7 +39,9 @@ export default function Quiz() {
     if (quiz_session_id === "generating") {
       // Prefer state passed via navigate(), fall back to localStorage (user
       // returned to /generating from another page).
-      let formData = state?.formData as QuizQuestionsGenerateFormData | undefined;
+      let formData = state?.formData as
+        | QuizQuestionsGenerateFormData
+        | undefined;
       if (!formData) {
         const session = getSession();
         if (session?.status === "generating") {
@@ -51,7 +53,7 @@ export default function Quiz() {
         mutation.mutate(formData);
       }
     }
-    // REMOVED: clearSession() here was stopping the session persistence 
+    // REMOVED: clearSession() here was stopping the session persistence
     // as soon as the quiz started.
   }, [quiz_session_id, state, mutation, getSession]);
 
@@ -78,6 +80,11 @@ export default function Quiz() {
   const isOnLastLoadedQuestion = currentQuestionIndex >= questions.length - 1;
   const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
 
+  const handleExit = () => {
+    clearSession();
+    navigate("/");
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-3xl mx-auto py-8 lg:py-12">
@@ -86,6 +93,7 @@ export default function Quiz() {
           currentQuestion={currentQuestionIndex + 1}
           totalQuestions={questions.length}
           isFinished={isFinished}
+          onExit={handleExit}
         />
 
         {/* Question Area */}

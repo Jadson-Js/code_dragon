@@ -16,7 +16,11 @@ import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas
 const STORAGE_KEY = "@code_dragon:active_quiz_session";
 
 export type QuizSessionState =
-  | { status: "generating"; route: string; formData: QuizQuestionsGenerateFormData }
+  | {
+      status: "generating";
+      route: string;
+      formData: QuizQuestionsGenerateFormData;
+    }
   | { status: "active"; route: string };
 
 export function useQuizSession() {

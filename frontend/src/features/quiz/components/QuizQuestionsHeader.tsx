@@ -4,12 +4,14 @@ interface Props {
   currentQuestion: number;
   totalQuestions: number;
   isFinished: boolean;
+  onExit: () => void;
 }
 
 export default function QuizQuestionsHeader({
   currentQuestion,
   totalQuestions,
   isFinished,
+  onExit,
 }: Props) {
   const progress = isFinished
     ? (currentQuestion / totalQuestions) * 100
@@ -18,7 +20,10 @@ export default function QuizQuestionsHeader({
   return (
     <header className="mb-12">
       <div className="flex items-center justify-between mb-4">
-        <button className="flex items-center gap-2 text-white-2 hover:text-white-1 transition-colors group">
+        <button
+          onClick={onExit}
+          className="flex items-center gap-2 text-white-2 hover:text-white-1 transition-colors group cursor-pointer"
+        >
           <X size="18" />
           <span className="text-sm font-medium">Sair do Quiz</span>
         </button>

@@ -34,7 +34,7 @@ export function useQuizQuestionsGenerate() {
       setGenerating(data);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return {
-        data: { sessionQuizId: "4fd2b5f9-b8c9-4bb4-8700-de997116b58c" },
+        data: { sessionQuizId: "702b9ce6-fc43-4791-be94-9498de081a30" },
       };
     },
     // mutationFn: async (data: QuizQuestionsGenerateFormData) => {
