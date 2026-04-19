@@ -12,6 +12,7 @@ import { useGetQuizOptions } from "@/features/dashboard/hooks/useGetQuizOptions"
 import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader";
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
 import { useQuizSession } from "@/features/quiz/hooks/useQuizSession";
+import QuizExitModal from "@/features/quiz/components/QuizExitModal";
 
 export default function Quiz() {
   const { quiz_session_id } = useParams();
@@ -23,6 +24,7 @@ export default function Quiz() {
   const [selectedAlternatives, setSelectedAlternatives] = useState<
     Record<number, number>
   >({});
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
   const { questions, isLoading, isFinished } =
     useQuizQuestionsStream(quiz_session_id);
@@ -81,6 +83,10 @@ export default function Quiz() {
   const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
 
   const handleExit = () => {
+    setIsExitModalOpen(true);
+  };
+
+  const confirmExit = () => {
     clearSession();
     navigate("/");
   };
@@ -174,6 +180,12 @@ export default function Quiz() {
             )}
           </Button>
         </div>
+
+        <QuizExitModal
+          open={isExitModalOpen}
+          onOpenChange={setIsExitModalOpen}
+          onConfirm={confirmExit}
+        />
       </div>
     </DashboardLayout>
   );
