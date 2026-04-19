@@ -17,10 +17,13 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
     @inject("IGeminiProvider")
     private readonly geminiProvider: IGeminiProvider,
 
+    @inject(QuizQuestionPrismaRepository)
     private readonly quizQuestionRepository: QuizQuestionPrismaRepository,
 
+    @inject(QuizQuestionEventEmitter)
     private readonly quizQuestionEventEmitter: QuizQuestionEventEmitter,
 
+    @inject(SessionQuizPrismaRepository)
     private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
