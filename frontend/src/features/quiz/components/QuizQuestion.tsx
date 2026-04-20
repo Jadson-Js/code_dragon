@@ -58,7 +58,7 @@ export default function QuizQuestion({
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="text-white-2 hover:text-white-1 transition-all p-2 rounded-lg hover:bg-bg-3 flex items-center gap-2 active:scale-95"
+                className="text-white-2 hover:text-white-1 transition-all p-2 rounded-lg hover:bg-bg-3 flex items-center gap-2 active:scale-95 cursor-pointer"
                 title="Copiar código"
               >
                 {copied ? (
