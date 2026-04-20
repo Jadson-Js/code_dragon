@@ -39,7 +39,6 @@ export function useQuizQuestionsStream(quizSessionId: string | undefined) {
     eventSource.addEventListener("finished", (event: any) => {
       try {
         const data = JSON.parse(event.data);
-        console.log("Stream finished:", data);
         setIsFinished(true);
         setIsLoading(false);
         eventSource.close();

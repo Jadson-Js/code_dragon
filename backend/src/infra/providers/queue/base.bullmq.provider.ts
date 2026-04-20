@@ -43,8 +43,6 @@ export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
     worker.on("error", (err) => {
       console.error(`❌ Worker [${this.queueName}] error:`, err);
     });
-
-    console.log(`👷 Worker [${this.queueName}] started`);
   }
 
   public async addJob(data: T): Promise<void> {
