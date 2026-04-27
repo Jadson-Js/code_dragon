@@ -1,5 +1,12 @@
 import "reflect-metadata";
-import { beforeAll, beforeEach, describe, expect, it, jest } from "@jest/globals";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
 
 const bcryptMock = {
   hash: jest.fn<(payload: string, rounds: number) => Promise<string>>(),

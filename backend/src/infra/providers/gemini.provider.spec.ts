@@ -164,4 +164,56 @@ describe("GeminiProvider", () => {
       expect(generateContentMock).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("generateQuizInsights", () => {
+    const mockInsightsInput = {
+      score: 85,
+      subjects: [{ name: "JS", correctAnswers: 10, wrongAnswers: 2 }],
+      stacks: [{ name: "Node", correctAnswers: 5, wrongAnswers: 1 }],
+      wrongQuestions: ["Question 1"],
+    };
+
+    it("should generate and parse insights correctly", async () => {
+      const provider = new GeminiProvider();
+      const mockResponse = {
+        insights: {
+          title: "Good Job",
+          description: "Keep it up",
+          strongPoints: ["Strong"],
+          weakPoints: ["Weak"],
+        },
+        roadmap: [
+          { title: "Study TS", description: "Why", priority: "HIGH" },
+        ],
+      };
+
+      generateContentMock.mockResolvedValue({
+        text: JSON.stringify(mockResponse),
+      });
+
+      const result = await provider.generateQuizInsights(mockInsightsInput);
+
+      expect(generateContentMock).toHaveBeenCalled();
+      expect(result.insights.title).toBe("Good Job");
+      expect(result.roadmap[0].priority).toBe("HIGH");
+    });
+
+    it("should throw InternalServerError if Gemini returns empty text", async () => {
+      const provider = new GeminiProvider();
+      generateContentMock.mockResolvedValue({ text: "" });
+
+      await expect(
+        provider.generateQuizInsights(mockInsightsInput),
+      ).rejects.toThrow("Failed to generate quiz insights");
+    });
+
+    it("should throw InternalServerError if JSON parsing fails", async () => {
+      const provider = new GeminiProvider();
+      generateContentMock.mockResolvedValue({ text: "invalid json" });
+
+      await expect(
+        provider.generateQuizInsights(mockInsightsInput),
+      ).rejects.toThrow("Invalid response format from AI");
+    });
+  });
 });

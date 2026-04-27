@@ -101,7 +101,7 @@ describe("QuizQuestionPrismaRepository", () => {
     const result = await repository.findBySessionQuizId(sessionQuizId);
 
     expect(result).toHaveLength(2);
-    expect(result[0].id).toBe(1);
+    expect(result[0]!.id).toBe(1);
     expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
       where: { sessionQuizId },
     });
@@ -118,6 +118,35 @@ describe("QuizQuestionPrismaRepository", () => {
     expect(result).toBe(5);
     expect(prismaMockData.quizQuestion.count).toHaveBeenCalledWith({
       where: { sessionQuizId },
+    });
+  });
+
+  it("should find questions by multiple ids", async () => {
+    const repository = new QuizQuestionPrismaRepository();
+    const ids = [1, 2, 3];
+
+    prismaMockData.quizQuestion.findMany.mockResolvedValue([
+      makeRaw(1),
+      makeRaw(2),
+      makeRaw(3),
+    ]);
+
+    const result = await repository.findManyByIds(ids);
+
+    expect(result).toHaveLength(3);
+    expect(result[0]!.id).toBe(1);
+    expect(result[1]!.id).toBe(2);
+    expect(result[2]!.id).toBe(3);
+    expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      include: {
+        stack: true,
+        subject: true,
+      },
     });
   });
 });

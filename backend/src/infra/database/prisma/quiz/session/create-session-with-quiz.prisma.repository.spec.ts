@@ -18,10 +18,10 @@ const prismaMock = {
   sessionQuiz: {
     create: jest.fn<any>(),
   },
-  quizSessionStack: {
+  sessionQuizStack: {
     createMany: jest.fn<any>(),
   },
-  quizSessionSubjects: {
+  sessionQuizSubject: {
     createMany: jest.fn<any>(),
   },
 };
@@ -88,8 +88,8 @@ describe("CreateSessionWithQuizPrismaRepository", () => {
       },
     });
     expect(prismaMock.sessionQuiz.create).toHaveBeenCalled();
-    expect(prismaMock.quizSessionStack.createMany).toHaveBeenCalled();
-    expect(prismaMock.quizSessionSubjects.createMany).toHaveBeenCalled();
+    expect(prismaMock.sessionQuizStack.createMany).toHaveBeenCalled();
+    expect(prismaMock.sessionQuizSubject.createMany).toHaveBeenCalled();
     expect(result.sessionQuiz).toBeInstanceOf(SessionQuiz);
   });
 });

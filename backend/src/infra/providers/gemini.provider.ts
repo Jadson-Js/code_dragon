@@ -23,10 +23,46 @@ export interface IGenerateQuizQuestionOutput {
   subjectId: number | null;
 }
 
+export interface IGenerateQuizInsightsInput {
+  score: number;
+  subjects: {
+    name: string;
+    correctAnswers: number;
+    wrongAnswers: number;
+    totalAnswers: number;
+    score: number;
+  }[];
+  stacks: {
+    name: string;
+    correctAnswers: number;
+    wrongAnswers: number;
+    totalAnswers: number;
+    score: number;
+  }[];
+  wrongQuestions: string[];
+}
+
+export interface IGenerateQuizInsightsOutput {
+  insights: {
+    title: string;
+    description: string;
+    strongPoints: string[];
+    weakPoints: string[];
+  };
+  roadmap: {
+    title: string;
+    description: string;
+    priority: "HIGH" | "MEDIUM" | "LOW";
+  }[];
+}
+
 export interface IGeminiProvider {
   generateQuizQuestion(
     data: IGenerateQuizQuestionInput,
   ): Promise<IGenerateQuizQuestionOutput[]>;
+  generateQuizInsights(
+    data: IGenerateQuizInsightsInput,
+  ): Promise<IGenerateQuizInsightsOutput>;
 }
 
 const ai = new GoogleGenAI({
@@ -187,6 +223,98 @@ LEMBRE-SE:
       });
     } catch {
       throw new InternalServerError();
+    }
+  }
+
+  async generateQuizInsights(
+    data: IGenerateQuizInsightsInput,
+  ): Promise<IGenerateQuizInsightsOutput> {
+    const subjectsList = data.subjects
+      .map(
+        (s) =>
+          `- ${s.name}: ${s.score}% (${s.correctAnswers}/${s.totalAnswers} acertos, ${s.wrongAnswers} erros)`,
+      )
+      .join("\n");
+
+    const stacksList = data.stacks
+      .map(
+        (s) =>
+          `- ${s.name}: ${s.score}% (${s.correctAnswers}/${s.totalAnswers} acertos, ${s.wrongAnswers} erros)`,
+      )
+      .join("\n");
+
+    const wrongQuestionsList =
+      data.wrongQuestions.length > 0
+        ? data.wrongQuestions.map((q: string) => `- ${q}`).join("\n")
+        : "Nenhuma questão errada";
+
+    const prompt = `
+Você é um Coach de Carreira Tech de alto nível e Especialista em Engenharia de Software.
+Sua missão é realizar uma análise diagnóstica profunda sobre o desempenho de um desenvolvedor em um quiz técnico e traçar um plano de ação (roadmap) de elite para sua evolução profissional.
+
+=== DADOS DE DESEMPENHO ===
+- Score Geral: ${data.score}%
+
+- Desempenho por Tópicos (Subjects):
+${subjectsList}
+
+- Desempenho por Tecnologias (Stacks):
+${stacksList}
+
+- Tópicos com falhas (Questões Erradas):
+${wrongQuestionsList}
+
+=== DIRETRIZES PARA A ANÁLISE (INSIGHTS) ===
+1. TITLE: Crie um título profissional, curto e impactante que resuma o perfil atual do desenvolvedor.
+2. DESCRIPTION: Forneça uma síntese narrativa encorajadora. Não apenas repita os números; explique o que eles dizem sobre a maturidade técnica, consistência e prontidão para o mercado.
+3. STRONG POINTS: Liste áreas onde o candidato demonstrou domínio sólido.
+4. WEAK POINTS: Identifique lacunas críticas ou áreas de oportunidade. Priorize conceitos fundamentais que sustentam o crescimento.
+
+=== DIRETRIZES PARA O ROADMAP (PLANO DE ESTUDOS) ===
+Crie uma sequência lógica de passos práticos.
+- TITLE: O que estudar ou praticar.
+- DESCRIPTION: Por que isso é importante agora e qual o impacto esperado na carreira.
+- PRIORITY:
+  - HIGH: Conceitos "core" com baixo desempenho ou stacks fundamentais para o perfil.
+  - MEDIUM: Evolução em tópicos onde já existe base, mas falta profundidade.
+  - LOW: Tópicos avançados, novas tendências ou refinamentos estéticos/organizacionais.
+
+=== FORMATO DE SAÍDA (STRICT JSON) ===
+Retorne APENAS o objeto JSON. NÃO use blocos de Markdown (\`\`\`json). NÃO adicione explicações extras.
+
+Estrutura:
+{
+  "insights": {
+    "title": "string",
+    "description": "string",
+    "strongPoints": ["string"],
+    "weakPoints": ["string"]
+  },
+  "roadmap": [
+    {
+      "title": "string",
+      "description": "string",
+      "priority": "HIGH" | "MEDIUM" | "LOW"
+    }
+  ]
+}
+`.trim();
+
+    const response = await this.withRetry(() =>
+      ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+      }),
+    );
+
+    const raw = response.text?.trim();
+    if (!raw) throw new InternalServerError("Failed to generate quiz insights");
+
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed as IGenerateQuizInsightsOutput;
+    } catch {
+      throw new InternalServerError("Invalid response format from AI");
     }
   }
 }

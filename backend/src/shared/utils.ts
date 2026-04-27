@@ -36,3 +36,13 @@ export function stringToDate(date: string): Date {
 export function generateHash(payload: string): string {
   return createHash("sha256").update(payload).digest("hex");
 }
+
+export function calculatePercentage(value: number, total: number): number {
+  if (total === 0) return 0;
+  return Math.round((value / total) * 100);
+}
+
+export function calcAverage(scores: { score: number }[]): number {
+  if (scores.length === 0) return 0;
+  return scores.reduce((sum, r) => sum + r.score, 0) / scores.length;
+}

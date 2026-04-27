@@ -26,6 +26,12 @@ enum SessionQuizStatus {
   FAILED
 }
 
+enum SessionQuizRoadmapPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
 model User {
   id           String    @id @default(uuid())
   name         String
@@ -163,7 +169,8 @@ model Stack {
   updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
   profileStacks     ProfileStack[]
-  quizSessionStacks QuizSessionStack[]
+  sessionQuizStacks SessionQuizStack[]
+  quizQuestions     QuizQuestion[]
 
   @@map("stacks")
 }
@@ -190,7 +197,8 @@ model QuizSubject {
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   specialties         QuizSpecialtySubject[]
-  quizSessionSubjects QuizSessionSubjects[]
+  sessionQuizSubjects SessionQuizSubject[]
+  quizQuestions       QuizQuestion[]
 
   @@map("quiz_subjects")
 }
@@ -226,6 +234,8 @@ model QuizQuestion {
   updatedAt               DateTime @default(now()) @updatedAt @map("updated_at")
 
   sessionQuiz SessionQuiz? @relation(fields: [sessionQuizId], references: [id])
+  stack       Stack?       @relation(fields: [stackId], references: [id])
+  subject     QuizSubject? @relation(fields: [subjectId], references: [id])
 
   @@map("quiz_questions")
 }
@@ -252,27 +262,30 @@ model SessionQuiz {
   specialtyId       Int               @map("specialty_id")
   quizObjectiveId   Int               @map("quiz_objective_id")
   quantityQuestions Int               @map("quantity_questions")
-  score             Int               @default(0)
   createdAt         DateTime          @default(now()) @map("created_at")
   updatedAt         DateTime          @default(now()) @updatedAt @map("updated_at")
   status            SessionQuizStatus @default(GENERATING)
 
-  session       Session               @relation(fields: [sessionId], references: [id])
-  user          User                  @relation(fields: [userId], references: [id])
-  seniority     Seniority             @relation(fields: [seniorityId], references: [id])
-  specialty     Specialty             @relation(fields: [specialtyId], references: [id])
-  quizObjective QuizObjective         @relation(fields: [quizObjectiveId], references: [id])
+  session       Session              @relation(fields: [sessionId], references: [id])
+  user          User                 @relation(fields: [userId], references: [id])
+  seniority     Seniority            @relation(fields: [seniorityId], references: [id])
+  specialty     Specialty            @relation(fields: [specialtyId], references: [id])
+  quizObjective QuizObjective        @relation(fields: [quizObjectiveId], references: [id])
   questions     QuizQuestion[]
-  stacks        QuizSessionStack[]
-  subjects      QuizSessionSubjects[]
+  stacks        SessionQuizStack[]
+  subjects      SessionQuizSubject[]
+  result        SessionQuizResult?
+  roadmaps      SessionQuizRoadmap[]
 
   @@map("session_quizzes")
 }
 
-model QuizSessionStack {
-  id            Int      @id @default(autoincrement())
+model SessionQuizStack {
+  id            String   @id @default(uuid())
   quizSessionId String   @map("quiz_session_id")
   stackId       Int      @map("stack_id")
+  score         Int?
+  averageScore  Int?     @map("average_score")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -280,13 +293,15 @@ model QuizSessionStack {
   stack       Stack       @relation(fields: [stackId], references: [id])
 
   @@unique([quizSessionId, stackId])
-  @@map("quiz_session_stacks")
+  @@map("session_quiz_stacks")
 }
 
-model QuizSessionSubjects {
+model SessionQuizSubject {
   id            String   @id @default(uuid())
   quizSessionId String   @map("quiz_session_id")
   subjectId     Int      @map("subject_id")
+  score         Int?
+  averageScore  Int?     @map("average_score")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -294,7 +309,43 @@ model QuizSessionSubjects {
   subject     QuizSubject @relation(fields: [subjectId], references: [id])
 
   @@unique([quizSessionId, subjectId])
-  @@map("quiz_session_subjects")
+  @@map("session_quiz_subjects")
+}
+
+model SessionQuizResult {
+  id             String   @id @default(uuid())
+  quizSessionId  String   @unique @map("quiz_session_id")
+  score          Int
+  averageScore   Int      @map("average_score")
+  title          String
+  description    String
+  strongPoints   String[] @map("strong_points")
+  weakPoints     String[] @map("weak_points")
+  correctAnswers Int      @map("correct_answers")
+  wrongAnswers   Int      @map("wrong_answers")
+  ignoredAnswers Int      @map("ignored_answers")
+  ranking        Int
+  percentile     Int      @map("percentile")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sessionQuiz SessionQuiz @relation(fields: [quizSessionId], references: [id])
+
+  @@map("session_quiz_results")
+}
+
+model SessionQuizRoadmap {
+  id            String                     @id @default(uuid())
+  quizSessionId String                     @map("quiz_session_id")
+  title         String
+  description   String
+  priority      SessionQuizRoadmapPriority
+  createdAt     DateTime                   @default(now()) @map("created_at")
+  updatedAt     DateTime                   @default(now()) @updatedAt @map("updated_at")
+
+  sessionQuiz SessionQuiz @relation(fields: [quizSessionId], references: [id])
+
+  @@map("session_quiz_roadmaps")
 }
 
 model Feature {

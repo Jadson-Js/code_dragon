@@ -43,12 +43,12 @@ export class UpdateProfileWithStacksPrismaRepository {
           },
           data: {
             usageCount: {
-              increment: 1, // Changed to increment since we're adding them (previous turn had decrement which seemed wrong for registration)
+              increment: 1,
             },
           },
         });
 
-        return profile.toDomain;
+        return (profile as any).toDomain;
       } catch (error) {
         if ((error as { code?: string }).code === "P2025") {
           throw new NotFoundError("Profile not found");

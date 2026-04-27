@@ -1,6 +1,7 @@
 import type { Prisma, QuizQuestion } from "generated/prisma/client";
 import { prisma } from "../../../../prisma/client";
 import { injectable } from "tsyringe";
+import type { QuizSubject, Stack } from "generated/prisma/browser";
 
 @injectable()
 export class QuizQuestionPrismaRepository {
@@ -34,5 +35,26 @@ export class QuizQuestionPrismaRepository {
     return await prisma.quizQuestion.count({
       where: { sessionQuizId },
     });
+  }
+
+  async findManyByIds(
+    ids: number[],
+  ): Promise<(QuizQuestion & { stack: Stack; subject: QuizSubject })[]> {
+    const questions = await prisma.quizQuestion.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      include: {
+        stack: true,
+        subject: true,
+      },
+    });
+
+    return questions as (QuizQuestion & {
+      stack: Stack;
+      subject: QuizSubject;
+    })[];
   }
 }

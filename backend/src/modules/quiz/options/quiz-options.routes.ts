@@ -10,4 +10,4 @@ router.get(
   quizOptionsController.handle.bind(quizOptionsController),
 );
 
-export { router as quizOptionsRoutes };
+export default router;

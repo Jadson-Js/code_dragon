@@ -40,12 +40,11 @@ export class CreateSessionWithQuizPrismaRepository {
           specialtyId: data.sessionQuiz.specialtyId,
           quizObjectiveId: data.sessionQuiz.quizObjectiveId,
           quantityQuestions: data.sessionQuiz.quantityQuestions,
-          score: data.sessionQuiz.score,
           status: data.sessionQuiz.status,
         },
       });
 
-      await tx.quizSessionStack.createMany({
+      await tx.sessionQuizStack.createMany({
         data: data.stacksId.map((stackId) => ({
           quizSessionId: createdSessionQuiz.id,
           stackId,
@@ -53,7 +52,7 @@ export class CreateSessionWithQuizPrismaRepository {
       });
 
       if (data.quizSubjectsId && data.quizSubjectsId.length > 0) {
-        await tx.quizSessionSubjects.createMany({
+        await tx.sessionQuizSubject.createMany({
           data: data.quizSubjectsId.map((subjectId) => ({
             quizSessionId: createdSessionQuiz.id,
             subjectId,
