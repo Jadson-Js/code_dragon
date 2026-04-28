@@ -7,6 +7,8 @@ import {
   formatMs,
   stringToDate,
   generateHash,
+  calculatePercentage,
+  calcAverage,
 } from "./utils";
 
 describe("utils", () => {
@@ -87,6 +89,31 @@ describe("utils", () => {
 
     it("should produce different hashes for different inputs", () => {
       expect(generateHash("foo")).not.toBe(generateHash("bar"));
+    });
+  });
+  describe("calculatePercentage", () => {
+    it("should calculate percentage correctly", () => {
+      expect(calculatePercentage(50, 200)).toBe(25);
+      expect(calculatePercentage(1, 3)).toBe(33);
+    });
+
+    it("should return 0 when total is 0", () => {
+      expect(calculatePercentage(10, 0)).toBe(0);
+    });
+  });
+
+  describe("calcAverage", () => {
+    it("should calculate average of scores", () => {
+      const scores = [{ score: 10 }, { score: 20 }, { score: 30 }];
+      expect(calcAverage(scores)).toBe(20);
+    });
+
+    it("should return 0 for empty array", () => {
+      expect(calcAverage([])).toBe(0);
+    });
+
+    it("should handle single score", () => {
+      expect(calcAverage([{ score: 100 }])).toBe(100);
     });
   });
 });
