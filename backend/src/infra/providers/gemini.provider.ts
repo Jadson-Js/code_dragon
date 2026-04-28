@@ -108,6 +108,23 @@ export class GeminiProvider implements IGeminiProvider {
   async generateQuizQuestion(
     data: IGenerateQuizQuestionInput,
   ): Promise<IGenerateQuizQuestionOutput[]> {
+    if (env.mockAi) {
+      console.log("🤖 [MOCK] Generating questions...");
+      return Array.from({ length: data.quantityPerBatch }).map((_, i) => ({
+        statement: `Esta é uma questão mockada número ${i + 1} sobre ${data.quizObjective.name}.`,
+        alternatives: [
+          "Alternativa correta (Mock)",
+          "Alternativa incorreta A",
+          "Alternativa incorreta B",
+          "Alternativa incorreta C",
+        ],
+        correctAlternativeIndex: 0,
+        code: "console.log('Hello Code Dragon!');",
+        stackId: data.stacks[0]?.id ?? null,
+        subjectId: data.quizSubjects?.[0]?.id ?? null,
+      }));
+    }
+
     const stacksList = data.stacks
       .map((s) => `  - id: ${s.id}, nome: "${s.name}"`)
       .join("\n");
@@ -229,6 +246,31 @@ LEMBRE-SE:
   async generateQuizInsights(
     data: IGenerateQuizInsightsInput,
   ): Promise<IGenerateQuizInsightsOutput> {
+    if (env.mockAi) {
+      console.log("🤖 [MOCK] Generating insights...");
+      return {
+        insights: {
+          title: "Desempenho Mockado",
+          description:
+            "Esta é uma análise simulada para fins de teste. Seu desempenho foi analisado com sucesso.",
+          strongPoints: ["Lógica de programação", "Conhecimento de sintaxe"],
+          weakPoints: ["Arquitetura de sistemas", "Testes unitários"],
+        },
+        roadmap: [
+          {
+            title: "Estudar Padrões de Projeto",
+            description: "Melhore a organização do seu código.",
+            priority: "HIGH",
+          },
+          {
+            title: "Praticar algoritmos",
+            description: "Aumente sua velocidade de resolução de problemas.",
+            priority: "MEDIUM",
+          },
+        ],
+      };
+    }
+
     const subjectsList = data.subjects
       .map(
         (s) =>

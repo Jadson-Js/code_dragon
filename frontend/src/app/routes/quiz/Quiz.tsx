@@ -26,7 +26,7 @@ export default function Quiz() {
   >({});
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
-  const { questions, isLoading, isFinished } =
+  const { questions, isLoading, isFinished, error } =
     useQuizQuestionsStream(quiz_session_id);
   const { data: quizOptions } = useGetQuizOptions();
 
@@ -79,6 +79,30 @@ export default function Quiz() {
     );
   }
 
+  if (error && questions.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4 py-10 px-6 bg-bg-2/50 rounded-2xl border border-bg-3/50">
+            <span className="text-white-1 text-lg font-medium text-center">
+              Esta sessao de quiz nao existe mais ou ficou indisponivel.
+            </span>
+            <span className="text-white-2 text-sm text-center">{error}</span>
+            <Button
+              onClick={() => {
+                clearSession();
+                navigate("/");
+              }}
+              variant="default"
+            >
+              Voltar ao Dashboard
+            </Button>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const isOnLastLoadedQuestion = currentQuestionIndex >= questions.length - 1;
   const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
 
@@ -125,7 +149,10 @@ export default function Quiz() {
                 Nenhuma questão disponível no momento.
               </span>
               <Button
-                onClick={() => navigate("/dashboard")}
+                onClick={() => {
+                  clearSession();
+                  navigate("/");
+                }}
                 variant="ghost"
                 className="border border-bg-3"
               >
@@ -159,7 +186,7 @@ export default function Quiz() {
               } else if (isFinished) {
                 // Handle finish quiz
                 clearSession();
-                navigate("/dashboard");
+                navigate("/");
               }
             }}
             disabled={

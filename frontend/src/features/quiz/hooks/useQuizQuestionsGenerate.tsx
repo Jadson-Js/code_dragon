@@ -29,21 +29,12 @@ export function useQuizQuestionsGenerate() {
 
   const mutation = useMutation({
     mutationFn: async (data: QuizQuestionsGenerateFormData) => {
-      // Persist "generating" state right before the API call so the dashboard
-      // knows a quiz is in progress even if the user navigates away.
       setGenerating(data);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      return {
-        data: { sessionQuizId: "702b9ce6-fc43-4791-be94-9498de081a30" },
-      };
+      return api.post<{ sessionQuizId: string }>(
+        "/quiz/questions/generate",
+        data,
+      );
     },
-    // mutationFn: async (data: QuizQuestionsGenerateFormData) => {
-    //   setGenerating(data);
-    //   return api.post<{ sessionQuizId: string }>(
-    //     "/quiz/questions/generate",
-    //     data,
-    //   );
-    // },
     onSuccess: (data, variables) => {
       if (variables.saveInProfile) {
         localStorage.setItem(

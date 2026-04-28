@@ -36,15 +36,12 @@ export function useQuizQuestionsStream(quizSessionId: string | undefined) {
       }
     };
 
-    eventSource.addEventListener("finished", (event: any) => {
-      try {
-        const data = JSON.parse(event.data);
-        setIsFinished(true);
-        setIsLoading(false);
-        eventSource.close();
-      } catch (err) {
-        console.error("Error parsing finished event:", err);
-      }
+    eventSource.addEventListener("finished", () => {
+      // Some backends send an empty payload for custom SSE events.
+      // Finishing the stream must not depend on parsing event.data.
+      setIsFinished(true);
+      setIsLoading(false);
+      eventSource.close();
     });
 
     eventSource.onerror = (err) => {

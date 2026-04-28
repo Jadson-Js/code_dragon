@@ -31,4 +31,5 @@ export const env = {
   redisPort: Number(process.env.REDIS_PORT) || 6379,
 
   geminiApiKey: process.env.GEMINI_API_KEY || "",
+  mockAi: process.env.MOCK_AI === "true" ? true : false,
 };
