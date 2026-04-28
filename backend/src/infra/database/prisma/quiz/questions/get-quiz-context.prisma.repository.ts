@@ -25,8 +25,6 @@ export interface IGetQuizQuestionContextOutput {
   stacks: Stack[];
 }
 
-
-
 @injectable()
 export class GetQuizContextPrismaRepository {
   async execute(

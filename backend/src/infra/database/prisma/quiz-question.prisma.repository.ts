@@ -10,7 +10,7 @@ export class QuizQuestionPrismaRepository {
       data,
     });
 
-    return response as unknown as QuizQuestion;
+    return response as QuizQuestion;
   }
 
   async createMany(
@@ -20,7 +20,7 @@ export class QuizQuestionPrismaRepository {
       data,
     });
 
-    return response as unknown as QuizQuestion[];
+    return response as QuizQuestion[];
   }
 
   async findBySessionQuizId(sessionQuizId: string): Promise<QuizQuestion[]> {
@@ -28,7 +28,7 @@ export class QuizQuestionPrismaRepository {
       where: { sessionQuizId },
     });
 
-    return questions as unknown as QuizQuestion[];
+    return questions as QuizQuestion[];
   }
 
   async countBySessionQuizId(sessionQuizId: string): Promise<number> {
