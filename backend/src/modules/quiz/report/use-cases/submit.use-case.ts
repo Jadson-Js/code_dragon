@@ -146,7 +146,7 @@ export class QuizReportSubmitUseCase {
   }
 
   private async enrichAnswer(
-    data: { quizQuestionId: number; selectedCorrectOption: boolean }[],
+    data: { quizQuestionId: string; selectedCorrectOption: boolean }[],
     questions: QuizQuestionWithRelations[],
   ): Promise<EnrichedAnswer[]> {
     const enrichedAnswers = data.map((answer) => {

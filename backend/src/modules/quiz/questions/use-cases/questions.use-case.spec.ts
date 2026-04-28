@@ -54,7 +54,7 @@ function makeGeminiOutput() {
 
 function makeSavedQuestions(): QuizQuestion[] {
   return makeGeminiOutput().map((q, i) => ({
-    id: i + 1,
+    id: `uuid-${i + 1}`,
     statement: q.statement,
     alternatives: q.alternatives,
     correctAlternativeIndex: q.correctAlternativeIndex,

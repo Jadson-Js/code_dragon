@@ -10,7 +10,7 @@ const SESSION_QUIZ_ID = "session-quiz-uuid-123";
 function makeSavedQuestions(): QuizQuestion[] {
   return [
     {
-      id: 1,
+      id: "question-uuid-1",
       statement: "Question 1",
       alternatives: ["A", "B", "C", "D"],
       correctAlternativeIndex: 0,

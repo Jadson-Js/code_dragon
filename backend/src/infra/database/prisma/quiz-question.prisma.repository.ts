@@ -38,7 +38,7 @@ export class QuizQuestionPrismaRepository {
   }
 
   async findManyByIds(
-    ids: number[],
+    ids: string[],
   ): Promise<(QuizQuestion & { stack: Stack; subject: QuizSubject })[]> {
     const questions = await prisma.quizQuestion.findMany({
       where: {

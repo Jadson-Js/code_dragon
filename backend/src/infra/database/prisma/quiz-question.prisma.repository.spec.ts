@@ -23,7 +23,7 @@ describe("QuizQuestionPrismaRepository", () => {
     jest.clearAllMocks();
   });
 
-  const makeRaw = (id: number) => ({
+  const makeRaw = (id: string) => ({
     id,
     statement: "Q",
     alternatives: ["A"],
@@ -54,11 +54,11 @@ describe("QuizQuestionPrismaRepository", () => {
       objectiveId: 5,
     };
 
-    prismaMockData.quizQuestion.create.mockResolvedValue(makeRaw(1));
+    prismaMockData.quizQuestion.create.mockResolvedValue(makeRaw("id-1"));
 
     const result = await repository.create(data as any);
 
-    expect(result.id).toBe(1);
+    expect(result.id).toBe("id-1");
     expect(prismaMockData.quizQuestion.create).toHaveBeenCalled();
   });
 
@@ -77,15 +77,15 @@ describe("QuizQuestionPrismaRepository", () => {
     };
 
     prismaMockData.quizQuestion.createManyAndReturn.mockResolvedValue([
-      makeRaw(10),
-      makeRaw(11),
+      makeRaw("id-10"),
+      makeRaw("id-11"),
     ]);
 
     const result = await repository.createMany([data as any, data as any]);
 
     expect(result).toHaveLength(2);
-    expect(result[0]!.id).toBe(10);
-    expect(result[1]!.id).toBe(11);
+    expect(result[0]!.id).toBe("id-10");
+    expect(result[1]!.id).toBe("id-11");
     expect(prismaMockData.quizQuestion.createManyAndReturn).toHaveBeenCalled();
   });
 
@@ -94,14 +94,14 @@ describe("QuizQuestionPrismaRepository", () => {
     const sessionQuizId = "session-1";
 
     prismaMockData.quizQuestion.findMany.mockResolvedValue([
-      makeRaw(1),
-      makeRaw(2),
+      makeRaw("id-1"),
+      makeRaw("id-2"),
     ]);
 
     const result = await repository.findBySessionQuizId(sessionQuizId);
 
     expect(result).toHaveLength(2);
-    expect(result[0]!.id).toBe(1);
+    expect(result[0]!.id).toBe("id-1");
     expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
       where: { sessionQuizId },
     });
@@ -123,20 +123,20 @@ describe("QuizQuestionPrismaRepository", () => {
 
   it("should find questions by multiple ids", async () => {
     const repository = new QuizQuestionPrismaRepository();
-    const ids = [1, 2, 3];
+    const ids = ["id-1", "id-2", "id-3"];
 
     prismaMockData.quizQuestion.findMany.mockResolvedValue([
-      makeRaw(1),
-      makeRaw(2),
-      makeRaw(3),
+      makeRaw("id-1"),
+      makeRaw("id-2"),
+      makeRaw("id-3"),
     ]);
 
     const result = await repository.findManyByIds(ids);
 
     expect(result).toHaveLength(3);
-    expect(result[0]!.id).toBe(1);
-    expect(result[1]!.id).toBe(2);
-    expect(result[2]!.id).toBe(3);
+    expect(result[0]!.id).toBe("id-1");
+    expect(result[1]!.id).toBe("id-2");
+    expect(result[2]!.id).toBe("id-3");
     expect(prismaMockData.quizQuestion.findMany).toHaveBeenCalledWith({
       where: {
         id: {

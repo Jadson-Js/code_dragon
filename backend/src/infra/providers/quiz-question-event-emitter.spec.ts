@@ -11,7 +11,7 @@ describe("QuizQuestionEventEmitter", () => {
 
   it("should subscribe and emit new questions", () => {
     const sessionQuizId = "sess-1";
-    const questions = [{ id: 1, statement: "Q1" }] as any[];
+    const questions = [{ id: "q1", statement: "Q1" }] as any[];
     const callback = jest.fn();
 
     eventEmitter.onNewQuestions(sessionQuizId, callback);
@@ -22,7 +22,7 @@ describe("QuizQuestionEventEmitter", () => {
 
   it("should unsubscribe from new questions", () => {
     const sessionQuizId = "sess-1";
-    const questions = [{ id: 1, statement: "Q1" }] as any[];
+    const questions = [{ id: "q1", statement: "Q1" }] as any[];
     const callback = jest.fn();
 
     eventEmitter.onNewQuestions(sessionQuizId, callback);
@@ -62,7 +62,7 @@ describe("QuizQuestionEventEmitter", () => {
     eventEmitter.onNewQuestions(session1, callback1);
     eventEmitter.onNewQuestions(session2, callback2);
 
-    const questions = [{ id: 1 }] as any[];
+    const questions = [{ id: "q1" }] as any[];
     eventEmitter.emitNewQuestions({ sessionQuizId: session1, questions });
 
     expect(callback1).toHaveBeenCalledWith(questions);

@@ -218,7 +218,7 @@ model QuizSpecialtySubject {
 }
 
 model QuizQuestion {
-  id                      Int      @id @default(autoincrement())
+  id                      String   @id @default(uuid())
   sessionQuizId           String?  @map("session_quiz_id")
   statement               String
   alternatives            String[]

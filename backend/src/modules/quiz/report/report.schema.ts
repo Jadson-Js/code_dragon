@@ -6,7 +6,7 @@ export const quizReportSubmitSchema = z.object({
     answers: z
       .array(
         z.object({
-          quizQuestionId: z.number(),
+          quizQuestionId: z.uuid(),
           selectedCorrectOption: z.boolean(),
         }),
       )

@@ -56,7 +56,7 @@ describe("QuizReportSubmitUseCase", () => {
 
   const mockQuestions = [
     {
-      id: 1,
+      id: "q1-uuid",
       statement: "Q1",
       subjectId: 10,
       subject: { name: "Subject 1" },
@@ -64,7 +64,7 @@ describe("QuizReportSubmitUseCase", () => {
       stack: { name: "Stack 1" },
     },
     {
-      id: 2,
+      id: "q2-uuid",
       statement: "Q2",
       subjectId: 10,
       subject: { name: "Subject 1" },
@@ -88,8 +88,8 @@ describe("QuizReportSubmitUseCase", () => {
       userId: "user-123",
       sessionQuizId: SESSION_QUIZ_ID,
       answers: [
-        { quizQuestionId: 1, selectedCorrectOption: true },
-        { quizQuestionId: 2, selectedCorrectOption: false },
+        { quizQuestionId: "q1-uuid", selectedCorrectOption: true },
+        { quizQuestionId: "q2-uuid", selectedCorrectOption: false },
       ],
     };
 
@@ -150,7 +150,7 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: "33333333-3333-4333-8333-333333333333",
-        answers: [{ quizQuestionId: 1, selectedCorrectOption: true }],
+        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
   });
@@ -166,7 +166,7 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: 1, selectedCorrectOption: true }],
+        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
       }),
     ).rejects.toBeInstanceOf(ForbiddenError);
   });
@@ -182,7 +182,7 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: 1, selectedCorrectOption: true }],
+        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
       }),
     ).rejects.toBeInstanceOf(ConflictError);
   });
@@ -195,7 +195,7 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: 1, selectedCorrectOption: true }],
+        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
   });
