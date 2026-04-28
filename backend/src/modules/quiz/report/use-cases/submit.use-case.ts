@@ -98,16 +98,24 @@ export class QuizReportSubmitUseCase {
   ): Promise<IQuizReportSubmitResponse> {
     const [questions, session] = await this.loadContext(data);
 
-    const answers = await this.enrichAnswer(data.answers, questions);
+    const enrichedAnswers = await this.enrichAnswer(data.answers, questions);
+
+    const dislikedQuestionIds = data.answers
+      .filter((a) => a.isDisliked)
+      .map((a) => a.quizQuestionId);
+
+    const answersForFeedback = enrichedAnswers.filter(
+      (a) => !dislikedQuestionIds.includes(a.question.id),
+    );
 
     const [evaluation, subjects, stacks] = await Promise.all([
-      this.evaluateOverall(answers, session),
-      this.evaluateSubjects(answers, session.seniorityId),
-      this.evaluateStacks(answers, session.seniorityId),
+      this.evaluateOverall(answersForFeedback, session),
+      this.evaluateSubjects(answersForFeedback, session.seniorityId),
+      this.evaluateStacks(answersForFeedback, session.seniorityId),
     ]);
 
     const { insights, roadmap } = await this.generateInsights(
-      answers,
+      answersForFeedback,
       evaluation.score.user,
     );
 
@@ -120,7 +128,10 @@ export class QuizReportSubmitUseCase {
       roadmap,
     };
 
-    await this.quizReportSaveSubmitPrismaRepository.execute(response);
+    await this.quizReportSaveSubmitPrismaRepository.execute(
+      response,
+      dislikedQuestionIds,
+    );
 
     return response;
   }

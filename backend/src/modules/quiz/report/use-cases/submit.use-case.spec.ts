@@ -127,19 +127,80 @@ describe("QuizReportSubmitUseCase", () => {
     expect(result.sessionQuizId).toBe(SESSION_QUIZ_ID);
     expect(result.score.user).toBe(50); // 1/2
     expect(result.score.community).toBe(65); // (60+70)/2 = 65
-    // Evaluation logic:
-    // userScore = 50
-    // communityScores = [60, 70]
-    // avgCommunityScore = Math.round((60+70)/2) = 65 -> actually the code says userScore is default if empty,
-    // but here it's 2 scores. 130 / 2 = 65.
-    // wait, line 165: const avgCommunityScore = communityScores.length > 0 ? Math.round(communitySum / communityScores.length) : userScore;
-    // So 65.
 
     expect(result.correctAnswers).toBe(1);
     expect(result.wrongAnswers).toBe(1);
     expect(
       mockQuizReportSaveSubmitPrismaRepository.execute,
-    ).toHaveBeenCalledWith(result);
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sessionQuizId: SESSION_QUIZ_ID,
+        correctAnswers: 1,
+        wrongAnswers: 1,
+      }),
+      [],
+    );
+  });
+
+  it("should ignore disliked questions in the feedback flow", async () => {
+    const input: any = {
+      userId: "user-123",
+      sessionQuizId: SESSION_QUIZ_ID,
+      answers: [
+        {
+          quizQuestionId: "q1-uuid",
+          selectedCorrectOption: true,
+          isDisliked: false,
+        },
+        {
+          quizQuestionId: "q2-uuid",
+          selectedCorrectOption: false,
+          isDisliked: true,
+        },
+      ],
+    };
+
+    mockQuizQuestionRepository.findManyByIds.mockResolvedValue(mockQuestions);
+    mockSessionQuizRepository.findById.mockResolvedValue(mockSession);
+    mockSessionQuizResultRepository.findManyScoreBySeniority.mockResolvedValue([
+      60, 70,
+    ]);
+    mockSessionQuizSubjectRepository.findAverageScoreByContext.mockResolvedValue(
+      [{ subjectId: 10, averageScore: 65 }],
+    );
+    mockSessionQuizStackRepository.findAverageScoreByContext.mockResolvedValue([
+      { stackId: 20, averageScore: 60 },
+    ]);
+
+    mockGeminiProvider.generateQuizInsights.mockResolvedValue({
+      insights: {
+        title: "Test Insights",
+        description: "Test Description",
+        strongPoints: ["Point 1"],
+        weakPoints: ["Point 2"],
+      },
+      roadmap: [],
+    });
+
+    const result = await useCase.execute(input);
+
+    expect(result.score.user).toBe(100); // 1/1 (q2 is ignored)
+    expect(result.correctAnswers).toBe(1);
+    expect(result.wrongAnswers).toBe(0);
+    expect(result.stacks).toHaveLength(1); // only stack from q1
+    expect(result.stacks[0].id).toBe(20);
+
+    // Verify Gemini was called only with q1 statement
+    expect(mockGeminiProvider.generateQuizInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        wrongQuestions: [], // q2 was wrong but it was disliked, so it's ignored
+      }),
+    );
+
+    // Verify repository was called with disliked question ids as second argument
+    expect(
+      mockQuizReportSaveSubmitPrismaRepository.execute,
+    ).toHaveBeenCalledWith(expect.anything(), ["q2-uuid"]);
   });
 
   it("should throw NotFoundError if session not found", async () => {
@@ -150,7 +211,13 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: "33333333-3333-4333-8333-333333333333",
-        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
+        answers: [
+          {
+            quizQuestionId: "q1-uuid",
+            selectedCorrectOption: true,
+            isDisliked: false,
+          },
+        ],
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
   });
@@ -166,7 +233,13 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
+        answers: [
+          {
+            quizQuestionId: "q1-uuid",
+            selectedCorrectOption: true,
+            isDisliked: false,
+          },
+        ],
       }),
     ).rejects.toBeInstanceOf(ForbiddenError);
   });
@@ -182,7 +255,13 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
+        answers: [
+          {
+            quizQuestionId: "q1-uuid",
+            selectedCorrectOption: true,
+            isDisliked: false,
+          },
+        ],
       }),
     ).rejects.toBeInstanceOf(ConflictError);
   });
@@ -195,7 +274,13 @@ describe("QuizReportSubmitUseCase", () => {
       useCase.execute({
         userId: "user-123",
         sessionQuizId: SESSION_QUIZ_ID,
-        answers: [{ quizQuestionId: "q1-uuid", selectedCorrectOption: true }],
+        answers: [
+          {
+            quizQuestionId: "q1-uuid",
+            selectedCorrectOption: true,
+            isDisliked: false,
+          },
+        ],
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
   });

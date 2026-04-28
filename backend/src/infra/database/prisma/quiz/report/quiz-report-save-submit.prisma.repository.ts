@@ -4,7 +4,10 @@ import type { IQuizReportSubmitResponse } from "@/modules/quiz/report/use-cases/
 
 @injectable()
 export class QuizReportSaveSubmitPrismaRepository {
-  async execute(data: IQuizReportSubmitResponse) {
+  async execute(
+    data: IQuizReportSubmitResponse,
+    dislikedQuestionIds: string[],
+  ) {
     return await prisma.$transaction(async (tx) => {
       await tx.sessionQuiz.update({
         where: {
@@ -14,6 +17,15 @@ export class QuizReportSaveSubmitPrismaRepository {
           status: "COMPLETED",
         },
       });
+
+      for (const questionId of dislikedQuestionIds) {
+        await tx.quizQuestion.update({
+          where: { id: questionId },
+          data: {
+            dislikes: { increment: 1 },
+          },
+        });
+      }
 
       for (const stack of data.stacks) {
         await tx.sessionQuizStack.update({

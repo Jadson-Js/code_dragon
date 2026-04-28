@@ -8,6 +8,7 @@ export const quizReportSubmitSchema = z.object({
         z.object({
           quizQuestionId: z.uuid(),
           selectedCorrectOption: z.boolean(),
+          isDisliked: z.boolean(),
         }),
       )
       .min(1),
