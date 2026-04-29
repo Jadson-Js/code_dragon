@@ -220,6 +220,7 @@ export default function Quiz() {
         {
           quizQuestionId: string;
           selectedCorrectOption: boolean;
+          isLiked: boolean;
           isDisliked: boolean;
         }[]
       >((acc, question, index) => {
@@ -231,6 +232,7 @@ export default function Quiz() {
           quizQuestionId: String(question.id),
           selectedCorrectOption:
             selectedAlternativeIndex === question.correctAlternativeIndex,
+          isLiked: questionFeedback[index] === "up",
           isDisliked: questionFeedback[index] === "down",
         });
 

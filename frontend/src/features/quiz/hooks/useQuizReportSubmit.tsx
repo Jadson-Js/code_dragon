@@ -6,6 +6,7 @@ type QuizReportSubmitInput = {
   answers: {
     quizQuestionId: string;
     selectedCorrectOption: boolean;
+    isLiked: boolean;
     isDisliked: boolean;
   }[];
 };
