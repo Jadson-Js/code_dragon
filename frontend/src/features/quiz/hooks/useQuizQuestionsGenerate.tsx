@@ -3,16 +3,15 @@ import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { isAxiosError } from "axios";
 import { api } from "@/lib/api-client";
 import {
   quizQuestionsGenerateSchema,
   type QuizQuestionsGenerateFormData,
 } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
-import { useQuizSession } from "./useQuizSession";
 
 export function useQuizQuestionsGenerate() {
   const navigate = useNavigate();
-  const { setGenerating, setActive, clearSession } = useQuizSession();
 
   const form = useForm<QuizQuestionsGenerateFormData>({
     resolver: zodResolver(quizQuestionsGenerateSchema),
@@ -28,13 +27,8 @@ export function useQuizQuestionsGenerate() {
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: QuizQuestionsGenerateFormData) => {
-      setGenerating(data);
-      return api.post<{ sessionQuizId: string }>(
-        "/quiz/questions/generate",
-        data,
-      );
-    },
+    mutationFn: async (data: QuizQuestionsGenerateFormData) =>
+      api.post("/quiz/questions/generate", data),
     onSuccess: (data, variables) => {
       if (variables.saveInProfile) {
         localStorage.setItem(
@@ -49,14 +43,19 @@ export function useQuizQuestionsGenerate() {
         localStorage.removeItem("@code_dragon:quiz_config");
       }
 
-      // Upgrade session to "active" with the real session ID.
-      setActive(data.data.sessionQuizId);
       navigate(`/quiz/session/${data.data.sessionQuizId}`);
     },
-    onError: async () => {
-      // Clear the pending session if generation fails.
-      clearSession();
-      toast.error("Erro ao gerar questões");
+    onError: (error) => {
+      const isTooManyRequests =
+        isAxiosError(error) && error.response?.status === 429;
+
+      toast.error(
+        isTooManyRequests
+          ? "Muitas tentativas em pouco tempo. Tente novamente em instantes."
+          : "Erro ao gerar questões",
+      );
+
+      navigate("/", { replace: true });
     },
   });
 

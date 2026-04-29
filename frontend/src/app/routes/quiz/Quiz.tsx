@@ -3,6 +3,7 @@ import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
 import { QuizLoader } from "@/features/quiz/components/QuizLoader";
@@ -11,7 +12,6 @@ import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestions
 import { useGetQuizOptions } from "@/features/dashboard/hooks/useGetQuizOptions";
 import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader";
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
-import { useQuizSession } from "@/features/quiz/hooks/useQuizSession";
 import QuizExitModal from "@/features/quiz/components/QuizExitModal";
 
 type QuizFallbackProps = {
@@ -52,10 +52,15 @@ function QuizFallback({
 
 export default function Quiz() {
   const { quiz_session_id } = useParams();
-  const { state } = useLocation();
+  const location = useLocation();
+  const { state } = location;
   const { mutation } = useQuizQuestionsGenerate();
   const navigate = useNavigate();
   const hasCalled = useRef(false);
+  const [isLeavingQuiz, setIsLeavingQuiz] = useState(false);
+  const [pendingNavigationPath, setPendingNavigationPath] = useState<
+    string | null
+  >(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAlternatives, setSelectedAlternatives] = useState<
     Record<number, number>
@@ -66,33 +71,79 @@ export default function Quiz() {
     useQuizQuestionsStream(quiz_session_id);
   const { data: quizOptions } = useGetQuizOptions();
 
-  const { getSession, clearSession } = useQuizSession();
   const isGeneratingRoute = quiz_session_id === "generating";
+  const isQuizRoute = location.pathname.startsWith("/quiz/session/");
+  const isExitConfirmationOpen =
+    isExitModalOpen || pendingNavigationPath !== null;
 
   const goBackToDashboard = useCallback(() => {
-    clearSession();
+    setIsLeavingQuiz(true);
     navigate("/");
-  }, [clearSession, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     if (isGeneratingRoute) {
-      // Prefer state passed via navigate(), fall back to localStorage (user
-      // returned to /generating from another page).
-      let formData = state?.formData as
-        | QuizQuestionsGenerateFormData
-        | undefined;
-      if (!formData) {
-        const session = getSession();
-        if (session?.status === "generating") {
-          formData = session.formData;
-        }
-      }
+      const formData = state?.formData as QuizQuestionsGenerateFormData | undefined;
       if (formData && !hasCalled.current) {
         hasCalled.current = true;
         mutation.mutate(formData);
+      } else if (!formData) {
+        toast.error("Sessao de geracao expirada. Inicie um novo quiz.");
+        navigate("/");
       }
     }
-  }, [isGeneratingRoute, state, mutation, getSession]);
+  }, [isGeneratingRoute, state, mutation, navigate]);
+
+  useEffect(() => {
+    if (isLeavingQuiz) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isLeavingQuiz]);
+
+  useEffect(() => {
+    if (!isQuizRoute || isLeavingQuiz) return;
+
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+
+      const target = event.target as Element | null;
+      const anchor = target?.closest("a[href]") as HTMLAnchorElement | null;
+      if (!anchor) return;
+      if (anchor.target && anchor.target !== "_self") return;
+
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("#")) return;
+
+      const nextUrl = new URL(anchor.href, window.location.href);
+      if (nextUrl.origin !== window.location.origin) return;
+
+      const currentPath = `${location.pathname}${location.search}${location.hash}`;
+      const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+
+      if (nextPath === currentPath) return;
+      if (nextUrl.pathname.startsWith("/quiz/session/")) return;
+
+      event.preventDefault();
+      setPendingNavigationPath(nextPath);
+      setIsExitModalOpen(true);
+    };
+
+    document.addEventListener("click", handleDocumentClick, true);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick, true);
+    };
+  }, [isQuizRoute, isLeavingQuiz, location.pathname, location.search, location.hash]);
 
   const currentQuestion = questions[currentQuestionIndex];
   const stackName = useMemo(
@@ -118,12 +169,21 @@ export default function Quiz() {
         : "Próximo";
 
   const handleExit = useCallback(() => {
+    setPendingNavigationPath(null);
     setIsExitModalOpen(true);
   }, []);
 
   const confirmExit = useCallback(() => {
-    goBackToDashboard();
-  }, [goBackToDashboard]);
+    setIsLeavingQuiz(true);
+    setIsExitModalOpen(false);
+    navigate(pendingNavigationPath ?? "/");
+    setPendingNavigationPath(null);
+  }, [navigate, pendingNavigationPath]);
+
+  const cancelExit = useCallback(() => {
+    setIsExitModalOpen(false);
+    setPendingNavigationPath(null);
+  }, []);
 
   const handlePrevious = useCallback(() => {
     setCurrentQuestionIndex((prev) => Math.max(0, prev - 1));
@@ -244,8 +304,14 @@ export default function Quiz() {
         </div>
 
         <QuizExitModal
-          open={isExitModalOpen}
-          onOpenChange={setIsExitModalOpen}
+          open={isExitConfirmationOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              cancelExit();
+              return;
+            }
+            setIsExitModalOpen(true);
+          }}
           onConfirm={confirmExit}
         />
       </div>

@@ -6,41 +6,14 @@ import {
   UserSearch,
   Lightbulb,
   Settings,
-  Loader2,
 } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router";
-import { useEffect, useCallback, useState } from "react";
-import { useQuizSession } from "@/features/quiz/hooks/useQuizSession";
+import { Link, useLocation } from "react-router";
+import { useState } from "react";
 import QuizConfigModal from "./QuizConfigModal";
 
 export default function DashboardSidebar() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const { getSession } = useQuizSession();
-
-  const [quizSession, setQuizSession] = useState(() => getSession());
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
-
-  const refreshSession = useCallback(() => {
-    setQuizSession(getSession());
-  }, [getSession]);
-
-  useEffect(() => {
-    refreshSession();
-
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === "@code_dragon:active_quiz_session") {
-        refreshSession();
-      }
-    };
-
-    const interval = setInterval(refreshSession, 1000);
-    window.addEventListener("storage", handleStorage);
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("storage", handleStorage);
-    };
-  }, [refreshSession]);
 
   const navItems = [
     { label: "Home", to: "/", icon: House },
@@ -64,22 +37,11 @@ export default function DashboardSidebar() {
             item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
 
           const isQuizLink = item.to === "/quiz";
-          const hasQuizSession = isQuizLink && !!quizSession;
-          const isGenerating =
-            isQuizLink && quizSession?.status === "generating";
 
           const handleClick = (e: React.MouseEvent) => {
             if (isQuizLink) {
               e.preventDefault();
-              if (hasQuizSession && quizSession?.route) {
-                navigate(quizSession.route, {
-                  ...(quizSession.status === "generating"
-                    ? { state: { formData: (quizSession as any).formData } }
-                    : {}),
-                });
-              } else {
-                setIsQuizModalOpen(true);
-              }
+              setIsQuizModalOpen(true);
             }
           };
 
@@ -101,25 +63,6 @@ export default function DashboardSidebar() {
               >
                 <Icon size={20} />
                 <span className="flex-1">{item.label}</span>
-
-                {/* Active quiz session indicator */}
-                {hasQuizSession && (
-                  <span
-                    className={cn(
-                      "flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm",
-                      isGenerating
-                        ? "bg-amber-500/20 text-amber-400"
-                        : "bg-green/20 text-green",
-                    )}
-                  >
-                    {isGenerating ? (
-                      <Loader2 size={10} className="animate-spin" />
-                    ) : (
-                      <span className="w-1.5 h-1.5 rounded-full bg-green inline-block" />
-                    )}
-                    {isGenerating ? "Gerando" : "Ativo"}
-                  </span>
-                )}
               </div>
             </Link>
           );
