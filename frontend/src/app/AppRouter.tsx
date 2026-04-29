@@ -9,6 +9,7 @@ import ResetPassword from "./routes/auth/ResetPassword";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Profile from "./routes/profile/Profile";
 import Quiz from "./routes/quiz/Quiz";
+import QuizInsights from "./routes/quiz/QuizInsights";
 
 export default function AppRouter() {
   return (
@@ -25,6 +26,10 @@ export default function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/quiz/session/:quiz_session_id" element={<Quiz />} />
+          <Route
+            path="/quiz/insights/session/:quiz_session_id"
+            element={<QuizInsights />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
