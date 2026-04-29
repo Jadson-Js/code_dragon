@@ -224,6 +224,7 @@ model QuizQuestion {
   alternatives            String[]
   correctAlternativeIndex Int      @map("correct_alternative_index")
   code                    String?
+  likes                   Int      @default(0)
   dislikes                Int      @default(0)
   stackId                 Int?     @map("stack_id")
   subjectId               Int?     @map("subject_id")

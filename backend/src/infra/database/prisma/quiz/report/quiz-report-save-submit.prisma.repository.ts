@@ -6,6 +6,7 @@ import type { IQuizReportSubmitResponse } from "@/modules/quiz/report/use-cases/
 export class QuizReportSaveSubmitPrismaRepository {
   async execute(
     data: IQuizReportSubmitResponse,
+    likedQuestionIds: string[],
     dislikedQuestionIds: string[],
   ) {
     return await prisma.$transaction(async (tx) => {
@@ -24,6 +25,15 @@ export class QuizReportSaveSubmitPrismaRepository {
           data: {
             dislikes: { increment: 1 },
           },
+        });
+      }
+
+      for (const questionId of likedQuestionIds) {
+        await tx.quizQuestion.update({
+          where: { id: questionId },
+          data: {
+            likes: { increment: 1 },
+          } as any,
         });
       }
 

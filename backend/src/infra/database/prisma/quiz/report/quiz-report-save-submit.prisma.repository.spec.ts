@@ -70,7 +70,7 @@ describe("QuizReportSaveSubmitPrismaRepository", () => {
       roadmap: [{ title: "R1", description: "D1", priority: "HIGH" }],
     };
 
-    await repository.execute(mockData, []);
+    await repository.execute(mockData, [], []);
 
     expect(prismaMock.$transaction).toHaveBeenCalled();
     expect(txMock.sessionQuiz.update).toHaveBeenCalledWith({
@@ -152,7 +152,7 @@ describe("QuizReportSaveSubmitPrismaRepository", () => {
       roadmap: [],
     };
 
-    await repository.execute(mockData, ["q1-uuid", "q2-uuid"]);
+    await repository.execute(mockData, [], ["q1-uuid", "q2-uuid"]);
 
     expect(txMock.quizQuestion.update).toHaveBeenCalledTimes(2);
     expect(txMock.quizQuestion.update).toHaveBeenCalledWith({
@@ -162,6 +162,35 @@ describe("QuizReportSaveSubmitPrismaRepository", () => {
     expect(txMock.quizQuestion.update).toHaveBeenCalledWith({
       where: { id: "q2-uuid" },
       data: { dislikes: { increment: 1 } },
+    });
+  });
+
+  it("should increment likes for liked questions", async () => {
+    const repository = new QuizReportSaveSubmitPrismaRepository();
+    const mockData: any = {
+      sessionQuizId: "session-123",
+      score: { user: 80, community: 70 },
+      percentile: 90,
+      ranking: 1,
+      correctAnswers: 8,
+      wrongAnswers: 2,
+      ignoredAnswers: 0,
+      stacks: [],
+      subjects: [],
+      insights: {
+        title: "T",
+        description: "D",
+        strongPoints: [],
+        weakPoints: [],
+      },
+      roadmap: [],
+    };
+
+    await repository.execute(mockData, ["q1-uuid"], []);
+
+    expect(txMock.quizQuestion.update).toHaveBeenCalledWith({
+      where: { id: "q1-uuid" },
+      data: { likes: { increment: 1 } },
     });
   });
 });

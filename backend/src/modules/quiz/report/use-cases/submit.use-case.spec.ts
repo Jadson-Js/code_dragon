@@ -139,6 +139,7 @@ describe("QuizReportSubmitUseCase", () => {
         wrongAnswers: 1,
       }),
       [],
+      [],
     );
   });
 
@@ -197,10 +198,10 @@ describe("QuizReportSubmitUseCase", () => {
       }),
     );
 
-    // Verify repository was called with disliked question ids as second argument
+    // Verify repository was called with liked and disliked question ids
     expect(
       mockQuizReportSaveSubmitPrismaRepository.execute,
-    ).toHaveBeenCalledWith(expect.anything(), ["q2-uuid"]);
+    ).toHaveBeenCalledWith(expect.anything(), [], ["q2-uuid"]);
   });
 
   it("should throw NotFoundError if session not found", async () => {

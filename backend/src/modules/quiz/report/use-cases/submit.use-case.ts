@@ -100,6 +100,10 @@ export class QuizReportSubmitUseCase {
 
     const enrichedAnswers = await this.enrichAnswer(data.answers, questions);
 
+    const likedQuestionIds = data.answers
+      .filter((a) => a.isLiked)
+      .map((a) => a.quizQuestionId);
+
     const dislikedQuestionIds = data.answers
       .filter((a) => a.isDisliked)
       .map((a) => a.quizQuestionId);
@@ -130,6 +134,7 @@ export class QuizReportSubmitUseCase {
 
     await this.quizReportSaveSubmitPrismaRepository.execute(
       response,
+      likedQuestionIds,
       dislikedQuestionIds,
     );
 
