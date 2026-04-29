@@ -20,7 +20,7 @@ export type IQuizQuestionGenerateInputDTO = z.infer<
 
 export const quizQuestionStreamSchema = z.object({
   params: z.object({
-    session_quiz_id: z.string(),
+    session_quiz_id: z.uuid(),
   }),
 });
 
