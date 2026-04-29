@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas/useQuizQuestionsGenerate";
@@ -13,6 +13,42 @@ import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader"
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
 import { useQuizSession } from "@/features/quiz/hooks/useQuizSession";
 import QuizExitModal from "@/features/quiz/components/QuizExitModal";
+
+type QuizFallbackProps = {
+  message: string;
+  details?: string;
+  actionLabel: string;
+  actionVariant?: "default" | "ghost";
+  onAction: () => void;
+};
+
+function QuizFallback({
+  message,
+  details,
+  actionLabel,
+  actionVariant = "default",
+  onAction,
+}: QuizFallbackProps) {
+  return (
+    <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex flex-col items-center gap-4 py-10 px-6 bg-bg-2/50 rounded-2xl border border-bg-3/50">
+        <span className="text-white-1 text-lg font-medium text-center">
+          {message}
+        </span>
+        {details ? (
+          <span className="text-white-2 text-sm text-center">{details}</span>
+        ) : null}
+        <Button
+          onClick={onAction}
+          variant={actionVariant}
+          className={actionVariant === "ghost" ? "border border-bg-3" : undefined}
+        >
+          {actionLabel}
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default function Quiz() {
   const { quiz_session_id } = useParams();
@@ -30,15 +66,16 @@ export default function Quiz() {
     useQuizQuestionsStream(quiz_session_id);
   const { data: quizOptions } = useGetQuizOptions();
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const stackName =
-    quizOptions?.stacks.find((s) => s.id === currentQuestion?.stackId)?.name ||
-    "";
-
   const { getSession, clearSession } = useQuizSession();
+  const isGeneratingRoute = quiz_session_id === "generating";
+
+  const goBackToDashboard = useCallback(() => {
+    clearSession();
+    navigate("/");
+  }, [clearSession, navigate]);
 
   useEffect(() => {
-    if (quiz_session_id === "generating") {
+    if (isGeneratingRoute) {
       // Prefer state passed via navigate(), fall back to localStorage (user
       // returned to /generating from another page).
       let formData = state?.formData as
@@ -55,11 +92,62 @@ export default function Quiz() {
         mutation.mutate(formData);
       }
     }
-    // REMOVED: clearSession() here was stopping the session persistence
-    // as soon as the quiz started.
-  }, [quiz_session_id, state, mutation, getSession]);
+  }, [isGeneratingRoute, state, mutation, getSession]);
 
-  if (quiz_session_id === "generating") {
+  const currentQuestion = questions[currentQuestionIndex];
+  const stackName = useMemo(
+    () =>
+      quizOptions?.stacks.find((stack) => stack.id === currentQuestion?.stackId)
+        ?.name || "",
+    [quizOptions?.stacks, currentQuestion?.stackId],
+  );
+
+  const isOnLastLoadedQuestion = currentQuestionIndex >= questions.length - 1;
+  const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
+  const currentSelection = selectedAlternatives[currentQuestionIndex];
+  const canGoPrevious = currentQuestionIndex > 0;
+  const canGoNext =
+    currentSelection !== undefined &&
+    currentSelection !== null &&
+    !isWaitingForMore;
+  const nextButtonLabel =
+    isWaitingForMore
+      ? "Gerando próximas questões..."
+      : isFinished && isOnLastLoadedQuestion
+        ? "Finalizar"
+        : "Próximo";
+
+  const handleExit = useCallback(() => {
+    setIsExitModalOpen(true);
+  }, []);
+
+  const confirmExit = useCallback(() => {
+    goBackToDashboard();
+  }, [goBackToDashboard]);
+
+  const handlePrevious = useCallback(() => {
+    setCurrentQuestionIndex((prev) => Math.max(0, prev - 1));
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+      return;
+    }
+
+    if (isFinished) {
+      goBackToDashboard();
+    }
+  }, [currentQuestionIndex, questions.length, isFinished, goBackToDashboard]);
+
+  const handleSelectAlternative = useCallback((idx: number) => {
+    setSelectedAlternatives((prev) => ({
+      ...prev,
+      [currentQuestionIndex]: idx,
+    }));
+  }, [currentQuestionIndex]);
+
+  if (isGeneratingRoute) {
     return (
       <DashboardLayout>
         <QuizLoader />
@@ -82,38 +170,15 @@ export default function Quiz() {
   if (error && questions.length === 0) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="flex flex-col items-center gap-4 py-10 px-6 bg-bg-2/50 rounded-2xl border border-bg-3/50">
-            <span className="text-white-1 text-lg font-medium text-center">
-              Esta sessao de quiz nao existe mais ou ficou indisponivel.
-            </span>
-            <span className="text-white-2 text-sm text-center">{error}</span>
-            <Button
-              onClick={() => {
-                clearSession();
-                navigate("/");
-              }}
-              variant="default"
-            >
-              Voltar ao Dashboard
-            </Button>
-          </div>
-        </div>
+        <QuizFallback
+          message="Esta sessao de quiz nao existe mais ou ficou indisponivel."
+          details={error}
+          actionLabel="Voltar ao Dashboard"
+          onAction={goBackToDashboard}
+        />
       </DashboardLayout>
     );
   }
-
-  const isOnLastLoadedQuestion = currentQuestionIndex >= questions.length - 1;
-  const isWaitingForMore = isOnLastLoadedQuestion && !isFinished;
-
-  const handleExit = () => {
-    setIsExitModalOpen(true);
-  };
-
-  const confirmExit = () => {
-    clearSession();
-    navigate("/");
-  };
 
   return (
     <DashboardLayout>
@@ -135,30 +200,16 @@ export default function Quiz() {
               code={currentQuestion?.code}
               alternatives={currentQuestion?.alternatives || []}
               stack={stackName}
-              selectedAlternative={selectedAlternatives[currentQuestionIndex]}
-              onSelectAlternative={(idx) =>
-                setSelectedAlternatives((prev) => ({
-                  ...prev,
-                  [currentQuestionIndex]: idx,
-                }))
-              }
+              selectedAlternative={currentSelection}
+              onSelectAlternative={handleSelectAlternative}
             />
           ) : (
-            <div className="flex flex-col items-center justify-center h-full gap-4 py-20 bg-bg-2/50 rounded-2xl border border-bg-3/50">
-              <span className="text-white-2 text-lg">
-                Nenhuma questão disponível no momento.
-              </span>
-              <Button
-                onClick={() => {
-                  clearSession();
-                  navigate("/");
-                }}
-                variant="ghost"
-                className="border border-bg-3"
-              >
-                Voltar ao Dashboard
-              </Button>
-            </div>
+            <QuizFallback
+              message="Nenhuma questão disponível no momento."
+              actionLabel="Voltar ao Dashboard"
+              actionVariant="ghost"
+              onAction={goBackToDashboard}
+            />
           )}
         </div>
 
@@ -167,10 +218,8 @@ export default function Quiz() {
             variant="ghost"
             size="lg"
             className="flex-1 sm:flex-none border border-bg-3 text-white-1 hover:bg-bg-2 w-30"
-            onClick={() =>
-              setCurrentQuestionIndex((prev: number) => Math.max(0, prev - 1))
-            }
-            disabled={currentQuestionIndex === 0}
+            onClick={handlePrevious}
+            disabled={!canGoPrevious}
           >
             <ArrowLeft />
             Anterior
@@ -180,30 +229,16 @@ export default function Quiz() {
             className="flex-1 sm:flex-none transition-all min-w-[180px]"
             variant="default"
             size="lg"
-            onClick={() => {
-              if (currentQuestionIndex < questions.length - 1) {
-                setCurrentQuestionIndex((prev: number) => prev + 1);
-              } else if (isFinished) {
-                // Handle finish quiz
-                clearSession();
-                navigate("/");
-              }
-            }}
-            disabled={
-              selectedAlternatives[currentQuestionIndex] === undefined ||
-              selectedAlternatives[currentQuestionIndex] === null ||
-              isWaitingForMore
-            }
+            onClick={handleNext}
+            disabled={!canGoNext}
           >
             {isWaitingForMore ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                Gerando próximas questões...
+                {nextButtonLabel}
               </>
-            ) : isFinished && isOnLastLoadedQuestion ? (
-              "Finalizar"
             ) : (
-              "Próximo"
+              nextButtonLabel
             )}
           </Button>
         </div>
