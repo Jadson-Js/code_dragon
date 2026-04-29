@@ -1,5 +1,5 @@
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -7,11 +7,30 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/shared/utils";
 
-export default function QuizQuestionFeedback() {
-  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
+type QuizQuestionFeedbackValue = "up" | "down" | null;
+
+interface QuizQuestionFeedbackProps {
+  value?: QuizQuestionFeedbackValue;
+  onChange?: (value: QuizQuestionFeedbackValue) => void;
+}
+
+export default function QuizQuestionFeedback({
+  value = null,
+  onChange,
+}: QuizQuestionFeedbackProps) {
+  const [internalFeedback, setInternalFeedback] =
+    useState<QuizQuestionFeedbackValue>(null);
+  const feedback = onChange ? value : internalFeedback;
 
   const handleFeedback = (type: "up" | "down") => {
-    setFeedback((prev) => (prev === type ? null : type));
+    const nextFeedback = feedback === type ? null : type;
+
+    if (onChange) {
+      onChange(nextFeedback);
+      return;
+    }
+
+    setInternalFeedback(nextFeedback);
   };
 
   return (

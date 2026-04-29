@@ -1,7 +1,7 @@
 import { cn } from "@/shared/utils";
-import { AlertCircle, Check, Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import QuizQuestionFeedback from "./QuizQuestionFeedback";
 
 interface Props {
@@ -12,6 +12,8 @@ interface Props {
   stack: string;
   selectedAlternative?: number | null;
   onSelectAlternative?: (index: number) => void;
+  feedback?: "up" | "down" | null;
+  onFeedbackChange?: (feedback: "up" | "down" | null) => void;
 }
 
 export default function QuizQuestion({
@@ -22,6 +24,8 @@ export default function QuizQuestion({
   stack,
   selectedAlternative,
   onSelectAlternative,
+  feedback,
+  onFeedbackChange,
 }: Props) {
   const [copied, setCopied] = useState(false);
 
@@ -143,7 +147,7 @@ export default function QuizQuestion({
           );
         })}
 
-        <QuizQuestionFeedback />
+        <QuizQuestionFeedback value={feedback} onChange={onFeedbackChange} />
       </section>
     </div>
   );

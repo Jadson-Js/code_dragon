@@ -13,7 +13,7 @@ const router = Router();
 router.post(
   "/submit",
   simpleRateLimitMiddleware.handle({
-    max: 2,
+    max: 5,
     windowInMs: 60000,
   }),
   validate(quizReportSubmitSchema),

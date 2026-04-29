@@ -9,6 +9,7 @@ import type { QuizQuestionsGenerateFormData } from "@/features/dashboard/schemas
 import { QuizLoader } from "@/features/quiz/components/QuizLoader";
 import { useQuizQuestionsStream } from "@/features/quiz/hooks/useQuizQuestionsStream";
 import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestionsGenerate";
+import { useQuizReportSubmit } from "@/features/quiz/hooks/useQuizReportSubmit";
 import { useGetQuizOptions } from "@/features/dashboard/hooks/useGetQuizOptions";
 import QuizQuestionsHeader from "@/features/quiz/components/QuizQuestionsHeader";
 import QuizQuestion from "@/features/quiz/components/QuizQuestion";
@@ -41,7 +42,9 @@ function QuizFallback({
         <Button
           onClick={onAction}
           variant={actionVariant}
-          className={actionVariant === "ghost" ? "border border-bg-3" : undefined}
+          className={
+            actionVariant === "ghost" ? "border border-bg-3" : undefined
+          }
         >
           {actionLabel}
         </Button>
@@ -55,6 +58,7 @@ export default function Quiz() {
   const location = useLocation();
   const { state } = location;
   const { mutation } = useQuizQuestionsGenerate();
+  const { mutation: submitReportMutation } = useQuizReportSubmit();
   const navigate = useNavigate();
   const hasCalled = useRef(false);
   const [isLeavingQuiz, setIsLeavingQuiz] = useState(false);
@@ -64,6 +68,9 @@ export default function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAlternatives, setSelectedAlternatives] = useState<
     Record<number, number>
+  >({});
+  const [questionFeedback, setQuestionFeedback] = useState<
+    Record<number, "up" | "down" | null>
   >({});
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
@@ -83,7 +90,9 @@ export default function Quiz() {
 
   useEffect(() => {
     if (isGeneratingRoute) {
-      const formData = state?.formData as QuizQuestionsGenerateFormData | undefined;
+      const formData = state?.formData as
+        | QuizQuestionsGenerateFormData
+        | undefined;
       if (formData && !hasCalled.current) {
         hasCalled.current = true;
         mutation.mutate(formData);
@@ -143,7 +152,13 @@ export default function Quiz() {
     return () => {
       document.removeEventListener("click", handleDocumentClick, true);
     };
-  }, [isQuizRoute, isLeavingQuiz, location.pathname, location.search, location.hash]);
+  }, [
+    isQuizRoute,
+    isLeavingQuiz,
+    location.pathname,
+    location.search,
+    location.hash,
+  ]);
 
   const currentQuestion = questions[currentQuestionIndex];
   const stackName = useMemo(
@@ -160,13 +175,13 @@ export default function Quiz() {
   const canGoNext =
     currentSelection !== undefined &&
     currentSelection !== null &&
-    !isWaitingForMore;
-  const nextButtonLabel =
-    isWaitingForMore
-      ? "Gerando próximas questões..."
-      : isFinished && isOnLastLoadedQuestion
-        ? "Finalizar"
-        : "Próximo";
+    !isWaitingForMore &&
+    !submitReportMutation.isPending;
+  const nextButtonLabel = isWaitingForMore
+    ? "Gerando próximas questões..."
+    : isFinished && isOnLastLoadedQuestion
+      ? "Finalizar"
+      : "Próximo";
 
   const handleExit = useCallback(() => {
     setPendingNavigationPath(null);
@@ -196,16 +211,83 @@ export default function Quiz() {
     }
 
     if (isFinished) {
-      goBackToDashboard();
-    }
-  }, [currentQuestionIndex, questions.length, isFinished, goBackToDashboard]);
+      if (!quiz_session_id) {
+        toast.error("Sessao de quiz invalida.");
+        return;
+      }
 
-  const handleSelectAlternative = useCallback((idx: number) => {
-    setSelectedAlternatives((prev) => ({
-      ...prev,
-      [currentQuestionIndex]: idx,
-    }));
-  }, [currentQuestionIndex]);
+      const answers = questions.reduce<
+        {
+          quizQuestionId: string;
+          selectedCorrectOption: boolean;
+          isDisliked: boolean;
+        }[]
+      >((acc, question, index) => {
+        const selectedAlternativeIndex = selectedAlternatives[index];
+
+        if (selectedAlternativeIndex === undefined) return acc;
+
+        acc.push({
+          quizQuestionId: String(question.id),
+          selectedCorrectOption:
+            selectedAlternativeIndex === question.correctAlternativeIndex,
+          isDisliked: questionFeedback[index] === "down",
+        });
+
+        return acc;
+      }, []);
+
+      if (answers.length === 0) {
+        toast.error("Nenhuma resposta para enviar.");
+        return;
+      }
+
+      submitReportMutation.mutate(
+        {
+          sessionQuizId: quiz_session_id,
+          answers,
+        },
+        {
+          onSuccess: (response) => {
+            console.log(response.data);
+            goBackToDashboard();
+          },
+          onError: () => {
+            toast.error("Erro ao enviar respostas do quiz.");
+          },
+        },
+      );
+    }
+  }, [
+    currentQuestionIndex,
+    questions,
+    isFinished,
+    goBackToDashboard,
+    quiz_session_id,
+    selectedAlternatives,
+    questionFeedback,
+    submitReportMutation,
+  ]);
+
+  const handleSelectAlternative = useCallback(
+    (idx: number) => {
+      setSelectedAlternatives((prev) => ({
+        ...prev,
+        [currentQuestionIndex]: idx,
+      }));
+    },
+    [currentQuestionIndex],
+  );
+
+  const handleFeedbackChange = useCallback(
+    (feedback: "up" | "down" | null) => {
+      setQuestionFeedback((prev) => ({
+        ...prev,
+        [currentQuestionIndex]: feedback,
+      }));
+    },
+    [currentQuestionIndex],
+  );
 
   if (isGeneratingRoute) {
     return (
@@ -257,11 +339,13 @@ export default function Quiz() {
             <QuizQuestion
               key={currentQuestion?.id}
               statement={currentQuestion?.statement || ""}
-              code={currentQuestion?.code}
+              code={currentQuestion?.code ?? undefined}
               alternatives={currentQuestion?.alternatives || []}
               stack={stackName}
               selectedAlternative={currentSelection}
               onSelectAlternative={handleSelectAlternative}
+              feedback={questionFeedback[currentQuestionIndex] ?? null}
+              onFeedbackChange={handleFeedbackChange}
             />
           ) : (
             <QuizFallback
