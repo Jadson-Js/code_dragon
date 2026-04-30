@@ -14,7 +14,6 @@ type QuizReportSubmitInput = {
 export function useQuizReportSubmit() {
   const mutation = useMutation({
     mutationFn: async (data: QuizReportSubmitInput) => {
-      console.log(data);
       return api.post("/quiz/report/submit", data);
     },
   });

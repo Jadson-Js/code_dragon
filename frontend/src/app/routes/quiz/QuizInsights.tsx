@@ -8,7 +8,7 @@ import {
   Linkedin,
   Twitter,
 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
   Bar,
   BarChart,
@@ -124,16 +124,21 @@ const priorityLabel: Record<"HIGH" | "MEDIUM" | "LOW", string> = {
 
 export default function QuizInsights() {
   const navigate = useNavigate();
-  const scoreProgress = quizInsightsData.score.user;
+  const location = useLocation();
+  const insightsDataFromState = location.state
+    ?.insightsData as QuizInsightPayload;
 
-  const subjectComparisonData = quizInsightsData.subjects.map((subject) => ({
+  const data = insightsDataFromState || quizInsightsData;
+  const scoreProgress = data.score.user;
+
+  const subjectComparisonData = data.subjects.map((subject) => ({
     subject: subject.name,
     voce: subject.score.user,
     media: subject.score.community,
     fullMark: 100,
   }));
 
-  const technologyPerformanceData = quizInsightsData.stacks.map((stack) => ({
+  const technologyPerformanceData = data.stacks.map((stack) => ({
     tecnologia: stack.name,
     voce: stack.score.user,
     media: stack.score.community,
@@ -158,7 +163,9 @@ export default function QuizInsights() {
         </div>
 
         <div>
-          <h1 className="typ-h1 text-white-1">Resultado do Diagnóstico Técnico</h1>
+          <h1 className="typ-h1 text-white-1">
+            Resultado do Diagnóstico Técnico
+          </h1>
           <p className="text-white-2 typ-caption mt-1">
             Análise completa do seu desempenho • Concluído em 16/01/2026
           </p>
@@ -175,15 +182,15 @@ export default function QuizInsights() {
             >
               <div className="w-full h-full rounded-full bg-bg-2 border border-bg-3 flex flex-col items-center justify-center">
                 <span className="text-white-1 text-5xl font-bold leading-none">
-                  {quizInsightsData.score.user}
+                  {data.score.user}
                 </span>
                 <span className="text-white-2 typ-caption mt-1">/100</span>
               </div>
             </div>
             <p className="text-white-1 typ-h2 mt-4">Bom</p>
             <p className="text-white-2 typ-caption mt-1">
-              Você fez {quizInsightsData.score.user}, média:{" "}
-              {quizInsightsData.score.community}
+              Você fez {data.score.user}, média:{" "}
+              {data.score.community}
             </p>
           </article>
 
@@ -202,14 +209,14 @@ export default function QuizInsights() {
               <div className="border border-bg-3 rounded-lg p-3 bg-bg-1/50">
                 <p className="text-white-2 typ-caption">Melhor que</p>
                 <p className="text-primary-2 text-3xl font-bold">
-                  {quizInsightsData.percentile}%
+                  {data.percentile}%
                 </p>
                 <p className="text-white-2 typ-caption">da comunidade</p>
               </div>
               <div className="border border-bg-3 rounded-lg p-3 bg-bg-1/50">
                 <p className="text-white-2 typ-caption">Ranking</p>
                 <p className="text-yellow text-3xl font-bold">
-                  #{quizInsightsData.ranking}
+                  #{data.ranking}
                 </p>
               </div>
             </div>
@@ -224,7 +231,7 @@ export default function QuizInsights() {
             <div className="mt-4 rounded-lg border border-bg-3 bg-bg-1/70 p-3">
               <p className="text-white-1 typ-caption">
                 🚀 Acabei de completar o Diagnóstico Técnico com{" "}
-                {quizInsightsData.score.user}/100 pontos!
+                {data.score.user}/100 pontos!
               </p>
               <p className="text-white-2 text-xs mt-3">
                 https://plataforma.com/meu-resultado
@@ -258,38 +265,42 @@ export default function QuizInsights() {
 
           <div className="rounded-lg border border-bg-3 bg-bg-1/60 p-4 space-y-3">
             <h3 className="text-white-1 font-semibold">
-              {quizInsightsData.insights.title}
+              {data.insights.title}
             </h3>
             <p className="text-white-2 typ-caption">
-              {quizInsightsData.insights.description}
+              {data.insights.description}
             </p>
             <ul className="space-y-2 typ-caption">
               <li className="text-green">
-                • Pontos Fortes: {quizInsightsData.insights.strongPoints.join(", ")}
+                • Pontos Fortes:{" "}
+                {data.insights.strongPoints.join(", ")}
               </li>
               <li className="text-red">
-                • Áreas de Melhoria: {quizInsightsData.insights.weakPoints.join(", ")}
+                • Áreas de Melhoria:{" "}
+                {data.insights.weakPoints.join(", ")}
               </li>
-              <li className="text-primary-2">• Próximos Passos: seguir o roadmap personalizado</li>
+              <li className="text-primary-2">
+                • Próximos Passos: seguir o roadmap personalizado
+              </li>
             </ul>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
             <div className="rounded-lg border border-primary-2/30 bg-primary-1/10 p-3 text-center">
               <p className="text-primary-2 text-2xl font-bold">
-                {quizInsightsData.correctAnswers}
+                {data.correctAnswers}
               </p>
               <p className="text-white-2 typ-caption">Acertos</p>
             </div>
             <div className="rounded-lg border border-red/40 bg-red/10 p-3 text-center">
               <p className="text-red text-2xl font-bold">
-                {quizInsightsData.wrongAnswers}
+                {data.wrongAnswers}
               </p>
               <p className="text-white-2 typ-caption">Erros</p>
             </div>
             <div className="rounded-lg border border-green/40 bg-green/10 p-3 text-center">
               <p className="text-green text-2xl font-bold">
-                {quizInsightsData.ignoredAnswers}
+                {data.ignoredAnswers}
               </p>
               <p className="text-white-2 typ-caption">Ignorados</p>
             </div>
@@ -298,7 +309,9 @@ export default function QuizInsights() {
 
         <section className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           <article className="card bg-bg-2 min-h-92">
-            <h2 className="typ-h3 text-white-1 mb-4">Comparativo nos assuntos</h2>
+            <h2 className="typ-h3 text-white-1 mb-4">
+              Comparativo nos assuntos
+            </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={subjectComparisonData}>
@@ -322,14 +335,19 @@ export default function QuizInsights() {
                     fill="#6366f1"
                     fillOpacity={0.35}
                   />
-                  <Legend iconType="square" wrapperStyle={{ color: "#94a3b8" }} />
+                  <Legend
+                    iconType="square"
+                    wrapperStyle={{ color: "#94a3b8" }}
+                  />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
           </article>
 
           <article className="card bg-bg-2 min-h-92">
-            <h2 className="typ-h3 text-white-1 mb-4">Desempenho por Tecnologia</h2>
+            <h2 className="typ-h3 text-white-1 mb-4">
+              Desempenho por Tecnologia
+            </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={technologyPerformanceData}>
@@ -347,9 +365,22 @@ export default function QuizInsights() {
                     tickLine={false}
                   />
                   <Tooltip />
-                  <Legend iconType="square" wrapperStyle={{ color: "#94a3b8" }} />
-                  <Bar dataKey="media" name="Média" fill="#64748b" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="voce" name="Você" fill="#6366f1" radius={[6, 6, 0, 0]} />
+                  <Legend
+                    iconType="square"
+                    wrapperStyle={{ color: "#94a3b8" }}
+                  />
+                  <Bar
+                    dataKey="media"
+                    name="Média"
+                    fill="#64748b"
+                    radius={[6, 6, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="voce"
+                    name="Você"
+                    fill="#6366f1"
+                    radius={[6, 6, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -365,12 +396,12 @@ export default function QuizInsights() {
               </p>
             </div>
             <span className="px-3 py-1 rounded-full border border-bg-3 text-white-2 typ-caption">
-              {quizInsightsData.roadmap.length} itens
+              {data.roadmap.length} itens
             </span>
           </div>
 
           <div className="space-y-3">
-            {quizInsightsData.roadmap.map((item) => (
+            {data.roadmap.map((item) => (
               <article
                 key={item.title}
                 className="rounded-lg border border-bg-3 bg-bg-1/40 p-4"
@@ -381,7 +412,9 @@ export default function QuizInsights() {
                     {priorityLabel[item.priority]}
                   </span>
                 </div>
-                <p className="text-white-2 typ-caption mt-2">{item.description}</p>
+                <p className="text-white-2 typ-caption mt-2">
+                  {item.description}
+                </p>
                 <button className="mt-3 text-primary-2 typ-caption hover:text-primary-1 transition-colors">
                   Ver material sugerido
                 </button>

@@ -251,8 +251,10 @@ export default function Quiz() {
         },
         {
           onSuccess: (response) => {
-            console.log(response.data);
-            goBackToDashboard();
+            setIsLeavingQuiz(true);
+            navigate(`/quiz/insights/session/${response.data.sessionQuizId}`, {
+              state: { insightsData: response.data },
+            });
           },
           onError: () => {
             toast.error("Erro ao enviar respostas do quiz.");
