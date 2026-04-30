@@ -363,9 +363,9 @@ export default function Quiz() {
 
         <div className="flex justify-end items-center gap-4 w-full sm:w-auto order-1 sm:order-2 mt-12">
           <Button
-            variant="ghost"
+            variant="outline"
             size="lg"
-            className="flex-1 sm:flex-none border border-bg-3 text-white-1 hover:bg-bg-2 w-30"
+            className="flex-1 sm:flex-none border border-bg-3 text-white-1 hover:bg-bg-2 w-40"
             onClick={handlePrevious}
             disabled={!canGoPrevious}
           >
@@ -374,7 +374,7 @@ export default function Quiz() {
           </Button>
 
           <Button
-            className="flex-1 sm:flex-none transition-all min-w-[180px]"
+            className="flex-1 sm:flex-none transition-all min-w-40"
             variant="default"
             size="lg"
             onClick={handleNext}

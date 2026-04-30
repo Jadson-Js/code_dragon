@@ -268,7 +268,7 @@ export default function QuizInsights() {
                       axisLine={false}
                       tickLine={false}
                     />
-                    <Tooltip />
+                    <Tooltip cursor={false} />
                     <Legend
                       iconType="square"
                       wrapperStyle={{ color: "#94a3b8" }}
@@ -338,7 +338,7 @@ export default function QuizInsights() {
                     axisLine={false}
                     tickLine={false}
                   />
-                  <Tooltip />
+                  <Tooltip cursor={false} />
                   <Legend
                     iconType="square"
                     wrapperStyle={{ color: "#94a3b8" }}
