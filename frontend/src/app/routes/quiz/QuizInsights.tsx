@@ -64,58 +64,6 @@ type QuizInsightPayload = {
   }>;
 };
 
-const quizInsightsData: QuizInsightPayload = {
-  sessionQuizId: "0835f1ef-4cde-42aa-9314-e742f866cdfb",
-  score: {
-    user: 50,
-    community: 75,
-  },
-  percentile: 67,
-  ranking: 2,
-  correctAnswers: 1,
-  wrongAnswers: 1,
-  ignoredAnswers: 0,
-  subjects: [
-    {
-      id: 8,
-      name: "Arquitetura de Software e Design Patterns",
-      score: {
-        user: 50,
-        community: 50,
-      },
-    },
-  ],
-  stacks: [
-    {
-      id: 3,
-      name: "Node.js",
-      score: {
-        user: 50,
-        community: 75,
-      },
-    },
-  ],
-  insights: {
-    title: "Desempenho Mockado",
-    description:
-      "Esta é uma análise simulada para fins de teste. Seu desempenho foi analisado com sucesso.",
-    strongPoints: ["Lógica de programação", "Conhecimento de sintaxe"],
-    weakPoints: ["Arquitetura de sistemas", "Testes unitários"],
-  },
-  roadmap: [
-    {
-      title: "Estudar Padrões de Projeto",
-      description: "Melhore a organização do seu código.",
-      priority: "HIGH",
-    },
-    {
-      title: "Praticar algoritmos",
-      description: "Aumente sua velocidade de resolução de problemas.",
-      priority: "MEDIUM",
-    },
-  ],
-};
-
 const priorityLabel: Record<"HIGH" | "MEDIUM" | "LOW", string> = {
   HIGH: "Alta",
   MEDIUM: "Média",
@@ -128,7 +76,7 @@ export default function QuizInsights() {
   const insightsDataFromState = location.state
     ?.insightsData as QuizInsightPayload;
 
-  const data = insightsDataFromState || quizInsightsData;
+  const data = insightsDataFromState;
   const scoreProgress = data.score.user;
 
   const subjectComparisonData = data.subjects.map((subject) => ({
@@ -146,13 +94,9 @@ export default function QuizInsights() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto py-8 space-y-6">
+      <div className="max-w-7xl mx-auto space-y-4">
         <div className="flex items-center justify-between gap-4">
-          <Button
-            variant="ghost"
-            className="text-white-1 border border-bg-3 hover:bg-bg-2"
-            onClick={() => navigate(-1)}
-          >
+          <Button variant="outline" className="" onClick={() => navigate("/")}>
             <ArrowLeft size={16} />
             Voltar
           </Button>
@@ -189,8 +133,7 @@ export default function QuizInsights() {
             </div>
             <p className="text-white-1 typ-h2 mt-4">Bom</p>
             <p className="text-white-2 typ-caption mt-1">
-              Você fez {data.score.user}, média:{" "}
-              {data.score.community}
+              Você fez {data.score.user}, média: {data.score.community}
             </p>
           </article>
 
@@ -239,16 +182,16 @@ export default function QuizInsights() {
             </div>
 
             <div className="grid grid-cols-4 gap-2 mt-4">
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors">
+              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
                 <Twitter size={16} />
               </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors">
+              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
                 <Linkedin size={16} />
               </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors">
+              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
                 <Facebook size={16} />
               </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors">
+              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
                 <Clipboard size={16} />
               </button>
             </div>
@@ -272,12 +215,10 @@ export default function QuizInsights() {
             </p>
             <ul className="space-y-2 typ-caption">
               <li className="text-green">
-                • Pontos Fortes:{" "}
-                {data.insights.strongPoints.join(", ")}
+                • Pontos Fortes: {data.insights.strongPoints.join(", ")}
               </li>
               <li className="text-red">
-                • Áreas de Melhoria:{" "}
-                {data.insights.weakPoints.join(", ")}
+                • Áreas de Melhoria: {data.insights.weakPoints.join(", ")}
               </li>
               <li className="text-primary-2">
                 • Próximos Passos: seguir o roadmap personalizado
@@ -293,9 +234,7 @@ export default function QuizInsights() {
               <p className="text-white-2 typ-caption">Acertos</p>
             </div>
             <div className="rounded-lg border border-red/40 bg-red/10 p-3 text-center">
-              <p className="text-red text-2xl font-bold">
-                {data.wrongAnswers}
-              </p>
+              <p className="text-red text-2xl font-bold">{data.wrongAnswers}</p>
               <p className="text-white-2 typ-caption">Erros</p>
             </div>
             <div className="rounded-lg border border-green/40 bg-green/10 p-3 text-center">
@@ -314,32 +253,67 @@ export default function QuizInsights() {
             </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={subjectComparisonData}>
-                  <PolarGrid stroke="#334155" />
-                  <PolarAngleAxis
-                    dataKey="subject"
-                    tick={{ fill: "#94a3b8", fontSize: 12 }}
-                  />
-                  <Tooltip />
-                  <Radar
-                    name="Média"
-                    dataKey="media"
-                    stroke="#64748b"
-                    fill="#64748b"
-                    fillOpacity={0.2}
-                  />
-                  <Radar
-                    name="Você"
-                    dataKey="voce"
-                    stroke="#6366f1"
-                    fill="#6366f1"
-                    fillOpacity={0.35}
-                  />
-                  <Legend
-                    iconType="square"
-                    wrapperStyle={{ color: "#94a3b8" }}
-                  />
-                </RadarChart>
+                {subjectComparisonData.length < 3 ? (
+                  <BarChart data={subjectComparisonData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis
+                      dataKey="subject"
+                      tick={{ fill: "#94a3b8", fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      domain={[0, 100]}
+                      tick={{ fill: "#94a3b8", fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip />
+                    <Legend
+                      iconType="square"
+                      wrapperStyle={{ color: "#94a3b8" }}
+                    />
+                    <Bar
+                      dataKey="media"
+                      name="Média"
+                      fill="#64748b"
+                      radius={[6, 6, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="voce"
+                      name="Você"
+                      fill="#6366f1"
+                      radius={[6, 6, 0, 0]}
+                    />
+                  </BarChart>
+                ) : (
+                  <RadarChart data={subjectComparisonData}>
+                    <PolarGrid stroke="#334155" />
+                    <PolarAngleAxis
+                      dataKey="subject"
+                      tick={{ fill: "#94a3b8", fontSize: 12 }}
+                    />
+                    <Tooltip />
+                    <Radar
+                      name="Média"
+                      dataKey="media"
+                      stroke="#64748b"
+                      fill="#64748b"
+                      fillOpacity={0.2}
+                    />
+                    <Radar
+                      name="Você"
+                      dataKey="voce"
+                      stroke="#6366f1"
+                      fill="#6366f1"
+                      fillOpacity={0.35}
+                    />
+                    <Legend
+                      iconType="square"
+                      wrapperStyle={{ color: "#94a3b8" }}
+                    />
+                  </RadarChart>
+                )}
               </ResponsiveContainer>
             </div>
           </article>
@@ -415,9 +389,6 @@ export default function QuizInsights() {
                 <p className="text-white-2 typ-caption mt-2">
                   {item.description}
                 </p>
-                <button className="mt-3 text-primary-2 typ-caption hover:text-primary-1 transition-colors">
-                  Ver material sugerido
-                </button>
               </article>
             ))}
           </div>
