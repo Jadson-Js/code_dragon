@@ -9,6 +9,10 @@ import {
   Twitter,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
+import { useState } from "react";
+import { pdf } from "@react-pdf/renderer";
+import { QuizReportPDF } from "./QuizReportPDF";
+import { Loader2 } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -70,11 +74,19 @@ const priorityLabel: Record<"HIGH" | "MEDIUM" | "LOW", string> = {
   LOW: "Baixa",
 };
 
+const priorityStyles: Record<"HIGH" | "MEDIUM" | "LOW", string> = {
+  HIGH: "border-red/40 bg-red/10 text-red",
+  MEDIUM: "border-yellow/40 bg-yellow/10 text-yellow",
+  LOW: "border-green/40 bg-green/10 text-green",
+};
+
 export default function QuizInsights() {
   const navigate = useNavigate();
   const location = useLocation();
   const insightsDataFromState = location.state
     ?.insightsData as QuizInsightPayload;
+
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const data = insightsDataFromState;
   const scoreProgress = data.score.user;
@@ -92,6 +104,24 @@ export default function QuizInsights() {
     media: stack.score.community,
   }));
 
+  const handleDownloadPDF = async () => {
+    if (!data) return;
+    setIsDownloading(true);
+    try {
+      const blob = await pdf(<QuizReportPDF data={data} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Relatorio_CodeDragon_${data.sessionQuizId.slice(0, 8)}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-4">
@@ -101,8 +131,19 @@ export default function QuizInsights() {
             Voltar
           </Button>
 
-          <Button className="uppercase tracking-wide font-semibold">
-            Baixar relatório em PDF
+          <Button
+            className="uppercase tracking-wide font-semibold"
+            onClick={handleDownloadPDF}
+            disabled={isDownloading}
+          >
+            {isDownloading ? (
+              <>
+                <Loader2 size={16} className="animate-spin mr-2" />
+                Gerando...
+              </>
+            ) : (
+              "Baixar relatório em PDF"
+            )}
           </Button>
         </div>
 
@@ -382,7 +423,9 @@ export default function QuizInsights() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-white-1 typ-h3">{item.title}</h3>
-                  <span className="px-3 py-1 rounded-full text-xs border border-red/40 bg-red/10 text-red">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs border ${priorityStyles[item.priority]}`}
+                  >
                     {priorityLabel[item.priority]}
                   </span>
                 </div>
