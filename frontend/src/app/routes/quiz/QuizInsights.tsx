@@ -3,9 +3,12 @@ import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import {
   ArrowLeft,
   Clipboard,
-  Facebook,
+  Check,
+  Gift,
+  Instagram,
   Lightbulb,
   Linkedin,
+  Share2,
   Twitter,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
@@ -87,9 +90,45 @@ export default function QuizInsights() {
     ?.insightsData as QuizInsightPayload;
 
   const [isDownloading, setIsDownloading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const data = insightsDataFromState;
   const scoreProgress = data.score.user;
+
+  const referralUrl = `https://plataforma.com/resultado/${data.sessionQuizId.slice(0, 8)}`;
+  const totalShares = 2400;
+
+  const shareText = `🚀 Acabei de completar o Diagnóstico Técnico com ${data.score.user}/100 pontos!\n\nIdentifiquei meus gaps e já sei onde focar. Você deveria tentar também 👇\n\n${referralUrl}`;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(referralUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareLinks = {
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`,
+    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
+    instagram: referralUrl,
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Meu Diagnóstico Técnico - Code Dragon",
+          text: shareText,
+          url: referralUrl,
+        });
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          handleCopy();
+        }
+      }
+    } else {
+      handleCopy();
+    }
+  };
 
   const subjectComparisonData = data.subjects.map((subject) => ({
     subject: subject.name,
@@ -206,36 +245,54 @@ export default function QuizInsights() {
             </div>
           </article>
 
-          <article className="card bg-linear-to-br from-primary-1/20 to-primary-2/30 border-primary-2/40 min-h-72">
-            <h2 className="typ-h3 text-white-1">Compartilhe seu resultado!</h2>
-            <p className="text-white-2 typ-caption mt-1">
-              Mostre suas habilidades para sua rede profissional
+          <article className="relative overflow-hidden rounded-2xl border border-primary-2/40 bg-gradient-to-br from-[#1a1040] via-[#2d1b69] to-[#1a2a50] p-6 flex flex-col justify-center">
+            {/* Glow decorativo */}
+            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-500/10" />
+            <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-blue-500/10" />
+
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-8 h-8 rounded-md bg-primary-1/20 text-primary-2 flex items-center justify-center">
+                <Share2 size={16} />
+              </span>
+              <h2 className="typ-h3 text-white-1">
+                Compartilhe seu resultado!
+              </h2>
+            </div>
+            <p className="mt-1.5 text-sm leading-relaxed text-purple-200/80">
+              Recrutadores procuram devs que demonstram crescimento.
+              Compartilhar seu diagnóstico é prova pública de que você investe
+              em si mesmo.
             </p>
 
-            <div className="mt-4 rounded-lg border border-bg-3 bg-bg-1/70 p-3">
-              <p className="text-white-1 typ-caption">
-                🚀 Acabei de completar o Diagnóstico Técnico com{" "}
-                {data.score.user}/100 pontos!
-              </p>
-              <p className="text-white-2 text-xs mt-3">
-                https://plataforma.com/meu-resultado
-              </p>
+            <div className="mt-3 flex items-start gap-3 rounded-xl border border-yellow-400/20 bg-yellow-400/8 px-3.5 py-3">
+              <Gift
+                size={18}
+                className="mt-0.5 flex-shrink-0 text-yellow-300"
+              />
+              <div>
+                <p className="text-sm font-medium text-yellow-300">
+                  Ganhe +1 quiz por mês, para sempre!!!
+                </p>
+                <p className="mt-0.5 text-xs leading-relaxed text-yellow-300/60">
+                  Cada pessoa que se cadastrar pelo seu link te dá um quiz extra
+                  vitalício.
+                </p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-2 mt-4">
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
-                <Twitter size={16} />
-              </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
-                <Linkedin size={16} />
-              </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
-                <Facebook size={16} />
-              </button>
-              <button className="h-10 rounded-md bg-bg-1/70 border border-bg-3 flex items-center justify-center text-white-2 hover:text-white-1 transition-colors cursor-pointer">
-                <Clipboard size={16} />
-              </button>
-            </div>
+            {/* Botões de compartilhamento */}
+            <Button
+              className="w-full mt-6 h-12 uppercase font-bold tracking-wide cursor-pointer"
+              onClick={handleShare}
+            >
+              <Share2 size={18} className="mr-2" />
+              Compartilhar agora
+            </Button>
+
+            {/* Prova social */}
+            <p className="mt-4 text-center text-[11px] text-gray-400">
+              Mais de {totalShares.toLocaleString()} devs já compartilharam
+            </p>
           </article>
         </section>
 
