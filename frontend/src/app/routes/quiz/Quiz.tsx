@@ -293,10 +293,23 @@ export default function Quiz() {
     [currentQuestionIndex],
   );
 
-  if (isGeneratingRoute) {
+  if (isGeneratingRoute || submitReportMutation.isPending) {
     return (
       <DashboardLayout>
-        <QuizLoader />
+        <QuizLoader
+          title={
+            submitReportMutation.isPending ? (
+              <>
+                Processando seus <span className="text-primary-1">Resultados</span>
+              </>
+            ) : undefined
+          }
+          subtitle={
+            submitReportMutation.isPending
+              ? "Nossa IA está analisando suas respostas e gerando insights personalizados..."
+              : undefined
+          }
+        />
       </DashboardLayout>
     );
   }

@@ -42,7 +42,12 @@ const PROMO_ADS = [
   },
 ];
 
-export function QuizLoader() {
+type QuizLoaderProps = {
+  title?: React.ReactNode;
+  subtitle?: string;
+};
+
+export function QuizLoader({ title, subtitle }: QuizLoaderProps) {
   const [adIndex, setAdIndex] = useState(0);
 
   // Ad Carousel Logic
@@ -77,11 +82,15 @@ export function QuizLoader() {
 
         <div className="text-center mb-12 space-y-3">
           <h1 className="text-3xl md:text-4xl font-bold text-white-1 tracking-tight">
-            Sintonizando seu{" "}
-            <span className="text-primary-1">Desafio Único</span>
+            {title || (
+              <>
+                Sintonizando seu{" "}
+                <span className="text-primary-1">Desafio Único</span>
+              </>
+            )}
           </h1>
           <p className="text-slate-400 text-sm md:text-base">
-            Nossa IA está refinando questões baseadas no seu perfil...
+            {subtitle || "Nossa IA está refinando questões baseadas no seu perfil..."}
           </p>
         </div>
 
