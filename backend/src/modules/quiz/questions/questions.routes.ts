@@ -8,7 +8,7 @@ import {
   quizQuestionGenerateSchema,
   quizQuestionStreamSchema,
 } from "./questions.schema";
-import { validate } from "@/infra/http/middlewares/validate.middleware";
+import { validate } from "@/infra/middlewares/validate.middleware";
 
 const router = Router();
 

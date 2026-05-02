@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validate } from "@/infra/http/middlewares/validate.middleware";
+import { validate } from "@/infra/middlewares/validate.middleware";
 import { createProfileSchema } from "./profile.schema";
 import { profileController } from "./profile.container";
 import {

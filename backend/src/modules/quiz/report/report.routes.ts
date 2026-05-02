@@ -4,7 +4,7 @@ import {
   simpleRateLimitMiddleware,
 } from "@/infra/container/providers";
 
-import { validate } from "@/infra/http/middlewares/validate.middleware";
+import { validate } from "@/infra/middlewares/validate.middleware";
 import { quizReportSubmitSchema } from "./report.schema";
 import { quizReportController } from "./report.container";
 

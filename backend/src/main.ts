@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import "@/infra/container/providers";
 
-import app from "./infra/http/server";
+import app from "./infra/server";
 import { env } from "./shared/env";
 import {
   emailQueueProvider,
