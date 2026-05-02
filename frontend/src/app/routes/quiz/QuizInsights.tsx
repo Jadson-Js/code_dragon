@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
+import QuizInsightsModal from "@/features/quiz/components/QuizInsightsModal";
 import {
   ArrowLeft,
   Clipboard,
@@ -31,7 +32,7 @@ import {
   YAxis,
 } from "recharts";
 
-type QuizInsightPayload = {
+export type QuizInsightPayload = {
   sessionQuizId: string;
   score: {
     user: number;
@@ -90,6 +91,7 @@ export default function QuizInsights() {
     ?.insightsData as QuizInsightPayload;
 
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const data = insightsDataFromState;
@@ -112,22 +114,8 @@ export default function QuizInsights() {
     instagram: referralUrl,
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Meu Diagnóstico Técnico - Code Dragon",
-          text: shareText,
-          url: referralUrl,
-        });
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          handleCopy();
-        }
-      }
-    } else {
-      handleCopy();
-    }
+  const handleShare = () => {
+    setIsShareModalOpen(true);
   };
 
   const subjectComparisonData = data.subjects.map((subject) => ({
@@ -494,6 +482,12 @@ export default function QuizInsights() {
           </div>
         </section>
       </div>
+
+      <QuizInsightsModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        data={data}
+      />
     </DashboardLayout>
   );
 }
