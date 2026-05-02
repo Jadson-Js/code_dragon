@@ -54,7 +54,7 @@ export default function QuizInsightsModal({
           </div>
 
           {/* O Card em si */}
-          <div className="relative z-10 w-full max-w-[320px] aspect-[3/4] bg-gradient-to-br from-[#1a1a2e] to-[#0a0a12] rounded-3xl border border-white-1/10 p-6 shadow-2xl flex flex-col items-center text-center">
+          <div className="relative z-10 w-full max-w-[320px] bg-linear-to-br from-[#1a1a2e] to-[#0a0a12] rounded-3xl border border-white-1/10 p-6 shadow-2xl flex flex-col items-center text-center">
             <div className="flex flex-col items-center gap-3">
               <img src="/logo.svg" alt="Logo" className="img" />
 
@@ -130,7 +130,7 @@ export default function QuizInsightsModal({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 flex-grow">
+          <div className="space-y-6 grow">
             <div className="space-y-3">
               <p className="text-sm font-semibold text-white-1 uppercase tracking-wider opacity-50">
                 Compartilhar em
@@ -167,7 +167,7 @@ export default function QuizInsightsModal({
                 Link direto
               </p>
               <div className="flex gap-2">
-                <div className="flex-grow bg-bg-2 border border-white-1/10 rounded-xl px-4 flex items-center h-12 text-white-2 overflow-hidden whitespace-nowrap">
+                <div className="grow bg-bg-2 border border-white-1/10 rounded-xl px-4 flex items-center h-12 text-white-2 overflow-hidden whitespace-nowrap">
                   <span className="truncate">{referralUrl}</span>
                 </div>
                 <Button
