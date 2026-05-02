@@ -63,10 +63,8 @@ O caminho que um endpoint percorre é padronizado:
 
 #### **Use Case**
 
-- **Estrutura**: Uma classe anotada com `@injectable()`.
-- **Responsabilidade**: Executa uma única ação de negócio.
-- **Método Principal**: Sempre possui um método `async execute()`.
 - **Dependências**: São injetadas via `constructor` usando o decorator `@inject()`. Ele nunca acessa o Prisma diretamente; ele usa o Repository.
+- **Testes**: Obrigatório ter `.spec.ts` com 100% de cobertura de todos os caminhos (sucesso e erros).
 
 #### **Controller**
 
@@ -76,9 +74,8 @@ O caminho que um endpoint percorre é padronizado:
 
 #### **Repository**
 
-- **Estrutura**: Implementa métodos de persistência.
-- **Responsabilidade**: Esconder a complexidade do banco de dados.
 - **Mapeamento**: Frequentemente possui um método ou getter (ex: `toDomain`) para transformar o objeto retornado pelo Prisma em uma `Entity` de domínio, garantindo que o resto da aplicação não dependa da estrutura da tabela.
+- **Testes**: Obrigatório ter `.spec.ts` unitário mockando o Prisma Client.
 
 #### **Entity**
 
@@ -87,8 +84,8 @@ O caminho que um endpoint percorre é padronizado:
 
 #### **Providers**
 
-- **Estrutura**: Classes que abstraem serviços de terceiros.
 - **Exemplo**: O `GeminiProvider` encapsula toda a lógica de prompt e comunicação com a API do Google, entregando para o Use Case apenas o dado já formatado.
+- **Testes**: Obrigatório ter `.spec.ts` unitário mockando as chamadas externas.
 
 Esta estrutura garante que seu código seja altamente testável e fácil de manter, permitindo, por exemplo, trocar o banco de dados ou o provedor de IA sem afetar as regras de negócio centrais.
 
@@ -250,18 +247,19 @@ describe("SignupUseCase", () => {
 
 ### 8. Testes e TDD
 
-O projeto segue rigorosamente o **TDD (Test-Driven Development)**:
+O projeto segue rigorosamente o **TDD (Test-Driven Development)** e exige cobertura total das camadas lógicas:
 
 1.  **Red**: Escreva um teste que falha para uma nova funcionalidade.
 2.  **Green**: Implemente o código mínimo necessário para fazer o teste passar.
 3.  **Refactor**: Melhore o código mantendo os testes passando.
 
-**Destaques**:
+**REGRAS INEGOCIÁVEIS DE TESTES:**
 
-- **Cobertura**: As camadas de **Use Cases**, **Repositories** e **Providers** possuem testes unitários rigorosos.
+- **Cobertura de 100%**: As camadas de **Use Cases**, **Repositories** e **Providers** DEVEM ser 100% testadas com testes unitários. **NUNCA gere um repository ou provider sem seu respectivo arquivo de teste (.spec.ts).**
 - **Unitários**: Focados especialmente em Use Cases, garantindo que a lógica de negócio esteja correta isoladamente.
 - **Mocks**: Utilizamos mocks para isolar os componentes de suas dependências externas (ex: mockar o Prisma no repositório ou a API de IA no provider).
 - **Localização**: Arquivos de teste ficam junto ao código (`.spec.ts`), facilitando a manutenção e a visibilidade da cobertura.
+- **Isolamento**: Testes de repositório devem mockar o `prisma client` para garantir que sejam unitários e rápidos, não dependendo de um banco real rodando.
 
 ---
 
@@ -277,7 +275,7 @@ Skill para criação de novos endpoints seguindo a arquitetura DDD da aplicaçã
 O processo sempre segue esta ordem:
 
 1. **Entrevista** → entender completamente o endpoint
-2. **Testes** → escrever toda a suíte de testes unitários (TDD Red)
+2. **Testes** → escrever toda a suíte de testes unitários para **Use Case, Repository e Provider** (TDD Red)
 3. **Aprovação** → aguardar confirmação do usuário
 4. **Implementação** → escrever o código de produção (TDD Green)
 
@@ -346,13 +344,17 @@ src/
   infra/
     database/prisma/
       <entity>.prisma.repository.ts          ← criar ou modificar
+      <entity>.prisma.repository.spec.ts     ← criar (OBRIGATÓRIO)
       <atomic-action>.prisma.repository.ts   ← criar se transacional
+      <atomic-action>.prisma.repository.spec.ts ← criar (OBRIGATÓRIO)
 ```
 
 Se houver provider novo, adicione também:
 
 ```
-src/infra/providers/<name>.provider.ts
+src/infra/providers/
+  <name>.provider.ts
+  <name>.provider.spec.ts            ← criar (OBRIGATÓRIO)
 ```
 
 Confirme esse mapeamento com o usuário antes de escrever os testes.
@@ -361,7 +363,7 @@ Confirme esse mapeamento com o usuário antes de escrever os testes.
 
 ## Fase 3 — Testes Unitários (TDD Red)
 
-Escreva **toda a suíte de testes** antes de qualquer código de produção.
+Escreva **toda a suíte de testes** (Use Cases, Repositories e Providers) antes de qualquer código de produção. A regra de ouro é: **Se tem lógica ou acesso a dados, tem que ter .spec.ts com 100% de cobertura.**
 
 ### Onde ficam os testes
 
@@ -597,6 +599,7 @@ Antes de declarar o endpoint pronto, verifique:
 - [ ] Repository tem método `toDomain` se retorna entidade de domínio
 - [ ] Transação usada quando há escrita em múltiplas tabelas
 - [ ] Rota tem os middlewares corretos (auth, rate limit, validação)
+- [ ] **TODOS os componentes (Use Case, Repository, Provider) têm testes unitários com 100% de cobertura**
 - [ ] Todos os testes passam
 - [ ] Nenhum `console.log` deixado no código
 - [ ] Novos tokens DI registrados no container

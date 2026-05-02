@@ -21,3 +21,13 @@ export type IQuizReportSubmitInputDTO = z.infer<
 >["body"] & {
   userId: string;
 };
+
+export const getQuizReportSchema = z.object({
+  params: z.object({
+    sessionQuizId: z.uuid(),
+  }),
+});
+
+export type IGetQuizReportInputDTO = z.infer<
+  typeof getQuizReportSchema
+>["params"];
