@@ -1,5 +1,6 @@
 export type QuizInsightPayload = {
   sessionQuizId: string;
+  sessionId: string;
   score: {
     user: number;
     community: number;

@@ -44,6 +44,7 @@ type PerformanceStats = {
 
 export interface IQuizReportSubmitResponse {
   sessionQuizId: string;
+  sessionId: string;
   score: {
     user: number;
     community: number;
@@ -125,6 +126,7 @@ export class QuizReportSubmitUseCase {
 
     const response = {
       sessionQuizId: session.id,
+      sessionId: session.sessionId,
       ...evaluation,
       subjects,
       stacks,

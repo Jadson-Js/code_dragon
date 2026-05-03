@@ -14,6 +14,7 @@ type ScoreEntry = {
 
 export interface IGetQuizReportResponse {
   sessionQuizId: string;
+  sessionId: string;
   score: {
     user: number;
     community: number;
@@ -69,6 +70,7 @@ export class GetReportUseCase {
 
     return {
       sessionQuizId: sessionQuiz.id,
+      sessionId: sessionQuiz.sessionId,
       score: {
         user: result.score,
         community: result.averageScore,

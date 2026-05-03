@@ -8,6 +8,11 @@ import { useQuizReport } from "@/features/quiz/hooks/useQuizReport";
 import { pdf } from "@react-pdf/renderer";
 import { QuizReportPDF } from "./QuizReportPDF";
 import { Loader2 } from "lucide-react";
+import FeedbackToast from "@/features/quiz/components/FeedbackToast";
+import FeedbackModal from "@/features/quiz/components/FeedbackModal";
+import { useFeedbackSubmit } from "@/features/quiz/hooks/useFeedbackSubmit";
+import { toast } from "sonner";
+
 import {
   Bar,
   BarChart,
@@ -52,6 +57,10 @@ export default function QuizInsights() {
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isFeedbackToastVisible, setIsFeedbackToastVisible] = useState(true);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+
+  const { mutateAsync: submitFeedback } = useFeedbackSubmit();
 
   const data = insightsDataFromState || insightsDataFromApi;
 
@@ -74,6 +83,27 @@ export default function QuizInsights() {
       console.error("Erro ao gerar PDF:", error);
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleFeedbackSubmit = async (
+    rate: number,
+    description: string,
+    reason: string,
+  ) => {
+    try {
+      await submitFeedback({
+        rate,
+        description,
+        reason,
+        sessionId: data.sessionId,
+        featureId: 1,
+      });
+      toast.success("Feedback enviado com sucesso! Obrigado.");
+      setIsFeedbackToastVisible(false);
+    } catch (error) {
+      toast.error("Erro ao enviar feedback. Tente novamente.");
+      throw error;
     }
   };
 
@@ -508,6 +538,19 @@ export default function QuizInsights() {
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         data={data}
+      />
+
+      {isFeedbackToastVisible && (
+        <FeedbackToast
+          onRate={() => setIsFeedbackModalOpen(true)}
+          onClose={() => setIsFeedbackToastVisible(false)}
+        />
+      )}
+
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        onSubmit={handleFeedbackSubmit}
       />
     </div>
   );

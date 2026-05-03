@@ -58,6 +58,7 @@ describe("GetQuizReportPrismaRepository", () => {
           },
         },
         roadmaps: true,
+        session: true,
       },
     });
     expect(result).toEqual({ id: sessionQuizId });

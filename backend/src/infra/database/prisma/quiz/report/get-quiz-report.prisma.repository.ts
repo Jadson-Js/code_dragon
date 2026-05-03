@@ -20,6 +20,7 @@ export class GetQuizReportPrismaRepository {
             },
           },
           roadmaps: true,
+          session: true,
         },
       });
 
