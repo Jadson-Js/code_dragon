@@ -1,17 +1,7 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import QuizInsightsModal from "@/features/quiz/components/QuizInsightsModal";
-import {
-  ArrowLeft,
-  Clipboard,
-  Check,
-  Gift,
-  Instagram,
-  Lightbulb,
-  Linkedin,
-  Share2,
-  Twitter,
-} from "lucide-react";
+import { ArrowLeft, Gift, Lightbulb, Share2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { pdf } from "@react-pdf/renderer";
@@ -92,27 +82,11 @@ export default function QuizInsights() {
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const data = insightsDataFromState;
   const scoreProgress = data.score.user;
 
-  const referralUrl = `https://plataforma.com/resultado/${data.sessionQuizId.slice(0, 8)}`;
   const totalShares = 2400;
-
-  const shareText = `🚀 Acabei de completar o Diagnóstico Técnico com ${data.score.user}/100 pontos!\n\nIdentifiquei meus gaps e já sei onde focar. Você deveria tentar também 👇\n\n${referralUrl}`;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(referralUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const shareLinks = {
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`,
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
-    instagram: referralUrl,
-  };
 
   const handleShare = () => {
     setIsShareModalOpen(true);
@@ -233,7 +207,7 @@ export default function QuizInsights() {
             </div>
           </article>
 
-          <article className="relative overflow-hidden rounded-2xl border border-primary-2/40 bg-gradient-to-br from-[#1a1040] via-[#2d1b69] to-[#1a2a50] p-6 flex flex-col justify-center">
+          <article className="relative overflow-hidden rounded-2xl border border-primary-2/40 bg-linear-to-br from-[#1a1040] via-[#2d1b69] to-[#1a2a50] p-6 flex flex-col justify-center">
             {/* Glow decorativo */}
             <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-500/10" />
             <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-blue-500/10" />

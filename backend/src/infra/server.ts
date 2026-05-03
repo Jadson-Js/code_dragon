@@ -8,6 +8,7 @@ import profileRoutes from "@/modules/profile/profile.routes";
 import quizQuestionsRoutes from "@/modules/quiz/questions/questions.routes";
 import quizOptionsRoutes from "@/modules/quiz/options/quiz-options.routes";
 import quizReportRoutes from "@/modules/quiz/report/report.routes";
+import feedbackRoutes from "@/modules/feedback/feedback.routes";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -26,6 +27,7 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/quiz/questions", quizQuestionsRoutes);
 app.use("/api/quiz/options", quizOptionsRoutes);
 app.use("/api/quiz/report", quizReportRoutes);
+app.use("/api/feedbacks", feedbackRoutes);
 
 app.use(errorHandler);
 

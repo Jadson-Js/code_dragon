@@ -5,7 +5,7 @@ import { User } from "@/entities/user.entity";
 import { Token } from "@/entities/token.entity";
 import { Profile } from "@/entities/profile.entity";
 import { SessionQuiz } from "@/entities/session-quiz.entity";
-
+import { Feedback } from "@/entities/feedback.entity";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -42,5 +42,6 @@ export const prisma = prismaClient.$extends({
       SessionQuiz,
       Prisma.SessionQuizScalarFieldEnum,
     ),
+    feedback: toDomainExtension(Feedback, Prisma.FeedbackScalarFieldEnum),
   },
 });

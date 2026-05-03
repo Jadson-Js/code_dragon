@@ -9,7 +9,7 @@
     "**/generated": true,
     "**/package.json": true,
     "**/prisma/migrations": true,
-    "**/prisma/client.ts": true,
+    //"**/prisma/client.ts": true,
     "**/node_modules": true,
     "**/.gitignore": true,
     "**/.prettierignore": true,

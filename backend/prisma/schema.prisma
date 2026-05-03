@@ -46,6 +46,7 @@ model User {
   profile        Profile?
   sessions       Session[]
   sessionQuizzes SessionQuiz[]
+  feedbacks      Feedback[]
 
   @@map("users")
 }
@@ -251,6 +252,7 @@ model Session {
   user           User          @relation(fields: [userId], references: [id])
   feature        Feature       @relation(fields: [featureId], references: [id])
   sessionQuizzes SessionQuiz[]
+  feedbacks      Feedback[]
 
   @@map("sessions")
 }
@@ -357,7 +359,27 @@ model Feature {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  sessions Session[]
+  sessions  Session[]
+  feedbacks Feedback[]
 
   @@map("features")
+}
+
+model Feedback {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  featureId   Int?      @map("feature_id")
+  sessionId   String?   @map("session_id")
+  rate        Int
+  reason      String
+  description String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  user    User     @relation(fields: [userId], references: [id])
+  feature Feature? @relation(fields: [featureId], references: [id])
+  session Session? @relation(fields: [sessionId], references: [id])
+
+  @@map("feedbacks")
 }
