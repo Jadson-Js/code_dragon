@@ -31,7 +31,6 @@ router.get(
     windowInMs: 60000,
   }),
   validate(getQuizReportSchema),
-  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
   quizReportController.getReport.bind(quizReportController),
 );
 

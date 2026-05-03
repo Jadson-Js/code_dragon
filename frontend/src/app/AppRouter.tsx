@@ -22,14 +22,15 @@ export default function AppRouter() {
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
 
+        <Route
+          path="/quiz/insights/session/:quiz_session_id"
+          element={<QuizInsights />}
+        />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/quiz/session/:quiz_session_id" element={<Quiz />} />
-          <Route
-            path="/quiz/insights/session/:quiz_session_id"
-            element={<QuizInsights />}
-          />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,3 +1,4 @@
+import type { QuizInsightPayload } from "@/features/quiz/types/quiz-report.types";
 import {
   Document,
   Page,
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  data: any;
+  data: QuizInsightPayload;
 };
 
 export const QuizReportPDF = ({ data }: Props) => {
