@@ -343,18 +343,19 @@ export default function QuizInsights() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-          <div className="rounded-lg border border-primary-2/30 bg-primary-1/10 p-3 text-center">
-            <p className="text-primary-2 text-2xl font-bold">
+          <div className="rounded-lg border border-green/40 bg-green/10 p-3 text-center">
+            <p className="text-green text-2xl font-bold">
               {data.correctAnswers}
             </p>
             <p className="text-white-2 typ-caption">Acertos</p>
           </div>
+
           <div className="rounded-lg border border-red/40 bg-red/10 p-3 text-center">
             <p className="text-red text-2xl font-bold">{data.wrongAnswers}</p>
             <p className="text-white-2 typ-caption">Erros</p>
           </div>
-          <div className="rounded-lg border border-green/40 bg-green/10 p-3 text-center">
-            <p className="text-green text-2xl font-bold">
+          <div className="rounded-lg border border-primary-2/30 bg-primary-1/10 p-3 text-center">
+            <p className="text-primary-2 text-2xl font-bold">
               {data.ignoredAnswers}
             </p>
             <p className="text-white-2 typ-caption">Ignorados</p>
