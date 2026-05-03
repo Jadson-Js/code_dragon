@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import QuizInsightsModal from "@/features/quiz/components/QuizInsightsModal";
-import { ArrowLeft, Gift, Lightbulb, Share2 } from "lucide-react";
+import { ArrowLeft, Gift, Lightbulb, Share2, UserPlus } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import { useQuizReport } from "@/features/quiz/hooks/useQuizReport";
@@ -23,7 +23,7 @@ import {
   YAxis,
 } from "recharts";
 import type { QuizInsightPayload } from "@/features/quiz/types/quiz-report.types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useOptionalAuthUser } from "@/features/auth/hooks/useOptionalAuthUser";
 const priorityLabel: Record<"HIGH" | "MEDIUM" | "LOW", string> = {
   HIGH: "Alta",
   MEDIUM: "Média",
@@ -43,12 +43,12 @@ export default function QuizInsights() {
   const insightsDataFromState = location.state
     ?.insightsData as QuizInsightPayload;
 
-  const queryClient = useQueryClient();
-  const userData = queryClient.getQueryData(["auth-user"]);
+  const { data: userData, isPending: isAuthPending } = useOptionalAuthUser();
 
-  const { data: insightsDataFromApi, isLoading } = useQuizReport(
-    !insightsDataFromState ? quiz_session_id : undefined,
-  );
+  const { data: insightsDataFromApi, isLoading: isReportLoading } =
+    useQuizReport(!insightsDataFromState ? quiz_session_id : undefined);
+
+  const isLoading = isAuthPending || isReportLoading;
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -123,6 +123,48 @@ export default function QuizInsights() {
 
   const content = (
     <div className="max-w-7xl mx-auto space-y-4">
+      {!userData && (
+        <section className="relative overflow-hidden rounded-2xl bg-linear-to-r from-primary-1/20 via-primary-2/10 to-transparent border border-primary-2/20 p-6 mb-8">
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-primary-2 font-bold uppercase tracking-wider text-xs">
+                <span className="flex h-2 w-2 rounded-full bg-primary-2 animate-pulse" />
+                Desbloqueie seu potencial
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white-1">
+                Gostou do diagnóstico? Crie o seu agora!
+              </h2>
+              <p className="text-white-2 max-w-xl">
+                Junte-se a milhares de desenvolvedores que já estão mapeando
+                seus gaps técnicos e recebendo roadmaps personalizados para
+                acelerar a carreira.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <Button
+                size="lg"
+                className="bg-primary-2 hover:bg-primary-2/90 text-white font-bold px-8 h-12 shadow-lg shadow-primary-2/20 cursor-pointer"
+                onClick={() => navigate("/auth/signup")}
+              >
+                <UserPlus size={18} className="mr-2" />
+                CRIAR MINHA CONTA
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white-2/20 text-white-2 hover:text-white-1 h-12 cursor-pointer"
+                onClick={() => navigate("/auth/login")}
+              >
+                Já tenho conta
+              </Button>
+            </div>
+          </div>
+          {/* Decorative background elements */}
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary-2/10 rounded-full blur-3xl" />
+          <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
+        </section>
+      )}
+
       <div className="flex items-center justify-between gap-4">
         <Button variant="outline" className="" onClick={() => navigate("/")}>
           <ArrowLeft size={16} />
@@ -435,6 +477,33 @@ export default function QuizInsights() {
         </div>
       </section>
 
+      {!userData && (
+        <section className="card bg-linear-to-br from-bg-2 to-bg-3 border-primary-2/30 text-center py-12 px-6">
+          <div className="max-w-2xl mx-auto space-y-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-2/20 text-primary-2 mb-2">
+              <UserPlus size={32} />
+            </div>
+            <h2 className="typ-h1 text-white-1">
+              Pronto para levar sua carreira ao próximo nível?
+            </h2>
+            <p className="text-white-2 text-lg">
+              Crie sua conta gratuita agora e tenha acesso a diagnósticos
+              ilimitados, acompanhamento de evolução e muito mais.
+            </p>
+            <Button
+              size="lg"
+              className="bg-primary-2 hover:bg-primary-2/90 text-white font-bold px-12 h-14 text-lg cursor-pointer"
+              onClick={() => navigate("/auth/signup")}
+            >
+              COMEÇAR AGORA — É GRÁTIS
+            </Button>
+            <p className="text-white-2 typ-caption">
+              Leva menos de 30 segundos para se cadastrar.
+            </p>
+          </div>
+        </section>
+      )}
+
       <QuizInsightsModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
@@ -446,6 +515,23 @@ export default function QuizInsights() {
   return userData ? (
     <DashboardLayout>{content}</DashboardLayout>
   ) : (
-    <div className="min-h-screen bg-bg-1 p-8">{content}</div>
+    <div className="min-h-screen bg-bg-1 flex flex-col">
+      <header className="w-full py-6 px-8 border-b border-bg-3 bg-bg-1/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <img src="/logo.svg" alt="CodeDragon" className="h-8" />
+          </div>
+        </div>
+      </header>
+      <main className="flex-1 p-8">{content}</main>
+      <footer className="w-full py-8 px-8 border-t border-bg-3 bg-bg-2/30 text-center">
+        <p className="text-white-2 typ-caption">
+          © {new Date().getFullYear()} CodeDragon. Todos os direitos reservados.
+        </p>
+      </footer>
+    </div>
   );
 }
