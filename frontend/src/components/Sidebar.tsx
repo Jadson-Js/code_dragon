@@ -9,17 +9,15 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useState } from "react";
-import QuizConfigModal from "./QuizConfigModal";
+import QuizConfigModal from "../features/dashboard/components/QuizConfigModal";
 
-export default function DashboardSidebar() {
+export default function Sidebar() {
   const { pathname } = useLocation();
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
 
   const navItems = [
     { label: "Home", to: "/", icon: House },
     { label: "Diagnósticos", to: "/quiz", icon: Activity },
-    { label: "Entrevista IA", to: "/interview", icon: Mic },
-    { label: "Auditoria Perfil", to: "/audit", icon: UserSearch },
     { label: "Caixa de Sugestões", to: "/suggestions", icon: Lightbulb },
     { label: "Configurações", to: "/settings", icon: Settings },
   ];
