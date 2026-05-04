@@ -1,7 +1,15 @@
 import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import QuizInsightsModal from "@/features/quiz/components/QuizInsightsModal";
-import { ArrowLeft, Gift, Lightbulb, Share2, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  Gift,
+  Lightbulb,
+  Lock,
+  Share2,
+  TrendingUp,
+  UserPlus,
+} from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import { useQuizReport } from "@/features/quiz/hooks/useQuizReport";
@@ -507,6 +515,34 @@ export default function QuizInsights() {
           ))}
         </div>
       </section>
+
+      <div className=" bottom-0 pt-6 z-50 bg-gradient-to-t from-bg-1 via-bg-1/90 to-transparent border-t border-primary-1/30">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-xl bg-bg-2 border-2 border-primary-1 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+          <div className="flex items-center gap-4 text-center md:text-left">
+            <div className="p-3 rounded-lg bg-primary-1/20">
+              <TrendingUp className="w-7 h-7 text-primary-1" />
+            </div>
+            <div>
+              <h4 className="text-white-1 font-semibold">
+                Não corra o risco de falhar na sua próxima entrevista técnica
+              </h4>
+              <p className="text-sm text-white-2 mt-1">
+                Libere seu Roadmap personalizado, análise detalhada e simulações
+                de entrevista
+              </p>
+            </div>
+          </div>
+          <button className="w-full md:w-auto px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold flex items-center justify-center gap-3 transition-all hover:-translate-y-1 cursor-pointer">
+            <Lock className="w-5 h-5" />
+            <div className="text-left">
+              <div className="text-base leading-tight">Tornar-se Pro</div>
+              <div className="text-[0.75rem] opacity-90 font-mono">
+                R$ 24,90/mês
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
 
       {!userData && (
         <section className="card bg-linear-to-br from-bg-2 to-bg-3 border-primary-2/30 text-center py-12 px-6">

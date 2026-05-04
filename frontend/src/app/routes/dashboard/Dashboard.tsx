@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { useAuthUser } from "@/features/auth/hooks/useAuthUser";
+import QuizConfigModal from "@/features/dashboard/components/QuizConfigModal";
 
 // --- Types ---
 
@@ -264,33 +265,22 @@ function SkillsRadar() {
           </div>
         ))}
       </div>
-
-      <button className="w-full bg-primary-1 hover:bg-primary-2 text-bg-1 px-4 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 font-bold cursor-pointer">
-        <TrendingUp className="w-4 h-4" />
-        Fazer Novo Quiz (Node.js)
-      </button>
     </div>
   );
 }
 
 export default function Dashboard() {
-  const [section, setSection] = useState<"home" | "diagnostic">("home");
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const { data } = useAuthUser();
-
-  const showSection = (s: "home" | "diagnostic") => {
-    setSection(s);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <DashboardLayout>
       <main className="max-w-7xl mx-auto">
         {/* Home Section */}
-        {section === "home" && (
-          <section
-            id="home-section"
-            className="space-y-12 animate-in fade-in duration-500"
-          >
+        <section
+          id="home-section"
+          className="space-y-12 animate-in fade-in duration-500"
+        >
             {/* Welcome */}
             <div className="flex items-center justify-between">
               <div>
@@ -438,8 +428,8 @@ export default function Dashboard() {
               <h3 className="mb-6 text-2xl text-white-1">Ações Rápidas</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <button
-                  className="bg-bg-2 rounded-xl p-8 text-left transition-all border-2 border-primary-1 hover:translate-y-[-4px] hover:border-primary-1/50 cursor-pointer"
-                  onClick={() => showSection("diagnostic")}
+                  className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-primary-1 cursor-pointer"
+                  onClick={() => setIsQuizModalOpen(true)}
                 >
                   <div className="inline-flex p-4 rounded-xl mb-4 bg-primary-1/20">
                     <Play className="w-8 h-8 text-primary-1" />
@@ -452,7 +442,7 @@ export default function Dashboard() {
                     conhecimento
                   </p>
                 </button>
-                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:translate-y-[-4px] hover:border-green cursor-pointer">
+                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-green cursor-pointer">
                   <div className="inline-flex p-4 rounded-xl mb-4 bg-green/20">
                     <BookOpen className="w-8 h-8 text-green" />
                   </div>
@@ -464,7 +454,7 @@ export default function Dashboard() {
                     atuais
                   </p>
                 </button>
-                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:translate-y-[-4px] hover:border-yellow cursor-pointer">
+                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-yellow cursor-pointer">
                   <div className="inline-flex p-4 rounded-xl mb-4 bg-yellow/20">
                     <BarChart3 className="w-8 h-8 text-yellow" />
                   </div>
@@ -488,411 +478,11 @@ export default function Dashboard() {
               </div>
             </div>
           </section>
-        )}
 
-        {/* Diagnostic Section */}
-        {section === "diagnostic" && (
-          <section
-            id="diagnostic-section"
-            className="space-y-12 pb-32 animate-in slide-in-from-bottom-4 duration-500"
-          >
-            {/* Back to Home */}
-            <button
-              onClick={() => showSection("home")}
-              className="text-white-2 hover:text-white-1 transition-colors flex items-center gap-2 cursor-pointer"
-            >
-              ← Voltar ao Início
-            </button>
-
-            {/* Score Section */}
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="relative">
-                <div
-                  className="w-48 h-48 rounded-full flex items-center justify-center border-4 border-yellow"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%)",
-                  }}
-                >
-                  <div className="text-center">
-                    <div className="font-mono text-[3.5rem] text-yellow leading-none">
-                      55
-                    </div>
-                    <div className="font-mono text-[1.5rem] text-white-2">
-                      /100
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 flex items-center gap-3 px-6 py-3 rounded-lg bg-yellow/10 border border-yellow">
-                <AlertTriangle className="w-5 h-5 text-yellow" />
-                <span className="text-yellow font-medium">
-                  Atenção: Nível de Empregabilidade Baixo
-                </span>
-              </div>
-              <div className="mt-4 text-center text-white-2">
-                <p>Você está abaixo da média do mercado</p>
-                <p className="mt-1 font-mono text-sm">
-                  Top 78% • Necessita melhoria crítica
-                </p>
-              </div>
-            </div>
-
-            {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Radar Chart */}
-              <div className="bg-bg-2 border border-white-1/10 rounded-xl p-6">
-                <h3 className="mb-2 text-white-1">Radar de Empregabilidade</h3>
-                <p className="mb-6 text-sm text-white-2">
-                  Comparativo: Seu nível vs. Exigência do mercado
-                </p>
-                <div className="flex justify-center py-4">
-                  <svg viewBox="0 0 400 400" className="w-full max-w-[350px]">
-                    <polygon
-                      points="200,40 340,120 340,280 200,360 60,280 60,120"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-                    <polygon
-                      points="200,80 305,140 305,260 200,320 95,260 95,140"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-                    <polygon
-                      points="200,120 270,160 270,240 200,280 130,240 130,160"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-                    <polygon
-                      points="200,160 235,180 235,220 200,240 165,220 165,180"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="200"
-                      y2="40"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="340"
-                      y2="120"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="340"
-                      y2="280"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="200"
-                      y2="360"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="60"
-                      y2="280"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <line
-                      x1="200"
-                      y1="200"
-                      x2="60"
-                      y2="120"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <polygon
-                      points="200,60 310,140 310,260 200,320 80,260 80,140"
-                      fill="rgba(148, 163, 184, 0.2)"
-                      stroke="#94a3b8"
-                      strokeWidth="2"
-                    />
-                    <polygon
-                      points="200,128 270,168 256,232 200,264 130,232 158,168"
-                      fill="rgba(245, 158, 11, 0.3)"
-                      stroke="#f59e0b"
-                      strokeWidth="2"
-                    />
-                    <text
-                      x="200"
-                      y="30"
-                      textAnchor="middle"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      Arquitetura
-                    </text>
-                    <text
-                      x="350"
-                      y="120"
-                      textAnchor="start"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      Lógica
-                    </text>
-                    <text
-                      x="350"
-                      y="290"
-                      textAnchor="start"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      Frameworks
-                    </text>
-                    <text
-                      x="200"
-                      y="380"
-                      textAnchor="middle"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      DevOps
-                    </text>
-                    <text
-                      x="50"
-                      y="290"
-                      textAnchor="end"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      Design Patterns
-                    </text>
-                    <text
-                      x="50"
-                      y="120"
-                      textAnchor="end"
-                      fill="#94a3b8"
-                      fontSize="12"
-                    >
-                      Testes
-                    </text>
-                  </svg>
-                </div>
-                <div className="flex justify-center gap-6 mt-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-white-2"></div>
-                    <span className="text-xs text-white-2">Mercado</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow"></div>
-                    <span className="text-xs text-white-2">Você</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bell Curve Chart */}
-              <div className="bg-bg-2 border border-white-1/10 rounded-xl p-6">
-                <h3 className="mb-2 text-white-1">Sua Posição na Fila</h3>
-                <p className="mb-6 text-sm text-white-2">
-                  Comparativo com outros candidatos
-                </p>
-                <div className="flex justify-center py-4">
-                  <svg viewBox="0 0 400 200" className="w-full max-w-[350px]">
-                    <path
-                      d="M 0,190 Q 50,190 100,150 Q 150,110 200,40 Q 250,110 300,150 Q 350,190 400,190"
-                      fill="rgba(148, 163, 184, 0.1)"
-                      stroke="#94a3b8"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M 312,160 Q 350,190 400,190 L 400,200 L 312,200 Z"
-                      fill="rgba(99, 102, 241, 0.2)"
-                    />
-                    <circle
-                      cx="312"
-                      cy="160"
-                      r="6"
-                      fill="#f59e0b"
-                      stroke="#0f172a"
-                      strokeWidth="2"
-                    />
-                    <text
-                      x="312"
-                      y="145"
-                      textAnchor="middle"
-                      fill="#f59e0b"
-                      fontSize="10"
-                      fontWeight="bold"
-                    >
-                      VOCÊ
-                    </text>
-                    <line
-                      x1="0"
-                      y1="190"
-                      x2="400"
-                      y2="190"
-                      stroke="rgba(255,255,255,0.1)"
-                    />
-                    <text
-                      x="0"
-                      y="205"
-                      textAnchor="start"
-                      fill="#94a3b8"
-                      fontSize="9"
-                    >
-                      0%
-                    </text>
-                    <text
-                      x="200"
-                      y="205"
-                      textAnchor="middle"
-                      fill="#94a3b8"
-                      fontSize="9"
-                    >
-                      50%
-                    </text>
-                    <text
-                      x="400"
-                      y="205"
-                      textAnchor="end"
-                      fill="#94a3b8"
-                      fontSize="9"
-                    >
-                      100%
-                    </text>
-                  </svg>
-                </div>
-                <div className="mt-6 p-4 rounded-lg bg-yellow/10 border border-yellow">
-                  <p className="text-yellow text-sm">
-                    Você está no <span className="font-mono">Top 78%</span>.
-                    Para entrar no Top 10%, você precisa melhorar
-                    significativamente.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Gaps List */}
-            <div className="bg-bg-2 border border-white-1/10 rounded-xl p-6">
-              <h3 className="mb-6 text-white-1">
-                Análise por Área de Conhecimento
-              </h3>
-              <div className="space-y-4">
-                <div className="rounded-lg p-5 bg-bg-1 border border-white-1/10">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-yellow" />
-                      <div>
-                        <h4 className="text-white-1 font-semibold">
-                          Lógica de Programação
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="font-mono text-sm text-yellow">
-                            60/100
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-white-2">
-                    Você acertou 6 de 10 questões. Principais erros em recursão
-                    e complexidade algorítmica.
-                  </p>
-                </div>
-                <div className="rounded-lg p-5 bg-white/5 border border-white-1/10 relative overflow-hidden">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <XCircle className="w-6 h-6 text-yellow" />
-                      <div>
-                        <h4 className="text-white-2 font-semibold">
-                          Arquitetura de Software
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="font-mono text-sm text-yellow">
-                            45/100
-                          </span>
-                          <span className="flex items-center gap-1 text-[0.75rem] text-primary-1">
-                            <Lock className="w-3 h-3" /> Pro
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-white-2 blur-sm select-none">
-                    Identificamos falhas críticas em padrões de design e
-                    arquitetura escalável. Recomendamos estudo em Clean
-                    Architecture e SOLID.
-                  </p>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button className="px-6 py-3 rounded-lg border-2 border-primary-1 text-primary-1 font-semibold transition-all hover:bg-primary-1 hover:text-bg-1 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] cursor-pointer">
-                      <Lock className="w-4 h-4 inline mr-2" />
-                      Desbloquear Análise
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Global CTA */}
-              <div
-                className="mt-8 p-8 rounded-xl text-center border-2 border-primary-1"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%)",
-                }}
-              >
-                <Lock className="w-8 h-8 mx-auto mb-4 text-primary-1" />
-                <h4 className="text-xl text-white-1 mb-2 font-semibold">
-                  Identificamos 3 falhas críticas no seu conhecimento
-                </h4>
-                <p className="text-sm text-white-2 mb-6">
-                  Seu perfil reprovaria na triagem de 78% das vagas atuais
-                </p>
-                <button className="px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold shadow-[0_0_30px_rgba(99,102,241,0.3)] transition-all hover:scale-105 cursor-pointer">
-                  Gerar Roadmap de Correção
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Sticky Footer Banner */}
-        {section === "diagnostic" && (
-          <div
-            id="sticky-banner"
-            className="fixed bottom-0 left-64 right-0 p-6 z-50 bg-gradient-to-t from-bg-1 via-bg-1/90 to-transparent border-t border-primary-1/30"
-          >
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-xl bg-bg-2 border-2 border-primary-1 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-              <div className="flex items-center gap-4 text-center md:text-left">
-                <div className="p-3 rounded-lg bg-primary-1/20">
-                  <TrendingUp className="w-7 h-7 text-primary-1" />
-                </div>
-                <div>
-                  <h4 className="text-white-1 font-semibold">
-                    Não corra o risco de falhar na sua próxima entrevista
-                    técnica
-                  </h4>
-                  <p className="text-sm text-white-2 mt-1">
-                    Libere seu Roadmap personalizado, análise detalhada e
-                    simulações de entrevista
-                  </p>
-                </div>
-              </div>
-              <button className="w-full md:w-auto px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold flex items-center justify-center gap-3 transition-all hover:-translate-y-1 cursor-pointer">
-                <Lock className="w-5 h-5" />
-                <div className="text-left">
-                  <div className="text-base leading-tight">Tornar-se Pro</div>
-                  <div className="text-[0.75rem] opacity-90 font-mono">
-                    R$ 24,90/mês
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
-        )}
+          <QuizConfigModal
+            open={isQuizModalOpen}
+            onOpenChange={setIsQuizModalOpen}
+          />
       </main>
     </DashboardLayout>
   );
