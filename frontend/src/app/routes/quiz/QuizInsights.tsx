@@ -541,7 +541,7 @@ export default function QuizInsights() {
         data={data}
       />
 
-      {isFeedbackToastVisible && (
+      {isFeedbackToastVisible && userData && (
         <FeedbackToast
           onRate={() => setIsFeedbackModalOpen(true)}
           onClose={() => setIsFeedbackToastVisible(false)}

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Linkedin, Copy, Check, Gift, Instagram } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/utils";
-import type { QuizInsightPayload } from "@/app/routes/quiz/QuizInsights";
+import type { QuizInsightPayload } from "../types/quiz-report.types";
 
 interface QuizInsightsModalProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ export default function QuizInsightsModal({
 
   if (!data) return null;
 
-  const referralUrl = `https://plataforma.com/resultado/${data.sessionQuizId.slice(0, 8)}`;
+  const referralUrl = `http://localhost:5173/quiz/insights/session/${data.sessionQuizId}`;
   const shareText = `🚀 Acabei de completar o Diagnóstico Técnico com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
 
   const handleCopy = async () => {
@@ -46,75 +46,152 @@ export default function QuizInsightsModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[1100px] w-[95vw] max-h-[90vh] h-fit p-0 overflow-hidden bg-bg-1 border-white-1/10 shadow-[0_0_50px_-12px_rgba(99,102,241,0.25)] rounded-2xl flex flex-col md:flex-row">
         {/* Lado Esquerdo: Preview do Card de Compartilhamento */}
-        <div className="w-full md:w-[45%] bg-[#0f0f1b] p-8 flex flex-col items-center justify-center relative overflow-hidden border-b md:border-b-0 md:border-r border-white-1/5">
-          {/* Background Effects */}
-          <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary-1/10 blur-[80px]" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/10 blur-[80px]" />
-          </div>
+        <div className="w-full md:w-[45%] bg-[#07070f] p-8 flex flex-col items-center justify-center relative overflow-hidden border-b md:border-b-0 md:border-r border-white-1/5">
+          {/* Orbs de fundo */}
+          <div className="absolute top-[-80px] right-[-60px] w-[300px] h-[300px] rounded-full bg-violet-600/20 blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-[-60px] left-[-40px] w-[220px] h-[220px] rounded-full bg-purple-500/15 blur-[80px] pointer-events-none" />
 
-          {/* O Card em si */}
-          <div className="relative z-10 w-full max-w-[320px] bg-linear-to-br from-[#1a1a2e] to-[#0a0a12] rounded-3xl border border-white-1/10 p-6 shadow-2xl flex flex-col items-center text-center">
-            <div className="flex flex-col items-center gap-3">
-              <img src="/logo.svg" alt="Logo" className="img" />
+          {/* Grid sutil */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-30"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
 
-              <p className="text-white-2 text-xs uppercase tracking-widest ">
-                Diagnóstico Técnico
-              </p>
+          {/* O Card */}
+          <div className="relative z-10 w-[300px] bg-[#0d0d1a] rounded-[28px] border border-violet-500/20 p-7 shadow-[0_32px_64px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)] overflow-hidden">
+            {/* Orbs internos */}
+            <div className="absolute top-[-60px] right-[-40px] w-[180px] h-[180px] rounded-full bg-violet-500/30 blur-[70px] pointer-events-none" />
+            <div className="absolute bottom-[-50px] left-[-30px] w-[150px] h-[150px] rounded-full bg-purple-500/20 blur-[60px] pointer-events-none" />
+
+            {/* Header */}
+            <div className="relative z-10 flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2 text-white text-[13px] font-bold tracking-wide">
+                <div className="w-2 h-2 rounded-full bg-gradient-to-br from-violet-400 to-purple-500" />
+                Code Dragon
+              </div>
+              <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-violet-500/20 border border-violet-500/40 text-violet-300 tracking-wide">
+                DIAGNÓSTICO
+              </span>
             </div>
 
-            <div className="flex flex-1 justify-center flex-col items-center my-auto">
-              <div className="relative">
-                <svg className="w-32 h-32 transform -rotate-90">
+            {/* Score Ring */}
+            <div className="relative z-10 flex flex-col items-center mb-5">
+              <div className="relative w-[130px] h-[130px] flex items-center justify-center">
+                {/* Pulse ring */}
+
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  viewBox="0 0 130 130"
+                >
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="58"
-                    stroke="currentColor"
+                    cx="65"
+                    cy="65"
+                    r="54"
+                    stroke="rgba(255,255,255,0.05)"
                     strokeWidth="8"
-                    fill="transparent"
-                    className="text-white-1/5"
+                    fill="none"
                   />
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="58"
-                    stroke="currentColor"
+                    cx="65"
+                    cy="65"
+                    r="54"
+                    stroke="url(#grad)"
                     strokeWidth="8"
-                    fill="transparent"
-                    strokeDasharray={364}
-                    strokeDashoffset={364 - (364 * data.score.user) / 100}
-                    className="text-primary-2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeDasharray={339}
+                    strokeDashoffset={339 - (339 * data.score.user) / 100}
+                    transform="rotate(-90 65 65)"
                   />
+                  <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#7c6bff" />
+                      <stop offset="100%" stopColor="#a855f7" />
+                    </linearGradient>
+                  </defs>
                 </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-3xl font-bold text-white-1">
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="text-[36px] font-bold leading-none bg-gradient-to-br from-white to-violet-200 bg-clip-text text-transparent">
                     {data.score.user}
                   </span>
-                  <span className="text-[10px] text-white-2 uppercase">
-                    Pontos
+                  <span className="text-[10px] text-white/40 uppercase tracking-widest mt-0.5">
+                    pontos
                   </span>
                 </div>
               </div>
+              <p className="mt-2.5 text-[13px] font-semibold bg-gradient-to-r from-violet-300 via-purple-200 to-violet-300 bg-clip-text text-transparent">
+                {data.insights.title}
+              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full ">
-              <div className="bg-white-1/5 rounded-xl p-2 border border-white-1/10">
-                <p className="text-[10px] text-white-2 uppercase">Percentil</p>
-                <p className="text-sm font-bold text-white-1">
-                  Top {100 - data.percentile}%
-                </p>
-              </div>
-              <div className="bg-white-1/5 rounded-xl p-2 border border-white-1/10">
-                <p className="text-[10px] text-white-2 uppercase">Ranking</p>
-                <p className="text-sm font-bold text-white-1">
-                  #{data.ranking}
-                </p>
-              </div>
+            {/* Stats */}
+            <div className="relative z-10 grid grid-cols-2 gap-2.5 mb-4">
+              {[
+                {
+                  label: "Percentil",
+                  value: `Top ${100 - data.percentile}%`,
+                  accent: true,
+                },
+                { label: "Ranking", value: `#${data.ranking}`, accent: false },
+              ].map(({ label, value, accent }) => (
+                <div
+                  key={label}
+                  className="bg-white/[0.04] border border-white/[0.07] rounded-[14px] p-2.5"
+                >
+                  <p className="text-[9px] text-white/35 uppercase tracking-widest">
+                    {label}
+                  </p>
+                  <p
+                    className={`text-[15px] font-bold mt-0.5 ${accent ? "bg-gradient-to-br from-violet-400 to-purple-400 bg-clip-text text-transparent" : "text-white"}`}
+                  >
+                    {value}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Skill bars */}
+            <div className="relative z-10 mb-4">
+              <p className="text-[9px] text-white/30 uppercase tracking-widest mb-2">
+                Breakdown
+              </p>
+              {data.subjects.slice(0, 3).map((subject) => (
+                <div
+                  key={subject.id}
+                  className="flex items-center gap-2 mb-1.5"
+                >
+                  <span className="text-[10px] text-white/50 w-16 flex-shrink-0 truncate text-left">
+                    {subject.name}
+                  </span>
+                  <div className="flex-1 h-[5px] bg-white/7 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-500 transition-all duration-1000"
+                      style={{ width: `${subject.score.user}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] text-white/40 w-6 text-right">
+                    {subject.score.user}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div className="relative z-10 flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
+              <span className="text-[10px] text-white/25">
+                Faça o seu diagnóstico
+              </span>
+              <span className="text-[9px] text-violet-500/60 font-mono">
+                codedragon.dev
+              </span>
             </div>
           </div>
 
-          <p className="relative z-10 mt-6 text-white-2 text-xs text-center opacity-60">
+          <p className="relative z-10 mt-5 text-white/25 text-xs text-center">
             Preview do seu card de compartilhamento
           </p>
         </div>
