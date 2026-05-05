@@ -332,13 +332,22 @@ export default function Dashboard() {
             {/* Credits & Skills Section */}
             <div className="flex flex-col h-full gap-6">
               {/* Credits Panel */}
-              <div className="bg-bg-2 border border-white-1/10 rounded-xl p-8 h-full flex flex-col justify-between">
+              <div
+                className="relative bg-bg-2 border-2 border-white-1/10 rounded-xl p-8 h-full flex flex-col justify-between opacity-70 cursor-not-allowed overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(148, 163, 184, 0.1) 0%, rgba(148, 163, 184, 0.05) 100%)",
+                }}
+              >
+                <div className="absolute top-4 right-4 px-3 py-1 bg-white-1/10 rounded-full text-[10px] font-bold text-white-2 uppercase tracking-widest border border-white-1/10">
+                  Em Breve
+                </div>
                 <div>
                   <h3 className="mb-4 text-white-1 text-xl font-semibold">
                     Créditos Disponíveis
                   </h3>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-mono text-[4rem] text-yellow leading-none">
+                    <span className="font-mono text-[4rem] text-white-1 leading-none">
                       5
                     </span>
                     <span className="font-mono text-[1.5rem] text-white-2">
@@ -354,17 +363,17 @@ export default function Dashboard() {
                 <div className="mt-8">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2 text-white-2 text-sm">
-                      <BatteryWarning className="w-5 h-5 text-yellow" />
+                      <BatteryWarning className="w-5 h-5 text-white-2" />
                       <span>Capacidade de Testes</span>
                     </div>
-                    <span className="text-yellow font-mono text-sm font-bold">
+                    <span className="text-white-2 font-mono text-sm font-bold">
                       50%
                     </span>
                   </div>
                   <div className="relative w-full h-4 bg-white/10 rounded-full overflow-hidden flex">
                     {/* Progress Fill */}
                     <div
-                      className="absolute top-0 left-0 h-full bg-yellow transition-all duration-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                      className="absolute top-0 left-0 h-full bg-white-1/20 transition-all duration-500"
                       style={{ width: "50%" }}
                     />
                     {/* Masks to create fragments */}
@@ -383,35 +392,38 @@ export default function Dashboard() {
 
             {/* Pro Banner */}
             <div
-              className="lg:col-span-2 bg-bg-2 rounded-xl p-8 relative overflow-hidden border-2 border-primary-1/50"
+              className="lg:col-span-2 bg-bg-2 rounded-xl p-8 relative overflow-hidden border-2 border-white-1/10 opacity-70 cursor-not-allowed"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%)",
+                  "linear-gradient(135deg, rgba(148, 163, 184, 0.1) 0%, rgba(148, 163, 184, 0.05) 100%)",
               }}
             >
+              <div className="absolute top-4 right-4 px-3 py-1 bg-white-1/10 rounded-full text-[10px] font-bold text-white-2 uppercase tracking-widest border border-white-1/10">
+                Em Breve
+              </div>
               <div
-                className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none"
+                className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(circle, var(--color-primary-1) 0%, transparent 70%)",
+                    "radial-gradient(circle, var(--color-white-2) 0%, transparent 70%)",
                 }}
               ></div>
               <div className="relative flex items-start gap-6 h-full flex-col">
                 <div className="flex items-start gap-6">
-                  <div className="p-4 rounded-xl bg-primary-1/20 border border-primary-1">
-                    <Rocket className="w-10 h-10 text-primary-1" />
+                  <div className="p-4 rounded-xl bg-white-1/5 border border-white-1/10 grayscale">
+                    <Rocket className="w-10 h-10 text-white-2" />
                   </div>
                   <div className="flex-1">
                     <h3 className="mb-2 text-2xl text-white-1 font-bold">
                       Quer acelerar sua contratação?
                     </h3>
                     <p className="mb-6 text-white-2">
-                      Assinantes Pro têm{" "}
-                      <span className="text-primary-1 font-semibold">
+                      Em breve, assinantes Pro terão acesso a{" "}
+                      <span className="text-white-1 font-semibold">
                         Testes Ilimitados
                       </span>{" "}
-                      e acesso ao{" "}
-                      <span className="text-primary-1 font-semibold">
+                      e ao{" "}
+                      <span className="text-white-1 font-semibold">
                         Roadmap de Estudos
                       </span>{" "}
                       focado nas vagas atuais.
@@ -425,10 +437,10 @@ export default function Dashboard() {
                         "Simulações de entrevistas",
                       ].map((text) => (
                         <div key={text} className="flex items-center gap-2">
-                          <div className="p-1 rounded-full bg-primary-1/20 text-primary-1">
+                          <div className="p-1 rounded-full bg-white-1/10 text-white-2">
                             <Check className="w-3.5 h-3.5" />
                           </div>
-                          <span className="text-sm text-white-1 font-medium">
+                          <span className="text-sm text-white-2 font-medium">
                             {text}
                           </span>
                         </div>
@@ -436,14 +448,13 @@ export default function Dashboard() {
                     </div>
 
                     <div className="flex items-center gap-4 mt-auto">
-                      <button className="px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold shadow-[0_0_30px_rgba(99,102,241,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)] cursor-pointer">
-                        Conhecer o Plano Pro
+                      <button className="px-8 py-4 rounded-lg bg-white-1/10 text-white-2 font-bold cursor-not-allowed border border-white-1/10">
+                        Aguarde Novidades
                       </button>
-                      <div className="font-mono text-white-2">
-                        <div className="text-[0.75rem]">A partir de</div>
-                        <div className="text-[1.25rem] text-primary-1 font-bold">
-                          R$ 24,90
-                          <span className="text-[0.875rem]">/mês</span>
+                      <div className="font-mono text-white-2 opacity-50">
+                        <div className="text-[0.75rem]">Previsão</div>
+                        <div className="text-[1.25rem] text-white-1 font-bold">
+                          R$ --,--
                         </div>
                       </div>
                     </div>
@@ -472,9 +483,12 @@ export default function Dashboard() {
                   conhecimento
                 </p>
               </button>
-              <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-green cursor-pointer">
-                <div className="inline-flex p-4 rounded-xl mb-4 bg-green/20">
-                  <BookOpen className="w-8 h-8 text-green" />
+              <button className="relative bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 opacity-60 cursor-not-allowed overflow-hidden group">
+                <div className="absolute top-4 right-4 px-2 py-1 bg-white-1/10 rounded text-[10px] font-bold text-white-2 uppercase tracking-widest border border-white-1/10">
+                  Em Breve
+                </div>
+                <div className="inline-flex p-4 rounded-xl mb-4 bg-white-1/5 grayscale">
+                  <BookOpen className="w-8 h-8 text-white-2" />
                 </div>
                 <h4 className="mb-2 text-xl text-white-1 font-semibold">
                   Ver Roadmap
@@ -484,9 +498,12 @@ export default function Dashboard() {
                   atuais
                 </p>
               </button>
-              <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-yellow cursor-pointer">
-                <div className="inline-flex p-4 rounded-xl mb-4 bg-yellow/20">
-                  <BarChart3 className="w-8 h-8 text-yellow" />
+              <button className="relative bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 opacity-60 cursor-not-allowed overflow-hidden group">
+                <div className="absolute top-4 right-4 px-2 py-1 bg-white-1/10 rounded text-[10px] font-bold text-white-2 uppercase tracking-widest border border-white-1/10">
+                  Em Breve
+                </div>
+                <div className="inline-flex p-4 rounded-xl mb-4 bg-white-1/5 grayscale">
+                  <BarChart3 className="w-8 h-8 text-white-2" />
                 </div>
                 <h4 className="mb-2 text-xl text-white-1 font-semibold">
                   Minha Evolução
