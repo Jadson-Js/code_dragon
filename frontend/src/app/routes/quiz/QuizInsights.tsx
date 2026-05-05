@@ -225,9 +225,7 @@ export default function QuizInsights() {
       </div>
 
       <div>
-        <h1 className="typ-h1 text-white-1">
-          Resultado do seu Quiz
-        </h1>
+        <h1 className="typ-h1 text-white-1">Resultado do seu Quiz</h1>
         <p className="text-white-2 typ-caption mt-1">
           Análise completa do seu desempenho • Concluído em 16/01/2026
         </p>
@@ -493,13 +491,13 @@ export default function QuizInsights() {
           </span>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {data.roadmap.map((item) => (
             <article
               key={item.title}
               className="rounded-lg border border-bg-3 bg-bg-1/40 p-4"
             >
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start justify-between gap-1">
                 <h3 className="text-white-1 typ-h3">{item.title}</h3>
                 <span
                   className={`px-3 py-1 rounded-full text-xs border ${priorityStyles[item.priority]}`}
@@ -507,9 +505,8 @@ export default function QuizInsights() {
                   {priorityLabel[item.priority]}
                 </span>
               </div>
-              <p className="text-white-2 typ-caption mt-2">
-                {item.description}
-              </p>
+
+              <p className="text-white-2 typ-caption">{item.description}</p>
             </article>
           ))}
         </div>
@@ -526,7 +523,8 @@ export default function QuizInsights() {
                 O que estamos preparando para a versão Pro
               </h4>
               <p className="text-sm text-white-2 mt-1">
-                Em breve: Roadmaps detalhados, análise profunda de erros e mais funcionalidades.
+                Em breve: Roadmaps detalhados, análise profunda de erros e mais
+                funcionalidades.
               </p>
             </div>
           </div>

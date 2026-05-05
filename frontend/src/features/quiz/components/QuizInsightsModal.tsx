@@ -182,9 +182,7 @@ export default function QuizInsightsModal({
 
             {/* Footer */}
             <div className="relative z-10 flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
-              <span className="text-[10px] text-white/25">
-                Faça o seu quiz
-              </span>
+              <span className="text-[10px] text-white/25">Faça o seu quiz</span>
               <span className="text-[9px] text-violet-500/60 font-mono">
                 codedragon.dev
               </span>
@@ -208,7 +206,7 @@ export default function QuizInsightsModal({
           </DialogHeader>
 
           <div className="space-y-6 grow">
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <p className="text-sm font-semibold text-white-1 uppercase tracking-wider opacity-50">
                 Compartilhar em
               </p>
@@ -237,7 +235,7 @@ export default function QuizInsightsModal({
                   WhatsApp
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             <div className="space-y-3">
               <p className="text-sm font-semibold text-white-1 uppercase tracking-wider opacity-50">
@@ -269,17 +267,22 @@ export default function QuizInsightsModal({
               </div>
             </div>
 
-            <div className="mt-8 p-6 bg-primary-1/5 rounded-2xl border border-primary-1/20 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-yellow/20 flex items-center justify-center shrink-0 border border-yellow/30">
+            <div className="relative mt-8 p-6 bg-primary-1/5 rounded-2xl border border-primary-1/20 flex items-start gap-4 overflow-hidden opacity-70 cursor-not-allowed group">
+              <div className="absolute top-0 right-0 px-3 py-1 bg-yellow/10 border-b border-l border-yellow/20 rounded-bl-xl">
+                <span className="text-[10px] font-bold text-yellow uppercase tracking-widest">
+                  Em breve
+                </span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-yellow/20 flex items-center justify-center shrink-0 border border-yellow/30 grayscale">
                 <Gift className="text-yellow w-5 h-5" />
               </div>
               <div>
                 <p className="text-white-1 font-bold text-base">
-                  Recompensa Ativa!
+                  Recompensas por Indicação
                 </p>
                 <p className="text-white-2 text-sm mt-1 leading-relaxed">
-                  Para cada novo desenvolvedor que fizer o quiz através
-                  do seu link, você ganha{" "}
+                  Para cada novo desenvolvedor que fizer o quiz através do seu
+                  link, você ganhará{" "}
                   <span className="text-yellow font-bold">
                     +1 quiz extra vitalício
                   </span>{" "}
