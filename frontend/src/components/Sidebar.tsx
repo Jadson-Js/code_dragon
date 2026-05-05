@@ -18,8 +18,8 @@ export default function Sidebar() {
   const navItems = [
     { label: "Home", to: "/", icon: House },
     { label: "Quizzes", to: "/quiz", icon: Activity },
-    { label: "Caixa de Sugestões", to: "/suggestions", icon: Lightbulb },
-    { label: "Configurações", to: "/settings", icon: Settings },
+    { label: "Caixa de Sugestões", to: "/suggestion", icon: Lightbulb },
+    // { label: "Configurações", to: "/settings", icon: Settings },
   ];
 
   return (
