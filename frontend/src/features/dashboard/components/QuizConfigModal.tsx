@@ -232,12 +232,12 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </div>
 
           <DialogTitle className="text-2xl font-bold tracking-tight">
-            Configurar Diagnóstico
+            Configurar Quiz
           </DialogTitle>
 
           <DialogDescription className="text-center max-w-md">
-            Personalize seu teste técnico. Nossa IA irá gerar um desafio sob
-            medida baseado nos seus critérios.
+            Personalize seu desafio técnico. Vou gerar perguntas sob medida
+            para o que você quer testar agora.
           </DialogDescription>
         </DialogHeader>
 
@@ -431,7 +431,7 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
               onClick={handleSubmit(onSubmit)}
             >
               <Sparkles size={18} />
-              INICIAR DIAGNÓSTICO
+              INICIAR QUIZ
             </Button>
           </div>
         </div>

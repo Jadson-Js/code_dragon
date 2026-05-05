@@ -337,7 +337,7 @@ export const QuizReportPDF = ({ data }: Props) => {
               <Text style={styles.scoreValue}>{data.score.user}</Text>
               <Text style={styles.scoreLabel}>PONTOS</Text>
             </View>
-            <Text style={styles.heroTitle}>Seu Diagnóstico Técnico</Text>
+            <Text style={styles.heroTitle}>Seu Relatório de Quiz</Text>
             <Text style={styles.heroSubtitle}>
               Parabéns! Você concluiu a avaliação com um desempenho de destaque.
               Confira abaixo sua análise detalhada e próximos passos.
@@ -505,7 +505,7 @@ export const QuizReportPDF = ({ data }: Props) => {
             <Text style={styles.heroTitle}>Seu Plano de Estudo</Text>
             <Text style={styles.heroSubtitle}>
               Abaixo estão os passos recomendados pela nossa IA para acelerar
-              sua evolução técnica com base no seu diagnóstico.
+              sua evolução técnica com base no seu desempenho.
             </Text>
           </View>
 

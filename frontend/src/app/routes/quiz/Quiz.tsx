@@ -306,7 +306,7 @@ export default function Quiz() {
           }
           subtitle={
             submitReportMutation.isPending
-              ? "Nossa IA está analisando suas respostas e gerando insights personalizados..."
+              ? "Estou analisando suas respostas para gerar feedbacks personalizados..."
               : undefined
           }
         />

@@ -27,7 +27,7 @@ export default function QuizInsightsModal({
   if (!data) return null;
 
   const referralUrl = `http://localhost:5173/quiz/insights/session/${data.sessionQuizId}`;
-  const shareText = `🚀 Acabei de completar o Diagnóstico Técnico com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
+  const shareText = `🚀 Acabei de completar o Quiz de Conhecimentos com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralUrl);
@@ -74,7 +74,7 @@ export default function QuizInsightsModal({
                 Code Dragon
               </div>
               <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-violet-500/20 border border-violet-500/40 text-violet-300 tracking-wide">
-                DIAGNÓSTICO
+                QUIZ
               </span>
             </div>
 
@@ -183,7 +183,7 @@ export default function QuizInsightsModal({
             {/* Footer */}
             <div className="relative z-10 flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
               <span className="text-[10px] text-white/25">
-                Faça o seu diagnóstico
+                Faça o seu quiz
               </span>
               <span className="text-[9px] text-violet-500/60 font-mono">
                 codedragon.dev
@@ -278,7 +278,7 @@ export default function QuizInsightsModal({
                   Recompensa Ativa!
                 </p>
                 <p className="text-white-2 text-sm mt-1 leading-relaxed">
-                  Para cada novo desenvolvedor que fizer o diagnóstico através
+                  Para cada novo desenvolvedor que fizer o quiz através
                   do seu link, você ganha{" "}
                   <span className="text-yellow font-bold">
                     +1 quiz extra vitalício

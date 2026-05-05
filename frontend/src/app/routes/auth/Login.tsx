@@ -23,7 +23,7 @@ export default function Login() {
     <AuthLayout>
       <PageHeader
         title="Bem vindo de volta!"
-        description="Junte-se a milhares de devs acelerando a carreira"
+        description="Continue sua jornada de aprendizado e evolução técnica"
         className="mb-8"
       />
 

@@ -323,7 +323,7 @@ export default function Dashboard() {
                 </span>
               </div>
               <p className="mt-2 text-white-2">
-                Pronto para acelerar sua carreira!
+                Bom ter você por aqui para testar as primeiras funcionalidades!
               </p>
             </div>
           </div>
@@ -355,8 +355,8 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <p className="text-sm text-white-2 leading-relaxed">
-                    Seus testes gratuitos renovam em 30 dias. <br />
-                    Use-os para validar seu conhecimento em novas tecnologias.
+                    Como estamos no início, você tem alguns testes para experimentar. <br />
+                    Use-os para testar seus conhecimentos e me dar um feedback!
                   </p>
                 </div>
 
@@ -415,18 +415,10 @@ export default function Dashboard() {
                   </div>
                   <div className="flex-1">
                     <h3 className="mb-2 text-2xl text-white-1 font-bold">
-                      Quer acelerar sua contratação?
+                      O que vem por aí no Code Dragon
                     </h3>
                     <p className="mb-6 text-white-2">
-                      Em breve, assinantes Pro terão acesso a{" "}
-                      <span className="text-white-1 font-semibold">
-                        Testes Ilimitados
-                      </span>{" "}
-                      e ao{" "}
-                      <span className="text-white-1 font-semibold">
-                        Roadmap de Estudos
-                      </span>{" "}
-                      focado nas vagas atuais.
+                      Estou trabalhando em novas funcionalidades para te ajudar a evoluir ainda mais rápido.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
@@ -449,7 +441,7 @@ export default function Dashboard() {
 
                     <div className="flex items-center gap-4 mt-auto">
                       <button className="px-8 py-4 rounded-lg bg-white-1/10 text-white-2 font-bold cursor-not-allowed border border-white-1/10">
-                        Aguarde Novidades
+                        Em Desenvolvimento
                       </button>
                       <div className="font-mono text-white-2 opacity-50">
                         <div className="text-[0.75rem]">Previsão</div>
@@ -476,7 +468,7 @@ export default function Dashboard() {
                   <Play className="w-8 h-8 text-primary-1" />
                 </div>
                 <h4 className="mb-2 text-xl text-white-1 font-semibold">
-                  Iniciar Novo Diagnóstico
+                  Iniciar Novo Quiz
                 </h4>
                 <p className="text-sm text-white-2 leading-relaxed">
                   Teste suas habilidades técnicas e descubra seus gaps de
@@ -494,8 +486,7 @@ export default function Dashboard() {
                   Ver Roadmap
                 </h4>
                 <p className="text-sm text-white-2 leading-relaxed">
-                  Acesse seu plano de estudos personalizado baseado nas vagas
-                  atuais
+                  Acesse seu plano de estudos baseado no seu desempenho nos quizzes
                 </p>
               </button>
               <button className="relative bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 opacity-60 cursor-not-allowed overflow-hidden group">

@@ -23,7 +23,7 @@ export default function Signup() {
     <AuthLayout>
       <PageHeader
         title="Crie sua conta gratuita"
-        description="Junte-se a milhares de devs acelerando a carreira"
+        description="Acompanhe sua evolução como desenvolvedor de forma prática"
         className="mb-8"
       />
 

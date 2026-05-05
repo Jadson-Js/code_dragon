@@ -13,11 +13,11 @@ export default function AuthFooter() {
     <div>
       <div className="flex flex-row items-center gap-2 mb-8">
         <div className="flex-1 border-b-2 border-bg-3" />
-        <span className="text-bg-3 typ-caption">OU</span>
-        <div className="flex-1 border-b-2 border-bg-3" />
+        {/* <span className="text-bg-3 typ-caption">OU</span> */}
+        {/* <div className="flex-1 border-b-2 border-bg-3" /> */}
       </div>
 
-      <Button
+      {/* <Button
         variant="outline"
         size="lg"
         className="w-full gap-3 transition-all cursor-pointer mb-8"
@@ -50,7 +50,7 @@ export default function AuthFooter() {
           </div>
           <p className="text-white-2 typ-caption">Usuários ativos</p>
         </div>
-      </div>
+      </div>  */}
 
       <div className="flex flex-row items-center gap-2">
         <p className="text-center text-white-2 typ-caption">

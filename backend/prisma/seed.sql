@@ -134,7 +134,15 @@ ON CONFLICT ("slug") DO NOTHING;
 -- 1. QUIZ OBJECTIVES
 -- A descrição aqui dita o 'tom' e a 'dificuldade' da pergunta para a LLM.
 -- ==========================================
-insert into "public"."quiz_objectives" ("created_at", "description", "id", "name", "slug", "updated_at") values ('2026-04-25 13:06:48.41', 'Crie perguntas com foco educativo. Aborde fundamentos, sintaxe, boas práticas e o funcionamento interno da tecnologia. O objetivo é validar se o usuário compreende os conceitos base antes de aplicá-los.', 1, 'Treinamento e Fixação', 'training', '2026-04-25 13:06:48.41'), ('2026-04-25 13:06:48.41', 'Crie perguntas focadas em resolução de problemas reais, trade-offs (vantagens e desvantagens), edge cases (casos extremos) e arquitetura. Simule cenários práticos que testam a experiência real do candidato, não apenas teoria.', 2, 'Entrevista Técnica', 'technical-interview', '2026-04-25 13:06:48.41') ON CONFLICT ("id") DO NOTHING;
+INSERT INTO "quiz_objectives" ("id", "name", "slug", "description", "created_at", "updated_at") VALUES
+(1, 'Identificador de Gaps', 'gap-identifier', 'Identifique pontos cegos e fragilidades técnicas. O foco é cobrir uma ampla gama de tópicos de forma leve para detectar onde o conhecimento precisa de reforço, sem exigir profundidade excessiva.', NOW(), NOW()),
+(2, 'Entrevista Técnica', 'technical-interview', 'Simule perguntas reais de processos seletivos. O objetivo é fazer perguntas pontuais sobre a stack (ex: uso do useMemo, hooks, patterns), da mesma forma como ocorre em entrevistas técnicas.', NOW(), NOW()),
+(3, 'Estudo por Questões', 'study-mode', 'Aprenda na prática com questões de nível intermediário focadas em "como fazer", "para que serve" e configurações de setup, guiando sua evolução para se tornar um desenvolvedor mais técnico.', NOW(), NOW())
+ON CONFLICT ("id") DO UPDATE SET
+  "name" = EXCLUDED."name",
+  "slug" = EXCLUDED."slug",
+  "description" = EXCLUDED."description",
+  "updated_at" = NOW();
 
 
 -- ==========================================

@@ -173,9 +173,8 @@ export default function QuizInsights() {
                 Gostou do diagnóstico? Crie o seu agora!
               </h2>
               <p className="text-white-2 max-w-xl">
-                Junte-se a milhares de desenvolvedores que já estão mapeando
-                seus gaps técnicos e recebendo roadmaps personalizados para
-                acelerar a carreira.
+                Mapeie seus gaps técnicos e receba roadmaps personalizados para
+                acelerar sua evolução como desenvolvedor.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -227,7 +226,7 @@ export default function QuizInsights() {
 
       <div>
         <h1 className="typ-h1 text-white-1">
-          Resultado do Diagnóstico Técnico
+          Resultado do seu Quiz
         </h1>
         <p className="text-white-2 typ-caption mt-1">
           Análise completa do seu desempenho • Concluído em 16/01/2026
@@ -301,7 +300,7 @@ export default function QuizInsights() {
             <Gift size={18} className="mt-0.5 flex-shrink-0 text-yellow-300" />
             <div>
               <p className="text-sm font-medium text-yellow-300">
-                Ganhe +1 quiz por mês, para sempre!!!
+                Ajude o projeto a crescer!
               </p>
               <p className="mt-0.5 text-xs leading-relaxed text-yellow-300/60">
                 Cada pessoa que se cadastrar pelo seu link te dá um quiz extra
@@ -319,7 +318,7 @@ export default function QuizInsights() {
           </Button>
 
           <p className="mt-4 text-center text-[11px] text-gray-400">
-            Mais de 2.400 devs já compartilharam
+            Compartilhe com seus amigos
           </p>
         </article>
       </section>
@@ -486,7 +485,7 @@ export default function QuizInsights() {
           <div>
             <h2 className="typ-h2 text-white-1">Seu Roadmap Personalizado</h2>
             <p className="text-white-2 typ-caption">
-              Plano de estudos baseado nos gaps identificados no diagnóstico
+              Sugestões de estudo baseadas no seu desempenho
             </p>
           </div>
           <span className="px-3 py-1 rounded-full border border-bg-3 text-white-2 typ-caption">
@@ -524,18 +523,17 @@ export default function QuizInsights() {
             </div>
             <div>
               <h4 className="text-white-1 font-semibold">
-                Não corra o risco de falhar na sua próxima entrevista técnica
+                O que estamos preparando para a versão Pro
               </h4>
               <p className="text-sm text-white-2 mt-1">
-                Libere seu Roadmap personalizado, análise detalhada e simulações
-                de entrevista
+                Em breve: Roadmaps detalhados, análise profunda de erros e mais funcionalidades.
               </p>
             </div>
           </div>
-          <button className="w-full md:w-auto px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold flex items-center justify-center gap-3 transition-all hover:-translate-y-1 cursor-pointer">
+          <button className="w-full md:w-auto px-8 py-4 rounded-lg bg-white-1/10 text-white-2 font-bold flex items-center justify-center gap-3 transition-all border border-white-1/10 cursor-not-allowed">
             <Lock className="w-5 h-5" />
             <div className="text-left">
-              <div className="text-base leading-tight">Tornar-se Pro</div>
+              <div className="text-base leading-tight">Em Breve</div>
               <div className="text-[0.75rem] opacity-90 font-mono">
                 R$ 24,90/mês
               </div>
@@ -554,8 +552,8 @@ export default function QuizInsights() {
               Pronto para levar sua carreira ao próximo nível?
             </h2>
             <p className="text-white-2 text-lg">
-              Crie sua conta gratuita agora e tenha acesso a diagnósticos
-              ilimitados, acompanhamento de evolução e muito mais.
+              Crie sua conta gratuita agora para salvar seu progresso,
+              acompanhar sua evolução e muito mais.
             </p>
             <Button
               size="lg"

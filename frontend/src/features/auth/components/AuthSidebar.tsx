@@ -13,8 +13,8 @@ export default function AuthSidebar() {
           Acelere sua carreira em tecnologia
         </h2>
         <p className="typ-body text-white-2">
-          Diagnósticos personalizados, simulações de entrevista com IA e
-          auditoria completa do seu perfil profissional.
+          Teste seus conhecimentos técnicos com quizzes gerados por IA e receba
+          insights personalizados para sua evolução.
         </p>
       </div>
       <div className="flex flex-col gap-4 ">
@@ -23,12 +23,10 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="typ-h3 text-white-1">
-              Acelere sua carreira em tecnologia
-            </h3>
+            <h3 className="typ-h3 text-white-1">Quizzes com IA</h3>
             <p className="text-white-2">
-              Diagnósticos personalizados, simulações de entrevista com IA e
-              auditoria completa do seu perfil profissional.
+              Teste seus conhecimentos técnicos e identifique seus gaps de forma
+              prática.
             </p>
           </div>
         </div>
@@ -37,9 +35,9 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="typ-h3 text-white-1">Simulação de Entrevista</h3>
+            <h3 className="typ-h3 text-white-1">Simulação de Entrevista (Em Breve)</h3>
             <p className="text-white-2">
-              Pratique com IA e receba feedback detalhado
+              Pratique com IA e receba feedback detalhado para suas entrevistas.
             </p>
           </div>
         </div>
@@ -48,8 +46,8 @@ export default function AuthSidebar() {
             <FaRegCircleCheck />
           </div>
           <div>
-            <h3 className="typ-h3 text-white-1">Auditoria de Perfil</h3>
-            <p className="text-white-2">Otimize seu LinkedIn e currículo</p>
+            <h3 className="typ-h3 text-white-1">Auditoria de Perfil (Em Breve)</h3>
+            <p className="text-white-2">Dicas para otimizar seu LinkedIn e currículo.</p>
           </div>
         </div>
       </div>
