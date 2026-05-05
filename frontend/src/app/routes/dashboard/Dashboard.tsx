@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
   Wallet,
+  Sparkles,
 } from "lucide-react";
 import {
   Radar,
@@ -47,6 +48,7 @@ interface Material {
 interface Action {
   id: number;
   text: string;
+  description: string;
   priority: "high" | "medium" | "low";
   material?: Material;
 }
@@ -75,7 +77,7 @@ const PriorityBadge = ({ priority }: { priority: Action["priority"] }) => {
 };
 
 const MaterialDropdown = ({ material }: { material: Material }) => (
-  <div className="pt-4 mt-4 border-t border-white-1/5 flex flex-col md:flex-row gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+  <div className="   flex flex-col md:flex-row gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
     <div className="w-full md:w-48 aspect-video rounded-sm overflow-hidden shrink-0 border border-white-1/10 shadow-lg">
       <img
         src={material.image}
@@ -122,30 +124,37 @@ function DashboardRoadmap() {
   const actions: Action[] = [
     {
       id: 1,
-      text: "Aprofundar em React Hooks (Você errou 3 questões sobre useEffect)",
+      text: "Dominar React Server Components",
+      description:
+        "Aprenda a arquitetura moderna do Next.js para melhorar a performance e o SEO das suas aplicações.",
       priority: "high",
       material: {
-        title: "React Completo: Do Zero ao Hooks Avançado",
+        title: "Mastering RSC & Next.js 15",
         rating: 4.9,
-        students: "12k alunos",
-        image:
-          "https://kinsta.com/pt/wp-content/uploads/sites/3/2023/04/react-must-be-in-scope-when-using-jsx-1024x512.jpg",
-        discount: "Desconto de 20% exclusivo via nossa plataforma",
+        students: "12k",
+        image: "https://placehold.co/100x100/1e293b/white?text=RSC",
+        discount: "15% OFF",
       },
     },
     {
       id: 2,
-      text: "Aprofundar em Gerenciamento de Estado (Context API)",
+      text: "Aprofundar em Generics no TypeScript",
+      description:
+        "Crie componentes e funções reutilizáveis e tipadas de forma avançada para reduzir bugs em produção.",
       priority: "medium",
+      material: {
+        title: "TypeScript Advanced Patterns",
+        rating: 4.8,
+        students: "8k",
+        image: "https://placehold.co/100x100/1e293b/white?text=TS",
+        discount: "Gratuito",
+      },
     },
     {
       id: 3,
-      text: "Revisar conceitos de Closures em Javascript",
-      priority: "low",
-    },
-    {
-      id: 4,
-      text: "Revisar conceitos de Closures em Javascript",
+      text: "Configurar CI/CD com GitHub Actions",
+      description:
+        "Automatize seus testes e deploys para garantir uma entrega contínua e segura do seu código.",
       priority: "low",
     },
   ];
@@ -156,9 +165,6 @@ function DashboardRoadmap() {
         <h3 className="text-white-1 text-lg font-semibold">
           Roadmap de Estudos
         </h3>
-        <Link to="/" className="text-primary-1 text-sm hover:underline">
-          Ver último roadmap
-        </Link>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -168,30 +174,49 @@ function DashboardRoadmap() {
           return (
             <div
               key={action.id}
-              className="flex flex-col border border-bg-3 rounded-lg bg-bg-1/40 hover:bg-bg-1/50 transition-colors p-4 cursor-pointer"
-              onClick={() => setExpandedId(isExpanded ? null : action.id)}
+              className={cn(
+                "flex flex-col p-4 rounded-xl border border-white-1/5 bg-white-1/5  transition-all  ",
+                isExpanded &&
+                  "ring-1 ring-primary-1/40 border-primary-1/20 bg-white-1/10",
+              )}
             >
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-sm font-medium text-white-1 flex-1 leading-snug">
-                  {action.text}
-                </p>
-                <div className="flex items-center gap-3 shrink-0">
-                  <PriorityBadge priority={action.priority} />
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h4 className="text-sm font-semibold text-white-1 transition-colors">
+                    {action.text}
+                  </h4>
+                  <p className="text-xs text-white-2 mt-1 opacity-70 leading-relaxed line-clamp-2">
+                    {action.description}
+                  </p>
                 </div>
+                <PriorityBadge priority={action.priority} />
               </div>
 
               {action.material && (
-                <div className="flex flex-col mt-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-primary-1">
-                    Ver material sugerido
-                    {isExpanded ? (
-                      <ChevronUp size={14} />
-                    ) : (
-                      <ChevronDown size={14} />
-                    )}
+                <div className="mt-4">
+                  <div className="flex items-center justify-start gap-1 group cursor-pointer">
+                    <span
+                      onClick={() =>
+                        setExpandedId(isExpanded ? null : action.id)
+                      }
+                      className="text-xs text-primary-1 group-hover:text-primary-2 transition-colors "
+                    >
+                      Ver material sugerido
+                    </span>
+
+                    <ChevronDown
+                      size={14}
+                      className={cn(
+                        "text-primary-1 transition-transform duration-300 group-hover:text-primary-2",
+                        isExpanded && "rotate-180",
+                      )}
+                    />
                   </div>
+
                   {isExpanded && (
-                    <MaterialDropdown material={action.material} />
+                    <div className="mt-4 pt-4 border-t border-white-1/5 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <MaterialDropdown material={action.material} />
+                    </div>
                   )}
                 </div>
               )}
@@ -242,11 +267,16 @@ function SkillsRadar() {
 
       <div className="space-y-3 mb-5">
         {data.map((item) => (
-          <div key={item.skill} className="flex items-center justify-between">
-            <span className="text-sm text-white-2">{item.skill}</span>
+          <div key={item.skill} className="flex items-center gap-4">
+            <span
+              className="text-sm text-white-2 truncate flex-1"
+              title={item.skill}
+            >
+              {item.skill}
+            </span>
 
-            <div className="flex items-center gap-2 w-10/12">
-              <div className="w-full bg-white/5 rounded-full h-2">
+            <div className="flex items-center gap-2 flex-3">
+              <div className="flex-1 bg-white/5 rounded-full h-2">
                 <div
                   className={`h-2 rounded-full ${
                     item.value >= 70
@@ -258,7 +288,7 @@ function SkillsRadar() {
                   style={{ width: `${item.value}%` }}
                 />
               </div>
-              <span className="text-sm text-white-1 w-10 text-right">
+              <span className="text-sm text-white-1 w-10 text-right shrink-0">
                 {item.value}%
               </span>
             </div>
@@ -281,140 +311,139 @@ export default function Dashboard() {
           id="home-section"
           className="space-y-12 animate-in fade-in duration-500"
         >
-            {/* Welcome */}
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-[28px] text-white-1 font-semibold">
-                    Olá, {data?.name || "Pedro"}.
-                  </h2>
-                  <span className="px-3 py-1 rounded-full bg-bg-2 border border-white-1/10 text-white-2 text-xs">
-                    Plano Free
-                  </span>
+          {/* Welcome */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <h2 className="text-[28px] text-white-1 font-semibold">
+                  Olá, {data?.name || "Pedro"}.
+                </h2>
+                <span className="px-3 py-1 rounded-full bg-bg-2 border border-white-1/10 text-white-2 text-xs">
+                  Plano Free
+                </span>
+              </div>
+              <p className="mt-2 text-white-2">
+                Pronto para acelerar sua carreira!
+              </p>
+            </div>
+          </div>
+          {/* Dashboard Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Credits & Skills Section */}
+            <div className="flex flex-col h-full gap-6">
+              {/* Credits Panel */}
+              <div className="bg-bg-2 border border-white-1/10 rounded-xl p-8 h-full flex flex-col justify-between">
+                <div>
+                  <h3 className="mb-4 text-white-1 text-xl font-semibold">
+                    Créditos Disponíveis
+                  </h3>
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="font-mono text-[4rem] text-yellow leading-none">
+                      5
+                    </span>
+                    <span className="font-mono text-[1.5rem] text-white-2">
+                      /10
+                    </span>
+                  </div>
+                  <p className="text-sm text-white-2 leading-relaxed">
+                    Seus testes gratuitos renovam em 30 dias. <br />
+                    Use-os para validar seu conhecimento em novas tecnologias.
+                  </p>
                 </div>
-                <p className="mt-2 text-white-2">
-                  Pronto para acelerar sua carreira!
-                </p>
+
+                <div className="mt-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2 text-white-2 text-sm">
+                      <BatteryWarning className="w-5 h-5 text-yellow" />
+                      <span>Capacidade de Testes</span>
+                    </div>
+                    <span className="text-yellow font-mono text-sm font-bold">
+                      50%
+                    </span>
+                  </div>
+                  <div className="relative w-full h-4 bg-white/10 rounded-full overflow-hidden flex">
+                    {/* Progress Fill */}
+                    <div
+                      className="absolute top-0 left-0 h-full bg-yellow transition-all duration-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                      style={{ width: "50%" }}
+                    />
+                    {/* Masks to create fragments */}
+                    <div className="absolute inset-0 flex w-full h-full pointer-events-none">
+                      {Array.from({ length: 10 }).map((_, index) => (
+                        <div
+                          key={index}
+                          className="flex-1 border-r-4 border-bg-2 last:border-none"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            {/* Dashboard Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Credits & Skills Section */}
-              <div className="flex flex-col h-full gap-6">
-                {/* Credits Panel */}
-                <div className="bg-bg-2 border border-white-1/10 rounded-xl p-8 h-full flex flex-col justify-between">
-                  <div>
-                    <h3 className="mb-4 text-white-1 text-xl font-semibold">
-                      Créditos Disponíveis
-                    </h3>
-                    <div className="flex items-baseline gap-2 mb-4">
-                      <span className="font-mono text-[4rem] text-yellow leading-none">
-                        5
-                      </span>
-                      <span className="font-mono text-[1.5rem] text-white-2">
-                        /10
-                      </span>
-                    </div>
-                    <p className="text-sm text-white-2 leading-relaxed">
-                      Seus testes gratuitos renovam em 30 dias. <br />
-                      Use-os para validar seu conhecimento em novas tecnologias.
-                    </p>
-                  </div>
 
-                  <div className="mt-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2 text-white-2 text-sm">
-                        <BatteryWarning className="w-5 h-5 text-yellow" />
-                        <span>Capacidade de Testes</span>
-                      </div>
-                      <span className="text-yellow font-mono text-sm font-bold">
-                        50%
-                      </span>
-                    </div>
-                    <div className="relative w-full h-4 bg-white/10 rounded-full overflow-hidden flex">
-                      {/* Progress Fill */}
-                      <div
-                        className="absolute top-0 left-0 h-full bg-yellow transition-all duration-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
-                        style={{ width: "50%" }}
-                      />
-                      {/* Masks to create fragments */}
-                      <div className="absolute inset-0 flex w-full h-full pointer-events-none">
-                        {Array.from({ length: 10 }).map((_, index) => (
-                          <div
-                            key={index}
-                            className="flex-1 border-r-4 border-bg-2 last:border-none"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pro Banner */}
+            {/* Pro Banner */}
+            <div
+              className="lg:col-span-2 bg-bg-2 rounded-xl p-8 relative overflow-hidden border-2 border-primary-1/50"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%)",
+              }}
+            >
               <div
-                className="lg:col-span-2 bg-bg-2 rounded-xl p-8 relative overflow-hidden border-2 border-primary-1/50"
+                className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%)",
+                    "radial-gradient(circle, var(--color-primary-1) 0%, transparent 70%)",
                 }}
-              >
-                <div
-                  className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none"
-                  style={{
-                    background:
-                      "radial-gradient(circle, var(--color-primary-1) 0%, transparent 70%)",
-                  }}
-                ></div>
-                <div className="relative flex items-start gap-6 h-full flex-col">
-                  <div className="flex items-start gap-6">
-                    <div className="p-4 rounded-xl bg-primary-1/20 border border-primary-1">
-                      <Rocket className="w-10 h-10 text-primary-1" />
+              ></div>
+              <div className="relative flex items-start gap-6 h-full flex-col">
+                <div className="flex items-start gap-6">
+                  <div className="p-4 rounded-xl bg-primary-1/20 border border-primary-1">
+                    <Rocket className="w-10 h-10 text-primary-1" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="mb-2 text-2xl text-white-1 font-bold">
+                      Quer acelerar sua contratação?
+                    </h3>
+                    <p className="mb-6 text-white-2">
+                      Assinantes Pro têm{" "}
+                      <span className="text-primary-1 font-semibold">
+                        Testes Ilimitados
+                      </span>{" "}
+                      e acesso ao{" "}
+                      <span className="text-primary-1 font-semibold">
+                        Roadmap de Estudos
+                      </span>{" "}
+                      focado nas vagas atuais.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                      {[
+                        "Testes técnicos ilimitados",
+                        "Roadmap personalizado",
+                        "Análise detalhada de erros",
+                        "Simulações de entrevistas",
+                      ].map((text) => (
+                        <div key={text} className="flex items-center gap-2">
+                          <div className="p-1 rounded-full bg-primary-1/20 text-primary-1">
+                            <Check className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="text-sm text-white-1 font-medium">
+                            {text}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="mb-2 text-2xl text-white-1 font-bold">
-                        Quer acelerar sua contratação?
-                      </h3>
-                      <p className="mb-6 text-white-2">
-                        Assinantes Pro têm{" "}
-                        <span className="text-primary-1 font-semibold">
-                          Testes Ilimitados
-                        </span>{" "}
-                        e acesso ao{" "}
-                        <span className="text-primary-1 font-semibold">
-                          Roadmap de Estudos
-                        </span>{" "}
-                        focado nas vagas atuais.
-                      </p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                        {[
-                          "Testes técnicos ilimitados",
-                          "Roadmap personalizado",
-                          "Análise detalhada de erros",
-                          "Simulações de entrevistas",
-                        ].map((text) => (
-                          <div key={text} className="flex items-center gap-2">
-                            <div className="p-1 rounded-full bg-primary-1/20 text-primary-1">
-                              <Check className="w-3.5 h-3.5" />
-                            </div>
-                            <span className="text-sm text-white-1 font-medium">
-                              {text}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="flex items-center gap-4 mt-auto">
-                        <button className="px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold shadow-[0_0_30px_rgba(99,102,241,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)] cursor-pointer">
-                          Conhecer o Plano Pro
-                        </button>
-                        <div className="font-mono text-white-2">
-                          <div className="text-[0.75rem]">A partir de</div>
-                          <div className="text-[1.25rem] text-primary-1 font-bold">
-                            R$ 24,90
-                            <span className="text-[0.875rem]">/mês</span>
-                          </div>
+                    <div className="flex items-center gap-4 mt-auto">
+                      <button className="px-8 py-4 rounded-lg bg-primary-1 text-bg-1 font-bold shadow-[0_0_30px_rgba(99,102,241,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)] cursor-pointer">
+                        Conhecer o Plano Pro
+                      </button>
+                      <div className="font-mono text-white-2">
+                        <div className="text-[0.75rem]">A partir de</div>
+                        <div className="text-[1.25rem] text-primary-1 font-bold">
+                          R$ 24,90
+                          <span className="text-[0.875rem]">/mês</span>
                         </div>
                       </div>
                     </div>
@@ -422,67 +451,72 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Quick Actions */}
-            <div>
-              <h3 className="mb-6 text-2xl text-white-1">Ações Rápidas</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button
-                  className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-primary-1 cursor-pointer"
-                  onClick={() => setIsQuizModalOpen(true)}
-                >
-                  <div className="inline-flex p-4 rounded-xl mb-4 bg-primary-1/20">
-                    <Play className="w-8 h-8 text-primary-1" />
-                  </div>
-                  <h4 className="mb-2 text-xl text-white-1 font-semibold">
-                    Iniciar Novo Diagnóstico
-                  </h4>
-                  <p className="text-sm text-white-2 leading-relaxed">
-                    Teste suas habilidades técnicas e descubra seus gaps de
-                    conhecimento
-                  </p>
-                </button>
-                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-green cursor-pointer">
-                  <div className="inline-flex p-4 rounded-xl mb-4 bg-green/20">
-                    <BookOpen className="w-8 h-8 text-green" />
-                  </div>
-                  <h4 className="mb-2 text-xl text-white-1 font-semibold">
-                    Ver Roadmap
-                  </h4>
-                  <p className="text-sm text-white-2 leading-relaxed">
-                    Acesse seu plano de estudos personalizado baseado nas vagas
-                    atuais
-                  </p>
-                </button>
-                <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-yellow cursor-pointer">
-                  <div className="inline-flex p-4 rounded-xl mb-4 bg-yellow/20">
-                    <BarChart3 className="w-8 h-8 text-yellow" />
-                  </div>
-                  <h4 className="mb-2 text-xl text-white-1 font-semibold">
-                    Minha Evolução
-                  </h4>
-                  <p className="text-sm text-white-2 leading-relaxed">
-                    Acompanhe seu progresso e veja como você está evoluindo ao
-                    longo do tempo
-                  </p>
-                </button>
-              </div>
+          {/* Quick Actions */}
+          <div>
+            <h3 className="mb-6 text-2xl text-white-1">Ações Rápidas</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <button
+                className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-primary-1 cursor-pointer"
+                onClick={() => setIsQuizModalOpen(true)}
+              >
+                <div className="inline-flex p-4 rounded-xl mb-4 bg-primary-1/20">
+                  <Play className="w-8 h-8 text-primary-1" />
+                </div>
+                <h4 className="mb-2 text-xl text-white-1 font-semibold">
+                  Iniciar Novo Diagnóstico
+                </h4>
+                <p className="text-sm text-white-2 leading-relaxed">
+                  Teste suas habilidades técnicas e descubra seus gaps de
+                  conhecimento
+                </p>
+              </button>
+              <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-green cursor-pointer">
+                <div className="inline-flex p-4 rounded-xl mb-4 bg-green/20">
+                  <BookOpen className="w-8 h-8 text-green" />
+                </div>
+                <h4 className="mb-2 text-xl text-white-1 font-semibold">
+                  Ver Roadmap
+                </h4>
+                <p className="text-sm text-white-2 leading-relaxed">
+                  Acesse seu plano de estudos personalizado baseado nas vagas
+                  atuais
+                </p>
+              </button>
+              <button className="bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 hover:border-yellow cursor-pointer">
+                <div className="inline-flex p-4 rounded-xl mb-4 bg-yellow/20">
+                  <BarChart3 className="w-8 h-8 text-yellow" />
+                </div>
+                <h4 className="mb-2 text-xl text-white-1 font-semibold">
+                  Minha Evolução
+                </h4>
+                <p className="text-sm text-white-2 leading-relaxed">
+                  Acompanhe seu progresso e veja como você está evoluindo ao
+                  longo do tempo
+                </p>
+              </button>
             </div>
+          </div>
 
-            <div className="">
-              <h3 className="mb-6 text-2xl text-white-1">Estatísticas</h3>
+          <div className="">
+            <h3 className="mb-6 text-2xl text-white-1">Estatísticas</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-3 gap-6">
+              <div className="col-span-1">
                 <SkillsRadar />
+              </div>
+              <div className="col-span-2">
                 <DashboardRoadmap />
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <QuizConfigModal
-            open={isQuizModalOpen}
-            onOpenChange={setIsQuizModalOpen}
-          />
+        <QuizConfigModal
+          open={isQuizModalOpen}
+          onOpenChange={setIsQuizModalOpen}
+        />
       </main>
     </DashboardLayout>
   );
