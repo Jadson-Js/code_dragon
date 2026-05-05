@@ -27,6 +27,11 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Cell,
 } from "recharts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -34,6 +39,7 @@ import { Link } from "react-router";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { useAuthUser } from "@/features/auth/hooks/useAuthUser";
 import QuizConfigModal from "@/features/dashboard/components/QuizConfigModal";
+import { useLatestReport } from "@/features/quiz/hooks/useLatestReport";
 
 // --- Types ---
 
@@ -118,46 +124,24 @@ const MaterialDropdown = ({ material }: { material: Material }) => (
   </div>
 );
 
-function DashboardRoadmap() {
+function DashboardRoadmap({ actions }: { actions: Action[] }) {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  const actions: Action[] = [
-    {
-      id: 1,
-      text: "Dominar React Server Components",
-      description:
-        "Aprenda a arquitetura moderna do Next.js para melhorar a performance e o SEO das suas aplicações.",
-      priority: "high",
-      material: {
-        title: "Mastering RSC & Next.js 15",
-        rating: 4.9,
-        students: "12k",
-        image: "https://placehold.co/100x100/1e293b/white?text=RSC",
-        discount: "15% OFF",
-      },
-    },
-    {
-      id: 2,
-      text: "Aprofundar em Generics no TypeScript",
-      description:
-        "Crie componentes e funções reutilizáveis e tipadas de forma avançada para reduzir bugs em produção.",
-      priority: "medium",
-      material: {
-        title: "TypeScript Advanced Patterns",
-        rating: 4.8,
-        students: "8k",
-        image: "https://placehold.co/100x100/1e293b/white?text=TS",
-        discount: "Gratuito",
-      },
-    },
-    {
-      id: 3,
-      text: "Configurar CI/CD com GitHub Actions",
-      description:
-        "Automatize seus testes e deploys para garantir uma entrega contínua e segura do seu código.",
-      priority: "low",
-    },
-  ];
+  if (actions.length === 0) {
+    return (
+      <div className="bg-bg-2 border border-white-1/10 rounded-xl p-6 flex flex-col items-center justify-center gap-4 h-full min-h-[300px] text-center">
+        <div className="p-4 rounded-full bg-white-1/5">
+          <BookOpen className="w-8 h-8 text-white-2 opacity-20" />
+        </div>
+        <div>
+          <h3 className="text-white-1 font-semibold">Nenhum Roadmap ainda</h3>
+          <p className="text-sm text-white-2 opacity-60 max-w-[200px] mt-1">
+            Complete um quiz para gerar seu plano de estudos personalizado.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-bg-2 border border-white-1/10 rounded-xl p-6 flex flex-col gap-4 h-full">
@@ -228,14 +212,28 @@ function DashboardRoadmap() {
   );
 }
 
-function SkillsRadar() {
-  const data = [
-    { skill: "React", value: 85 },
-    { skill: "TypeScript", value: 60 },
-    { skill: "Node.js", value: 40 },
-    { skill: "SQL", value: 70 },
-    { skill: "Git", value: 75 },
-  ];
+function SkillsRadar({
+  skills,
+  insights,
+}: {
+  skills: Array<{ skill: string; value: number }>;
+  insights?: { title: string; description: string };
+}) {
+  if (skills.length === 0) {
+    return (
+      <div className="bg-bg-2 rounded-xl p-6 shadow-sm border border-white-1/10 flex flex-col items-center justify-center gap-4 h-full min-h-[300px] text-center">
+        <div className="p-4 rounded-full bg-white-1/5">
+          <Brain className="w-8 h-8 text-white-2 opacity-20" />
+        </div>
+        <div>
+          <h3 className="text-white-1 font-semibold">Radar não disponível</h3>
+          <p className="text-sm text-white-2 opacity-60 max-w-[200px] mt-1">
+            Complete seu primeiro quiz para visualizar suas habilidades.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-bg-2 rounded-xl p-6 shadow-sm border border-white-1/10 flex flex-col h-full">
@@ -243,65 +241,91 @@ function SkillsRadar() {
 
       <div className="mb-6 flex-1 min-h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart data={data} cx="50%" cy="50%" outerRadius="80%">
-            <PolarGrid stroke="rgba(255,255,255,0.1)" />
-            <PolarAngleAxis
-              dataKey="skill"
-              tick={{ fill: "#94a3b8", fontSize: 12 }}
-            />
-            <PolarRadiusAxis
-              angle={90}
-              domain={[0, 100]}
-              tick={{ fill: "#94a3b8", fontSize: 11 }}
-            />
-            <Radar
-              name="Skills"
-              dataKey="value"
-              stroke="#6366f1"
-              fill="#6366f1"
-              fillOpacity={0.3}
-            />
-          </RadarChart>
+          {skills.length < 3 ? (
+            <BarChart
+              data={skills}
+              layout="horizontal"
+              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+            >
+              <XAxis
+                dataKey="skill"
+                type="category"
+                tick={{ fill: "#94a3b8", fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis type="number" domain={[0, 100]} hide />
+              <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={60}>
+                {skills.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.value >= 70
+                        ? "#10b981"
+                        : entry.value >= 50
+                          ? "#6366f1"
+                          : "#f59e0b"
+                    }
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          ) : (
+            <RadarChart data={skills} cx="50%" cy="50%" outerRadius="80%">
+              <PolarGrid stroke="rgba(255,255,255,0.1)" />
+              <PolarAngleAxis
+                dataKey="skill"
+                tick={{ fill: "#94a3b8", fontSize: 12 }}
+              />
+              <PolarRadiusAxis
+                angle={90}
+                domain={[0, 100]}
+                tick={{ fill: "#94a3b8", fontSize: 11 }}
+              />
+              <Radar
+                name="Skills"
+                dataKey="value"
+                stroke="#6366f1"
+                fill="#6366f1"
+                fillOpacity={0.3}
+              />
+            </RadarChart>
+          )}
         </ResponsiveContainer>
       </div>
 
-      <div className="space-y-3 mb-5">
-        {data.map((item) => (
-          <div key={item.skill} className="flex items-center gap-4">
-            <span
-              className="text-sm text-white-2 truncate flex-1"
-              title={item.skill}
-            >
-              {item.skill}
-            </span>
-
-            <div className="flex items-center gap-2 flex-3">
-              <div className="flex-1 bg-white/5 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full ${
-                    item.value >= 70
-                      ? "bg-green"
-                      : item.value >= 50
-                        ? "bg-primary-1"
-                        : "bg-yellow"
-                  }`}
-                  style={{ width: `${item.value}%` }}
-                />
-              </div>
-              <span className="text-sm text-white-1 w-10 text-right shrink-0">
-                {item.value}%
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+      {insights && (
+        <div className="mt-4 pt-4 border-t border-white-1/10">
+          <h4 className="text-sm font-bold text-primary-1 mb-1">
+            {insights.title}
+          </h4>
+          <p className="text-xs text-white-2 leading-relaxed opacity-80">
+            {insights.description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function Dashboard() {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
-  const { data } = useAuthUser();
+  const { data: userData } = useAuthUser();
+  const { data: latestReport, isLoading } = useLatestReport();
+
+  const skillsData =
+    latestReport?.stacks.map((s) => ({
+      skill: s.name,
+      value: s.score.user,
+    })) || [];
+
+  const roadmapData: Action[] =
+    latestReport?.roadmap.map((item, index) => ({
+      id: index,
+      text: item.title,
+      description: item.description,
+      priority: item.priority.toLowerCase() as Action["priority"],
+    })) || [];
 
   return (
     <DashboardLayout>
@@ -316,7 +340,7 @@ export default function Dashboard() {
             <div>
               <div className="flex items-center gap-3">
                 <h2 className="text-[28px] text-white-1 font-semibold">
-                  Olá, {data?.name || "Pedro"}.
+                  Olá, {userData?.name || "Pedro"}.
                 </h2>
                 <span className="px-3 py-1 rounded-full bg-bg-2 border border-white-1/10 text-white-2 text-xs">
                   Plano Free
@@ -355,7 +379,8 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <p className="text-sm text-white-2 leading-relaxed">
-                    Como estamos no início, você tem alguns testes para experimentar. <br />
+                    Como estamos no início, você tem alguns testes para
+                    experimentar. <br />
                     Use-os para testar seus conhecimentos e me dar um feedback!
                   </p>
                 </div>
@@ -418,7 +443,8 @@ export default function Dashboard() {
                       O que vem por aí no Code Dragon
                     </h3>
                     <p className="mb-6 text-white-2">
-                      Estou trabalhando em novas funcionalidades para te ajudar a evoluir ainda mais rápido.
+                      Estou trabalhando em novas funcionalidades para te ajudar
+                      a evoluir ainda mais rápido.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
@@ -486,7 +512,8 @@ export default function Dashboard() {
                   Ver Roadmap
                 </h4>
                 <p className="text-sm text-white-2 leading-relaxed">
-                  Acesse seu plano de estudos baseado no seu desempenho nos quizzes
+                  Acesse seu plano de estudos baseado no seu desempenho nos
+                  quizzes
                 </p>
               </button>
               <button className="relative bg-bg-2 rounded-xl p-8 text-left transition-all border border-white-1/10 opacity-60 cursor-not-allowed overflow-hidden group">
@@ -510,12 +537,15 @@ export default function Dashboard() {
           <div className="">
             <h3 className="mb-6 text-2xl text-white-1">Estatísticas</h3>
 
-            <div className="grid grid-cols-3 gap-6">
-              <div className="col-span-1">
-                <SkillsRadar />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <SkillsRadar
+                  skills={skillsData}
+                  insights={latestReport?.insights}
+                />
               </div>
-              <div className="col-span-2">
-                <DashboardRoadmap />
+              <div className="lg:col-span-2">
+                <DashboardRoadmap actions={roadmapData} />
               </div>
             </div>
           </div>
