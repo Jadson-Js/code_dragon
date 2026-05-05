@@ -34,4 +34,14 @@ router.get(
   quizReportController.getReport.bind(quizReportController),
 );
 
+router.get(
+  "/latest",
+  simpleRateLimitMiddleware.handle({
+    max: 60,
+    windowInMs: 60000,
+  }),
+  ensureAuthenticated.authAccess.bind(ensureAuthenticated),
+  quizReportController.getLatestReport.bind(quizReportController),
+);
+
 export default router;

@@ -8,6 +8,7 @@ import { SessionQuizSubjectPrismaRepository } from "@/infra/database/prisma/sess
 import { SessionQuizStackPrismaRepository } from "@/infra/database/prisma/session-quiz-stack.prisma.repository";
 import { GeminiProvider } from "@/infra/providers/gemini.provider";
 import { GetQuizReportPrismaRepository } from "@/infra/database/prisma/quiz/report/get-quiz-report.prisma.repository";
+import { GetLatestQuizReportPrismaRepository } from "@/infra/database/prisma/quiz/report/get-latest-quiz-report.prisma.repository";
 
 // Register dependencies
 container.registerSingleton(QuizQuestionPrismaRepository);
@@ -16,6 +17,7 @@ container.registerSingleton(SessionQuizPrismaRepository);
 container.registerSingleton(SessionQuizSubjectPrismaRepository);
 container.registerSingleton(SessionQuizStackPrismaRepository);
 container.registerSingleton(GetQuizReportPrismaRepository);
+container.registerSingleton(GetLatestQuizReportPrismaRepository);
 
 container.register("IGeminiProvider", { useClass: GeminiProvider });
 

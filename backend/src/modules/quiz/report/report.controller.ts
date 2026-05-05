@@ -8,6 +8,7 @@ import {
   GetReportUseCase,
   type IGetQuizReportResponse,
 } from "./use-cases/get-report.use-case";
+import { GetLatestReportUseCase } from "./use-cases/get-latest-report.use-case";
 
 @injectable()
 export class QuizReportController {
@@ -16,6 +17,8 @@ export class QuizReportController {
     private readonly quizReportSubmitUseCase: QuizReportSubmitUseCase,
     @inject(GetReportUseCase)
     private readonly getReportUseCase: GetReportUseCase,
+    @inject(GetLatestReportUseCase)
+    private readonly getLatestReportUseCase: GetLatestReportUseCase,
   ) {}
 
   async submit(
@@ -42,6 +45,19 @@ export class QuizReportController {
 
     const quizReportResponse = await this.getReportUseCase.execute({
       sessionQuizId: params.sessionQuizId as string,
+    });
+
+    return response.status(200).json(quizReportResponse);
+  }
+
+  async getLatestReport(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IGetQuizReportResponse>> {
+    const userId = request.user.id;
+
+    const quizReportResponse = await this.getLatestReportUseCase.execute({
+      userId,
     });
 
     return response.status(200).json(quizReportResponse);
