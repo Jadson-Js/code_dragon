@@ -3,7 +3,6 @@ import {
   Sparkles,
   Bug,
   MessageSquare,
-  Upload,
   Send,
   Lightbulb,
   Loader2,
@@ -29,7 +28,6 @@ export default function Suggestion() {
   const [feedbackType, setFeedbackType] = useState<FeedbackType>("feature");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
 
   const { mutateAsync: submitFeedback, isPending: isSubmitting } =
     useFeedbackSubmit();

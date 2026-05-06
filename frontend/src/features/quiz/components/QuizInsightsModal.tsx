@@ -6,7 +6,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Copy, Check, Gift, Instagram } from "lucide-react";
+import { Copy, Check, Gift } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/utils";
 import type { QuizInsightPayload } from "../types/quiz-report.types";
@@ -27,7 +27,7 @@ export default function QuizInsightsModal({
   if (!data) return null;
 
   const referralUrl = `http://localhost:5173/quiz/insights/session/${data.sessionQuizId}`;
-  const shareText = `🚀 Acabei de completar o Quiz de Conhecimentos com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
+  // const shareText = `🚀 Acabei de completar o Quiz de Conhecimentos com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralUrl);
@@ -35,12 +35,12 @@ export default function QuizInsightsModal({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareLinks = {
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`,
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
-    whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`,
-    instagram: `https://www.instagram.com/`, // Instagram doesn't support direct URL sharing with text easily
-  };
+  // const shareLinks = {
+  //   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`,
+  //   twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
+  //   whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`,
+  //   instagram: `https://www.instagram.com/`, // Instagram doesn't support direct URL sharing with text easily
+  // };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

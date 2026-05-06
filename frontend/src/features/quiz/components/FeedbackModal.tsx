@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Star, Loader2, Send, X } from "lucide-react";
+import { Star, Loader2, Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,

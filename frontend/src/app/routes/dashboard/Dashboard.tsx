@@ -6,19 +6,11 @@ import {
   Play,
   BookOpen,
   BarChart3,
-  AlertTriangle,
-  CheckCircle2,
-  XCircle,
-  Lock,
-  TrendingUp,
-  AlertCircle,
   Brain,
   Star,
   Users,
   ChevronDown,
-  ChevronUp,
   Wallet,
-  Sparkles,
 } from "lucide-react";
 import {
   Radar,
@@ -35,7 +27,6 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
 import DashboardLayout from "@/features/dashboard/layout/DashboardLayout";
 import { useAuthUser } from "@/features/auth/hooks/useAuthUser";
 import QuizConfigModal from "@/features/dashboard/components/QuizConfigModal";
@@ -311,7 +302,7 @@ function SkillsRadar({
 export default function Dashboard() {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const { data: userData } = useAuthUser();
-  const { data: latestReport, isLoading } = useLatestReport();
+  const { data: latestReport } = useLatestReport();
 
   const skillsData =
     latestReport?.stacks.map((s) => ({

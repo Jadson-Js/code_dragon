@@ -2,10 +2,7 @@ import { cn } from "@/shared/utils";
 import {
   House,
   Activity,
-  Mic,
-  UserSearch,
   Lightbulb,
-  Settings,
 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useState } from "react";

@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { User, ShieldCheck, FileText } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+import { ShieldCheck, FileText } from "lucide-react";
 import * as React from "react";
 import { TermsDialog } from "./TermsDialog";
 
