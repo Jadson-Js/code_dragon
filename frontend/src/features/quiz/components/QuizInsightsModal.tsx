@@ -10,6 +10,7 @@ import { Copy, Check, Gift } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/utils";
 import type { QuizInsightPayload } from "../types/quiz-report.types";
+import { env } from "@/shared/environments";
 
 interface QuizInsightsModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export default function QuizInsightsModal({
 
   if (!data) return null;
 
-  const referralUrl = `http://localhost:5173/quiz/insights/session/${data.sessionQuizId}`;
+  const referralUrl = `${env.clientUrl}/quiz/insights/session/${data.sessionQuizId}`;
   // const shareText = `🚀 Acabei de completar o Quiz de Conhecimentos com ${data.score.user}/100 pontos no Code Dragon!\n\nIdentifiquei meus gaps e já sei onde focar. Faça o seu também 👇\n\n${referralUrl}`;
 
   const handleCopy = async () => {
