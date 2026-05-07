@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { generateHash, msToSeconds } from "@/shared/utils";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 
 @injectable()
 export class RefreshTokenUseCase {

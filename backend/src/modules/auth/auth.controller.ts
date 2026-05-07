@@ -9,7 +9,7 @@ import { ResetPasswordUseCase } from "./use-cases/reset-password";
 import { LoginUseCase } from "./use-cases/login";
 import { LogoutUseCase } from "./use-cases/logout";
 import { RefreshTokenUseCase } from "./use-cases/refresh-token";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { GetMeUseCase } from "./use-cases/get-me";
 
 @injectable()

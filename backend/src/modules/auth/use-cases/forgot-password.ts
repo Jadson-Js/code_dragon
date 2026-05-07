@@ -6,7 +6,7 @@ import type { IHashProvider } from "@/infra/providers/hash.provider";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import type { IEmailQueueProvider } from "@/infra/providers/queue/email.bullmq.provider";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { formatMs } from "@/shared/utils";
 
 @injectable()

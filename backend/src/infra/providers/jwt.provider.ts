@@ -1,5 +1,5 @@
 import { UnauthorizedError } from "@/shared/app.error";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { msToSeconds } from "@/shared/utils";
 import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";

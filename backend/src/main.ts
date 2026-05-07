@@ -2,7 +2,7 @@ import "reflect-metadata";
 import "@/infra/container/providers";
 
 import app from "./infra/server";
-import { env } from "./shared/env";
+import { env } from "./shared/environments";
 import {
   emailQueueProvider,
   generateQuizQuestionQueueProvider,

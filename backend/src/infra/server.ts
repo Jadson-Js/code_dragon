@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import authRoutes from "@/modules/auth/auth.routes";
 import profileRoutes from "@/modules/profile/profile.routes";
 import quizQuestionsRoutes from "@/modules/quiz/questions/questions.routes";

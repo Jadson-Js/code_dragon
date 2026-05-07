@@ -1,4 +1,4 @@
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import IORedis from "ioredis";
 
 const isTest = process.env.NODE_ENV === "test";

@@ -6,7 +6,7 @@ import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.reposi
 import type { IHashProvider } from "@/infra/providers/hash.provider";
 import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IRedisProvider } from "@/infra/providers/redis.provider";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { msToSeconds, generateHash } from "@/shared/utils";
 
 @injectable()

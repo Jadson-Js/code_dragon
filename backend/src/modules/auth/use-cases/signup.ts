@@ -6,7 +6,7 @@ import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
 import { CreateUserWithEmailTokenPrismaRepository } from "@/infra/database/prisma/auth/create-user-with-email-token.prisma.repository";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { formatMs } from "@/shared/utils";
 import type { IEmailQueueProvider } from "@/infra/providers/queue/email.bullmq.provider";
 

@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { env } from "@/shared/env";
+import { env } from "@/shared/environments";
 import { injectable } from "tsyringe";
 import { InternalServerError, TooManyRequestsError } from "@/shared/app.error";
 import type { SessionQuiz } from "@/entities/session-quiz.entity";
