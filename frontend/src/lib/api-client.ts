@@ -20,6 +20,7 @@ let refreshPromise: Promise<any> | null = null;
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("Axios BaseURL configurada como:", env.serverUrl);
     const originalRequest = error.config;
 
     // Se o erro for 401 E NÃO for na rota de refresh
