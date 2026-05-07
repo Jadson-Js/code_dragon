@@ -35,10 +35,7 @@ export class AuthController {
     private readonly getMeUseCase: GetMeUseCase,
   ) {}
 
-  async me(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async me(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
     const result = await this.getMeUseCase.execute(userId);
 
@@ -53,10 +50,7 @@ export class AuthController {
     return response.status(200).json(httpResponse);
   }
 
-  async signup(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async signup(request: Request, response: Response): Promise<Response> {
     await this.signupUseCase.execute(request.body);
     return response
       .status(200)
@@ -77,10 +71,7 @@ export class AuthController {
       );
   }
 
-  async verifyEmail(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async verifyEmail(request: Request, response: Response): Promise<Response> {
     await this.verifyEmailUseCase.execute(request.body);
     return response
       .status(200)
@@ -99,18 +90,12 @@ export class AuthController {
       );
   }
 
-  async resetPassword(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async resetPassword(request: Request, response: Response): Promise<Response> {
     await this.resetPasswordUseCase.execute(request.body);
     return response.status(200).json("Password reset successfully.");
   }
 
-  async login(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  async login(request: Request, response: Response): Promise<Response> {
     const { user, accessToken, refreshToken } = await this.loginUseCase.execute(
       request.body,
     );
@@ -118,14 +103,14 @@ export class AuthController {
     response.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: env.jwtRefreshExpiresInMs,
     });
 
     response.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: env.jwtAccessExpiresInMs,
     });
 
@@ -152,14 +137,14 @@ export class AuthController {
     response.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: env.jwtRefreshExpiresInMs,
     });
 
     response.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: env.jwtAccessExpiresInMs,
     });
 
