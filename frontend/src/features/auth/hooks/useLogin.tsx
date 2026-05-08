@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
@@ -8,6 +8,7 @@ import { api } from "@/lib/api-client";
 
 export function useLogin() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -16,6 +17,7 @@ export function useLogin() {
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => api.post("/auth/login", data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["auth-user"] });
       form.reset();
       navigate("/");
     },

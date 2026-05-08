@@ -4,7 +4,10 @@ import type { IJWTProvider } from "@/infra/providers/jwt.provider";
 import { UserPrismaRepository } from "@/infra/database/prisma/user.prisma.repository";
 import { TokenPrismaRepository } from "@/infra/database/prisma/token.prisma.repository";
 import type { IHashProvider } from "@/infra/providers/hash.provider";
+import type { IRedisProvider } from "@/infra/providers/redis.provider";
 import { NotFoundError, BadRequestError } from "@/shared/app.error";
+import { env } from "@/shared/environments";
+import { msToSeconds, generateHash } from "@/shared/utils";
 
 @injectable()
 export class VerifyEmailUseCase {
@@ -20,9 +23,14 @@ export class VerifyEmailUseCase {
 
     @inject(TokenPrismaRepository)
     private readonly tokenRepository: TokenPrismaRepository,
+
+    @inject("IRedisProvider")
+    private readonly redisProvider: IRedisProvider,
   ) {}
 
-  async execute(params: IVerifyEmailInputDTO): Promise<void> {
+  async execute(
+    params: IVerifyEmailInputDTO,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     // 1. Verify the JWT signature
     const isValidToken = await this.jwtProvider.verifyEmailVerificationToken(
       params.token,
@@ -76,5 +84,20 @@ export class VerifyEmailUseCase {
 
     // 7. Delete the used token
     await this.tokenRepository.delete(token.id);
+
+    // 8. Create a session so the user is logged in immediately after verification
+    const accessToken = await this.jwtProvider.generateAccessToken(userId);
+    const refreshToken = await this.jwtProvider.generateRefreshToken(userId);
+
+    const tokenId = generateHash(refreshToken);
+    const ttlSeconds = msToSeconds(env.jwtRefreshExpiresInMs);
+
+    await this.redisProvider.set(
+      `session:${userId}:${tokenId}`,
+      "true",
+      ttlSeconds,
+    );
+
+    return { accessToken, refreshToken };
   }
 }

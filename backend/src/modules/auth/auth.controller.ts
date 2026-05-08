@@ -72,7 +72,24 @@ export class AuthController {
   }
 
   async verifyEmail(request: Request, response: Response): Promise<Response> {
-    await this.verifyEmailUseCase.execute(request.body);
+    const { accessToken, refreshToken } = await this.verifyEmailUseCase.execute(
+      request.body,
+    );
+
+    response.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: env.jwtRefreshExpiresInMs,
+    });
+
+    response.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: env.jwtAccessExpiresInMs,
+    });
+
     return response
       .status(200)
       .json("This email has been verified successfully.");
