@@ -5,7 +5,7 @@ export default function AuthSidebar() {
     <div className="hidden md:block px-4 md:px-8 bg-linear-to-tl from-[#242565] to-[#2B2F3A] py-8 md:py-16 md:max-w-sm xl:max-w-xl">
       <div className="flex flex-row justify-center mb-8">
         <div className="h-12">
-          <img src="/public/logo.svg" alt="logo" className="img" />
+          <img src="/logo.svg" alt="logo" className="img" />
         </div>
       </div>
       <div className="flex flex-col gap-2 mb-8">
