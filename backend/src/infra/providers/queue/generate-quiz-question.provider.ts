@@ -9,7 +9,7 @@ import type {
 import { QuizQuestionEventEmitter } from "../quiz-question-event-emitter";
 import { QuizQuestionPrismaRepository } from "@/infra/database/prisma/quiz-question.prisma.repository";
 import { SessionQuizPrismaRepository } from "@/infra/database/prisma/session-quiz.prisma.repository";
-import type { Prisma, QuizQuestion } from "generated/prisma/client";
+import type { Prisma } from "generated/prisma/client";
 
 @injectable()
 export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGenerateQuizQuestionInput> {

@@ -8,7 +8,7 @@ import {
 
 export interface IBaseQueueProvider<T> {
   addJob(data: T): Promise<void>;
-  start(): void;
+  start(concurrency?: number, limiter?: WorkerOptions["limiter"]): void;
 }
 
 export abstract class BaseBullMQProvider<T> implements IBaseQueueProvider<T> {
