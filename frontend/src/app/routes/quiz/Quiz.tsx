@@ -83,6 +83,11 @@ export default function Quiz() {
   const isExitConfirmationOpen =
     isExitModalOpen || pendingNavigationPath !== null;
 
+  const totalQuestions = useMemo(() => {
+    if (isFinished) return questions.length;
+    return (state as any)?.quantity ?? questions.length;
+  }, [isFinished, questions.length, state]);
+
   const goBackToDashboard = useCallback(() => {
     setIsLeavingQuiz(true);
     navigate("/");
@@ -300,7 +305,8 @@ export default function Quiz() {
           title={
             submitReportMutation.isPending ? (
               <>
-                Processando seus <span className="text-primary-1">Resultados</span>
+                Processando seus{" "}
+                <span className="text-primary-1">Resultados</span>
               </>
             ) : undefined
           }
@@ -345,7 +351,7 @@ export default function Quiz() {
         {/* Header with Progress & Stats */}
         <QuizQuestionsHeader
           currentQuestion={currentQuestionIndex + 1}
-          totalQuestions={questions.length}
+          totalQuestions={totalQuestions}
           isFinished={isFinished}
           onExit={handleExit}
         />

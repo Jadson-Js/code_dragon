@@ -43,7 +43,9 @@ export function useQuizQuestionsGenerate() {
         localStorage.removeItem("@code_dragon:quiz_config");
       }
 
-      navigate(`/quiz/session/${data.data.sessionQuizId}`);
+      navigate(`/quiz/session/${data.data.sessionQuizId}`, {
+        state: { quantity: variables.quantity },
+      });
     },
     onError: (error) => {
       const isTooManyRequests =

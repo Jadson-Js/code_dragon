@@ -30,7 +30,7 @@ export default function QuizQuestionsHeader({
         <div className="text-sm font-medium text-white-2 uppercase tracking-wider">
           Questão{" "}
           <span className="text-white-1">
-            {currentQuestion}/{isFinished ? totalQuestions : "?"}
+            {currentQuestion}/{totalQuestions}
           </span>
         </div>
       </div>
