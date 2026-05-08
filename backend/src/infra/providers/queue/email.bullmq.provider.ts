@@ -4,7 +4,10 @@ import type {
   IEmailProvider,
   ISendEmailProps,
 } from "@/infra/providers/email/email.provider";
-import { BaseBullMQProvider, type IBaseQueueProvider } from "./base.bullmq.provider";
+import {
+  BaseBullMQProvider,
+  type IBaseQueueProvider,
+} from "./base.bullmq.provider";
 import { redisConnection } from "@/infra/database/redis/connection";
 
 export type IEmailQueueProvider = IBaseQueueProvider<ISendEmailProps>;
@@ -15,7 +18,6 @@ export class EmailBullMQProvider extends BaseBullMQProvider<ISendEmailProps> {
     @inject("IEmailProvider")
     private readonly emailProvider: IEmailProvider,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     super("email", redisConnection as any);
   }
 

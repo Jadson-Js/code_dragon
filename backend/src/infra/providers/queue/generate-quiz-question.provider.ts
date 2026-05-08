@@ -26,7 +26,6 @@ export class GenerateQuizQuestionBullMQProvider extends BaseBullMQProvider<IGene
     @inject(SessionQuizPrismaRepository)
     private readonly sessionQuizRepository: SessionQuizPrismaRepository,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     super("generateQuizQuestion", redisConnection as any);
   }
 

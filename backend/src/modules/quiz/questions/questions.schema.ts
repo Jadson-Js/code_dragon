@@ -7,7 +7,7 @@ export const quizQuestionGenerateSchema = z.object({
     seniorityId: z.number(),
     specialtyId: z.number(),
     stacksId: z.array(z.number()).min(1),
-    quantity: z.number().min(1).max(20),
+    quantity: z.number().min(1).max(30),
     saveInProfile: z.boolean(),
   }),
 });

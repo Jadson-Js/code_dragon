@@ -29,9 +29,9 @@ import { useQuizQuestionsGenerate } from "@/features/quiz/hooks/useQuizQuestions
 
 // --- Constantes ---
 const QUANTITY_MAP: Record<string, number> = {
-  short: 1,
-  medium: 2,
-  long: 3,
+  short: 10,
+  medium: 20,
+  long: 30,
 };
 
 // --- Componentes Auxiliares para Limpar o Boilerplate ---
@@ -236,8 +236,8 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
           </DialogTitle>
 
           <DialogDescription className="text-center max-w-md">
-            Personalize seu desafio técnico. Vou gerar perguntas sob medida
-            para o que você quer testar agora.
+            Personalize seu desafio técnico. Vou gerar perguntas sob medida para
+            o que você quer testar agora.
           </DialogDescription>
         </DialogHeader>
 
@@ -338,9 +338,9 @@ export default function QuizConfigModal({ open, onOpenChange }: Props) {
                         <SelectValue placeholder="Tamanho" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="short">Curto (1)</SelectItem>
-                        <SelectItem value="medium">Médio (2)</SelectItem>
-                        <SelectItem value="long">Longo (3)</SelectItem>
+                        <SelectItem value="short">Curto (10)</SelectItem>
+                        <SelectItem value="medium">Médio (20)</SelectItem>
+                        <SelectItem value="long">Longo (30)</SelectItem>
                       </SelectContent>
                     </Select>
                     <FieldError

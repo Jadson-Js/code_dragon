@@ -53,7 +53,7 @@ export class QuizQuestionGenerateUseCase {
 
     const { sessionQuiz } = await this.createSession(data);
 
-    const quantityPerBatch = 1;
+    const quantityPerBatch = 5;
     const batchQuestions = Math.ceil(data.quantity / quantityPerBatch);
 
     const context = await this.getQuizContextRepository.execute(data);
