@@ -18,7 +18,7 @@ export default function AuthVerifyEmailSuccess() {
       setSeconds((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate("/dashboard");
+          navigate("/profile");
           return 0;
         }
         return prev - 1;
