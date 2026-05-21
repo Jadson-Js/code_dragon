@@ -8,14 +8,12 @@
 
 ---
 
-## 🎬 Demonstração em Vídeo
+## 🎬 Demonstração
 
-Assista ao vídeo abaixo para visualizar o funcionamento do **CodeDragon** em tempo real sem precisar executar o projeto localmente:
+Veja o **CodeDragon** em funcionamento sem precisar executar o projeto localmente:
 
 <div align="center">
-  <video src="./video.mp4" width="100%" style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" controls autoplay loop muted></video>
-  
-  <p><i>Caso o player acima não carregue, você também pode baixar ou visualizar o arquivo diretamente: <a href="./video.mp4"><b>video.mp4</b></a></i></p>
+  <img src="./video.gif" alt="Demonstração do CodeDragon" width="100%" style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" />
 </div>
 
 ---
